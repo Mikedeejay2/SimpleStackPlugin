@@ -16,9 +16,7 @@ public final class Simplestack extends JavaPlugin
 
     @Override
     public void onDisable()
-    {
-
-    }
+    {}
 
     public static Simplestack getInstance()
     {

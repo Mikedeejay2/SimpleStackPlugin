@@ -19,6 +19,8 @@ public class Listeners implements Listener
 {
     private Simplestack plugin = Simplestack.getInstance();
 
+    public static final int MAX_AMOUNT_IN_STACK = 64;
+
     @EventHandler
     public void stackEvent(InventoryClickEvent event)
     {
@@ -57,10 +59,10 @@ public class Listeners implements Listener
             {
                 int newAmount = itemPutDown.getAmount() + itemPickUp.getAmount();
                 int extraAmount = 0;
-                if(newAmount > 64)
+                if(newAmount > MAX_AMOUNT_IN_STACK)
                 {
-                    extraAmount = (newAmount - 64);
-                    newAmount = 64;
+                    extraAmount = (newAmount - MAX_AMOUNT_IN_STACK);
+                    newAmount = MAX_AMOUNT_IN_STACK;
                 }
                 itemPutDown.setAmount(newAmount);
                 itemPickUp.setAmount(extraAmount);
@@ -93,10 +95,10 @@ public class Listeners implements Listener
                 {
                     int newAmount = itemStack.getAmount() + itemPickUp.getAmount();
                     int extraAmount = 0;
-                    if(newAmount > 64)
+                    if(newAmount > MAX_AMOUNT_IN_STACK)
                     {
-                        extraAmount = (newAmount - 64);
-                        newAmount = 64;
+                        extraAmount = (newAmount - MAX_AMOUNT_IN_STACK);
+                        newAmount = MAX_AMOUNT_IN_STACK;
                     }
                     itemStack.setAmount(newAmount);
                     itemPickUp.setAmount(extraAmount);
@@ -119,6 +121,7 @@ public class Listeners implements Listener
         }
     }
 
+    // We can't use .equals() because it also checks the amount variable which shouldn't be checked in this case
     private boolean equalsEachOther(ItemStack stack1, ItemStack stack2)
     {
         ItemMeta meta1 = stack1.getItemMeta();
