@@ -7,8 +7,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -97,46 +99,144 @@ public class Listeners implements Listener
         if(itemPickUp != null && itemPickUp.getData().getItemType().getMaxStackSize() != 64 && !itemPickUp.getType().equals(Material.AIR))
         {
             Inventory inv = null;
-            if(event.getClickedInventory().equals(player.getOpenInventory().getBottomInventory()))
+            if(!(player.getOpenInventory().getBottomInventory() instanceof PlayerInventory && player.getOpenInventory().getTopInventory() instanceof CraftingInventory))
             {
-                inv = player.getOpenInventory().getTopInventory();
-            }
-            else if(event.getClickedInventory().equals(player.getOpenInventory().getTopInventory()))
-            {
-                inv = player.getOpenInventory().getBottomInventory();
-            }
-
-            for(int i = 0; i < inv.getSize(); i++)
-            {
-                ItemStack itemStack = inv.getItem(i);
-                if(itemStack != null && equalsEachOther(itemPickUp, itemStack))
+                if(event.getClickedInventory().equals(player.getOpenInventory().getBottomInventory()))
                 {
-                    int newAmount = itemStack.getAmount() + itemPickUp.getAmount();
-                    int extraAmount = 0;
-                    if(newAmount > MAX_AMOUNT_IN_STACK)
+                    inv = player.getOpenInventory().getTopInventory();
+                }
+                else if(event.getClickedInventory().equals(player.getOpenInventory().getTopInventory()))
+                {
+                    inv = player.getOpenInventory().getBottomInventory();
+                }
+
+                moveItem(itemPickUp, player, event, inv, 0, inv.getSize(), false);
+            }
+            else
+            {
+                String type = itemPickUp.getType().toString();
+                if(!type.endsWith("_HELMET") &&
+                   !type.endsWith("_CHESTPLATE") &&
+                   !type.endsWith("_LEGGINGS") &&
+                   !type.endsWith("_BOOTS") &&
+                   !type.equals("SHIELD"))
+                {
+                    if(event.getSlot() < 9)
                     {
-                        extraAmount = (newAmount - MAX_AMOUNT_IN_STACK);
-                        newAmount = MAX_AMOUNT_IN_STACK;
+                        moveItem(itemPickUp, player, event, event.getClickedInventory(), 9, 36, false);
                     }
-                    itemStack.setAmount(newAmount);
-                    itemPickUp.setAmount(extraAmount);
-                    if(itemPickUp.getAmount() == 0)
+                    else if(event.getSlot() < 36)
                     {
-                        break;
+                        moveItem(itemPickUp, player, event, event.getClickedInventory(), 0, 8, false);
+                    }
+                    else
+                    {
+                        moveItem(itemPickUp, player, event, event.getClickedInventory(), 9, 36, false);
                     }
                 }
-            }
-            if(itemPickUp.getAmount() != 0)
-            {
-                HashMap<Integer, ItemStack> temp = inv.addItem(itemPickUp);
-                if(temp.isEmpty())
+                else
                 {
-                    event.getClickedInventory().setItem(event.getSlot(), null);
+                    if(event.getSlot() < 36)
+                    {
+                        if(type.endsWith("_BOOTS"))
+                        {
+                            inv.setItem(36, itemPickUp);
+                            event.getClickedInventory().setItem(event.getSlot(), null);
+                        }
+                        else if(type.endsWith("_LEGGINGS"))
+                        {
+                            inv.setItem(37, itemPickUp);
+                            event.getClickedInventory().setItem(event.getSlot(), null);
+                        }
+                        else if(type.endsWith("_CHESTPLATE"))
+                        {
+                            inv.setItem(38, itemPickUp);
+                            event.getClickedInventory().setItem(event.getSlot(), null);
+                        }
+                        else if(type.endsWith("_HELMET"))
+                        {
+                            inv.setItem(39, itemPickUp);
+                            event.getClickedInventory().setItem(event.getSlot(), null);
+                        }
+                        else if(type.equals("SHIELD"))
+                        {
+                            inv.setItem(40, itemPickUp);
+                            event.getClickedInventory().setItem(event.getSlot(), null);
+                        }
+                    }
+                    else
+                    {
+                        moveItem(itemPickUp, player, event, event.getClickedInventory(), 9, 36, false);
+                    }
                 }
             }
             player.updateInventory();
             event.setCancelled(true);
         }
+    }
+
+    private void moveItem(ItemStack itemPickUp, Player player, InventoryClickEvent event, Inventory inv, int startingSlot, int endingSlot, boolean reverse)
+    {
+        if(!reverse)
+        {
+            for(int i = startingSlot; i < endingSlot; i++)
+            {
+                if(moveItemInternal(itemPickUp, inv, i)) break;
+            }
+            if(itemPickUp.getAmount() != 0)
+            {
+                for(int i = startingSlot; i < endingSlot; i++)
+                {
+                    if(inv.getItem(i) == null)
+                    {
+                        inv.setItem(i, itemPickUp);
+                        event.getClickedInventory().setItem(event.getSlot(), null);
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            for(int i = endingSlot-1; i >= startingSlot; i--)
+            {
+                if(moveItemInternal(itemPickUp, inv, i)) break;
+            }
+            if(itemPickUp.getAmount() != 0)
+            {
+                for(int i = endingSlot-1; i >= startingSlot; i--)
+                {
+                    if(inv.getItem(i) == null)
+                    {
+                        inv.setItem(i, itemPickUp);
+                        event.getClickedInventory().setItem(event.getSlot(), null);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean moveItemInternal(ItemStack itemPickUp, Inventory inv, int i)
+    {
+        ItemStack itemStack = inv.getItem(i);
+        if(itemStack != null && equalsEachOther(itemPickUp, itemStack))
+        {
+            int newAmount = itemStack.getAmount() + itemPickUp.getAmount();
+            int extraAmount = 0;
+            if(newAmount > MAX_AMOUNT_IN_STACK)
+            {
+                extraAmount = (newAmount - MAX_AMOUNT_IN_STACK);
+                newAmount = MAX_AMOUNT_IN_STACK;
+            }
+            itemStack.setAmount(newAmount);
+            itemPickUp.setAmount(extraAmount);
+            if(itemPickUp.getAmount() == 0)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void makeUnique(ItemStack itemPickUp, NamespacedKey key)
