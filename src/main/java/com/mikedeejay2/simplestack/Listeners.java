@@ -5,11 +5,15 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+
+import java.util.HashMap;
 
 public class Listeners implements Listener
 {
@@ -24,14 +28,6 @@ public class Listeners implements Listener
 
         NamespacedKey key = new NamespacedKey(plugin, "simplestack");
 
-        if(event.getClick().isLeftClick())
-        {
-            normalClick(itemPickUp, itemPutDown, key, event);
-        }
-    }
-
-    private void normalClick(ItemStack itemPickUp, ItemStack itemPutDown, NamespacedKey key, InventoryClickEvent event)
-    {
         if(itemPickUp != null && itemPickUp.getData().getItemType().getMaxStackSize() != 64 && !itemPickUp.getType().equals(Material.AIR))
         {
             ItemMeta itemMeta = itemPickUp.getItemMeta();
@@ -42,22 +38,84 @@ public class Listeners implements Listener
                 itemPickUp.setItemMeta(itemMeta);
             }
 
-            if(itemPutDown != null && itemPutDown.getData().getItemType().getMaxStackSize() != 64 && !itemPutDown.getType().equals(Material.AIR))
+            if(event.getClick().equals(ClickType.LEFT))
             {
-                if(itemPickUp.getAmount() == 64 || itemPutDown.getAmount() == 64) event.setCancelled(true);
-                if(equalsEachOther(itemPutDown, itemPickUp))
+                normalClick(itemPickUp, itemPutDown, player, event);
+            }
+            else if(event.getClick().equals(ClickType.SHIFT_LEFT) || event.getClick().equals(ClickType.SHIFT_RIGHT))
+            {
+                shiftClick(itemPickUp, player, event);
+            }
+        }
+    }
+
+    private void normalClick(ItemStack itemPickUp, ItemStack itemPutDown, Player player, InventoryClickEvent event)
+    {
+        if(itemPutDown != null && itemPutDown.getData().getItemType().getMaxStackSize() != 64 && !itemPutDown.getType().equals(Material.AIR))
+        {
+            if(equalsEachOther(itemPutDown, itemPickUp))
+            {
+                int newAmount = itemPutDown.getAmount() + itemPickUp.getAmount();
+                int extraAmount = 0;
+                if(newAmount > 64)
                 {
-                    int newAmount = itemPutDown.getAmount() + itemPickUp.getAmount();
+                    extraAmount = (newAmount - 64);
+                    newAmount = 64;
+                }
+                itemPutDown.setAmount(newAmount);
+                itemPickUp.setAmount(extraAmount);
+                event.getClickedInventory().setItem(event.getSlot(), itemPutDown);
+                player.getOpenInventory().setCursor(itemPickUp);
+                player.updateInventory();
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    private void shiftClick(ItemStack itemPickUp, Player player, InventoryClickEvent event)
+    {
+        if(itemPickUp != null && itemPickUp.getData().getItemType().getMaxStackSize() != 64 && !itemPickUp.getType().equals(Material.AIR))
+        {
+            Inventory inv = null;
+            if(event.getClickedInventory().equals(player.getOpenInventory().getBottomInventory()))
+            {
+                inv = player.getOpenInventory().getTopInventory();
+            }
+            else if(event.getClickedInventory().equals(player.getOpenInventory().getTopInventory()))
+            {
+                inv = player.getOpenInventory().getBottomInventory();
+            }
+
+            for(int i = 0; i < inv.getSize(); i++)
+            {
+                ItemStack itemStack = inv.getItem(i);
+                if(itemStack != null && equalsEachOther(itemPickUp, itemStack))
+                {
+                    int newAmount = itemStack.getAmount() + itemPickUp.getAmount();
                     int extraAmount = 0;
                     if(newAmount > 64)
                     {
                         extraAmount = (newAmount - 64);
                         newAmount = 64;
                     }
-                    itemPutDown.setAmount(newAmount);
+                    itemStack.setAmount(newAmount);
                     itemPickUp.setAmount(extraAmount);
+                    if(itemPickUp.getAmount() == 0)
+                    {
+                        break;
+                    }
                 }
             }
+            if(itemPickUp.getAmount() != 0)
+            {
+                HashMap<Integer, ItemStack> temp = inv.addItem(itemPickUp);
+                if(temp.isEmpty())
+                {
+                    event.getClickedInventory().setItem(event.getSlot(), null);
+                }
+            }
+            player.updateInventory();
+            event.setCancelled(true);
         }
     }
 
