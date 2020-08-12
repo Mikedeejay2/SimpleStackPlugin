@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import javax.swing.*;
 import java.util.HashMap;
 
 public class Listeners implements Listener
@@ -32,26 +33,24 @@ public class Listeners implements Listener
 
         if(itemPickUp != null && itemPickUp.getData().getItemType().getMaxStackSize() != 64 && !itemPickUp.getType().equals(Material.AIR))
         {
-            ItemMeta itemMeta = itemPickUp.getItemMeta();
-            PersistentDataContainer data = itemMeta.getPersistentDataContainer();
-            if(!data.has(key, PersistentDataType.BYTE))
-            {
-                data.set(key, PersistentDataType.BYTE, (byte) 1);
-                itemPickUp.setItemMeta(itemMeta);
-            }
+            makeUnique(itemPickUp, key);
 
             if(event.getClick().equals(ClickType.LEFT))
             {
-                normalClick(itemPickUp, itemPutDown, player, event);
+                leftClick(itemPickUp, itemPutDown, player, event);
             }
             else if(event.getClick().equals(ClickType.SHIFT_LEFT) || event.getClick().equals(ClickType.SHIFT_RIGHT))
             {
                 shiftClick(itemPickUp, player, event);
             }
+            else if(event.getClick().equals(ClickType.RIGHT))
+            {
+                rightClick(itemPickUp, itemPutDown, player, event);
+            }
         }
     }
 
-    private void normalClick(ItemStack itemPickUp, ItemStack itemPutDown, Player player, InventoryClickEvent event)
+    private void leftClick(ItemStack itemPickUp, ItemStack itemPutDown, Player player, InventoryClickEvent event)
     {
         if(itemPutDown != null && itemPutDown.getData().getItemType().getMaxStackSize() != 64 && !itemPutDown.getType().equals(Material.AIR))
         {
@@ -68,6 +67,25 @@ public class Listeners implements Listener
                 itemPickUp.setAmount(extraAmount);
                 event.getClickedInventory().setItem(event.getSlot(), itemPutDown);
                 player.getOpenInventory().setCursor(itemPickUp);
+                player.updateInventory();
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    private void rightClick(ItemStack itemPickUp, ItemStack itemPutDown, Player player, InventoryClickEvent event)
+    {
+        if(itemPutDown != null && itemPutDown.getData().getItemType().getMaxStackSize() != 64 && !itemPutDown.getType().equals(Material.AIR))
+        {
+            if(equalsEachOther(itemPutDown, itemPickUp))
+            {
+                if(itemPutDown.getAmount() > 0)
+                {
+                    int bottomAmount = itemPickUp.getAmount() + 1;
+                    int topAmount = itemPutDown.getAmount() - 1;
+                    itemPickUp.setAmount(bottomAmount);
+                    itemPutDown.setAmount(topAmount);
+                }
                 player.updateInventory();
                 event.setCancelled(true);
             }
@@ -118,6 +136,17 @@ public class Listeners implements Listener
             }
             player.updateInventory();
             event.setCancelled(true);
+        }
+    }
+
+    private void makeUnique(ItemStack itemPickUp, NamespacedKey key)
+    {
+        ItemMeta itemMeta = itemPickUp.getItemMeta();
+        PersistentDataContainer data = itemMeta.getPersistentDataContainer();
+        if(!data.has(key, PersistentDataType.BYTE))
+        {
+            data.set(key, PersistentDataType.BYTE, (byte) 1);
+            itemPickUp.setItemMeta(itemMeta);
         }
     }
 
