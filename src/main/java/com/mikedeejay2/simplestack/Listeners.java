@@ -114,6 +114,7 @@ public class Listeners implements Listener
             }
             else
             {
+                inv = event.getClickedInventory();
                 String type = itemPickUp.getType().toString();
                 if(!type.endsWith("_HELMET") &&
                    !type.endsWith("_CHESTPLATE") &&
@@ -123,15 +124,15 @@ public class Listeners implements Listener
                 {
                     if(event.getSlot() < 9)
                     {
-                        moveItem(itemPickUp, player, event, event.getClickedInventory(), 9, 36, false);
+                        moveItem(itemPickUp, player, event, inv, 9, 36, false);
                     }
                     else if(event.getSlot() < 36)
                     {
-                        moveItem(itemPickUp, player, event, event.getClickedInventory(), 0, 8, false);
+                        moveItem(itemPickUp, player, event, inv, 0, 8, false);
                     }
                     else
                     {
-                        moveItem(itemPickUp, player, event, event.getClickedInventory(), 9, 36, false);
+                        moveItem(itemPickUp, player, event, inv, 9, 36, false);
                     }
                 }
                 else
@@ -141,27 +142,27 @@ public class Listeners implements Listener
                         if(type.endsWith("_BOOTS"))
                         {
                             inv.setItem(36, itemPickUp);
-                            event.getClickedInventory().setItem(event.getSlot(), null);
+                            inv.setItem(event.getSlot(), null);
                         }
                         else if(type.endsWith("_LEGGINGS"))
                         {
                             inv.setItem(37, itemPickUp);
-                            event.getClickedInventory().setItem(event.getSlot(), null);
+                            inv.setItem(event.getSlot(), null);
                         }
                         else if(type.endsWith("_CHESTPLATE"))
                         {
                             inv.setItem(38, itemPickUp);
-                            event.getClickedInventory().setItem(event.getSlot(), null);
+                            inv.setItem(event.getSlot(), null);
                         }
                         else if(type.endsWith("_HELMET"))
                         {
                             inv.setItem(39, itemPickUp);
-                            event.getClickedInventory().setItem(event.getSlot(), null);
+                            inv.setItem(event.getSlot(), null);
                         }
                         else if(type.equals("SHIELD"))
                         {
                             inv.setItem(40, itemPickUp);
-                            event.getClickedInventory().setItem(event.getSlot(), null);
+                            inv.setItem(event.getSlot(), null);
                         }
                     }
                     else
