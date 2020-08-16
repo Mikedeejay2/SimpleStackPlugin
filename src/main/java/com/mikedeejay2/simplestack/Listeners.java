@@ -68,7 +68,6 @@ public class Listeners implements Listener
     @EventHandler
     public void entityPickupItemEvent(EntityPickupItemEvent event)
     {
-        Bukkit.getConsoleSender().sendMessage("EntityPickupItemEvent");
         if(!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
         ItemStack item = event.getItem().getItemStack();
