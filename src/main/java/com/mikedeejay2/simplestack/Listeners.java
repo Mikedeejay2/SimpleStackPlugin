@@ -1,12 +1,23 @@
 package com.mikedeejay2.simplestack;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.EntityTameEvent;
+import org.bukkit.event.entity.ItemMergeEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -14,8 +25,10 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.swing.*;
+import java.awt.event.ItemEvent;
 import java.util.HashMap;
 
 public class Listeners implements Listener
@@ -48,6 +61,46 @@ public class Listeners implements Listener
             else if(event.getClick().equals(ClickType.RIGHT))
             {
                 rightClick(itemPickUp, itemPutDown, player, event);
+            }
+        }
+    }
+
+    @EventHandler
+    public void entityPickupItemEvent(EntityPickupItemEvent event)
+    {
+        Bukkit.getConsoleSender().sendMessage("EntityPickupItemEvent");
+        if(!(event.getEntity() instanceof Player)) return;
+        Player player = (Player) event.getEntity();
+        ItemStack item = event.getItem().getItemStack();
+        moveItemToInventory(event, event.getItem(), player, item);
+    }
+
+    private void moveItemToInventory(Cancellable event, Item groundItem, Player player, ItemStack item)
+    {
+        if(item.getType().getMaxStackSize() == 64) return;
+        PlayerInventory inv = player.getInventory();
+        for(int i = 0; i < inv.getSize(); i++)
+        {
+            if(moveItemInternal(item, inv, i))
+            {
+                groundItem.remove();
+                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);
+                event.setCancelled(true);
+                break;
+            }
+        }
+        if(item.getAmount() != 0)
+        {
+            for(int i = 0; i < inv.getSize(); i++)
+            {
+                if(inv.getItem(i) == null)
+                {
+                    inv.setItem(i, item);
+                    groundItem.remove();
+                    player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);
+                    event.setCancelled(true);
+                    break;
+                }
             }
         }
     }
