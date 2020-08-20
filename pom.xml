@@ -48,7 +48,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-                    <outputDirectory>C:\Users\mdeej\IdeaProjects\MINECRAFT SPIGOT PLUGIN TOOLS\Buildtools\Server\plugins</outputDirectory>
+                    <outputDirectory>C:\Users\mdeej\IdeaProjects\MINECRAFT SPIGOT PLUGIN TOOLS\Dev Server Latest\plugins</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
