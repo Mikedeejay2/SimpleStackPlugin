@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -22,6 +23,7 @@ import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -30,6 +32,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import javax.swing.*;
 import java.awt.event.ItemEvent;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Listeners implements Listener
 {
@@ -308,18 +313,6 @@ public class Listeners implements Listener
     {
         ItemMeta meta1 = stack1.getItemMeta();
         ItemMeta meta2 = stack2.getItemMeta();
-        if(!stack1.getType().equals(stack2.getType())) return false;
-        if(meta1.hasAttributeModifiers() != meta2.hasAttributeModifiers()) return false;
-        if(meta1.hasCustomModelData() != meta2.hasCustomModelData()) return false;
-        if(meta1.hasDisplayName() != meta2.hasDisplayName()) return false;
-        if(meta1.hasEnchants() != meta2.hasEnchants())return false;
-        if(meta1.hasLore() != meta2.hasLore()) return false;
-        if(meta1.hasDisplayName() && meta2.hasDisplayName()) if(!meta1.getDisplayName().equals(meta2.getDisplayName())) return false;
-        if(meta1.hasLore() && meta2.hasLore()) if(!meta1.getLore().equals(meta2.getLore())) return false;
-        if(meta1.hasEnchants() && meta2.hasEnchants()) if(!meta1.getEnchants().equals(meta2.getEnchants())) return false;
-        if(meta1.hasCustomModelData() && meta2.hasCustomModelData()) if(meta1.getCustomModelData() != meta2.getCustomModelData()) return false;
-        if(meta1.hasAttributeModifiers() && meta2.hasAttributeModifiers()) if(!meta1.getAttributeModifiers().equals(meta2.getAttributeModifiers())) return false;
-        if(!meta1.getPersistentDataContainer().equals(meta2.getPersistentDataContainer())) return false;
-        return true;
+        return meta1.equals(meta2);
     }
 }
