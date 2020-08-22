@@ -10,7 +10,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -50,6 +52,7 @@ public class Listeners implements Listener
         ItemStack itemPickUp = event.getCurrentItem();
         ItemStack itemPutDown = event.getCursor();
         Player player = (Player) event.getWhoClicked();
+        ClickType clickType = event.getClick();
 
         if(itemPickUp == null ||
         itemPickUp.getData().getItemType().getMaxStackSize() == 64 ||
@@ -58,15 +61,15 @@ public class Listeners implements Listener
 
         makeUnique(itemPickUp, key);
 
-        if(event.getClick().equals(ClickType.LEFT))
+        if(clickType.isLeftClick())
         {
             leftClick(itemPickUp, itemPutDown, player, event);
         }
-        else if(event.getClick().equals(ClickType.SHIFT_LEFT) || event.getClick().equals(ClickType.SHIFT_RIGHT))
+        else if(clickType.isShiftClick())
         {
             shiftClick(itemPickUp, player, event);
         }
-        else if(event.getClick().equals(ClickType.RIGHT))
+        else if(clickType.isRightClick())
         {
             rightClick(itemPickUp, itemPutDown, player, event);
         }
@@ -338,6 +341,7 @@ public class Listeners implements Listener
     {
         ItemMeta meta1 = stack1.getItemMeta();
         ItemMeta meta2 = stack2.getItemMeta();
+        if(meta1 == null || meta2 == null) return false;
         return meta1.equals(meta2);
     }
 }
