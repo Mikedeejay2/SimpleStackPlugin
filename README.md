@@ -8,4 +8,5 @@ the issues tab in this Github repository.
 ### Downloads
 
 This plugin can be downloaded through any of the below links:
+
 [GitHub Releases Page](https://github.com/Mikedeejay2/SimpleStackPlugin/releases)
