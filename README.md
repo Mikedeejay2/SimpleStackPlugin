@@ -1,3 +1,5 @@
+![Project Icon](https://user-images.githubusercontent.com/58639173/90967216-ffc61900-e4a9-11ea-88bc-169dd28c8735.png)
+
 # Simple Stack Plugin
 A plugin that makes all items stack to 64.
 
