@@ -59,17 +59,18 @@ public class Listeners implements Listener
 
         makeUnique(itemPickUp, key);
 
-        if(clickType.isLeftClick())
+        switch(clickType)
         {
-            leftClick(itemPickUp, itemPutDown, player, event);
-        }
-        else if(clickType.isShiftClick())
-        {
-            shiftClick(itemPickUp, player, event);
-        }
-        else if(clickType.isRightClick())
-        {
-            rightClick(itemPickUp, itemPutDown, player, event);
+            case LEFT:
+                leftClick(itemPickUp, itemPutDown, player, event);
+                break;
+            case SHIFT_LEFT:
+            case SHIFT_RIGHT:
+                shiftClick(itemPickUp, player, event);
+                break;
+            case RIGHT:
+                rightClick(itemPickUp, itemPutDown, player, event);
+                break;
         }
     }
 
