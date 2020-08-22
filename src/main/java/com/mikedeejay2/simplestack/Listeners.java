@@ -19,12 +19,31 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+/*
+ * This is where all of the code for this plugin exists.
+ * I could split the code into other classes but since there is
+ * so little code required to make this idea work I thought I would
+ * just leave it in here for now.
+ */
 public class Listeners implements Listener
 {
-    private Simplestack plugin = Simplestack.getInstance();
+    // Plugin instance for referencing
+    private static final Simplestack plugin = Simplestack.getInstance();
 
+    // Max stack size. Changing this produces some really weird results because
+    // Minecraft really doesn't know how to handle anything higher than 64.
     public static final int MAX_AMOUNT_IN_STACK = 64;
 
+    // A namespaced key for adding a small piece of NBT data that makes each item "Unique".
+    // This has to happen because if we don't make each item unique then the InventoryClickEvent won't be called
+    // when trying to stack 2 fully stacked items of the same type.
+    // Certainly a hacky work around, but it works.
+    private static final NamespacedKey key = new NamespacedKey(plugin, "simplestack");
+
+    /*
+     * InventoryClickEvent handler,
+     * This does a majority of the work for this plugin.
+     */
     @EventHandler
     public void stackEvent(InventoryClickEvent event)
     {
@@ -32,27 +51,34 @@ public class Listeners implements Listener
         ItemStack itemPutDown = event.getCursor();
         Player player = (Player) event.getWhoClicked();
 
-        NamespacedKey key = new NamespacedKey(plugin, "simplestack");
+        if(itemPickUp == null ||
+        itemPickUp.getData().getItemType().getMaxStackSize() == 64 ||
+        itemPickUp.getType().equals(Material.AIR))
+            return;
 
-        if(itemPickUp != null && itemPickUp.getData().getItemType().getMaxStackSize() != 64 && !itemPickUp.getType().equals(Material.AIR))
+        makeUnique(itemPickUp, key);
+
+        if(event.getClick().equals(ClickType.LEFT))
         {
-            makeUnique(itemPickUp, key);
-
-            if(event.getClick().equals(ClickType.LEFT))
-            {
-                leftClick(itemPickUp, itemPutDown, player, event);
-            }
-            else if(event.getClick().equals(ClickType.SHIFT_LEFT) || event.getClick().equals(ClickType.SHIFT_RIGHT))
-            {
-                shiftClick(itemPickUp, player, event);
-            }
-            else if(event.getClick().equals(ClickType.RIGHT))
-            {
-                rightClick(itemPickUp, itemPutDown, player, event);
-            }
+            leftClick(itemPickUp, itemPutDown, player, event);
+        }
+        else if(event.getClick().equals(ClickType.SHIFT_LEFT) || event.getClick().equals(ClickType.SHIFT_RIGHT))
+        {
+            shiftClick(itemPickUp, player, event);
+        }
+        else if(event.getClick().equals(ClickType.RIGHT))
+        {
+            rightClick(itemPickUp, itemPutDown, player, event);
         }
     }
 
+    /*
+     * EntityPickupItemEvent
+     * This is for when multiple unstackable items are on the ground and
+     * are picked up by a player.
+     * This code will automatically stack them in their inventory as if they
+     * were a stack of 64.
+     */
     @EventHandler
     public void entityPickupItemEvent(EntityPickupItemEvent event)
     {
@@ -62,78 +88,89 @@ public class Listeners implements Listener
         moveItemToInventory(event, event.getItem(), player, item);
     }
 
+    /*
+     * This helper method takes an item that is on the ground and moves
+     * it into a player's inventory while also attempting to stack the
+     * item with other items in the player's inventory.
+     */
     private void moveItemToInventory(Cancellable event, Item groundItem, Player player, ItemStack item)
     {
         if(item.getType().getMaxStackSize() == 64) return;
         PlayerInventory inv = player.getInventory();
         for(int i = 0; i < inv.getSize(); i++)
         {
-            if(moveItemInternal(item, inv, i))
-            {
-                groundItem.remove();
-                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);
-                event.setCancelled(true);
-                break;
-            }
+            if(!moveItemInternal(item, inv, i)) continue;
+            groundItem.remove();
+            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);
+            event.setCancelled(true);
+            break;
         }
-        if(item.getAmount() != 0)
+        if(item.getAmount() == 0) return;
+        for(int i = 0; i < inv.getSize(); i++)
         {
-            for(int i = 0; i < inv.getSize(); i++)
-            {
-                if(inv.getItem(i) == null)
-                {
-                    inv.setItem(i, item);
-                    groundItem.remove();
-                    player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);
-                    event.setCancelled(true);
-                    break;
-                }
-            }
+            if(inv.getItem(i) != null) continue;
+            inv.setItem(i, item);
+            groundItem.remove();
+            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);
+            event.setCancelled(true);
+            break;
         }
     }
 
+    /*
+     * This helped method is a left click event that attempts to
+     * stack 2 items together to a stack of 64.
+     */
     private void leftClick(ItemStack itemPickUp, ItemStack itemPutDown, Player player, InventoryClickEvent event)
     {
-        if(itemPutDown != null && itemPutDown.getData().getItemType().getMaxStackSize() != 64 && !itemPutDown.getType().equals(Material.AIR))
+        if(itemPutDown == null ||
+        itemPutDown.getData().getItemType().getMaxStackSize() == 64 &&
+        itemPutDown.getType().equals(Material.AIR))
+            return;
+        if(!equalsEachOther(itemPutDown, itemPickUp)) return;
+        int newAmount = itemPutDown.getAmount() + itemPickUp.getAmount();
+        int extraAmount = 0;
+        if(newAmount > MAX_AMOUNT_IN_STACK)
         {
-            if(equalsEachOther(itemPutDown, itemPickUp))
-            {
-                int newAmount = itemPutDown.getAmount() + itemPickUp.getAmount();
-                int extraAmount = 0;
-                if(newAmount > MAX_AMOUNT_IN_STACK)
-                {
-                    extraAmount = (newAmount - MAX_AMOUNT_IN_STACK);
-                    newAmount = MAX_AMOUNT_IN_STACK;
-                }
-                itemPutDown.setAmount(newAmount);
-                itemPickUp.setAmount(extraAmount);
-                event.getClickedInventory().setItem(event.getSlot(), itemPutDown);
-                player.getOpenInventory().setCursor(itemPickUp);
-                player.updateInventory();
-                event.setCancelled(true);
-            }
+            extraAmount = (newAmount - MAX_AMOUNT_IN_STACK);
+            newAmount = MAX_AMOUNT_IN_STACK;
         }
+        itemPutDown.setAmount(newAmount);
+        itemPickUp.setAmount(extraAmount);
+        event.getClickedInventory().setItem(event.getSlot(), itemPutDown);
+        player.getOpenInventory().setCursor(itemPickUp);
+        player.updateInventory();
+        event.setCancelled(true);
     }
 
+    /*
+     * This helper method attempts to emulate a right click event where
+     * one item is removed from the held stack and put down to the slot
+     * being right clicked.
+     */
     private void rightClick(ItemStack itemPickUp, ItemStack itemPutDown, Player player, InventoryClickEvent event)
     {
-        if(itemPutDown != null && itemPutDown.getData().getItemType().getMaxStackSize() != 64 && !itemPutDown.getType().equals(Material.AIR))
+        if(itemPutDown == null ||
+        itemPutDown.getData().getItemType().getMaxStackSize() == 64 ||
+        itemPutDown.getType().equals(Material.AIR))
+            return;
+        if(!equalsEachOther(itemPutDown, itemPickUp)) return;
+        if(itemPutDown.getAmount() > 0)
         {
-            if(equalsEachOther(itemPutDown, itemPickUp))
-            {
-                if(itemPutDown.getAmount() > 0)
-                {
-                    int bottomAmount = itemPickUp.getAmount() + 1;
-                    int topAmount = itemPutDown.getAmount() - 1;
-                    itemPickUp.setAmount(bottomAmount);
-                    itemPutDown.setAmount(topAmount);
-                }
-                player.updateInventory();
-                event.setCancelled(true);
-            }
+            int bottomAmount = itemPickUp.getAmount() + 1;
+            int topAmount = itemPutDown.getAmount() - 1;
+            itemPickUp.setAmount(bottomAmount);
+            itemPutDown.setAmount(topAmount);
         }
+        player.updateInventory();
+        event.setCancelled(true);
     }
 
+    /*
+     * This helper method emulates the action of shift clicking an item into another inventory.
+     * This if the biggest method because there's a lot that has a possibility
+     * of happening when shift clicking.
+     */
     private void shiftClick(ItemStack itemPickUp, Player player, InventoryClickEvent event)
     {
         if(itemPickUp != null && itemPickUp.getData().getItemType().getMaxStackSize() != 64 && !itemPickUp.getType().equals(Material.AIR))
@@ -150,7 +187,7 @@ public class Listeners implements Listener
                     inv = player.getOpenInventory().getBottomInventory();
                 }
 
-                moveItem(itemPickUp, player, event, inv, 0, inv.getSize()-5, false);
+                moveItem(itemPickUp, event, inv, 0, inv.getSize()-5, false);
             }
             else
             {
@@ -164,15 +201,15 @@ public class Listeners implements Listener
                 {
                     if(event.getSlot() < 9)
                     {
-                        moveItem(itemPickUp, player, event, inv, 9, 36, false);
+                        moveItem(itemPickUp, event, inv, 9, 36, false);
                     }
                     else if(event.getSlot() < 36)
                     {
-                        moveItem(itemPickUp, player, event, inv, 0, 8, false);
+                        moveItem(itemPickUp, event, inv, 0, 8, false);
                     }
                     else
                     {
-                        moveItem(itemPickUp, player, event, inv, 9, 36, false);
+                        moveItem(itemPickUp, event, inv, 9, 36, false);
                     }
                 }
                 else
@@ -207,7 +244,7 @@ public class Listeners implements Listener
                     }
                     else
                     {
-                        moveItem(itemPickUp, player, event, event.getClickedInventory(), 9, 36, false);
+                        moveItem(itemPickUp, event, event.getClickedInventory(), 9, 36, false);
                     }
                 }
             }
@@ -216,7 +253,11 @@ public class Listeners implements Listener
         }
     }
 
-    private void moveItem(ItemStack itemPickUp, Player player, InventoryClickEvent event, Inventory inv, int startingSlot, int endingSlot, boolean reverse)
+    /*
+     * This helper method moves an item into a player's inventory with a set starting slot
+     * and ending slot to search through. This method can also be called in reverse if needed.
+     */
+    private void moveItem(ItemStack itemPickUp, InventoryClickEvent event, Inventory inv, int startingSlot, int endingSlot, boolean reverse)
     {
         if(!reverse)
         {
@@ -224,17 +265,13 @@ public class Listeners implements Listener
             {
                 if(moveItemInternal(itemPickUp, inv, i)) break;
             }
-            if(itemPickUp.getAmount() != 0)
+            if(itemPickUp.getAmount() == 0) return;
+            for(int i = startingSlot; i < endingSlot; i++)
             {
-                for(int i = startingSlot; i < endingSlot; i++)
-                {
-                    if(inv.getItem(i) == null)
-                    {
-                        inv.setItem(i, itemPickUp);
-                        event.getClickedInventory().setItem(event.getSlot(), null);
-                        break;
-                    }
-                }
+                if(inv.getItem(i) != null) continue;
+                inv.setItem(i, itemPickUp);
+                event.getClickedInventory().setItem(event.getSlot(), null);
+                break;
             }
         }
         else
@@ -243,43 +280,44 @@ public class Listeners implements Listener
             {
                 if(moveItemInternal(itemPickUp, inv, i)) break;
             }
-            if(itemPickUp.getAmount() != 0)
+            if(itemPickUp.getAmount() == 0) return;
+            for(int i = endingSlot-1; i >= startingSlot; i--)
             {
-                for(int i = endingSlot-1; i >= startingSlot; i--)
-                {
-                    if(inv.getItem(i) == null)
-                    {
-                        inv.setItem(i, itemPickUp);
-                        event.getClickedInventory().setItem(event.getSlot(), null);
-                        break;
-                    }
-                }
+                if(inv.getItem(i) != null) continue;
+                inv.setItem(i, itemPickUp);
+                event.getClickedInventory().setItem(event.getSlot(), null);
+                break;
             }
         }
     }
 
+    /*
+     * A helper method that attempts to move an item into a slot if all conditions
+     * are correct (same type of item, not already stacked to 64, etc).
+     */
     private boolean moveItemInternal(ItemStack itemPickUp, Inventory inv, int i)
     {
         ItemStack itemStack = inv.getItem(i);
-        if(itemStack != null && equalsEachOther(itemPickUp, itemStack))
+        if(itemStack == null || !equalsEachOther(itemPickUp, itemStack)) return false;
+        int newAmount = itemStack.getAmount() + itemPickUp.getAmount();
+        int extraAmount = 0;
+        if(newAmount > MAX_AMOUNT_IN_STACK)
         {
-            int newAmount = itemStack.getAmount() + itemPickUp.getAmount();
-            int extraAmount = 0;
-            if(newAmount > MAX_AMOUNT_IN_STACK)
-            {
-                extraAmount = (newAmount - MAX_AMOUNT_IN_STACK);
-                newAmount = MAX_AMOUNT_IN_STACK;
-            }
-            itemStack.setAmount(newAmount);
-            itemPickUp.setAmount(extraAmount);
-            if(itemPickUp.getAmount() == 0)
-            {
-                return true;
-            }
+            extraAmount = (newAmount - MAX_AMOUNT_IN_STACK);
+            newAmount = MAX_AMOUNT_IN_STACK;
         }
-        return false;
+        itemStack.setAmount(newAmount);
+        itemPickUp.setAmount(extraAmount);
+        return itemPickUp.getAmount() == 0;
     }
 
+    /*
+     * This makes an item unique and fools the Minecraft client to sending a move item
+     * packet even with "fully stacked" items. This has to be worked around because
+     * without InventoryClickEvent on fully stacked items there would be no way
+     * for this code to know if the player was trying to combine fully stacked
+     * items.
+     */
     private void makeUnique(ItemStack itemPickUp, NamespacedKey key)
     {
         ItemMeta itemMeta = itemPickUp.getItemMeta();
@@ -291,7 +329,11 @@ public class Listeners implements Listener
         }
     }
 
-    // We can't use .equals() because it also checks the amount variable which shouldn't be checked in this case
+    /*
+     * Simple helper method that takes 2 item metas
+     * and checks to see if they equal each other.
+     * Maybe the most important method in this code.
+     */
     private boolean equalsEachOther(ItemStack stack1, ItemStack stack2)
     {
         ItemMeta meta1 = stack1.getItemMeta();

@@ -2,6 +2,12 @@ package com.mikedeejay2.simplestack;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+/*
+ * Simple Stacking plugin by Mikedeejay2
+ * Visit the listeners class for all of the code
+ * If you find a bug, please report it to my Github:
+ * https://github.com/Mikedeejay2/SimpleStackPlugin
+ */
 public final class Simplestack extends JavaPlugin
 {
     private static Simplestack instance;
