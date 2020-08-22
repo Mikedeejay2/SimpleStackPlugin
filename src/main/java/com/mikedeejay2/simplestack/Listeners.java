@@ -150,7 +150,7 @@ public class Listeners implements Listener
                     inv = player.getOpenInventory().getBottomInventory();
                 }
 
-                moveItem(itemPickUp, player, event, inv, 0, inv.getSize(), false);
+                moveItem(itemPickUp, player, event, inv, 0, inv.getSize()-5, false);
             }
             else
             {
