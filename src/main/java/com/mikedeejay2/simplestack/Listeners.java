@@ -88,7 +88,7 @@ public class Listeners implements Listener
             if(moveItemInternal(item, inv, i))
             {
                 groundItem.remove();
-                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);
+                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);
                 event.setCancelled(true);
                 break;
             }
@@ -101,7 +101,7 @@ public class Listeners implements Listener
                 {
                     inv.setItem(i, item);
                     groundItem.remove();
-                    player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);
+                    player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);
                     event.setCancelled(true);
                     break;
                 }
