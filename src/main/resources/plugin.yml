@@ -1,4 +1,3 @@
-name: Simplestack
+name: SimpleStack
 version: ${project.version}
 main: com.mikedeejay2.simplestack.Simplestack
-api-version: 1.16

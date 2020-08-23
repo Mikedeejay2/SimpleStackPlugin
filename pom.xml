@@ -6,10 +6,10 @@
 
     <groupId>com.mikedeejay2</groupId>
     <artifactId>simplestack</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Simplestack</name>
+    <name>SimpleStack</name>
 
     <properties>
         <java.version>1.8</java.version>
