@@ -7,7 +7,7 @@ A plugin that makes all items stack to 64.
 deploying this plugin on your server! If you find a bug or want to suggest a new feature, please report it to
 the issues tab in this Github repository.
 
-:warning: Note: Stacking items that don't normally stack to 64 currently don't work in the creative inventory.
+:warning: Note: Stacking items that don't normally stack to 64 currently do not work in the creative inventory.
 This is because the creative inventory works differently from the normal inventories (Survival inventory,
 chest inventory, etc). To stack items in creative mode, open any other inventory besides the creative inventory
 like a chest or furnace.
