@@ -17,6 +17,8 @@ like a chest or furnace.
 After installing this plugin on a server items that didn't previously stack to 64 can now be stacked to 64
 simply by moving items around the inventory and combining them into a stack.
 
+![Example](https://user-images.githubusercontent.com/58639173/90967434-479a6f80-e4ad-11ea-8758-9ba1be2494df.gif)
+
 ### Downloads
 
 This plugin can be downloaded through any of the below links:
