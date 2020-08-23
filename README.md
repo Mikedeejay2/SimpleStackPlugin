@@ -8,10 +8,9 @@ just install the plugin to your server and run!
 deploying this plugin on your server! If you find a bug or want to suggest a new feature, please report it to
 the issues tab in this Github repository.
 
-:warning: Note: Stacking items that don't normally stack to 64 currently do not work in the creative inventory.
-This is because the creative inventory works differently from the normal inventories (Survival inventory,
-chest inventory, etc). To stack items in creative mode, open any other inventory besides the creative inventory
-like a chest or furnace.
+:warning: Note: Simple Stack does not currently work in the creative inventory. This is because the creative inventory 
+works differently from the normal inventories (Survival inventory, chest inventory, etc). To stack normally unstackable 
+items in creative mode, open any other inventory besides the creative inventory like a chest or furnace.
 
 ### How to Use
 
