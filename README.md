@@ -1,16 +1,16 @@
 ![Project Icon](https://user-images.githubusercontent.com/58639173/90967216-ffc61900-e4a9-11ea-88bc-169dd28c8735.png)
 
 # Simple Stack Plugin
-A plugin that makes all items stack to 64.
+Simple Stack is a plugin designed to make all items stack to 64. No permissions are required to make Simple Stack work, 
+just install the plugin to your server and run!
 
 :warning: This plugin has not been tested on large servers or with other plugins! Please do proper testing before 
 deploying this plugin on your server! If you find a bug or want to suggest a new feature, please report it to
 the issues tab in this Github repository.
 
-:warning: Note: Stacking items that don't normally stack to 64 currently don't work in the creative inventory.
-This is because the creative inventory works differently from the normal inventories (Survival inventory,
-chest inventory, etc). To stack items in creative mode, open any other inventory besides the creative inventory
-like a chest or furnace.
+:warning: Note: Simple Stack does not currently work in the creative inventory. This is because the creative inventory 
+works differently from the normal inventories (Survival inventory, chest inventory, etc). To stack normally unstackable 
+items in creative mode, open any other inventory besides the creative inventory like a chest or furnace.
 
 ### How to Use
 
@@ -24,3 +24,9 @@ simply by moving items around the inventory and combining them into a stack.
 This plugin can be downloaded through any of the below links:
 
 [GitHub Releases Page](https://github.com/Mikedeejay2/SimpleStackPlugin/releases)
+
+[Spigot](https://www.spigotmc.org/resources/simple-stack.83044/)
+
+[Bukkit](https://dev.bukkit.org/projects/simple-stack)
+
+If you enjoy this plugin and want to throw money at me: [Donation Link](paypal.me/mikedeejay2)
