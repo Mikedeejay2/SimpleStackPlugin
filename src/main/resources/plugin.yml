@@ -2,3 +2,8 @@ name: SimpleStack
 version: ${project.version}
 main: com.mikedeejay2.simplestack.Simplestack
 api-version: 1.14
+
+permissions:
+  simplestack.use:
+    description: Allow a player to stack normally unstackable items to 64
+    default: true

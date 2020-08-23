@@ -13,8 +13,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
-import java.util.Set;
-
 public class Listeners implements Listener
 {
     // Plugin instance for referencing
@@ -26,6 +24,8 @@ public class Listeners implements Listener
     // Certainly a hacky work around, but it works.
     private static final NamespacedKey key = new NamespacedKey(plugin, "simplestack");
 
+    private static final String permission = "simplestack.use";
+
     /*
      * InventoryClickEvent handler,
      * This does a majority of the work for this plugin.
@@ -33,9 +33,10 @@ public class Listeners implements Listener
     @EventHandler
     public void stackEvent(InventoryClickEvent event)
     {
+        Player player = (Player) event.getWhoClicked();
+        if(!player.hasPermission(permission)) return;
         ItemStack itemPickUp = event.getCurrentItem();
         ItemStack itemPutDown = event.getCursor();
-        Player player = (Player) event.getWhoClicked();
         ClickType clickType = event.getClick();
 
         if(itemPickUp == null ||
@@ -72,6 +73,7 @@ public class Listeners implements Listener
     {
         if(!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
+        if(!player.hasPermission(permission)) return;
         ItemStack item = event.getItem().getItemStack();
         StackUtils.moveItemToInventory(event, event.getItem(), player, item);
     }
@@ -79,6 +81,8 @@ public class Listeners implements Listener
     @EventHandler
     public void breakBlockEvent(BlockBreakEvent event)
     {
+        Player player = event.getPlayer();
+        if(!player.hasPermission(permission)) return;
         Block block = event.getBlock();
         if(!block.getType().toString().endsWith("SHULKER_BOX")) return;
 
