@@ -29,3 +29,5 @@ This plugin can be downloaded through any of the below links:
 [Spigot](https://www.spigotmc.org/resources/simple-stack.83044/)
 
 [Bukkit](https://dev.bukkit.org/projects/simple-stack)
+
+If you enjoy this plugin and want to throw money at me: [Donation Link](paypal.me/mikedeejay2)
