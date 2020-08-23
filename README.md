@@ -25,5 +25,7 @@ simply by moving items around the inventory and combining them into a stack.
 This plugin can be downloaded through any of the below links:
 
 [GitHub Releases Page](https://github.com/Mikedeejay2/SimpleStackPlugin/releases)
+
 [Spigot](https://www.spigotmc.org/resources/simple-stack.83044/)
+
 [Bukkit](https://dev.bukkit.org/projects/simple-stack)
