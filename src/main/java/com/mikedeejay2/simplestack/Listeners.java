@@ -96,6 +96,7 @@ public class Listeners implements Listener
             break;
         }
         item.setItemMeta(meta);
+        StackUtils.makeUnique(item, key);
 
         world.dropItemNaturally(location, item);
         block.setType(Material.AIR);
