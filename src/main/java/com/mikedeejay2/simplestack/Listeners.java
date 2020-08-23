@@ -1,14 +1,25 @@
 package com.mikedeejay2.simplestack;
 
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.apache.commons.lang.WordUtils;
+import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataAdapterContext;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Set;
 
 public class Listeners implements Listener
 {
@@ -69,5 +80,26 @@ public class Listeners implements Listener
         Player player = (Player) event.getEntity();
         ItemStack item = event.getItem().getItemStack();
         StackUtils.moveItemToInventory(event, event.getItem(), player, item);
+    }
+
+    @EventHandler
+    public void breakBlockEvent(BlockBreakEvent event)
+    {
+        Block block = event.getBlock();
+        if(!block.getType().toString().endsWith("SHULKER_BOX")) return;
+
+        Location location = block.getLocation();
+        World world = location.getWorld();
+        ShulkerBox shulkerBox = (ShulkerBox)block.getState();
+        ItemStack item = new ItemStack(block.getType());
+        BlockStateMeta meta = (BlockStateMeta) item.getItemMeta();
+
+        meta.setBlockState(shulkerBox);
+        meta.setDisplayName(shulkerBox.getCustomName());
+        item.setItemMeta(meta);
+
+        world.dropItemNaturally(location, item);
+        block.setType(Material.AIR);
+        event.setCancelled(true);
     }
 }
