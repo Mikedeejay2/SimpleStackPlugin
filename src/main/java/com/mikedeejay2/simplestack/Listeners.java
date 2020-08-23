@@ -94,8 +94,13 @@ public class Listeners implements Listener
         ItemStack item = new ItemStack(block.getType());
         BlockStateMeta meta = (BlockStateMeta) item.getItemMeta();
 
-        meta.setBlockState(shulkerBox);
         meta.setDisplayName(shulkerBox.getCustomName());
+        for(ItemStack curItem : shulkerBox.getInventory().getStorageContents())
+        {
+            if(curItem == null) continue;
+            meta.setBlockState(shulkerBox);
+            break;
+        }
         item.setItemMeta(meta);
 
         world.dropItemNaturally(location, item);
