@@ -133,7 +133,8 @@ public class StackUtils
                         !type.endsWith("_CHESTPLATE") &&
                         !type.endsWith("_LEGGINGS") &&
                         !type.endsWith("_BOOTS") &&
-                        !type.equals("SHIELD"))
+                        !type.equals("SHIELD") &&
+                        !type.equals("ELYTRA"))
                 {
                     if(event.getSlot() < 9)
                     {
@@ -162,7 +163,7 @@ public class StackUtils
                             inv.setItem(37, itemPickUp);
                             inv.setItem(event.getSlot(), null);
                         }
-                        else if(type.endsWith("_CHESTPLATE"))
+                        else if(type.endsWith("_CHESTPLATE") || type.equals("ELYTRA"))
                         {
                             inv.setItem(38, itemPickUp);
                             inv.setItem(event.getSlot(), null);
