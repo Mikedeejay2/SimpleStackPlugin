@@ -1,7 +1,8 @@
 ![Project Icon](https://user-images.githubusercontent.com/58639173/90967216-ffc61900-e4a9-11ea-88bc-169dd28c8735.png)
 
 # Simple Stack Plugin
-A plugin that makes all items stack to 64.
+Simple Stack is a plugin designed to make all items stack to 64. No permissions are required to make Simple Stack work, 
+just install the plugin to your server and run!
 
 :warning: This plugin has not been tested on large servers or with other plugins! Please do proper testing before 
 deploying this plugin on your server! If you find a bug or want to suggest a new feature, please report it to
@@ -24,3 +25,5 @@ simply by moving items around the inventory and combining them into a stack.
 This plugin can be downloaded through any of the below links:
 
 [GitHub Releases Page](https://github.com/Mikedeejay2/SimpleStackPlugin/releases)
+[Spigot](https://www.spigotmc.org/resources/simple-stack.83044/)
+[Bukkit](https://dev.bukkit.org/projects/simple-stack)
