@@ -123,7 +123,7 @@ public class StackUtils
                     inv = player.getOpenInventory().getBottomInventory();
                 }
 
-                moveItem(itemPickUp, event, inv, 0, inv.getSize()-5, false);
+                moveItem(itemPickUp, event, inv, 0, inv instanceof PlayerInventory ? inv.getSize()-5 : inv.getSize(), false);
             }
             else
             {
