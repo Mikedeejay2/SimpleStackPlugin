@@ -1,5 +1,7 @@
 package com.mikedeejay2.simplestack;
 
+import com.mikedeejay2.simplestack.config.Config;
+import com.mikedeejay2.simplestack.config.ListMode;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.ShulkerBox;
@@ -44,6 +46,17 @@ public class Listeners implements Listener
         itemPickUp.getType().equals(Material.AIR))
             return;
 
+        Config config = Simplestack.getCustomConfig();
+
+        if(config.LIST_MODE.equals(ListMode.BLACKLIST))
+        {
+            if(config.LIST.contains(itemPickUp.getType())) return;
+        }
+        else
+        {
+            if(!config.LIST.contains(itemPickUp.getType())) return;
+        }
+
         StackUtils.makeUnique(itemPickUp, key);
 
         switch(clickType)
@@ -78,6 +91,11 @@ public class Listeners implements Listener
         StackUtils.moveItemToInventory(event, event.getItem(), player, item);
     }
 
+    /*
+     * BlockBreakEvent
+     * This is needed for when a shulker box breaks, because by default Minecraft
+     * unstacks items inside of a shulker box automatically
+     */
     @EventHandler
     public void breakBlockEvent(BlockBreakEvent event)
     {

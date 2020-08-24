@@ -1,0 +1,8 @@
+# ListMode: The mode that the list below will operate in
+# Blacklist = Items added to the list will not be stackable
+# Whitelist = Items added to the list will be stackable, but
+# unstackable items will stay unstackable if they're not in the list
+# Items: Items that will or will not be stacked to 64 based on the list mode above
+ListMode: Blacklist
+Items:
+  - 'Example Item'
