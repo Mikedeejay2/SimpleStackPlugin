@@ -1,7 +1,6 @@
 package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.simplestack.config.Config;
-import com.mikedeejay2.simplestack.config.ListMode;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.ShulkerBox;
@@ -46,16 +45,8 @@ public class Listeners implements Listener
         itemPickUp.getType().equals(Material.AIR))
             return;
 
-        Config config = Simplestack.getCustomConfig();
-
-        if(config.LIST_MODE.equals(ListMode.BLACKLIST))
-        {
-            if(config.LIST.contains(itemPickUp.getType())) return;
-        }
-        else
-        {
-            if(!config.LIST.contains(itemPickUp.getType())) return;
-        }
+        boolean cancel = StackUtils.cancelStackCheck(itemPickUp.getType());
+        if(cancel) return;
 
         StackUtils.makeUnique(itemPickUp, key);
 
@@ -88,6 +79,10 @@ public class Listeners implements Listener
         Player player = (Player) event.getEntity();
         if(!player.hasPermission(permission)) return;
         ItemStack item = event.getItem().getItemStack();
+
+        boolean cancel = StackUtils.cancelStackCheck(item.getType());
+        if(cancel) return;
+
         StackUtils.moveItemToInventory(event, event.getItem(), player, item);
     }
 
@@ -103,6 +98,9 @@ public class Listeners implements Listener
         if(!player.hasPermission(permission)) return;
         Block block = event.getBlock();
         if(!block.getType().toString().endsWith("SHULKER_BOX")) return;
+
+        boolean cancel = StackUtils.cancelStackCheck(block.getType());
+        if(cancel) return;
 
         Location location = block.getLocation();
         World world = location.getWorld();

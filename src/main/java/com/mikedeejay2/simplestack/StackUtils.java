@@ -1,5 +1,7 @@
 package com.mikedeejay2.simplestack;
 
+import com.mikedeejay2.simplestack.config.Config;
+import com.mikedeejay2.simplestack.config.ListMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
@@ -279,5 +281,18 @@ public class StackUtils
         if(!meta1.equals(meta2)) return false;
         if(!stack1.getType().equals(stack2.getType())) return false;
         return true;
+    }
+
+    public static boolean cancelStackCheck(Material material)
+    {
+        Config config = Simplestack.getCustomConfig();
+        if(Simplestack.getCustomConfig().LIST_MODE.equals(ListMode.BLACKLIST))
+        {
+            return config.LIST.contains(material);
+        }
+        else
+        {
+            return !config.LIST.contains(material);
+        }
     }
 }
