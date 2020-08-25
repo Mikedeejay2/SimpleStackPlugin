@@ -27,13 +27,13 @@ public class HelpCommand extends SubCommand
         }
         String ver = plugin.getDescription().getVersion();
         ArrayList<BaseComponent[]> lines = new ArrayList<>();
-        BaseComponent[] line1 = ChatUtils.getBaseComponentArray("&b&m                                                                               "      + "\n");
-        BaseComponent[] line2 = ChatUtils.getBaseComponentArray("                              &9&lSimple &d&lStack&r                               "       + "\n");
-        BaseComponent[] line3 = ChatUtils.getBaseComponentArray("                                                                               "          + "\n");
-        BaseComponent[] line4 = ChatUtils.getBaseComponentArray("  &b/simplestack reload &d- &fUpdate config settings in game."                            + "\n");
-        BaseComponent[] line5 = ChatUtils.getBaseComponentArray("                                                                               "          + "\n");
-        BaseComponent[] line6 = ChatUtils.getBaseComponentArray("                               &7Version: " + ver                                          + "\n");
-        BaseComponent[] line7 = ChatUtils.getBaseComponentArray("&b&m                                                                               "      + "\n");
+        BaseComponent[] line1 = ChatUtils.getBaseComponentArray("&b &m                                                                              \n");
+        BaseComponent[] line2 = ChatUtils.getBaseComponentArray("                              &9&lSimple &d&lStack&r                               \n");
+        BaseComponent[] line3 = ChatUtils.getBaseComponentArray("                                                                               \n");
+        BaseComponent[] line4 = ChatUtils.getBaseComponentArray("  &b/simplestack reload &d- &fUpdate config settings in game.\n");
+        BaseComponent[] line5 = ChatUtils.getBaseComponentArray("                                                                               \n");
+        BaseComponent[] line6 = ChatUtils.getBaseComponentArray("                               &7Version: " + ver + "\n");
+        BaseComponent[] line7 = ChatUtils.getBaseComponentArray("&b &m                                                                              ");
 
         ChatUtils.setClickEvent(line4, getClickEvent(ClickEvent.Action.RUN_COMMAND, "/simplestack reload"));
         ChatUtils.setHoverEvent(line4, getHoverEvent(HoverEvent.Action.SHOW_TEXT, "Click to run /simplestack reload"));

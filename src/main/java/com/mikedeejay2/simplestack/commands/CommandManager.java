@@ -6,9 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-import javax.security.auth.callback.CallbackHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -17,6 +15,7 @@ public class CommandManager implements CommandExecutor
 {
     private ArrayList<SubCommand> commands = new ArrayList<SubCommand>();
     private Simplestack plugin = Simplestack.getInstance();
+    private CustomTabCompleter completer;
 
     public CommandManager() {}
 
@@ -28,6 +27,9 @@ public class CommandManager implements CommandExecutor
     public void setup()
     {
         plugin.getCommand(main).setExecutor(this);
+
+        completer = new CustomTabCompleter();
+        plugin.getCommand(main).setTabCompleter(completer);
 
         // Add new subcommands here:
         this.commands.add(new ReloadCommand());
