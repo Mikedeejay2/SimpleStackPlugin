@@ -36,7 +36,7 @@ simplestack.reload - Allow access to reload the config (/simplestack reload)
 ### Config
 
 In config.yml there are options for configuring which items should be stacked by this plugin or not.
-A list mode can be choosed (blacklist / whitelist) which tells the plugin how to handle items in the list.
+A list mode can be chosen (blacklist / whitelist) which tells the plugin how to handle items in the list.
 
 ### Downloads
 
