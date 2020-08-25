@@ -2,6 +2,7 @@ package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.simplestack.commands.CommandManager;
 import com.mikedeejay2.simplestack.config.Config;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /*
@@ -17,10 +18,18 @@ public final class Simplestack extends JavaPlugin
 
     public CommandManager commandManager;
 
+    // A namespaced key for adding a small piece of NBT data that makes each item "Unique".
+    // This has to happen because if we don't make each item unique then the InventoryClickEvent won't be called
+    // when trying to stack 2 fully stacked items of the same type.
+    // Certainly a hacky work around, but it works.
+    private static NamespacedKey key;
+
     @Override
     public void onEnable()
     {
         setInstance(this);
+
+        key = new NamespacedKey(this, "simplestack");
 
         customConfig = new Config();
         customConfig.onEnable();
@@ -50,5 +59,10 @@ public final class Simplestack extends JavaPlugin
     public static Config getCustomConfig()
     {
         return customConfig;
+    }
+
+    public NamespacedKey getKey()
+    {
+        return key;
     }
 }

@@ -19,12 +19,6 @@ public class Listeners implements Listener
     // Plugin instance for referencing
     private static final Simplestack plugin = Simplestack.getInstance();
 
-    // A namespaced key for adding a small piece of NBT data that makes each item "Unique".
-    // This has to happen because if we don't make each item unique then the InventoryClickEvent won't be called
-    // when trying to stack 2 fully stacked items of the same type.
-    // Certainly a hacky work around, but it works.
-    private static final NamespacedKey key = new NamespacedKey(plugin, "simplestack");
-
     private static final String permission = "simplestack.use";
 
     /*
@@ -48,7 +42,7 @@ public class Listeners implements Listener
         boolean cancel = StackUtils.cancelStackCheck(itemPickUp.getType());
         if(cancel) return;
 
-        StackUtils.makeUnique(itemPickUp, key);
+        StackUtils.makeUnique(itemPickUp, plugin.getKey());
 
         switch(clickType)
         {
@@ -102,24 +96,6 @@ public class Listeners implements Listener
         boolean cancel = StackUtils.cancelStackCheck(block.getType());
         if(cancel) return;
 
-        Location location = block.getLocation();
-        World world = location.getWorld();
-        ShulkerBox shulkerBox = (ShulkerBox)block.getState();
-        ItemStack item = new ItemStack(block.getType());
-        BlockStateMeta meta = (BlockStateMeta) item.getItemMeta();
-
-        meta.setDisplayName(shulkerBox.getCustomName());
-        for(ItemStack curItem : shulkerBox.getInventory().getStorageContents())
-        {
-            if(curItem == null) continue;
-            meta.setBlockState(shulkerBox);
-            break;
-        }
-        item.setItemMeta(meta);
-        StackUtils.makeUnique(item, key);
-
-        world.dropItemNaturally(location, item);
-        block.setType(Material.AIR);
-        event.setCancelled(true);
+        StackUtils.preserveShulkerBox(event, block);
     }
 }

@@ -31,7 +31,7 @@ public class ChatUtils
 
     public static void debug(String s)
     {
-        Bukkit.getConsoleSender().sendMessage(chat(getTitleString() + s));
+        Bukkit.getConsoleSender().sendMessage(chat(getTitleString() + "&c" + s));
     }
 
     public static void sendMessage(Player p, String s)

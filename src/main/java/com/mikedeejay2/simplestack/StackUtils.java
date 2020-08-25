@@ -2,17 +2,20 @@ package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
+import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -25,6 +28,8 @@ public class StackUtils
     // Max stack size. Changing this produces some really weird results because
     // Minecraft really doesn't know how to handle anything higher than 64.
     public static final int MAX_AMOUNT_IN_STACK = 64;
+
+    private static final NamespacedKey key = new NamespacedKey(plugin, "simplestack");
 
     /*
      * This helper method takes an item that is on the ground and moves
@@ -283,6 +288,10 @@ public class StackUtils
         return true;
     }
 
+    /*
+     * If the player doesn't have the permission "simplestack.use" (enabled by default)
+     * then this will tell the event it's being called in to return and not run stacking code.
+     */
     public static boolean cancelStackCheck(Material material)
     {
         Config config = Simplestack.getCustomConfig();
@@ -294,5 +303,31 @@ public class StackUtils
         {
             return !config.LIST.contains(material);
         }
+    }
+
+    /*
+     * By default shulker boxes unstack items when broken, this stops that.
+     */
+    public static void preserveShulkerBox(BlockBreakEvent event, Block block)
+    {
+        Location location = block.getLocation();
+        World world = location.getWorld();
+        ShulkerBox shulkerBox = (ShulkerBox) block.getState();
+        ItemStack item = new ItemStack(block.getType());
+        BlockStateMeta meta = (BlockStateMeta) item.getItemMeta();
+
+        meta.setDisplayName(shulkerBox.getCustomName());
+        for(ItemStack curItem : shulkerBox.getInventory().getStorageContents())
+        {
+            if(curItem == null) continue;
+            meta.setBlockState(shulkerBox);
+            break;
+        }
+        item.setItemMeta(meta);
+        StackUtils.makeUnique(item, plugin.getKey());
+
+        world.dropItemNaturally(location, item);
+        block.setType(Material.AIR);
+        event.setCancelled(true);
     }
 }
