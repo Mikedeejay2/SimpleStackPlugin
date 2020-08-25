@@ -167,32 +167,57 @@ public class StackUtils
         if(itemPickUp != null && itemPickUp.getData().getItemType().getMaxStackSize() != 64 && !itemPickUp.getType().equals(Material.AIR))
         {
             Inventory inv = null;
+            Inventory otherInv = null;
             Inventory topInv = player.getOpenInventory().getTopInventory();
             Inventory bottomInv = player.getOpenInventory().getBottomInventory();
-            if(!(player.getOpenInventory().getBottomInventory() instanceof PlayerInventory && player.getOpenInventory().getTopInventory() instanceof CraftingInventory))
+            int slot = event.getSlot();
+            if(
+                !(bottomInv instanceof PlayerInventory &&
+                topInv instanceof CraftingInventory &&
+                topInv.getSize() == 5)
+              )
             {
                 if(event.getClickedInventory().equals(bottomInv))
                 {
-                    inv = player.getOpenInventory().getTopInventory();
+                    inv = topInv;
+                    otherInv = bottomInv;
                 }
                 else if(event.getClickedInventory().equals(topInv))
                 {
-                    inv = player.getOpenInventory().getBottomInventory();
-
-                    if(topInv instanceof AnvilInventory && event.getSlot() == 2)
-                    {
-                        ItemStack item1 = topInv.getItem(0);
-                        ItemStack item2 = topInv.getItem(1);
-                        if(item1 != null) item1.setAmount(item1.getAmount()-1);
-                        if(item2 != null) item2.setAmount(item2.getAmount()-1);
-                        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
-                    }
+                    inv = bottomInv;
+                    otherInv = topInv;
                 }
 
-                moveItem(itemPickUp, event, inv, 0, inv instanceof PlayerInventory ? inv.getSize()-5 : inv.getSize(), false);
+                int startSlot = 0;
+                int endSlot = inv.getSize();
+                boolean reverse = false;
+                if(inv instanceof PlayerInventory)
+                {
+                    endSlot -= 5;
+                    if(topInv instanceof FurnaceInventory && itemPickUp.getType().isFuel())
+                    {
+                        endSlot = 2;
+                        reverse = true;
+                    }
+                }
+                else if(inv instanceof CraftingInventory)
+                {
+                    Bukkit.getConsoleSender().sendMessage("size: " + topInv.getSize());
+                    ++startSlot;
+                }
+                else if(inv instanceof AnvilInventory && slot == 2)
+                {
+                    ItemStack item1 = topInv.getItem(0);
+                    ItemStack item2 = topInv.getItem(1);
+                    if(item1 != null) item1.setAmount(item1.getAmount()-1);
+                    if(item2 != null) item2.setAmount(item2.getAmount()-1);
+                    player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
+                }
+                moveItem(itemPickUp, event, inv, startSlot, endSlot, false);
             }
             else
             {
+                Bukkit.getConsoleSender().sendMessage("aijai " + topInv.getSize());
                 inv = event.getClickedInventory();
                 String type = itemPickUp.getType().toString();
                 if(!type.endsWith("_HELMET") &&
