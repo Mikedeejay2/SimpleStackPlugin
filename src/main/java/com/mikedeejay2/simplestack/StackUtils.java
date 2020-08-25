@@ -209,18 +209,18 @@ public class StackUtils
                 endSlot = 2;
                 reverse = true;
             }
+            if(clickedInventory instanceof AnvilInventory && slot == 2)
+            {
+                ItemStack item1 = topInv.getItem(0);
+                ItemStack item2 = topInv.getItem(1);
+                if(item2 != null) item2.setAmount(item2.getAmount() - item1.getAmount());
+                if(item1 != null) item1.setAmount(0);
+                player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
+            }
         }
         else if(inv instanceof CraftingInventory)
         {
             ++startSlot;
-        }
-        else if(inv instanceof AnvilInventory && slot == 2)
-        {
-            ItemStack item1 = topInv.getItem(0);
-            ItemStack item2 = topInv.getItem(1);
-            if(item1 != null) item1.setAmount(item1.getAmount() - 1);
-            if(item2 != null) item2.setAmount(item2.getAmount() - 1);
-            player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
         }
         if(inv instanceof PlayerInventory)
         {
@@ -476,7 +476,9 @@ public class StackUtils
 
     public static void moveAllItemsToPlayerInv(Inventory inv, Player player, Inventory playerInv)
     {
-        for(int i = 1; i < inv.getSize(); i++)
+        int startingSlot = 0;
+        if(inv instanceof CraftingInventory) startingSlot = 1;
+        for(int i = startingSlot; i < inv.getSize(); i++)
         {
             ItemStack stack = inv.getItem(i);
             if(stack == null) continue;
@@ -484,7 +486,7 @@ public class StackUtils
             boolean cancel = StackUtils.cancelStackCheck(stack.getType());
             if(cancel) continue;
 
-            StackUtils.moveItemPlayerOrder(stack, inv, i, playerInv);
+            StackUtils.moveItem(stack, inv, i, playerInv, 0, 36, false);
             player.updateInventory();
         }
     }

@@ -126,7 +126,10 @@ public class Listeners implements Listener
     public void craftingTableCloseEvent(InventoryCloseEvent event)
     {
         Inventory inv = event.getInventory();
-        if(!inv.getType().equals(InventoryType.WORKBENCH)) return;
+        InventoryType type = inv.getType();
+        if(!(type.equals(InventoryType.WORKBENCH) ||
+        type.equals(InventoryType.ENCHANTING) ||
+        type.equals(InventoryType.ANVIL))) return;
         Player player = (Player) event.getPlayer();
         Inventory playerInv = player.getInventory();
         StackUtils.moveAllItemsToPlayerInv(inv, player, playerInv);
