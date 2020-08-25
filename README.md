@@ -22,12 +22,15 @@ simply by moving items around the inventory and combining them into a stack.
 ### Commands
 
 /simplestack help - An in game help menu for admin commands
+
 /simplestack reload - Reload the blacklist/whitelist from config
 
 ### Permissions
 
 simplestack.use - Use Simple Stack to combine items in inventories
+
 simplestack.help - Allow access to view the admin help menu (/simplestack help)
+
 simplestack.reload - Allow access to reload the config (/simplestack reload)
 
 ### Config
