@@ -12,6 +12,10 @@ public class CustomTabCompleter implements TabCompleter
 {
     private static final Simplestack plugin = Simplestack.getInstance();
 
+    /*
+     * This class is meant to autocomplete the /simplestack command with options to make
+     * typing out commands easier.
+     */
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
     {
