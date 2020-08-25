@@ -15,6 +15,9 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Arrays;
 
 public class StackUtils
 {
@@ -56,27 +59,54 @@ public class StackUtils
         }
     }
 
-//    public static void moveItemToInventory(Cancellable event, ItemStack item, Inventory fromInv, Inventory toInv)
-//    {
-//        if(item.getType().getMaxStackSize() == 64) return;
-//        Inventory inv = toInv;
-//        for(int i = 0; i < inv.getSize(); i++)
-//        {
-//            if(!moveItemInternal(item, inv, i)) continue;
-//            fromInv.removeItem(item);
-//            event.setCancelled(true);
-//            break;
-//        }
-//        if(item.getAmount() == 0) return;
-//        for(int i = 0; i < inv.getSize(); i++)
-//        {
-//            if(inv.getItem(i) != null) continue;
-//            inv.setItem(i, item);
-//            fromInv.removeItem(item);
-//            event.setCancelled(true);
-//            break;
-//        }
-//    }
+    public static void moveItemToInventory(ItemStack item, Inventory fromInv, Inventory toInv, int amountBeingMoved)
+    {
+        if(item.getType().getMaxStackSize() == 64) return;
+        int amountLeft = amountBeingMoved;
+        item = item.clone();
+        item.setAmount(amountBeingMoved);
+        ItemStack origItem = item.clone();
+        Inventory inv = toInv;
+        for(int i = 0; i < inv.getSize(); i++)
+        {
+            if(!moveItemInternal(item, inv, i)) continue;
+            amountLeft -= item.getAmount();
+            break;
+        }
+        if(amountBeingMoved != 0)
+        {
+            for(int i = 0; i < inv.getSize(); i++)
+            {
+                if(inv.getItem(i) != null) continue;
+                inv.setItem(i, item);
+                amountLeft = 0;
+                break;
+            }
+        }
+        removeItemFromInventory(origItem, fromInv, amountBeingMoved - amountLeft);
+    }
+
+    public static void removeItemFromInventory(ItemStack item, Inventory inv, int amount)
+    {
+        for(int i = 0; i < inv.getSize(); i++)
+        {
+            ItemStack curItem = inv.getItem(i);
+            if(curItem == null) continue;
+            if(!equalsEachOther(curItem, item)) continue;
+            if(amount > curItem.getAmount())
+            {
+                amount -= curItem.getAmount();
+                curItem.setAmount(0);
+            }
+            else
+            {
+                curItem.setAmount(curItem.getAmount() - amount);
+                amount = 0;
+            }
+            inv.setItem(i, curItem);
+            if(amount == 0) break;
+        }
+    }
 
     /*
      * This helped method is a left click event that attempts to

@@ -3,8 +3,7 @@ package com.mikedeejay2.simplestack;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.util.ChatUtils;
 import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.ShulkerBox;
+import org.bukkit.block.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,6 +15,9 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Arrays;
 
 public class Listeners implements Listener
 {
@@ -98,16 +100,27 @@ public class Listeners implements Listener
         StackUtils.preserveShulkerBox(event, block);
     }
 
-//    @EventHandler
-//    public void inventoryMoveItemEvent(InventoryMoveItemEvent event)
-//    {
-//        ItemStack item = event.getItem();
-//        Inventory fromInv = event.getSource();
-//        Inventory toInv = event.getDestination();
-//
-//        boolean cancel = StackUtils.cancelStackCheck(item.getType());
-//        if(cancel) return;
-//
-//        StackUtils.moveItemToInventory(event, item, fromInv, toInv);
-//    }
+    @EventHandler
+    public void inventoryMoveItemEvent(InventoryMoveItemEvent event)
+    {
+        ItemStack item = event.getItem();
+
+        boolean cancel = StackUtils.cancelStackCheck(item.getType());
+        if(cancel) return;
+        event.setCancelled(true);
+
+        Inventory fromInv = event.getSource();
+        Inventory toInv = event.getDestination();
+        int amountBeingMoved = item.getAmount();
+
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                StackUtils.moveItemToInventory(item, fromInv, toInv, amountBeingMoved);
+            }
+        }.runTaskLater(plugin, 0);
+
+    }
 }
