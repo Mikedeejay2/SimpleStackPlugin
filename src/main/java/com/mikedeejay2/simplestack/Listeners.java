@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.simplestack.config.Config;
+import com.mikedeejay2.simplestack.util.ChatUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.ShulkerBox;
@@ -11,6 +12,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
@@ -33,11 +36,7 @@ public class Listeners implements Listener
         ItemStack itemPickUp = event.getCurrentItem();
         ItemStack itemPutDown = event.getCursor();
         ClickType clickType = event.getClick();
-
-        if(itemPickUp == null ||
-        itemPickUp.getData().getItemType().getMaxStackSize() == 64 ||
-        itemPickUp.getType().equals(Material.AIR))
-            return;
+        if(itemPickUp == null) return;
 
         boolean cancel = StackUtils.cancelStackCheck(itemPickUp.getType());
         if(cancel) return;
@@ -86,7 +85,7 @@ public class Listeners implements Listener
      * unstacks items inside of a shulker box automatically
      */
     @EventHandler
-    public void breakBlockEvent(BlockBreakEvent event)
+    public void blockBreakEvent(BlockBreakEvent event)
     {
         Player player = event.getPlayer();
         if(!player.hasPermission(permission)) return;
@@ -98,4 +97,17 @@ public class Listeners implements Listener
 
         StackUtils.preserveShulkerBox(event, block);
     }
+
+//    @EventHandler
+//    public void inventoryMoveItemEvent(InventoryMoveItemEvent event)
+//    {
+//        ItemStack item = event.getItem();
+//        Inventory fromInv = event.getSource();
+//        Inventory toInv = event.getDestination();
+//
+//        boolean cancel = StackUtils.cancelStackCheck(item.getType());
+//        if(cancel) return;
+//
+//        StackUtils.moveItemToInventory(event, item, fromInv, toInv);
+//    }
 }

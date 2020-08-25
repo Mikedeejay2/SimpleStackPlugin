@@ -8,13 +8,9 @@ import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -59,6 +55,28 @@ public class StackUtils
             break;
         }
     }
+
+//    public static void moveItemToInventory(Cancellable event, ItemStack item, Inventory fromInv, Inventory toInv)
+//    {
+//        if(item.getType().getMaxStackSize() == 64) return;
+//        Inventory inv = toInv;
+//        for(int i = 0; i < inv.getSize(); i++)
+//        {
+//            if(!moveItemInternal(item, inv, i)) continue;
+//            fromInv.removeItem(item);
+//            event.setCancelled(true);
+//            break;
+//        }
+//        if(item.getAmount() == 0) return;
+//        for(int i = 0; i < inv.getSize(); i++)
+//        {
+//            if(inv.getItem(i) != null) continue;
+//            inv.setItem(i, item);
+//            fromInv.removeItem(item);
+//            event.setCancelled(true);
+//            break;
+//        }
+//    }
 
     /*
      * This helped method is a left click event that attempts to
@@ -119,15 +137,26 @@ public class StackUtils
         if(itemPickUp != null && itemPickUp.getData().getItemType().getMaxStackSize() != 64 && !itemPickUp.getType().equals(Material.AIR))
         {
             Inventory inv = null;
+            Inventory topInv = player.getOpenInventory().getTopInventory();
+            Inventory bottomInv = player.getOpenInventory().getBottomInventory();
             if(!(player.getOpenInventory().getBottomInventory() instanceof PlayerInventory && player.getOpenInventory().getTopInventory() instanceof CraftingInventory))
             {
-                if(event.getClickedInventory().equals(player.getOpenInventory().getBottomInventory()))
+                if(event.getClickedInventory().equals(bottomInv))
                 {
                     inv = player.getOpenInventory().getTopInventory();
                 }
-                else if(event.getClickedInventory().equals(player.getOpenInventory().getTopInventory()))
+                else if(event.getClickedInventory().equals(topInv))
                 {
                     inv = player.getOpenInventory().getBottomInventory();
+
+                    if(topInv instanceof AnvilInventory && event.getSlot() == 2)
+                    {
+                        ItemStack item1 = topInv.getItem(0);
+                        ItemStack item2 = topInv.getItem(1);
+                        if(item1 != null) item1.setAmount(item1.getAmount()-1);
+                        if(item2 != null) item2.setAmount(item2.getAmount()-1);
+                        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
+                    }
                 }
 
                 moveItem(itemPickUp, event, inv, 0, inv instanceof PlayerInventory ? inv.getSize()-5 : inv.getSize(), false);
@@ -295,6 +324,10 @@ public class StackUtils
     public static boolean cancelStackCheck(Material material)
     {
         Config config = Simplestack.getCustomConfig();
+        if(material == null ||
+           material.getMaxStackSize() == 64 ||
+           material.equals(Material.AIR))
+            return true;
         if(Simplestack.getCustomConfig().LIST_MODE.equals(ListMode.BLACKLIST))
         {
             return config.LIST.contains(material);
