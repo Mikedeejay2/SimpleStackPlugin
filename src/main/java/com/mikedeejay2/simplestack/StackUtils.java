@@ -15,9 +15,6 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.Arrays;
 
 public class StackUtils
 {
@@ -164,120 +161,141 @@ public class StackUtils
      */
     public static void shiftClick(ItemStack itemPickUp, Player player, InventoryClickEvent event)
     {
-        if(itemPickUp != null && itemPickUp.getData().getItemType().getMaxStackSize() != 64 && !itemPickUp.getType().equals(Material.AIR))
+        if(itemPickUp == null || itemPickUp.getData().getItemType().getMaxStackSize() == 64 || itemPickUp.getType().equals(Material.AIR))
+            return;
+        Inventory inv = null;
+        Inventory topInv = player.getOpenInventory().getTopInventory();
+        Inventory bottomInv = player.getOpenInventory().getBottomInventory();
+        int slot = event.getSlot();
+        if(!(bottomInv instanceof PlayerInventory) || !(topInv instanceof CraftingInventory && topInv.getSize() == 5))
         {
-            Inventory inv = null;
-            Inventory otherInv = null;
-            Inventory topInv = player.getOpenInventory().getTopInventory();
-            Inventory bottomInv = player.getOpenInventory().getBottomInventory();
-            int slot = event.getSlot();
-            if(
-                !(bottomInv instanceof PlayerInventory &&
-                topInv instanceof CraftingInventory &&
-                topInv.getSize() == 5)
-              )
-            {
-                if(event.getClickedInventory().equals(bottomInv))
-                {
-                    inv = topInv;
-                    otherInv = bottomInv;
-                }
-                else if(event.getClickedInventory().equals(topInv))
-                {
-                    inv = bottomInv;
-                    otherInv = topInv;
-                }
+            shiftClickSeperateInv(itemPickUp, player, event, inv, topInv, bottomInv, slot);
+        }
+        else
+        {
+            shiftClickSameInv(itemPickUp, event, bottomInv);
+        }
+        player.updateInventory();
+        event.setCancelled(true);
+    }
 
-                int startSlot = 0;
-                int endSlot = inv.getSize();
-                boolean reverse = false;
-                if(inv instanceof PlayerInventory)
-                {
-                    endSlot -= 5;
-                    if(topInv instanceof FurnaceInventory && itemPickUp.getType().isFuel())
-                    {
-                        endSlot = 2;
-                        reverse = true;
-                    }
-                }
-                else if(inv instanceof CraftingInventory)
-                {
-                    Bukkit.getConsoleSender().sendMessage("size: " + topInv.getSize());
-                    ++startSlot;
-                }
-                else if(inv instanceof AnvilInventory && slot == 2)
-                {
-                    ItemStack item1 = topInv.getItem(0);
-                    ItemStack item2 = topInv.getItem(1);
-                    if(item1 != null) item1.setAmount(item1.getAmount()-1);
-                    if(item2 != null) item2.setAmount(item2.getAmount()-1);
-                    player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
-                }
-                moveItem(itemPickUp, event, inv, startSlot, endSlot, false);
+    private static void shiftClickSeperateInv(ItemStack itemPickUp, Player player, InventoryClickEvent event, Inventory inv, Inventory topInv, Inventory bottomInv, int slot)
+    {
+        if(event.getClickedInventory().equals(bottomInv))
+        {
+            if(topInv instanceof CraftingInventory && topInv.getSize() == 5)
+            {
+                inv = bottomInv;
             }
             else
             {
-                Bukkit.getConsoleSender().sendMessage("aijai " + topInv.getSize());
-                inv = event.getClickedInventory();
-                String type = itemPickUp.getType().toString();
-                if(!type.endsWith("_HELMET") &&
-                        !type.endsWith("_CHESTPLATE") &&
-                        !type.endsWith("_LEGGINGS") &&
-                        !type.endsWith("_BOOTS") &&
-                        !type.equals("SHIELD") &&
-                        !type.equals("ELYTRA"))
+                inv = topInv;
+            }
+        }
+        else if(event.getClickedInventory().equals(topInv))
+        {
+            inv = bottomInv;
+        }
+
+        int startSlot = 0;
+        int endSlot = inv.getSize();
+        boolean reverse = false;
+        if(inv instanceof PlayerInventory)
+        {
+            endSlot -= 5;
+            if(topInv instanceof FurnaceInventory && itemPickUp.getType().isFuel())
+            {
+                endSlot = 2;
+                reverse = true;
+            }
+        }
+        else if(inv instanceof CraftingInventory)
+        {
+            ++startSlot;
+        }
+        else if(inv instanceof AnvilInventory && slot == 2)
+        {
+            ItemStack item1 = topInv.getItem(0);
+            ItemStack item2 = topInv.getItem(1);
+            if(item1 != null) item1.setAmount(item1.getAmount() - 1);
+            if(item2 != null) item2.setAmount(item2.getAmount() - 1);
+            player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
+        }
+        if(inv instanceof PlayerInventory)
+        {
+            moveItemPlayerOrder(itemPickUp, event, bottomInv);
+        }
+        else
+        {
+            moveItem(itemPickUp, event, inv, startSlot, endSlot, reverse);
+        }
+    }
+
+    private static void shiftClickSameInv(ItemStack itemPickUp, InventoryClickEvent event, Inventory bottomInv)
+    {
+        Inventory inv;
+        int slot = event.getSlot();
+        inv = event.getClickedInventory();
+        String type = itemPickUp.getType().toString();
+        if(inv instanceof CraftingInventory)
+        {
+            moveItemPlayerOrder(itemPickUp, event, bottomInv);
+            return;
+        }
+        if(!type.endsWith("_HELMET") &&
+                !type.endsWith("_CHESTPLATE") &&
+                !type.endsWith("_LEGGINGS") &&
+                !type.endsWith("_BOOTS") &&
+                !type.equals("SHIELD") &&
+                !type.equals("ELYTRA"))
+        {
+            if(slot < 9)
+            {
+                moveItem(itemPickUp, event, inv, 10, 36, false);
+            }
+            else if(slot < 36)
+            {
+                moveItem(itemPickUp, event, inv, 0, 9, false);
+            }
+            else
+            {
+                moveItem(itemPickUp, event, inv, 10, 36, false);
+            }
+        }
+        else
+        {
+            if(slot < 36)
+            {
+                if(type.endsWith("_BOOTS"))
                 {
-                    if(event.getSlot() < 9)
-                    {
-                        moveItem(itemPickUp, event, inv, 9, 36, false);
-                    }
-                    else if(event.getSlot() < 36)
-                    {
-                        moveItem(itemPickUp, event, inv, 0, 8, false);
-                    }
-                    else
-                    {
-                        moveItem(itemPickUp, event, inv, 9, 36, false);
-                    }
+                    inv.setItem(36, itemPickUp);
+                    inv.setItem(slot, null);
                 }
-                else
+                else if(type.endsWith("_LEGGINGS"))
                 {
-                    if(event.getSlot() < 36)
-                    {
-                        if(type.endsWith("_BOOTS"))
-                        {
-                            inv.setItem(36, itemPickUp);
-                            inv.setItem(event.getSlot(), null);
-                        }
-                        else if(type.endsWith("_LEGGINGS"))
-                        {
-                            inv.setItem(37, itemPickUp);
-                            inv.setItem(event.getSlot(), null);
-                        }
-                        else if(type.endsWith("_CHESTPLATE") || type.equals("ELYTRA"))
-                        {
-                            inv.setItem(38, itemPickUp);
-                            inv.setItem(event.getSlot(), null);
-                        }
-                        else if(type.endsWith("_HELMET"))
-                        {
-                            inv.setItem(39, itemPickUp);
-                            inv.setItem(event.getSlot(), null);
-                        }
-                        else if(type.equals("SHIELD"))
-                        {
-                            inv.setItem(40, itemPickUp);
-                            inv.setItem(event.getSlot(), null);
-                        }
-                    }
-                    else
-                    {
-                        moveItem(itemPickUp, event, event.getClickedInventory(), 9, 36, false);
-                    }
+                    inv.setItem(37, itemPickUp);
+                    inv.setItem(slot, null);
+                }
+                else if(type.endsWith("_CHESTPLATE") || type.equals("ELYTRA"))
+                {
+                    inv.setItem(38, itemPickUp);
+                    inv.setItem(slot, null);
+                }
+                else if(type.endsWith("_HELMET"))
+                {
+                    inv.setItem(39, itemPickUp);
+                    inv.setItem(slot, null);
+                }
+                else if(type.equals("SHIELD"))
+                {
+                    inv.setItem(40, itemPickUp);
+                    inv.setItem(slot, null);
                 }
             }
-            player.updateInventory();
-            event.setCancelled(true);
+            else
+            {
+                moveItem(itemPickUp, event, inv, 10, 36, false);
+            }
         }
     }
 
@@ -285,7 +303,7 @@ public class StackUtils
      * This helper method moves an item into a player's inventory with a set starting slot
      * and ending slot to search through. This method can also be called in reverse if needed.
      */
-    public static void moveItem(ItemStack itemPickUp, InventoryClickEvent event, Inventory inv, int startingSlot, int endingSlot, boolean reverse)
+    public static boolean moveItem(ItemStack itemPickUp, InventoryClickEvent event, Inventory inv, int startingSlot, int endingSlot, boolean reverse)
     {
         if(!reverse)
         {
@@ -293,14 +311,17 @@ public class StackUtils
             {
                 if(moveItemInternal(itemPickUp, inv, i)) break;
             }
-            if(itemPickUp.getAmount() == 0) return;
+            if(itemPickUp.getAmount() == 0) return true;
+            boolean flag = false;
             for(int i = startingSlot; i < endingSlot; i++)
             {
                 if(inv.getItem(i) != null) continue;
                 inv.setItem(i, itemPickUp);
                 event.getClickedInventory().setItem(event.getSlot(), null);
+                flag = true;
                 break;
             }
+            return flag;
         }
         else
         {
@@ -308,14 +329,25 @@ public class StackUtils
             {
                 if(moveItemInternal(itemPickUp, inv, i)) break;
             }
-            if(itemPickUp.getAmount() == 0) return;
+            if(itemPickUp.getAmount() == 0) return true;
+            boolean flag = false;
             for(int i = endingSlot-1; i >= startingSlot; i--)
             {
                 if(inv.getItem(i) != null) continue;
                 inv.setItem(i, itemPickUp);
                 event.getClickedInventory().setItem(event.getSlot(), null);
+                flag = true;
                 break;
             }
+            return flag;
+        }
+    }
+
+    public static void moveItemPlayerOrder(ItemStack itemPickUp, InventoryClickEvent event, Inventory inv)
+    {
+        if(!moveItem(itemPickUp, event, inv, 10, 36, false))
+        {
+            moveItem(itemPickUp, event, inv, 0, 9, false);
         }
     }
 
