@@ -181,7 +181,8 @@ public class StackUtils
 
     private static void shiftClickSeperateInv(ItemStack itemPickUp, Player player, InventoryClickEvent event, Inventory inv, Inventory topInv, Inventory bottomInv, int slot)
     {
-        if(event.getClickedInventory().equals(bottomInv))
+        Inventory clickedInventory = event.getClickedInventory();
+        if(clickedInventory.equals(bottomInv))
         {
             if(topInv instanceof CraftingInventory && topInv.getSize() == 5)
             {
@@ -192,7 +193,7 @@ public class StackUtils
                 inv = topInv;
             }
         }
-        else if(event.getClickedInventory().equals(topInv))
+        else if(clickedInventory.equals(topInv))
         {
             inv = bottomInv;
         }
@@ -223,23 +224,24 @@ public class StackUtils
         }
         if(inv instanceof PlayerInventory)
         {
-            moveItemPlayerOrder(itemPickUp, event, bottomInv);
+            moveItemPlayerOrder(itemPickUp, clickedInventory, slot, bottomInv);
         }
         else
         {
-            moveItem(itemPickUp, event, inv, startSlot, endSlot, reverse);
+            moveItem(itemPickUp, clickedInventory, slot, inv, startSlot, endSlot, reverse);
         }
     }
 
     private static void shiftClickSameInv(ItemStack itemPickUp, InventoryClickEvent event, Inventory bottomInv)
     {
+        Inventory clickedInventory = event.getClickedInventory();
         Inventory inv;
         int slot = event.getSlot();
         inv = event.getClickedInventory();
         String type = itemPickUp.getType().toString();
         if(inv instanceof CraftingInventory)
         {
-            moveItemPlayerOrder(itemPickUp, event, bottomInv);
+            moveItemPlayerOrder(itemPickUp, clickedInventory, slot, bottomInv);
             return;
         }
         if(!type.endsWith("_HELMET") &&
@@ -251,15 +253,15 @@ public class StackUtils
         {
             if(slot < 9)
             {
-                moveItem(itemPickUp, event, inv, 10, 36, false);
+                moveItem(itemPickUp, clickedInventory, slot, inv, 10, 36, false);
             }
             else if(slot < 36)
             {
-                moveItem(itemPickUp, event, inv, 0, 9, false);
+                moveItem(itemPickUp, clickedInventory, slot, inv, 0, 9, false);
             }
             else
             {
-                moveItem(itemPickUp, event, inv, 10, 36, false);
+                moveItem(itemPickUp, clickedInventory, slot, inv, 10, 36, false);
             }
         }
         else
@@ -294,7 +296,7 @@ public class StackUtils
             }
             else
             {
-                moveItem(itemPickUp, event, inv, 10, 36, false);
+                moveItem(itemPickUp, clickedInventory, slot, inv, 10, 36, false);
             }
         }
     }
@@ -303,7 +305,46 @@ public class StackUtils
      * This helper method moves an item into a player's inventory with a set starting slot
      * and ending slot to search through. This method can also be called in reverse if needed.
      */
-    public static boolean moveItem(ItemStack itemPickUp, InventoryClickEvent event, Inventory inv, int startingSlot, int endingSlot, boolean reverse)
+    public static boolean moveItem(ItemStack itemPickUp, Inventory clickedInventory, int slot, Inventory inv, int startingSlot, int endingSlot, boolean reverse)
+    {
+        if(!reverse)
+        {
+            if(addItemToExistingStack(itemPickUp, inv, startingSlot, endingSlot, false)) return true;
+            return addItemIgnoreStacks(itemPickUp, clickedInventory, slot, inv, startingSlot, endingSlot, false);
+        }
+        else
+        {
+            if(addItemToExistingStack(itemPickUp, inv, startingSlot, endingSlot, true)) return true;
+            return addItemIgnoreStacks(itemPickUp, clickedInventory, slot, inv, startingSlot, endingSlot, true);
+        }
+    }
+
+    private static boolean addItemIgnoreStacks(ItemStack itemPickUp, Inventory clickedInventory, int slot, Inventory inv, int startingSlot, int endingSlot, boolean reverse)
+    {
+        if(!reverse)
+        {
+            for(int i = startingSlot; i < endingSlot; i++)
+            {
+                if(inv.getItem(i) != null) continue;
+                inv.setItem(i, itemPickUp);
+                clickedInventory.setItem(slot, null);
+                return true;
+            }
+        }
+        else
+        {
+            for(int i = endingSlot-1; i >= startingSlot; i--)
+            {
+                if(inv.getItem(i) != null) continue;
+                inv.setItem(i, itemPickUp);
+                clickedInventory.setItem(slot, null);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean addItemToExistingStack(ItemStack itemPickUp, Inventory inv, int startingSlot, int endingSlot, boolean reverse)
     {
         if(!reverse)
         {
@@ -311,43 +352,24 @@ public class StackUtils
             {
                 if(moveItemInternal(itemPickUp, inv, i)) break;
             }
-            if(itemPickUp.getAmount() == 0) return true;
-            boolean flag = false;
-            for(int i = startingSlot; i < endingSlot; i++)
-            {
-                if(inv.getItem(i) != null) continue;
-                inv.setItem(i, itemPickUp);
-                event.getClickedInventory().setItem(event.getSlot(), null);
-                flag = true;
-                break;
-            }
-            return flag;
         }
         else
         {
-            for(int i = endingSlot-1; i >= startingSlot; i--)
+            for(int i = startingSlot; i < endingSlot; i++)
             {
                 if(moveItemInternal(itemPickUp, inv, i)) break;
             }
-            if(itemPickUp.getAmount() == 0) return true;
-            boolean flag = false;
-            for(int i = endingSlot-1; i >= startingSlot; i--)
-            {
-                if(inv.getItem(i) != null) continue;
-                inv.setItem(i, itemPickUp);
-                event.getClickedInventory().setItem(event.getSlot(), null);
-                flag = true;
-                break;
-            }
-            return flag;
         }
+        return itemPickUp.getAmount() == 0;
     }
 
-    public static void moveItemPlayerOrder(ItemStack itemPickUp, InventoryClickEvent event, Inventory inv)
+    public static void moveItemPlayerOrder(ItemStack itemPickUp, Inventory clickedInventory, int slot, Inventory inv)
     {
-        if(!moveItem(itemPickUp, event, inv, 10, 36, false))
+        if(addItemToExistingStack(itemPickUp, inv, 0, 9, false)) return;
+        if(addItemToExistingStack(itemPickUp, inv, 10, 36, false)) return;
+        if(!moveItem(itemPickUp, clickedInventory, slot, inv, 10, 36, false))
         {
-            moveItem(itemPickUp, event, inv, 0, 9, false);
+            moveItem(itemPickUp, clickedInventory, slot, inv, 0, 9, false);
         }
     }
 
@@ -449,5 +471,21 @@ public class StackUtils
         world.dropItemNaturally(location, item);
         block.setType(Material.AIR);
         event.setCancelled(true);
+    }
+
+
+    public static void moveAllItemsToPlayerInv(Inventory inv, Player player, Inventory playerInv)
+    {
+        for(int i = 1; i < inv.getSize(); i++)
+        {
+            ItemStack stack = inv.getItem(i);
+            if(stack == null) continue;
+
+            boolean cancel = StackUtils.cancelStackCheck(stack.getType());
+            if(cancel) continue;
+
+            StackUtils.moveItemPlayerOrder(stack, inv, i, playerInv);
+            player.updateInventory();
+        }
     }
 }
