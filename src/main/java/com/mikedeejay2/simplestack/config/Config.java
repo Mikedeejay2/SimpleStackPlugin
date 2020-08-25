@@ -64,4 +64,11 @@ public class Config
     {
         plugin.saveConfig();
     }
+
+    public void reload()
+    {
+        plugin.reloadConfig();
+        this.config = plugin.getConfig();
+        onEnable();
+    }
 }

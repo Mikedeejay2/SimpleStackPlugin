@@ -3,7 +3,15 @@ version: ${project.version}
 main: com.mikedeejay2.simplestack.Simplestack
 api-version: 1.14
 
+commands:
+  simplestack:
+    description: Simple Stack base command.
+
 permissions:
   simplestack.use:
     description: Allow a player to stack normally unstackable items to 64
     default: true
+  simplestack.reload:
+    description: Allow a player to reload the simplestack config
+  simplestack.help:
+    description: Allow a player to access the help command help screen (admin commands)

@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack;
 
+import com.mikedeejay2.simplestack.commands.CommandManager;
 import com.mikedeejay2.simplestack.config.Config;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,6 +15,8 @@ public final class Simplestack extends JavaPlugin
     private static Simplestack instance;
     private static Config customConfig;
 
+    public CommandManager commandManager;
+
     @Override
     public void onEnable()
     {
@@ -21,6 +24,9 @@ public final class Simplestack extends JavaPlugin
 
         customConfig = new Config();
         customConfig.onEnable();
+
+        this.commandManager = new CommandManager();
+        commandManager.setup();
 
         this.getServer().getPluginManager().registerEvents(new Listeners(), this);
     }
