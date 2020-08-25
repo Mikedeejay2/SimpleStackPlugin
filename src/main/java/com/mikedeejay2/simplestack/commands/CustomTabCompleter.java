@@ -23,6 +23,7 @@ public class CustomTabCompleter implements TabCompleter
             case 1:
                 commands.add(manager.help);
                 commands.add(manager.reload);
+                commands.add("rl");
                 break;
         }
         return commands;
