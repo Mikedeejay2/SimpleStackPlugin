@@ -19,6 +19,22 @@ simply by moving items around the inventory and combining them into a stack.
 
 ![Example](https://user-images.githubusercontent.com/58639173/90967434-479a6f80-e4ad-11ea-8758-9ba1be2494df.gif)
 
+### Commands
+
+/simplestack help - An in game help menu for admin commands
+/simplestack reload - Reload the blacklist/whitelist from config
+
+### Permissions
+
+simplestack.use - Use Simple Stack to combine items in inventories
+simplestack.help - Allow access to view the admin help menu (/simplestack help)
+simplestack.reload - Allow access to reload the config (/simplestack reload)
+
+### Config
+
+In config.yml there are options for configuring which items should be stacked by this plugin or not.
+A list mode can be choosed (blacklist / whitelist) which tells the plugin how to handle items in the list.
+
 ### Downloads
 
 This plugin can be downloaded through any of the below links:
