@@ -9,23 +9,23 @@ import org.bukkit.event.server.ServerCommandEvent;
 
 public class CommandSendListener implements Listener
 {
-    @EventHandler
-    public void serverCommandEvent(ServerCommandEvent event)
-    {
-        CommandSender sender = event.getSender();
-
-        String command = event.getCommand();
-
-        if(!command.startsWith("give ")) return;
-    }
-
-    @EventHandler
-    public void playerCommandSendEvent(PlayerCommandPreprocessEvent event)
-    {
-        Player player = event.getPlayer();
-
-        String message = event.getMessage();
-
-        if(!message.startsWith("/give ")) return;
-    }
+//    @EventHandler
+//    public void serverCommandEvent(ServerCommandEvent event)
+//    {
+//        CommandSender sender = event.getSender();
+//
+//        String command = event.getCommand();
+//
+//        if(!command.startsWith("give ")) return;
+//    }
+//
+//    @EventHandler
+//    public void playerCommandSendEvent(PlayerCommandPreprocessEvent event)
+//    {
+//        Player player = event.getPlayer();
+//
+//        String message = event.getMessage();
+//
+//        if(!message.startsWith("/give ")) return;
+//    }
 }

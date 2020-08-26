@@ -30,7 +30,10 @@ public class InventoryCloseListener implements Listener
         InventoryType type = inv.getType();
         if(!(type.equals(InventoryType.WORKBENCH) ||
                 type.equals(InventoryType.ENCHANTING) ||
-                type.equals(InventoryType.ANVIL))) return;
+                type.equals(InventoryType.ANVIL) ||
+                type.equals(InventoryType.LOOM) ||
+                type.equals(InventoryType.GRINDSTONE)
+          ) ) return;
         Inventory playerInv = player.getInventory();
         StackUtils.moveAllItemsToPlayerInv(inv, player, playerInv);
     }
