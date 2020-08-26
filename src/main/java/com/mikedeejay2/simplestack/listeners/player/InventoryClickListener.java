@@ -1,14 +1,16 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
 import com.mikedeejay2.simplestack.Simplestack;
-import com.mikedeejay2.simplestack.StackUtils;
+import com.mikedeejay2.simplestack.util.ClickUtils;
+import com.mikedeejay2.simplestack.util.StackUtils;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.*;
 
 public class InventoryClickListener implements Listener
 {
@@ -23,12 +25,16 @@ public class InventoryClickListener implements Listener
     public void stackEvent(InventoryClickEvent event)
     {
         Player player = (Player) event.getWhoClicked();
+        player.sendMessage("Action: " + event.getAction().toString());
+        InventoryAction action = event.getAction();
         StackUtils.updateAnvilManual(player.getOpenInventory().getTopInventory());
         if(StackUtils.cancelPlayerCheck(player)) return;
         ItemStack itemPickUp = event.getCurrentItem();
         ItemStack itemPutDown = event.getCursor();
         ClickType clickType = event.getClick();
-        if(itemPickUp == null || clickType.equals(ClickType.CREATIVE) || event.getAction().equals(InventoryAction.CLONE_STACK) || event.getAction().toString().contains("DROP")) return;
+        if(itemPickUp == null ||
+                clickType.equals(ClickType.CREATIVE) ||
+                action.toString().contains("DROP")) return;
 
         boolean cancel = StackUtils.cancelStackCheck(itemPickUp.getType());
         if(cancel || event.isCancelled()) return;
@@ -36,17 +42,21 @@ public class InventoryClickListener implements Listener
 
         StackUtils.makeUnique(itemPickUp, plugin.getKey());
 
+        if(action.equals(InventoryAction.CLONE_STACK))
+        {
+            ClickUtils.cloneStack(player, itemPickUp);
+        }
         switch(clickType)
         {
             case LEFT:
-                StackUtils.leftClick(itemPickUp, itemPutDown, player, event);
+                ClickUtils.leftClick(itemPickUp, itemPutDown, player, event);
                 break;
             case SHIFT_LEFT:
             case SHIFT_RIGHT:
-                StackUtils.shiftClick(itemPickUp, player, event);
+                ClickUtils.shiftClick(itemPickUp, player, event);
                 break;
             case RIGHT:
-                StackUtils.rightClick(itemPickUp, itemPutDown, player, event);
+                ClickUtils.rightClick(itemPickUp, itemPutDown, player, event);
                 break;
         }
     }

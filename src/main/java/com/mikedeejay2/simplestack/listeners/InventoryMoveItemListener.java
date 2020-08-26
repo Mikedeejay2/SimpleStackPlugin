@@ -1,7 +1,7 @@
 package com.mikedeejay2.simplestack.listeners;
 
 import com.mikedeejay2.simplestack.Simplestack;
-import com.mikedeejay2.simplestack.StackUtils;
+import com.mikedeejay2.simplestack.util.StackUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;

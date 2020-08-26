@@ -1,14 +1,11 @@
-package com.mikedeejay2.simplestack.listeners;
+package com.mikedeejay2.simplestack.listeners.player;
 
 import com.mikedeejay2.simplestack.Simplestack;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.DragType;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
