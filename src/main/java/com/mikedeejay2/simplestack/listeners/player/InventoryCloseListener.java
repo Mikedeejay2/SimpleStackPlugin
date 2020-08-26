@@ -14,6 +14,13 @@ public class InventoryCloseListener implements Listener
     // Plugin instance for referencing
     private static final Simplestack plugin = Simplestack.getInstance();
 
+    /**
+     * When a crafting table is closed, if it contains items it will be placed
+     * back into the player's inventory without unstacking the items inside,
+     * because Minecraft doesn't like what this plugin is trying to accomplish.
+     *
+     * @param event The event being activated
+     */
     @EventHandler
     public void craftingTableCloseEvent(InventoryCloseEvent event)
     {

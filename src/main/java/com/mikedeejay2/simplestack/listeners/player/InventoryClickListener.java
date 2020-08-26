@@ -17,15 +17,16 @@ public class InventoryClickListener implements Listener
     // Plugin instance for referencing
     private static final Simplestack plugin = Simplestack.getInstance();
 
-    /*
-     * InventoryClickEvent handler,
-     * This does a majority of the work for this plugin.
+    /**
+     * Handles clicking for any item that doesn't normally stack to 64.
+     * This is what lets players combine items into a stack in their inventory.
+     *
+     * @param event The event being activated
      */
     @EventHandler
     public void stackEvent(InventoryClickEvent event)
     {
         Player player = (Player) event.getWhoClicked();
-        player.sendMessage("Action: " + event.getAction().toString());
         InventoryAction action = event.getAction();
         StackUtils.updateAnvilManual(player.getOpenInventory().getTopInventory());
         if(StackUtils.cancelPlayerCheck(player)) return;

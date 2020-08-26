@@ -12,6 +12,12 @@ public class PrepareAnvilListener implements Listener
     // Plugin instance for referencing
     private static final Simplestack plugin = Simplestack.getInstance();
 
+    /**
+     * Patches bug where anvil number counts aren't accurate to what is
+     * actually being output.
+     *
+     * @param event The event being activated
+     */
     @EventHandler
     public void prepareAnvilEvent(PrepareAnvilEvent event)
     {

@@ -13,12 +13,14 @@ public class EntityPickupItemListener implements Listener
     // Plugin instance for referencing
     private static final Simplestack plugin = Simplestack.getInstance();
 
-    /*
+    /**
      * EntityPickupItemEvent
      * This is for when multiple unstackable items are on the ground and
      * are picked up by a player.
      * This code will automatically stack them in their inventory as if they
      * were a stack of 64.
+     *
+     * @param event The event being activated
      */
     @EventHandler
     public void entityPickupItemEvent(EntityPickupItemEvent event)

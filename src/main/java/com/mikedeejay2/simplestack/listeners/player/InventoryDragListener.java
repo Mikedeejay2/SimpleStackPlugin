@@ -14,6 +14,13 @@ public class InventoryDragListener implements Listener
 {
     private static final Simplestack plugin = Simplestack.getInstance();
 
+    /**
+     * This method properly distributes un-stackable items that have been stacked evenly
+     * across the inventory slots. This fixes the 1 per item bug that was happening
+     * before this was implemented.
+     *
+     * @param event The event being activated
+     */
     @EventHandler
     public void inventoryDragEvent(InventoryDragEvent event)
     {

@@ -16,7 +16,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /*
  * Simple Stacking plugin by Mikedeejay2
- * Visit the listeners class for all of the code
  * If you find a bug, please report it to my Github:
  * https://github.com/Mikedeejay2/SimpleStackPlugin
  */
@@ -40,6 +39,8 @@ public final class Simplestack extends JavaPlugin
     @Override
     public void onEnable()
     {
+        // There's definitely an easier way to do this, create an issue in the GitHub
+        // repository or a pull request if you know how.
         String verString = this.getServer().getVersion();
         if(verString.contains("1.16")) MCVersion = 1.16;
         else if(verString.contains("1.15")) MCVersion = 1.15;

@@ -28,10 +28,14 @@ public class StackUtils
 
     private static final NamespacedKey key = new NamespacedKey(plugin, "simplestack");
 
-    /*
-     * This helper method takes an item that is on the ground and moves
-     * it into a player's inventory while also attempting to stack the
-     * item with other items in the player's inventory.
+    /**
+     * Emulates picking up an item that is regularly unstackable from the ground
+     * and attempting to stack it with other items in the player's inventory.
+     *
+     * @param event The cancellable event that this method has been called in
+     * @param groundItem The item on the ground that this method is attempting to move to a player's inventory
+     * @param player The player attempting to pick up the groundItem
+     * @param item The ItemStack contained inside of the groundItem
      */
     public static void moveItemToInventory(Cancellable event, Item groundItem, Player player, ItemStack item)
     {
@@ -39,7 +43,7 @@ public class StackUtils
         PlayerInventory inv = player.getInventory();
         for(int i = 0; i < inv.getSize(); i++)
         {
-            if(!moveItemInternal(item, inv, i)) continue;
+            if(!combineItemInternal(item, inv, i)) continue;
             groundItem.remove();
             player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);
             event.setCancelled(true);
@@ -57,6 +61,15 @@ public class StackUtils
         }
     }
 
+    /**
+     * Moving an item from one inventory to another inventory while manually finding
+     * the item in the original inventory and removing it (Mostly for hoppers)
+     *
+     * @param item The ItemStack being moved
+     * @param fromInv The inventory that the items are coming from (source)
+     * @param toInv The inventory that the items are moving to (destination)
+     * @param amountBeingMoved The amount of items being moves to the toInv
+     */
     public static void moveItemToInventory(ItemStack item, Inventory fromInv, Inventory toInv, int amountBeingMoved)
     {
         if(item.getType().getMaxStackSize() == 64) return;
@@ -67,7 +80,7 @@ public class StackUtils
         Inventory inv = toInv;
         for(int i = 0; i < inv.getSize(); i++)
         {
-            if(!moveItemInternal(item, inv, i)) continue;
+            if(!combineItemInternal(item, inv, i)) continue;
             amountLeft -= item.getAmount();
             break;
         }
@@ -84,6 +97,14 @@ public class StackUtils
         removeItemFromInventory(origItem, fromInv, amountBeingMoved - amountLeft);
     }
 
+    /**
+     * Manually remove an item from an inventory if the current slot that the item
+     * exists in is unknown.
+     *
+     * @param item The item to be deleted in the inventory
+     * @param inv The inventory that the item is going to be deleted in
+     * @param amount The amount of item to be deleted (If unsure, item.getAmount())
+     */
     public static void removeItemFromInventory(ItemStack item, Inventory inv, int amount)
     {
         for(int i = 0; i < inv.getSize(); i++)
@@ -106,6 +127,18 @@ public class StackUtils
         }
     }
 
+    /**
+     * Check if an anvil has been used. If it has, appropriately calculate the output items.
+     * This is required for edge cases like having more items in slot 1 than in slot 2 so that
+     * items can't be duped for odd combinations and that output items after the result item has
+     * been taken out is also accurate.
+     *
+     * @param player The player that might be attempting to use the anvil
+     * @param topInv The top inventory that the player is viewing
+     * @param slot The slot that the player has clicked
+     * @param clickedInventory The inventory that the player has clicked
+     * @param rightClick Mark if the click was a right click or not to account for resulting in half of the output
+     */
     public static void useAnvilCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean rightClick)
     {
         Sound sound = Sound.BLOCK_ANVIL_USE;
@@ -115,6 +148,18 @@ public class StackUtils
         }
     }
 
+    /**
+     * Check if an smithing table has been used. If it has, appropriately calculate the output items.
+     * This is required for edge cases like having more items in slot 1 than in slot 2 so that
+     * items can't be duped for odd combinations and that output items after the result item has
+     * been taken out is also accurate.
+     *
+     * @param player The player that might be attempting to use the smithing table
+     * @param topInv The top inventory that the player is viewing
+     * @param slot The slot that the player has clicked
+     * @param clickedInventory The inventory that the player has clicked
+     * @param rightClick Mark if the click was a right click or not to account for resulting in half of the output
+     */
     public static void useSmithingCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean rightClick)
     {
         if(Simplestack.getMCVersion() < 1.16) return;
@@ -125,6 +170,15 @@ public class StackUtils
         }
     }
 
+    /**
+     * Trigger the use of an anvil or a smithing table. This method appropriately calculates
+     * the item output amounts of each of the 3 items
+     *
+     * @param player The player that used the anvil
+     * @param topInv The inventory of the anvil
+     * @param rightClick Mark if the click was a right click or not to account for resulting in half of the output
+     * @param sound The sound that will be played on use
+     */
     public static void triggerAnvilSmithingUse(Player player, Inventory topInv, boolean rightClick, Sound sound)
     {
         ItemStack item1 = topInv.getItem(0);
@@ -150,6 +204,13 @@ public class StackUtils
         }
     }
 
+    /**
+     * Manually update the contents of an anvil or a smithing table. There is a chance that a player
+     * added an item to the anvil without updating the contents of the anvil, that is checked with
+     * this method. If this method is not called, incorrect values will be displayed to the player.
+     *
+     * @param topInv Player's top inventory that will be updated
+     */
     public static void updateAnvilManual(Inventory topInv)
     {
         new BukkitRunnable()
@@ -170,6 +231,12 @@ public class StackUtils
         }.runTask(plugin);
     }
 
+    /**
+     * Trigger a manual PrepareAnvilEvent or PrepareSmithingEvent to have the item amounts
+     * displayed on the player's screen be correct.
+     *
+     * @param topInv Player's top inventory that will be updated
+     */
     private static void triggerAnvilSmithingUpdate(Inventory topInv)
     {
         ItemStack item1 = topInv.getItem(0);
@@ -180,32 +247,54 @@ public class StackUtils
         topInv.setItem(1, item2);
     }
 
-    /*
-     * This helper method moves an item into a player's inventory with a set starting slot
-     * and ending slot to search through. This method can also be called in reverse if needed.
+    /**
+     * Moves an item from one inventory to another (shift-click) while attempting
+     * to combine unstackable items.
+     *
+     * @param itemInSlot Item to be moved (Clicked item)
+     * @param clickedInventory The inventory that was clicked
+     * @param slot The slot that was clicked
+     * @param invToMoveTo The inventory that the item should be moved to
+     * @param startingSlot The slot that the algorithm will begin attempting a move at
+     * @param endingSlot The slot that the algorithm will stop attempting to move at
+     * @param reverse Should the algorithm attempt to move in reverse
+     * @return If move was successful
      */
-    public static boolean moveItem(ItemStack itemPickUp, Inventory clickedInventory, int slot, Inventory inv, int startingSlot, int endingSlot, boolean reverse)
+    public static boolean moveItem(ItemStack itemInSlot, Inventory clickedInventory, int slot, Inventory invToMoveTo, int startingSlot, int endingSlot, boolean reverse)
     {
         if(!reverse)
         {
-            if(addItemToExistingStack(itemPickUp, inv, startingSlot, endingSlot, false)) return true;
-            return addItemIgnoreStacks(itemPickUp, clickedInventory, slot, inv, startingSlot, endingSlot, false);
+            if(moveItemToExistingStack(itemInSlot, invToMoveTo, startingSlot, endingSlot, false)) return true;
+            return moveItemIgnoreStacks(itemInSlot, clickedInventory, slot, invToMoveTo, startingSlot, endingSlot, false);
         }
         else
         {
-            if(addItemToExistingStack(itemPickUp, inv, startingSlot, endingSlot, true)) return true;
-            return addItemIgnoreStacks(itemPickUp, clickedInventory, slot, inv, startingSlot, endingSlot, true);
+            if(moveItemToExistingStack(itemInSlot, invToMoveTo, startingSlot, endingSlot, true)) return true;
+            return moveItemIgnoreStacks(itemInSlot, clickedInventory, slot, invToMoveTo, startingSlot, endingSlot, true);
         }
     }
 
-    private static boolean addItemIgnoreStacks(ItemStack itemPickUp, Inventory clickedInventory, int slot, Inventory inv, int startingSlot, int endingSlot, boolean reverse)
+    /**
+     * Attempt to move an item to a new slot in an inventory while disregarding whether it can stack with
+     * other ItemStacks or not.
+     *
+     * @param itemInSlot The item being moved (Clicked item)
+     * @param clickedInventory The inventory that was clicked
+     * @param slot The slot that was clicked
+     * @param invToMoveTo The inventory that the item should be moved to
+     * @param startingSlot The slot that the algorithm will begin attempting a move at
+     * @param endingSlot The slot that the algorithm will stop attempting to move at
+     * @param reverse Should the algorithm attempt to move in reverse
+     * @return If move was successful
+     */
+    private static boolean moveItemIgnoreStacks(ItemStack itemInSlot, Inventory clickedInventory, int slot, Inventory invToMoveTo, int startingSlot, int endingSlot, boolean reverse)
     {
         if(!reverse)
         {
             for(int i = startingSlot; i < endingSlot; i++)
             {
-                if(inv.getItem(i) != null) continue;
-                inv.setItem(i, itemPickUp);
+                if(invToMoveTo.getItem(i) != null) continue;
+                invToMoveTo.setItem(i, itemInSlot);
                 clickedInventory.setItem(slot, null);
                 return true;
             }
@@ -214,8 +303,8 @@ public class StackUtils
         {
             for(int i = endingSlot-1; i >= startingSlot; i--)
             {
-                if(inv.getItem(i) != null) continue;
-                inv.setItem(i, itemPickUp);
+                if(invToMoveTo.getItem(i) != null) continue;
+                invToMoveTo.setItem(i, itemInSlot);
                 clickedInventory.setItem(slot, null);
                 return true;
             }
@@ -223,44 +312,71 @@ public class StackUtils
         return false;
     }
 
-    private static boolean addItemToExistingStack(ItemStack itemPickUp, Inventory inv, int startingSlot, int endingSlot, boolean reverse)
+    /**
+     * Attempt to move an item to an existing stack(s) in an inventory, disregarding any
+     * blank space with no items occupying them. This method will only attempt to combine
+     * the itemInSlot with any other non-null items in the invToMoveTo.
+     *
+     * @param itemInSlot The item being moved (Clicked item)
+     * @param invToMoveTo The inventory that the item should be moved to
+     * @param startingSlot The slot that the algorithm will begin attempting a move at
+     * @param endingSlot The slot that the algorithm will stop attempting to move at
+     * @param reverse Should the algorithm attempt to move in reverse
+     * @return If move was successful
+     */
+    private static boolean moveItemToExistingStack(ItemStack itemInSlot, Inventory invToMoveTo, int startingSlot, int endingSlot, boolean reverse)
     {
         if(!reverse)
         {
             for(int i = startingSlot; i < endingSlot; i++)
             {
-                if(moveItemInternal(itemPickUp, inv, i)) break;
+                if(combineItemInternal(itemInSlot, invToMoveTo, i)) break;
             }
         }
         else
         {
             for(int i = startingSlot; i < endingSlot; i++)
             {
-                if(moveItemInternal(itemPickUp, inv, i)) break;
+                if(combineItemInternal(itemInSlot, invToMoveTo, i)) break;
             }
         }
-        return itemPickUp.getAmount() == 0;
+        return itemInSlot.getAmount() == 0;
     }
 
-    public static void moveItemPlayerOrder(ItemStack itemPickUp, Inventory clickedInventory, int slot, Inventory inv)
+    /**
+     * Move an item into the player's inventory in the priority that slots 9 to 36 (not the hotbar)
+     * are attempted to be moved into first and then the hotbar afterwards.
+     *
+     * @param itemInSlot The item being moved (Clicked item)
+     * @param clickedInventory The inventory that was clicked
+     * @param slot The slot that was clicked
+     * @param invToMoveTo The inventory that the item should be moved to
+     */
+    public static void moveItemPlayerOrder(ItemStack itemInSlot, Inventory clickedInventory, int slot, Inventory invToMoveTo)
     {
-        if(addItemToExistingStack(itemPickUp, inv, 0, 9, false)) return;
-        if(addItemToExistingStack(itemPickUp, inv, 9, 36, false)) return;
-        if(!moveItem(itemPickUp, clickedInventory, slot, inv, 9, 36, false))
+        if(moveItemToExistingStack(itemInSlot, invToMoveTo, 0, 9, false)) return;
+        if(moveItemToExistingStack(itemInSlot, invToMoveTo, 9, 36, false)) return;
+        if(!moveItem(itemInSlot, clickedInventory, slot, invToMoveTo, 9, 36, false))
         {
-            moveItem(itemPickUp, clickedInventory, slot, inv, 0, 9, false);
+            moveItem(itemInSlot, clickedInventory, slot, invToMoveTo, 0, 9, false);
         }
     }
 
-    /*
-     * A helper method that attempts to move an item into a slot if all conditions
-     * are correct (same type of item, not already stacked to 64, etc).
+    /**
+     * Attempt to combine an item with another item in a specific slot of an inventory.
+     * This method will only be successful if the item slot in the inventory is not null
+     * and both the itemInSlot and the item in the inventory slot equal each other (using equalsEachOther())
+     *
+     * @param itemInSlot The item being moved (Clicked item)
+     * @param inv Inventory that will be used to get inventory item
+     * @param slot Slot that the method should compare with
+     * @return If method was successful
      */
-    public static boolean moveItemInternal(ItemStack itemPickUp, Inventory inv, int i)
+    public static boolean combineItemInternal(ItemStack itemInSlot, Inventory inv, int slot)
     {
-        ItemStack itemStack = inv.getItem(i);
-        if(itemStack == null || !equalsEachOther(itemPickUp, itemStack)) return false;
-        int newAmount = itemStack.getAmount() + itemPickUp.getAmount();
+        ItemStack itemStack = inv.getItem(slot);
+        if(itemStack == null || !equalsEachOther(itemInSlot, itemStack)) return false;
+        int newAmount = itemStack.getAmount() + itemInSlot.getAmount();
         int extraAmount = 0;
         if(newAmount > MAX_AMOUNT_IN_STACK)
         {
@@ -268,32 +384,38 @@ public class StackUtils
             newAmount = MAX_AMOUNT_IN_STACK;
         }
         itemStack.setAmount(newAmount);
-        itemPickUp.setAmount(extraAmount);
-        return itemPickUp.getAmount() == 0;
+        itemInSlot.setAmount(extraAmount);
+        return itemInSlot.getAmount() == 0;
     }
 
-    /*
-     * This makes an item unique and fools the Minecraft client to sending a move item
-     * packet even with "fully stacked" items. This has to be worked around because
-     * without InventoryClickEvent on fully stacked items there would be no way
-     * for this code to know if the player was trying to combine fully stacked
-     * items.
+    /**
+     * This method is the work around to Minecraft not calling InventoryClickEvents on 2 items
+     * of the same type. This is also the reason why this plugin will not work below
+     * 1.14 (Because PersistentDataContainer was added in 1.14 spigot). Essentially, this method
+     * adds a entry to the NBT data of the clicked item (Key is "simplestack" with the value of 1)
+     * to trick the Minecraft client into thinking that this item is unique and sending a packet over
+     * to the server saying that they clicked the item and to do something with it.
+     *
+     * @param itemInSlot The item being moved (Clicked item)
+     * @param key The key to be used when setting the NBT data ("simplestack")
      */
-    public static void makeUnique(ItemStack itemPickUp, NamespacedKey key)
+    public static void makeUnique(ItemStack itemInSlot, NamespacedKey key)
     {
-        ItemMeta itemMeta = itemPickUp.getItemMeta();
+        ItemMeta itemMeta = itemInSlot.getItemMeta();
         PersistentDataContainer data = itemMeta.getPersistentDataContainer();
         if(!data.has(key, PersistentDataType.BYTE))
         {
             data.set(key, PersistentDataType.BYTE, (byte) 1);
-            itemPickUp.setItemMeta(itemMeta);
+            itemInSlot.setItemMeta(itemMeta);
         }
     }
 
-    /*
-     * Simple helper method that takes 2 item metas
-     * and checks to see if they equal each other.
-     * Maybe the most important method in this code.
+    /**
+     * Simple helper method that takes 2 item metas and checks to see if they equal each other.
+     *
+     * @param stack1 First ItemStack to check
+     * @param stack2 Second ItemStack to compare with
+     * @return If items are equal
      */
     public static boolean equalsEachOther(ItemStack stack1, ItemStack stack2)
     {
@@ -305,9 +427,12 @@ public class StackUtils
         return true;
     }
 
-    /*
-     * If the player doesn't have the permission "simplestack.use" (enabled by default)
-     * then this will tell the event it's being called in to return and not run stacking code.
+    /**
+     * Will check to make sure that item being stacked is not blacklisted or not whitelisted
+     * or is not null or max stack size is 64 or is of the air material.
+     *
+     * @param material Material to check
+     * @return If stack event should be cancelled
      */
     public static boolean cancelStackCheck(Material material)
     {
@@ -326,13 +451,25 @@ public class StackUtils
         }
     }
 
+    /**
+     * If the player doesn't have the permission "simplestack.use" (enabled by default)
+     * then this will tell the event it's being called in to return and not run stacking code.
+     *
+     * @param player Player to check the permission for
+     * @return If the event for the player should be cancelled because they don't have the permission
+     */
     public static boolean cancelPlayerCheck(Player player)
     {
         return !player.hasPermission(Simplestack.getPermission());
     }
 
-    /*
-     * By default shulker boxes unstack items when broken, this stops that.
+    /**
+     * By default when a shulker box is broken Minecraft forcefully unstacks any items
+     * that don't regularly stack. This can be catastrophic because it can unstack past the amount
+     * of inventory slots that a shulker box has resulting in data loss.
+     *
+     * @param event Event that this method is being run in
+     * @param block The block to check
      */
     public static void preserveShulkerBox(BlockBreakEvent event, Block block)
     {
@@ -358,19 +495,28 @@ public class StackUtils
     }
 
 
-    public static void moveAllItemsToPlayerInv(Inventory inv, Player player, Inventory playerInv)
+    /**
+     * Moves an entire inventory into the player's inventory.
+     * This method is most commonly called when a crafting table / other temporary storage
+     * inventory is closed.
+     *
+     * @param invToMove Inventory that will be moved into the player's inventory
+     * @param player The player that will receive the items of the invToMove
+     * @param playerInv The inventory of the player
+     */
+    public static void moveAllItemsToPlayerInv(Inventory invToMove, Player player, Inventory playerInv)
     {
         int startingSlot = 0;
-        if(inv instanceof CraftingInventory) startingSlot = 1;
-        for(int i = startingSlot; i < inv.getSize(); i++)
+        if(invToMove instanceof CraftingInventory) startingSlot = 1;
+        for(int i = startingSlot; i < invToMove.getSize(); i++)
         {
-            ItemStack stack = inv.getItem(i);
+            ItemStack stack = invToMove.getItem(i);
             if(stack == null) continue;
 
             boolean cancel = StackUtils.cancelStackCheck(stack.getType());
             if(cancel) continue;
 
-            StackUtils.moveItem(stack, inv, i, playerInv, 0, 36, false);
+            StackUtils.moveItem(stack, invToMove, i, playerInv, 0, 36, false);
             player.updateInventory();
         }
     }

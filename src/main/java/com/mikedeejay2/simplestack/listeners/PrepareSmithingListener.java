@@ -12,6 +12,12 @@ public class PrepareSmithingListener implements Listener
     // Plugin instance for referencing
     private static final Simplestack plugin = Simplestack.getInstance();
 
+    /**
+     * Patches bug where smithing table number counts aren't accurate to what is
+     * actually being output.
+     *
+     * @param event The event being activated
+     */
     @EventHandler
     public void prepareSmithingEvent(PrepareSmithingEvent event)
     {

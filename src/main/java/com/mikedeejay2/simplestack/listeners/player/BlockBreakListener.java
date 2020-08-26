@@ -13,10 +13,12 @@ public class BlockBreakListener implements Listener
     // Plugin instance for referencing
     private static final Simplestack plugin = Simplestack.getInstance();
 
-    /*
+    /**
      * BlockBreakEvent
      * This is needed for when a shulker box breaks, because by default Minecraft
      * unstacks items inside of a shulker box automatically
+     *
+     * @param event The event being activated
      */
     @EventHandler
     public void blockBreakEvent(BlockBreakEvent event)

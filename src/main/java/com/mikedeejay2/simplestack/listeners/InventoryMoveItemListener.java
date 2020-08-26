@@ -14,6 +14,12 @@ public class InventoryMoveItemListener implements Listener
     // Plugin instance for referencing
     private static final Simplestack plugin = Simplestack.getInstance();
 
+    /**
+     * This patches hoppers not properly stacking unstackable items together in
+     * inventories.
+     *
+     * @param event The event being activated
+     */
     @EventHandler
     public void inventoryMoveItemEvent(InventoryMoveItemEvent event)
     {
