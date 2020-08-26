@@ -266,7 +266,7 @@ public class ClickUtils
 
     /**
      * Emulates specifically picking up all of an item.
-     * Probably used, backup method if something major breaks and I don't have time to fix it.
+     * Probably not used, backup method if something major breaks and I don't have time to fix it.
      *
      * @param player The player that has clicked
      * @param itemInSlot The item clicked on by the cursor
@@ -281,7 +281,7 @@ public class ClickUtils
 
     /**
      * Emulates specifically placing everything in the cursor into the slot below.
-     * Probably used, backup method if something major breaks and I don't have time to fix it.
+     * Probably not used, backup method if something major breaks and I don't have time to fix it.
      *
      * @param player The player that has clicked
      * @param itemInSlot The item clicked on by the cursor
@@ -306,7 +306,7 @@ public class ClickUtils
 
     /**
      * Emulates specifically picking up half of an ItemStack into the cursor.
-     * Probably used, backup method if something major breaks and I don't have time to fix it.
+     * Probably not used, backup method if something major breaks and I don't have time to fix it.
      *
      * @param player The player that has clicked
      * @param itemInSlot The item clicked on by the cursor

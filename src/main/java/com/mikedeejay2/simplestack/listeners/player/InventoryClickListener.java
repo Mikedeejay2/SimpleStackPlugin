@@ -33,9 +33,7 @@ public class InventoryClickListener implements Listener
         ItemStack itemPickUp = event.getCurrentItem();
         ItemStack itemPutDown = event.getCursor();
         ClickType clickType = event.getClick();
-        if(itemPickUp == null ||
-                clickType.equals(ClickType.CREATIVE) ||
-                action.toString().contains("DROP")) return;
+        if(itemPickUp == null || action.toString().contains("DROP") || clickType.equals(ClickType.CREATIVE)) return;
 
         boolean cancel = StackUtils.cancelStackCheck(itemPickUp.getType());
         if(cancel || event.isCancelled()) return;
