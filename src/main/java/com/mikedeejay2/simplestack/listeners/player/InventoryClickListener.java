@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -27,7 +28,7 @@ public class InventoryClickListener implements Listener
         ItemStack itemPickUp = event.getCurrentItem();
         ItemStack itemPutDown = event.getCursor();
         ClickType clickType = event.getClick();
-        if(itemPickUp == null || clickType.equals(ClickType.CREATIVE)) return;
+        if(itemPickUp == null || clickType.equals(ClickType.CREATIVE) || event.getAction().equals(InventoryAction.CLONE_STACK) || event.getAction().toString().contains("DROP")) return;
 
         boolean cancel = StackUtils.cancelStackCheck(itemPickUp.getType());
         if(cancel || event.isCancelled()) return;

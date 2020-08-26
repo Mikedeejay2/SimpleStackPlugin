@@ -2,6 +2,7 @@ package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.simplestack.commands.CommandManager;
 import com.mikedeejay2.simplestack.config.Config;
+import com.mikedeejay2.simplestack.listeners.InventoryDragListener;
 import com.mikedeejay2.simplestack.listeners.InventoryMoveItemListener;
 import com.mikedeejay2.simplestack.listeners.PrepareAnvilListener;
 import com.mikedeejay2.simplestack.listeners.PrepareSmithingListener;
@@ -62,6 +63,7 @@ public final class Simplestack extends JavaPlugin
         manager.registerEvents(new InventoryCloseListener(), this);
         manager.registerEvents(new PrepareAnvilListener(), this);
         if(MCVersion >= 1.16) manager.registerEvents(new PrepareSmithingListener(), this);
+        manager.registerEvents(new InventoryDragListener(), this);
     }
 
     @Override

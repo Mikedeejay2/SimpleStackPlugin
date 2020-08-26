@@ -294,7 +294,7 @@ public class StackUtils
                 }
                 item2.setAmount(item2.getAmount() - (int) Math.ceil(result.getAmount() / divider));
             }
-            item1.setAmount(item1.getAmount() - (int) Math.ceil(result.getAmount() / divider));
+            if(item1 != null) item1.setAmount(item1.getAmount() - (int) Math.ceil(result.getAmount() / divider));
             player.getWorld().playSound(player.getLocation(), sound, 1, 1);
         }
     }
