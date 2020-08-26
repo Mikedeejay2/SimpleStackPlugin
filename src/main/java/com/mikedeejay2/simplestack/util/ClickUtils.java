@@ -181,6 +181,19 @@ public class ClickUtils
             clickedInventory.setItem(slot, itemInSlot);
             return;
         }
+        else if(inv instanceof LoomInventory)
+        {
+            if(itemInSlot.getType().toString().endsWith("BANNER"))
+            {
+                startSlot = 0;
+                endSlot = 1;
+            }
+            else if(itemInSlot.getType().toString().endsWith("PATTERN"))
+            {
+                startSlot = 2;
+                endSlot = 3;
+            }
+        }
         if(playerOrder)
         {
             StackUtils.moveItemPlayerOrder(itemInSlot, clickedInventory, slot, bottomInv);
