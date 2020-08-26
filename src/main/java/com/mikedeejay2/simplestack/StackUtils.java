@@ -118,6 +118,7 @@ public class StackUtils
         Inventory topInv = player.getOpenInventory().getTopInventory();
         if(!equalsEachOther(itemPutDown, itemPickUp))
         {
+            useSmithingCheck(player, topInv, slot, clickedInv, false);
             useAnvilCheck(player, topInv, slot, clickedInv, false);
             player.setItemOnCursor(itemPickUp);
             clickedInv.setItem(slot, itemPutDown);
@@ -151,6 +152,7 @@ public class StackUtils
         Inventory clickedInv = event.getClickedInventory();
         if(!equalsEachOther(itemPutDown, itemPickUp))
         {
+            useSmithingCheck(player, topInv, slot, clickedInv, true);
             useAnvilCheck(player, topInv, slot, clickedInv, true);
             ItemStack cursorItemStack = itemPickUp.clone();
             cursorItemStack.setAmount((int) Math.ceil(itemPickUp.getAmount()/2.0f));
@@ -255,32 +257,45 @@ public class StackUtils
 
     private static void useAnvilCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean rightClick)
     {
-        if((clickedInventory instanceof AnvilInventory || clickedInventory instanceof SmithingInventory) && slot == 2)
+        Sound sound = Sound.BLOCK_ANVIL_USE;
+        if(clickedInventory instanceof AnvilInventory && slot == 2)
         {
-            Sound sound = null;
-            if(clickedInventory instanceof AnvilInventory) sound = Sound.BLOCK_ANVIL_USE;
-            if(clickedInventory instanceof SmithingInventory) sound = Sound.BLOCK_SMITHING_TABLE_USE;
-            ItemStack item1 = topInv.getItem(0);
-            ItemStack item2 = topInv.getItem(1);
-            ItemStack result = topInv.getItem(2);
-            double divider = rightClick ? 2 : 1;
-            if(result != null)
+            triggerAnvilSmithingUse(player, topInv, rightClick, sound);
+        }
+    }
+
+    private static void useSmithingCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean rightClick)
+    {
+        if(Simplestack.getMCVersion() < 1.16) return;
+        Sound sound = Sound.BLOCK_SMITHING_TABLE_USE;
+        if(clickedInventory instanceof SmithingInventory && slot == 2)
+        {
+            triggerAnvilSmithingUse(player, topInv, rightClick, sound);
+        }
+    }
+
+    public static void triggerAnvilSmithingUse(Player player, Inventory topInv, boolean rightClick, Sound sound)
+    {
+        ItemStack item1 = topInv.getItem(0);
+        ItemStack item2 = topInv.getItem(1);
+        ItemStack result = topInv.getItem(2);
+        double divider = rightClick ? 2 : 1;
+        if(result != null)
+        {
+            if(item2 != null)
             {
-                if(item2 != null)
+                if(item2.getAmount() > item1.getAmount())
                 {
-                    if(item2.getAmount() > item1.getAmount())
-                    {
-                        result.setAmount(item1.getAmount());
-                    }
-                    else
-                    {
-                        result.setAmount(item2.getAmount());
-                    }
-                    item2.setAmount(item2.getAmount() - (int)Math.ceil(result.getAmount()/divider));
+                    result.setAmount(item1.getAmount());
                 }
-                item1.setAmount(item1.getAmount() - (int)Math.ceil(result.getAmount()/divider));
-                player.getWorld().playSound(player.getLocation(), sound, 1, 1);
+                else
+                {
+                    result.setAmount(item2.getAmount());
+                }
+                item2.setAmount(item2.getAmount() - (int) Math.ceil(result.getAmount() / divider));
             }
+            item1.setAmount(item1.getAmount() - (int) Math.ceil(result.getAmount() / divider));
+            player.getWorld().playSound(player.getLocation(), sound, 1, 1);
         }
     }
 
@@ -291,17 +306,27 @@ public class StackUtils
             @Override
             public void run()
             {
-                if(topInv instanceof AnvilInventory || topInv instanceof SmithingInventory)
+                if(topInv instanceof AnvilInventory)
                 {
-                    ItemStack item1 = topInv.getItem(0);
-                    ItemStack item2 = topInv.getItem(1);
-                    topInv.setItem(0, null);
-                    topInv.setItem(1, null);
-                    topInv.setItem(0, item1);
-                    topInv.setItem(1, item2);
+                    triggerAnvilSmithingUpdate(topInv);
+                }
+                if(Simplestack.getMCVersion() < 1.16) return;
+                if(topInv instanceof SmithingInventory)
+                {
+                    triggerAnvilSmithingUpdate(topInv);
                 }
             }
         }.runTask(plugin);
+    }
+
+    private static void triggerAnvilSmithingUpdate(Inventory topInv)
+    {
+        ItemStack item1 = topInv.getItem(0);
+        ItemStack item2 = topInv.getItem(1);
+        topInv.setItem(0, null);
+        topInv.setItem(1, null);
+        topInv.setItem(0, item1);
+        topInv.setItem(1, item2);
     }
 
     private static void shiftClickSameInv(ItemStack itemPickUp, InventoryClickEvent event, Inventory bottomInv)
@@ -517,6 +542,11 @@ public class StackUtils
         {
             return !config.LIST.contains(material);
         }
+    }
+
+    public static boolean cancelPlayerCheck(Player player)
+    {
+        return !player.hasPermission(Simplestack.getPermission());
     }
 
     /*
