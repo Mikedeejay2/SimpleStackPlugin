@@ -155,6 +155,11 @@ public class ClickUtils
             {
                 playerOrder = true;
             }
+            else if(topInv instanceof GrindstoneInventory)
+            {
+                topInv.setItem(0, null);
+                topInv.setItem(1, null);
+            }
         }
         else if(inv instanceof CraftingInventory)
         {

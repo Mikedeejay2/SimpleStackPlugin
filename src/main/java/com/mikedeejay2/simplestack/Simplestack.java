@@ -2,14 +2,10 @@ package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.simplestack.commands.CommandManager;
 import com.mikedeejay2.simplestack.config.Config;
-import com.mikedeejay2.simplestack.listeners.player.InventoryDragListener;
+import com.mikedeejay2.simplestack.listeners.player.*;
 import com.mikedeejay2.simplestack.listeners.InventoryMoveItemListener;
 import com.mikedeejay2.simplestack.listeners.PrepareAnvilListener;
 import com.mikedeejay2.simplestack.listeners.PrepareSmithingListener;
-import com.mikedeejay2.simplestack.listeners.player.BlockBreakListener;
-import com.mikedeejay2.simplestack.listeners.player.EntityPickupItemListener;
-import com.mikedeejay2.simplestack.listeners.player.InventoryClickListener;
-import com.mikedeejay2.simplestack.listeners.player.InventoryCloseListener;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -65,6 +61,7 @@ public final class Simplestack extends JavaPlugin
         manager.registerEvents(new PrepareAnvilListener(), this);
         if(MCVersion >= 1.16) manager.registerEvents(new PrepareSmithingListener(), this);
         manager.registerEvents(new InventoryDragListener(), this);
+        manager.registerEvents(new CommandSendListener(), this);
     }
 
     @Override
