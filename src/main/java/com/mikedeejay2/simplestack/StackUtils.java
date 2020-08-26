@@ -217,21 +217,33 @@ public class StackUtils
         int startSlot = 0;
         int endSlot = inv.getSize();
         boolean reverse = false;
+        boolean playerOrder = false;
         if(inv instanceof PlayerInventory)
         {
             endSlot -= 5;
-            if(topInv instanceof FurnaceInventory && itemPickUp.getType().isFuel())
-            {
-                endSlot = 2;
-                reverse = true;
-            }
-            useAnvilCheck(player, topInv, slot, clickedInventory, false);
         }
         else if(inv instanceof CraftingInventory)
         {
             ++startSlot;
+            playerOrder = true;
         }
-        if(inv instanceof PlayerInventory)
+        else if(inv instanceof FurnaceInventory && itemPickUp.getType().isFuel())
+        {
+            --endSlot;
+            reverse = true;
+        }
+        else if(inv instanceof EnchantingInventory)
+        {
+            --endSlot;
+            if(inv.getItem(0) != null) return;
+            ItemStack itemToMove = itemPickUp.clone();
+            itemToMove.setAmount(1);
+            moveItem(itemToMove, clickedInventory, slot, inv, startSlot, endSlot, reverse);
+            itemPickUp.setAmount(itemPickUp.getAmount()-1);
+            clickedInventory.setItem(slot, itemPickUp);
+            return;
+        }
+        if(playerOrder)
         {
             moveItemPlayerOrder(itemPickUp, clickedInventory, slot, bottomInv);
         }
