@@ -223,11 +223,15 @@ public class StackUtils
         if(inv instanceof PlayerInventory)
         {
             endSlot -= 5;
+
+            if(topInv instanceof CraftingInventory && topInv.getSize() == 10)
+            {
+                playerOrder = true;
+            }
         }
         else if(inv instanceof CraftingInventory)
         {
             ++startSlot;
-            playerOrder = true;
         }
         else if(inv instanceof FurnaceInventory && itemPickUp.getType().isFuel())
         {
@@ -350,7 +354,7 @@ public class StackUtils
         {
             if(slot < 9)
             {
-                moveItem(itemPickUp, clickedInventory, slot, inv, 10, 36, false);
+                moveItem(itemPickUp, clickedInventory, slot, inv, 9, 36, false);
             }
             else if(slot < 36)
             {
@@ -358,7 +362,7 @@ public class StackUtils
             }
             else
             {
-                moveItem(itemPickUp, clickedInventory, slot, inv, 10, 36, false);
+                moveItem(itemPickUp, clickedInventory, slot, inv, 9, 36, false);
             }
         }
         else
@@ -393,7 +397,7 @@ public class StackUtils
             }
             else
             {
-                moveItem(itemPickUp, clickedInventory, slot, inv, 10, 36, false);
+                moveItem(itemPickUp, clickedInventory, slot, inv, 9, 36, false);
             }
         }
     }
@@ -463,8 +467,8 @@ public class StackUtils
     public static void moveItemPlayerOrder(ItemStack itemPickUp, Inventory clickedInventory, int slot, Inventory inv)
     {
         if(addItemToExistingStack(itemPickUp, inv, 0, 9, false)) return;
-        if(addItemToExistingStack(itemPickUp, inv, 10, 36, false)) return;
-        if(!moveItem(itemPickUp, clickedInventory, slot, inv, 10, 36, false))
+        if(addItemToExistingStack(itemPickUp, inv, 9, 36, false)) return;
+        if(!moveItem(itemPickUp, clickedInventory, slot, inv, 9, 36, false))
         {
             moveItem(itemPickUp, clickedInventory, slot, inv, 0, 9, false);
         }
