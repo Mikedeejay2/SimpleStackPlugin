@@ -15,6 +15,8 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.io.BukkitObjectInputStream;
 
 public class StackUtils
 {
@@ -111,11 +113,18 @@ public class StackUtils
      */
     public static void leftClick(ItemStack itemPickUp, ItemStack itemPutDown, Player player, InventoryClickEvent event)
     {
-        if(itemPutDown == null ||
-        itemPutDown.getData().getItemType().getMaxStackSize() == 64 &&
-        itemPutDown.getType().equals(Material.AIR))
+        Inventory clickedInv = event.getClickedInventory();
+        int slot = event.getSlot();
+        Inventory topInv = player.getOpenInventory().getTopInventory();
+        if(!equalsEachOther(itemPutDown, itemPickUp))
+        {
+            useAnvilCheck(player, topInv, slot, clickedInv, false);
+            player.setItemOnCursor(itemPickUp);
+            clickedInv.setItem(slot, itemPutDown);
+            player.updateInventory();
             return;
-        if(!equalsEachOther(itemPutDown, itemPickUp)) return;
+        }
+
         int newAmount = itemPutDown.getAmount() + itemPickUp.getAmount();
         int extraAmount = 0;
         if(newAmount > MAX_AMOUNT_IN_STACK)
@@ -128,7 +137,6 @@ public class StackUtils
         event.getClickedInventory().setItem(event.getSlot(), itemPutDown);
         player.getOpenInventory().setCursor(itemPickUp);
         player.updateInventory();
-        event.setCancelled(true);
     }
 
     /*
@@ -138,11 +146,20 @@ public class StackUtils
      */
     public static void rightClick(ItemStack itemPickUp, ItemStack itemPutDown, Player player, InventoryClickEvent event)
     {
-        if(itemPutDown == null ||
-                itemPutDown.getData().getItemType().getMaxStackSize() == 64 ||
-                itemPutDown.getType().equals(Material.AIR))
+        Inventory topInv = player.getOpenInventory().getTopInventory();
+        int slot = event.getSlot();
+        Inventory clickedInv = event.getClickedInventory();
+        if(!equalsEachOther(itemPutDown, itemPickUp))
+        {
+            useAnvilCheck(player, topInv, slot, clickedInv, true);
+            ItemStack cursorItemStack = itemPickUp.clone();
+            cursorItemStack.setAmount((int) Math.ceil(itemPickUp.getAmount()/2.0f));
+            itemPickUp.setAmount((int) Math.floor(itemPickUp.getAmount()/2.0f));
+            player.setItemOnCursor(cursorItemStack);
+            player.updateInventory();
             return;
-        if(!equalsEachOther(itemPutDown, itemPickUp)) return;
+        }
+
         if(itemPutDown.getAmount() > 0)
         {
             int bottomAmount = itemPickUp.getAmount() + 1;
@@ -151,7 +168,6 @@ public class StackUtils
             itemPutDown.setAmount(topAmount);
         }
         player.updateInventory();
-        event.setCancelled(true);
     }
 
     /*
@@ -209,14 +225,7 @@ public class StackUtils
                 endSlot = 2;
                 reverse = true;
             }
-            if(clickedInventory instanceof AnvilInventory && slot == 2)
-            {
-                ItemStack item1 = topInv.getItem(0);
-                ItemStack item2 = topInv.getItem(1);
-                if(item2 != null) item2.setAmount(item2.getAmount() - item1.getAmount());
-                if(item1 != null) item1.setAmount(0);
-                player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
-            }
+            useAnvilCheck(player, topInv, slot, clickedInventory, false);
         }
         else if(inv instanceof CraftingInventory)
         {
@@ -230,6 +239,57 @@ public class StackUtils
         {
             moveItem(itemPickUp, clickedInventory, slot, inv, startSlot, endSlot, reverse);
         }
+    }
+
+    private static void useAnvilCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean rightClick)
+    {
+        if((clickedInventory instanceof AnvilInventory || clickedInventory instanceof SmithingInventory) && slot == 2)
+        {
+            Sound sound = null;
+            if(clickedInventory instanceof AnvilInventory) sound = Sound.BLOCK_ANVIL_USE;
+            if(clickedInventory instanceof SmithingInventory) sound = Sound.BLOCK_SMITHING_TABLE_USE;
+            ItemStack item1 = topInv.getItem(0);
+            ItemStack item2 = topInv.getItem(1);
+            ItemStack result = topInv.getItem(2);
+            double divider = rightClick ? 2 : 1;
+            if(result != null)
+            {
+                if(item2 != null)
+                {
+                    if(item2.getAmount() > item1.getAmount())
+                    {
+                        result.setAmount(item1.getAmount());
+                    }
+                    else
+                    {
+                        result.setAmount(item2.getAmount());
+                    }
+                    item2.setAmount(item2.getAmount() - (int)Math.ceil(result.getAmount()/divider));
+                }
+                item1.setAmount(item1.getAmount() - (int)Math.ceil(result.getAmount()/divider));
+                player.getWorld().playSound(player.getLocation(), sound, 1, 1);
+            }
+        }
+    }
+
+    public static void updateAnvilManual(Inventory topInv)
+    {
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                if(topInv instanceof AnvilInventory || topInv instanceof SmithingInventory)
+                {
+                    ItemStack item1 = topInv.getItem(0);
+                    ItemStack item2 = topInv.getItem(1);
+                    topInv.setItem(0, null);
+                    topInv.setItem(1, null);
+                    topInv.setItem(0, item1);
+                    topInv.setItem(1, item2);
+                }
+            }
+        }.runTask(plugin);
     }
 
     private static void shiftClickSameInv(ItemStack itemPickUp, InventoryClickEvent event, Inventory bottomInv)

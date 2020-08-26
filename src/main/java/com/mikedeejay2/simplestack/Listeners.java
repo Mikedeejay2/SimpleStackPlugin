@@ -1,8 +1,6 @@
 package com.mikedeejay2.simplestack;
 
-import com.mikedeejay2.simplestack.config.Config;
-import com.mikedeejay2.simplestack.util.ChatUtils;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
 import org.bukkit.block.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,9 +8,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.*;
+import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.inventory.SmithingInventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
@@ -32,14 +31,19 @@ public class Listeners implements Listener
     public void stackEvent(InventoryClickEvent event)
     {
         Player player = (Player) event.getWhoClicked();
+        StackUtils.updateAnvilManual(player.getOpenInventory().getTopInventory());
         if(!player.hasPermission(permission)) return;
         ItemStack itemPickUp = event.getCurrentItem();
         ItemStack itemPutDown = event.getCursor();
         ClickType clickType = event.getClick();
-        if(itemPickUp == null) return;
+        if(itemPickUp == null || clickType.equals(ClickType.CREATIVE)) return;
 
         boolean cancel = StackUtils.cancelStackCheck(itemPickUp.getType());
-        if(cancel) return;
+        if(cancel || event.isCancelled())
+        {
+            return;
+        }
+        event.setCancelled(true);
 
         StackUtils.makeUnique(itemPickUp, plugin.getKey());
 
@@ -134,4 +138,54 @@ public class Listeners implements Listener
         Inventory playerInv = player.getInventory();
         StackUtils.moveAllItemsToPlayerInv(inv, player, playerInv);
     }
+
+    @EventHandler
+    public void prepareAnvilEvent(PrepareAnvilEvent event)
+    {
+        AnvilInventory inv = event.getInventory();
+        ItemStack result = event.getResult();
+        ItemStack item1 = inv.getItem(0);
+        ItemStack item2 = inv.getItem(1);
+        if(item2 == null || result == null || item1 == null) return;
+        if(item1.getAmount() < item2.getAmount())
+        {
+            result.setAmount(item1.getAmount());
+        }
+        else if(item1.getAmount() > item2.getAmount())
+        {
+            result.setAmount(item2.getAmount());
+        }
+        else if(item1.getAmount() == item2.getAmount())
+        {
+            result.setAmount(item1.getAmount());
+        }
+    }
+
+    @EventHandler
+    public void prepareSmithingEvent(PrepareSmithingEvent event)
+    {
+        SmithingInventory inv = event.getInventory();
+        ItemStack result = event.getResult();
+        ItemStack item1 = inv.getItem(0);
+        ItemStack item2 = inv.getItem(1);
+        if(item2 == null || result == null || item1 == null) return;
+        if(item1.getAmount() < item2.getAmount())
+        {
+            result.setAmount(item1.getAmount());
+        }
+        else if(item1.getAmount() > item2.getAmount())
+        {
+            result.setAmount(item2.getAmount());
+        }
+        else if(item1.getAmount() == item2.getAmount())
+        {
+            result.setAmount(item1.getAmount());
+        }
+    }
+
+//    @EventHandler
+//    public void event(InventoryDragEvent event)
+//    {
+//
+//    }
 }
