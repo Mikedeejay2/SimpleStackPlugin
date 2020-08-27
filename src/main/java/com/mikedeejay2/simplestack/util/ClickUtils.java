@@ -206,6 +206,24 @@ public class ClickUtils
                 return;
             }
         }
+        else if(inv instanceof CartographyInventory)
+        {
+            if(itemInSlot.getType().equals(Material.FILLED_MAP))
+            {
+                startSlot = 0;
+                endSlot = 1;
+            }
+            else if(itemInSlot.getType().equals(Material.PAPER))
+            {
+                startSlot = 1;
+                endSlot = 2;
+            }
+            else
+            {
+                ClickUtils.shiftClickSameInv(itemInSlot, event, bottomInv);
+                return;
+            }
+        }
         if(playerOrder)
         {
             StackUtils.moveItemPlayerOrder(itemInSlot, clickedInventory, slot, bottomInv);
