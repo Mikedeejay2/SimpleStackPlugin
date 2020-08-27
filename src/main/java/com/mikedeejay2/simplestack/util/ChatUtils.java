@@ -185,7 +185,7 @@ public class ChatUtils
     /**
      * Print all BaseComponents to a Player
      *
-     * @param sender The Player that will receive the message
+     * @param player The Player that will receive the message
      * @param components An Array of BaseComponents arrays that will be printed, Each BaseComponent array being 1 line
      */
     public static void printComponents(Player player, BaseComponent[]... components)

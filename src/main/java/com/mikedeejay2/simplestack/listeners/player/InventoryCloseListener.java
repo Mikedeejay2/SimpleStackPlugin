@@ -32,7 +32,8 @@ public class InventoryCloseListener implements Listener
                 type.equals(InventoryType.ENCHANTING) ||
                 type.equals(InventoryType.ANVIL) ||
                 type.equals(InventoryType.LOOM) ||
-                type.equals(InventoryType.GRINDSTONE)
+                type.equals(InventoryType.GRINDSTONE) ||
+                (Simplestack.getMCVersion() >= 1.16 && type.equals(InventoryType.SMITHING))
           ) ) return;
         Inventory playerInv = player.getInventory();
         StackUtils.moveAllItemsToPlayerInv(inv, player, playerInv);

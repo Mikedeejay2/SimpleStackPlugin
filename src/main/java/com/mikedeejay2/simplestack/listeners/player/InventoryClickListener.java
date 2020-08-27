@@ -3,7 +3,6 @@ package com.mikedeejay2.simplestack.listeners.player;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.ClickUtils;
 import com.mikedeejay2.simplestack.util.StackUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,8 +27,8 @@ public class InventoryClickListener implements Listener
     {
         Player player = (Player) event.getWhoClicked();
         InventoryAction action = event.getAction();
-        StackUtils.updateAnvilManual(player.getOpenInventory().getTopInventory());
         if(StackUtils.cancelPlayerCheck(player)) return;
+        StackUtils.updateAnvilManual(player.getOpenInventory().getTopInventory());
         ItemStack itemPickUp = event.getCurrentItem();
         ItemStack itemPutDown = event.getCursor();
         ClickType clickType = event.getClick();

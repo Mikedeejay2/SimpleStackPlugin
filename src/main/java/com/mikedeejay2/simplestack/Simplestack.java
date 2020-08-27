@@ -7,6 +7,7 @@ import com.mikedeejay2.simplestack.listeners.InventoryMoveItemListener;
 import com.mikedeejay2.simplestack.listeners.PrepareAnvilListener;
 import com.mikedeejay2.simplestack.listeners.PrepareSmithingListener;
 import org.bukkit.NamespacedKey;
+import org.bukkit.command.Command;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -28,6 +29,7 @@ public final class Simplestack extends JavaPlugin
     // Certainly a hacky work around, but it works.
     private static NamespacedKey key;
 
+    // The Minecraft version for version safety down to 1.14
     public static double MCVersion;
 
     private static final String permission = "simplestack.use";
@@ -61,7 +63,6 @@ public final class Simplestack extends JavaPlugin
         manager.registerEvents(new PrepareAnvilListener(), this);
         if(MCVersion >= 1.16) manager.registerEvents(new PrepareSmithingListener(), this);
         manager.registerEvents(new InventoryDragListener(), this);
-        manager.registerEvents(new CommandSendListener(), this);
     }
 
     @Override
