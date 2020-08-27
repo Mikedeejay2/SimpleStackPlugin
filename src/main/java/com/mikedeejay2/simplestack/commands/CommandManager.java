@@ -51,7 +51,7 @@ public class CommandManager implements CommandExecutor
 
             if(target == null)
             {
-                ChatUtils.sendMessage(sender, "&cError: Invalid subcommand");
+                ChatUtils.sendMessage(sender, "&c" + "Error: Invalid subcommand");
                 return true;
             }
 
@@ -67,7 +67,7 @@ public class CommandManager implements CommandExecutor
             }
             catch(Exception e)
             {
-                ChatUtils.sendMessage(sender, ChatColor.RED + "An error has occured");
+                ChatUtils.sendMessage(sender, ChatColor.RED + "An error has occurred");
                 e.printStackTrace();
             }
         }

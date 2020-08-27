@@ -26,7 +26,7 @@ public class HelpCommand extends SubCommand
     {
         if(!sender.hasPermission("simplestack.help"))
         {
-            ChatUtils.sendMessage(sender, "&cError: You don't have permission to access this command.");
+            ChatUtils.sendMessage(sender, "&c" + "Error: You don't have permission to access this command.");
             return;
         }
         String ver = plugin.getDescription().getVersion();

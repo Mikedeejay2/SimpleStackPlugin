@@ -40,7 +40,7 @@ public class ReloadCommand extends SubCommand
     @Override
     public String info()
     {
-        return "Reloads the config";
+        return "Update config settings in game";
     }
 
     @Override

@@ -1,0 +1,18 @@
+{
+  "language.name": "English",
+  "language.region": "United States",
+  "language.code": "en_us",
+  "simplestack.title": "Simple Stack",
+  "simplestack.version": "Version: {VERSION}",
+  "simplestack.commands.click_to_run": "Click to run {COMMAND}",
+  "simplestack.commands.help": "help",
+  "simplestack.commands.help.info": "Help for simplestack commands",
+  "simplestack.commands.reload": "reload",
+  "simplestack.commands.reload.alias.1": "rl",
+  "simplestack.commands.reload.info": "Update config settings in game",
+  "simplestack.errors.invalid_subcommand": "Error: Invalid subcommand",
+  "simplestack.errors.general": "An error has occurred",
+  "simplestack.errors.nopermission": "Error: You don't have permission to access this command.",
+  "simplestack.warnings.invalid_material": "The material {MAT} in the config does not exist.",
+  "simplestack.warnings.invalid_list_mode": "The list mode {MODE} is not a valid list mode. Defaulting to blacklist mode."
+}
