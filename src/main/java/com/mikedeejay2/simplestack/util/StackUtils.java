@@ -162,7 +162,7 @@ public class StackUtils
      */
     public static void useSmithingCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean rightClick)
     {
-        if(Simplestack.getMCVersion() < 1.16) return;
+        if(plugin.getMCVersion() < 1.16) return;
         Sound sound = Sound.BLOCK_SMITHING_TABLE_USE;
         if(clickedInventory instanceof SmithingInventory && slot == 2)
         {
@@ -222,7 +222,7 @@ public class StackUtils
                 {
                     triggerAnvilSmithingUpdate(topInv);
                 }
-                if(Simplestack.getMCVersion() < 1.16) return;
+                if(plugin.getMCVersion() < 1.16) return;
                 if(topInv instanceof SmithingInventory)
                 {
                     triggerAnvilSmithingUpdate(topInv);
@@ -436,12 +436,12 @@ public class StackUtils
      */
     public static boolean cancelStackCheck(Material material)
     {
-        Config config = Simplestack.getCustomConfig();
+        Config config = plugin.getCustomConfig();
         if(material == null ||
            material.getMaxStackSize() == 64 ||
            material.equals(Material.AIR))
             return true;
-        if(Simplestack.getCustomConfig().LIST_MODE.equals(ListMode.BLACKLIST))
+        if(plugin.getCustomConfig().LIST_MODE.equals(ListMode.BLACKLIST))
         {
             return config.LIST.contains(material);
         }
@@ -460,7 +460,7 @@ public class StackUtils
      */
     public static boolean cancelPlayerCheck(Player player)
     {
-        return !player.hasPermission(Simplestack.getPermission());
+        return !player.hasPermission(plugin.getPermission());
     }
 
     /**

@@ -19,7 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class Simplestack extends JavaPlugin
 {
     private static Simplestack instance;
-    private static Config customConfig;
+    private Config customConfig;
 
     public CommandManager commandManager;
 
@@ -27,12 +27,12 @@ public final class Simplestack extends JavaPlugin
     // This has to happen because if we don't make each item unique then the InventoryClickEvent won't be called
     // when trying to stack 2 fully stacked items of the same type.
     // Certainly a hacky work around, but it works.
-    private static NamespacedKey key;
+    private NamespacedKey key;
 
     // The Minecraft version for version safety down to 1.14
-    public static double MCVersion;
+    public double MCVersion;
 
-    private static final String permission = "simplestack.use";
+    private final String permission = "simplestack.use";
 
     @Override
     public void onEnable()
@@ -81,7 +81,7 @@ public final class Simplestack extends JavaPlugin
         Simplestack.instance = instance;
     }
 
-    public static Config getCustomConfig()
+    public Config getCustomConfig()
     {
         return customConfig;
     }
@@ -91,12 +91,12 @@ public final class Simplestack extends JavaPlugin
         return key;
     }
 
-    public static double getMCVersion()
+    public double getMCVersion()
     {
         return MCVersion;
     }
 
-    public static String getPermission()
+    public String getPermission()
     {
         return permission;
     }

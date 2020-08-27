@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CustomTabCompleter implements TabCompleter
@@ -25,9 +26,8 @@ public class CustomTabCompleter implements TabCompleter
         switch(args.length)
         {
             case 1:
-                commands.add(manager.help);
-                commands.add(manager.reload);
-                commands.add("rl");
+                String[] arg1Strings = plugin.commandManager.getAllCommandStrings();
+                Collections.addAll(commands, arg1Strings);
                 break;
         }
         return commands;

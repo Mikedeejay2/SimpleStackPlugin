@@ -80,7 +80,7 @@ public class ChatUtils
      */
     public static String getTitleString()
     {
-        return "&b[&9SimpleStack&b] &r";
+        return "&b[&9Simple Stack&b] &r";
     }
 
     /**

@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 
 public class CommandManager implements CommandExecutor
@@ -102,5 +103,16 @@ public class CommandManager implements CommandExecutor
             }
         }
         return null;
+    }
+
+    public String[] getAllCommandStrings()
+    {
+        ArrayList<String> strings = new ArrayList<>();
+        for(SubCommand command : commands)
+        {
+            strings.add(command.name());
+            Collections.addAll(strings, command.aliases());
+        }
+        return strings.toArray(new String[0]);
     }
 }

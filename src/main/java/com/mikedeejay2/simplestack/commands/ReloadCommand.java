@@ -21,10 +21,10 @@ public class ReloadCommand extends SubCommand
     {
         if(!sender.hasPermission("simplestack.reload"))
         {
-            ChatUtils.sendMessage(sender, "&cError: You don't have permission to reload the config.");
+            ChatUtils.sendMessage(sender, "&c" + "Error: You don't have permission to reload the config.");
             return;
         }
-        Simplestack.getCustomConfig().reload();
+        plugin.getCustomConfig().reload();
         ChatUtils.sendMessage(sender, "&e&lSuccess!&r &9The config has been reloaded.");
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;

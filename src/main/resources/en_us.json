@@ -12,7 +12,10 @@
   "simplestack.commands.reload.info": "Update config settings in game",
   "simplestack.errors.invalid_subcommand": "Error: Invalid subcommand",
   "simplestack.errors.general": "An error has occurred",
-  "simplestack.errors.nopermission": "Error: You don't have permission to access this command.",
+  "simplestack.errors.nopermission.general": "Error: You don't have permission to access this command.",
+  "simplestack.errors.nopermission.reload": "Error: You don't have permission to reload the config.",
   "simplestack.warnings.invalid_material": "The material {MAT} in the config does not exist.",
-  "simplestack.warnings.invalid_list_mode": "The list mode {MODE} is not a valid list mode. Defaulting to blacklist mode."
+  "simplestack.warnings.invalid_list_mode": "The list mode {MODE} is not a valid list mode. Defaulting to blacklist mode.",
+  "simplestack.success": "Success!",
+  "simplestack.success.reload": "The config has been reloaded."
 }

@@ -160,7 +160,7 @@ public class ClickUtils
                 topInv.setItem(0, null);
                 topInv.setItem(1, null);
             }
-            else if(topInv instanceof AnvilInventory || (Simplestack.getMCVersion() >= 1.16 && topInv instanceof SmithingInventory))
+            else if(topInv instanceof AnvilInventory || (plugin.getMCVersion() >= 1.16 && topInv instanceof SmithingInventory))
             {
                 playerOrder = true;
             }
