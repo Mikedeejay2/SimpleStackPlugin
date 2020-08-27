@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.util.StackUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,8 +27,11 @@ public class InventoryDragListener implements Listener
     {
         if(!event.getType().equals(DragType.EVEN)) return;
         InventoryView inventoryView = event.getView();
+        Player player = (Player) inventoryView.getPlayer();
+        if(StackUtils.cancelPlayerCheck(player)) return;
 
         ItemStack cursor = event.getOldCursor();
+        if(StackUtils.cancelStackCheck(cursor.getType())) return;
         Integer[] slots = event.getNewItems().keySet().toArray(new Integer[0]);
         ItemStack[] newItems = event.getNewItems().values().toArray(new ItemStack[0]);
         int amountOfItems = newItems.length;
@@ -36,7 +40,6 @@ public class InventoryDragListener implements Listener
         int amountPerItem = (int) Math.floor(amountPerItemRaw);
         int totalAmount = amountPerItem*amountOfItems;
         int amountLeft = cursorSize-totalAmount;
-        Player player = (Player) inventoryView.getPlayer();
 
         new BukkitRunnable()
         {
