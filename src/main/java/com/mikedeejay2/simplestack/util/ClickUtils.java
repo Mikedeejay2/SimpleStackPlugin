@@ -160,15 +160,22 @@ public class ClickUtils
                 topInv.setItem(0, null);
                 topInv.setItem(1, null);
             }
+            else if(topInv instanceof AnvilInventory || (Simplestack.getMCVersion() >= 1.16 && topInv instanceof SmithingInventory))
+            {
+                playerOrder = true;
+            }
         }
         else if(inv instanceof CraftingInventory)
         {
             ++startSlot;
         }
-        else if(inv instanceof FurnaceInventory && itemInSlot.getType().isFuel())
+        else if(inv instanceof FurnaceInventory)
         {
-            --endSlot;
-            reverse = true;
+            if(itemInSlot.getType().isFuel())
+            {
+                --endSlot;
+                reverse = true;
+            }
         }
         else if(inv instanceof EnchantingInventory)
         {
