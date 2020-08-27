@@ -193,6 +193,11 @@ public class ClickUtils
                 startSlot = 2;
                 endSlot = 3;
             }
+            else
+            {
+                ClickUtils.shiftClickSameInv(itemInSlot, event, bottomInv);
+                return;
+            }
         }
         if(playerOrder)
         {
