@@ -39,14 +39,14 @@ public class CommandManager implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        if(args.length == 0)
-        {
-            ChatUtils.sendMessage(sender, "&cError: Please enter a valid subcommand. Type &6&o\"/simplestack help\" &r&cfor help");
-            return true;
-        }
-
         if(command.getName().equalsIgnoreCase(main))
         {
+            if(args.length == 0)
+            {
+                args = new String[1];
+                args[0] = "help";
+            }
+
             SubCommand target = this.get(args[0]);
 
             if(target == null)

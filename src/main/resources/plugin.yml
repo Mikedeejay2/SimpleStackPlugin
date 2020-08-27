@@ -6,6 +6,10 @@ api-version: 1.14
 commands:
   simplestack:
     description: Simple Stack base command.
+    aliases:
+      - ss
+      - stack
+      - sstack
 
 permissions:
   simplestack.use:
