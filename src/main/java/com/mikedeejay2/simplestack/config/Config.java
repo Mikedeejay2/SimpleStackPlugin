@@ -34,7 +34,9 @@ public class Config
         }
         catch(Exception e)
         {
-            plugin.getLogger().warning("The list mode \"" + listMode + "\" is not a valid list mode. Defaulting to blacklist mode.");
+            plugin.getLogger().warning(
+                    plugin.lang().getText("simplestack.warnings.invalid_list_mode", new String[]{"MODE"}, new String[]{listMode})
+            );
             LIST_MODE = ListMode.BLACKLIST;
         }
         List<String> matList = config.getStringList("Items");
@@ -45,7 +47,7 @@ public class Config
             Material material = Material.matchMaterial(mat);
             if(material == null && !mat.equals("Example Item"))
             {
-                plugin.getLogger().warning("The material \"" + mat + "\" in the config does not exist.");
+                plugin.getLogger().warning(plugin.lang().getText("simplestack.warnings.invalid_material", new String[]{"MAT"}, new String[]{mat}));
                 continue;
             }
             LIST.add(material);
