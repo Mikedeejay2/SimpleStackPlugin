@@ -39,7 +39,6 @@ public class StackUtils
      */
     public static void moveItemToInventory(Cancellable event, Item groundItem, Player player, ItemStack item)
     {
-        if(item.getType().getMaxStackSize() == 64) return;
         PlayerInventory inv = player.getInventory();
         for(int i = 0; i < inv.getSize(); i++)
         {
@@ -72,7 +71,6 @@ public class StackUtils
      */
     public static void moveItemToInventory(ItemStack item, Inventory fromInv, Inventory toInv, int amountBeingMoved)
     {
-        if(item.getType().getMaxStackSize() == 64) return;
         int amountLeft = amountBeingMoved;
         item = item.clone();
         item.setAmount(amountBeingMoved);
@@ -141,11 +139,55 @@ public class StackUtils
      */
     public static void useAnvilCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean rightClick)
     {
-        Sound sound = Sound.BLOCK_ANVIL_USE;
-        if(clickedInventory instanceof AnvilInventory && slot == 2)
+        if(!(clickedInventory instanceof AnvilInventory && slot == 2)) return;
+        triggerAnvilSmithingUse(player, topInv, rightClick, Sound.BLOCK_ANVIL_USE);
+    }
+
+    /**
+     * Check if a stonecutter has been used. If it has, appropriately calculate the output items.
+     * This is required because if the item being clicked on is a simplestack item the output has
+     * to be calculated manually.
+     *
+     * @param player The player that might be attempting to use the stonecutter
+     * @param topInv The top inventory that the player is viewing
+     * @param slot The slot that the player has clicked
+     * @param clickedInventory The inventory that the player has clicked
+     * @param shiftClick Mark if the click was a shift click or not
+     */
+    public static void useStonecutterCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean shiftClick)
+    {
+        if(!(clickedInventory instanceof StonecutterInventory && slot == 1)) return;
+        triggerStonecutterUse(player, topInv, shiftClick);
+    }
+
+    /**
+     * Trigger the use of a stonecutter. This method appropriately calculates
+     * the input and output items
+     *
+     * @param player The player that might be attempting to use the stonecutter
+     * @param topInv The top inventory that the player is viewing
+     * @param shiftClick Mark if the click was a shift click or not
+     */
+    private static void triggerStonecutterUse(Player player, Inventory topInv, boolean shiftClick)
+    {
+        ItemStack itemInput = topInv.getItem(0);
+        ItemStack itemOutput = player.getItemOnCursor().clone();
+        itemOutput.setAmount(1);
+        if(shiftClick)
         {
-            triggerAnvilSmithingUse(player, topInv, rightClick, sound);
+            itemOutput.setAmount(itemInput.getAmount());
+            itemInput.setAmount(0);
         }
+        else
+        {
+            itemInput.setAmount(itemInput.getAmount()-1);
+            itemOutput.setAmount(1);
+        }
+        topInv.setItem(0, null);
+        topInv.setItem(1, null);
+        topInv.setItem(0, itemInput);
+        topInv.setItem(1, itemOutput);
+        player.getWorld().playSound(player.getLocation(), Sound.UI_STONECUTTER_TAKE_RESULT, 1, 1);
     }
 
     /**
@@ -205,13 +247,14 @@ public class StackUtils
     }
 
     /**
-     * Manually update the contents of an anvil or a smithing table. There is a chance that a player
-     * added an item to the anvil without updating the contents of the anvil, that is checked with
-     * this method. If this method is not called, incorrect values will be displayed to the player.
+     * Manually update the contents of an anvil, smithing table, or stonecutter. There is a chance that a player
+     * added an item to the GUI or took an item out of the GUI, that is checked with
+     * this method. If this method is not called, incorrect values will be displayed to the player and
+     * duping could occur.
      *
      * @param topInv Player's top inventory that will be updated
      */
-    public static void updateAnvilManual(Inventory topInv)
+    public static void updateGUIManual(Inventory topInv)
     {
         new BukkitRunnable()
         {
@@ -396,16 +439,39 @@ public class StackUtils
      * to trick the Minecraft client into thinking that this item is unique and sending a packet over
      * to the server saying that they clicked the item and to do something with it.
      *
+     * As of 1.2.0, this doesn't need to be used for some reason.
+     *
      * @param itemInSlot The item being moved (Clicked item)
      * @param key The key to be used when setting the NBT data ("simplestack")
      */
+    @Deprecated
     public static void makeUnique(ItemStack itemInSlot, NamespacedKey key)
     {
+        if(itemInSlot.getType().getMaxStackSize() == 64) return;
         ItemMeta itemMeta = itemInSlot.getItemMeta();
         PersistentDataContainer data = itemMeta.getPersistentDataContainer();
         if(!data.has(key, PersistentDataType.BYTE))
         {
             data.set(key, PersistentDataType.BYTE, (byte) 1);
+            itemInSlot.setItemMeta(itemMeta);
+        }
+    }
+
+    /**
+     * If this plugin was used before 1.2.0, some items will be stuck on unique and others will not be unique,
+     * to fix this, this method removes the unique tag from an item being moved.
+     *
+     * @param itemInSlot The item being moved (Clicked item)
+     * @param key The key to be used when setting the NBT data ("simplestack")
+     */
+    public static void removeUnique(ItemStack itemInSlot, NamespacedKey key)
+    {
+        if(itemInSlot.getType().getMaxStackSize() == 64) return;
+        ItemMeta itemMeta = itemInSlot.getItemMeta();
+        PersistentDataContainer data = itemMeta.getPersistentDataContainer();
+        if(data.has(key, PersistentDataType.BYTE))
+        {
+            data.remove(key);
             itemInSlot.setItemMeta(itemMeta);
         }
     }
@@ -438,7 +504,6 @@ public class StackUtils
     {
         Config config = plugin.getCustomConfig();
         if(material == null ||
-           material.getMaxStackSize() == 64 ||
            material.equals(Material.AIR))
             return true;
         if(plugin.getCustomConfig().LIST_MODE.equals(ListMode.BLACKLIST))
@@ -487,7 +552,7 @@ public class StackUtils
             break;
         }
         item.setItemMeta(meta);
-        StackUtils.makeUnique(item, plugin.getKey());
+        StackUtils.removeUnique(item, plugin.getKey());
 
         world.dropItemNaturally(location, item);
         block.setType(Material.AIR);

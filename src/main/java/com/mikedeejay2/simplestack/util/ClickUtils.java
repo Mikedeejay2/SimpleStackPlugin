@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.util;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -30,6 +31,7 @@ public class ClickUtils
             StackUtils.useAnvilCheck(player, topInv, slot, clickedInv, false);
             player.setItemOnCursor(itemInSlot);
             clickedInv.setItem(slot, itemInCursor);
+            StackUtils.useStonecutterCheck(player, topInv, slot, clickedInv, false);
             player.updateInventory();
             return;
         }
@@ -43,9 +45,24 @@ public class ClickUtils
         }
         itemInCursor.setAmount(newAmount);
         itemInSlot.setAmount(extraAmount);
-        event.getClickedInventory().setItem(event.getSlot(), itemInCursor);
-        player.getOpenInventory().setCursor(itemInSlot);
+        if(shouldSwitch(clickedInv, slot))
+        {
+            clickedInv.setItem(slot, itemInCursor);
+            player.getOpenInventory().setCursor(itemInSlot);
+        }
+        else
+        {
+            clickedInv.setItem(slot, itemInSlot);
+            player.setItemOnCursor(itemInCursor);
+            StackUtils.useStonecutterCheck(player, topInv, slot, clickedInv, false);
+        }
         player.updateInventory();
+    }
+
+    public static boolean shouldSwitch(Inventory inventory, int slot)
+    {
+        if(inventory instanceof StonecutterInventory && slot == 1) return false;
+        return true;
     }
 
     /**
@@ -70,6 +87,7 @@ public class ClickUtils
             cursorItemStack.setAmount((int) Math.ceil(itemInSlot.getAmount()/2.0f));
             itemInSlot.setAmount((int) Math.floor(itemInSlot.getAmount()/2.0f));
             player.setItemOnCursor(cursorItemStack);
+            StackUtils.useStonecutterCheck(player, topInv, slot, clickedInv, false);
             player.updateInventory();
             return;
         }
@@ -102,7 +120,7 @@ public class ClickUtils
         int slot = event.getSlot();
         if(!(bottomInv instanceof PlayerInventory) || !(topInv instanceof CraftingInventory && topInv.getSize() == 5))
         {
-            shiftClickSeperateInv(itemInSlot, event, inv, topInv, bottomInv, slot);
+            shiftClickSeperateInv(itemInSlot, event, inv, topInv, bottomInv, slot, player);
         }
         else
         {
@@ -124,7 +142,7 @@ public class ClickUtils
      * @param bottomInv The bottom inventory that the player is viewing
      * @param slot The slot that the player has clicked on
      */
-    private static void shiftClickSeperateInv(ItemStack itemInSlot, InventoryClickEvent event, Inventory inv, Inventory topInv, Inventory bottomInv, int slot)
+    private static void shiftClickSeperateInv(ItemStack itemInSlot, InventoryClickEvent event, Inventory inv, Inventory topInv, Inventory bottomInv, int slot, Player player)
     {
         Inventory clickedInventory = event.getClickedInventory();
         if(clickedInventory.equals(bottomInv))
@@ -150,20 +168,14 @@ public class ClickUtils
         if(inv instanceof PlayerInventory)
         {
             endSlot -= 5;
+            playerOrder = true;
 
-            if(topInv instanceof CraftingInventory && topInv.getSize() == 10)
-            {
-                playerOrder = true;
-            }
-            else if(topInv instanceof GrindstoneInventory)
+            if(topInv instanceof GrindstoneInventory)
             {
                 topInv.setItem(0, null);
                 topInv.setItem(1, null);
             }
-            else if(topInv instanceof AnvilInventory || (plugin.getMCVersion() >= 1.16 && topInv instanceof SmithingInventory))
-            {
-                playerOrder = true;
-            }
+            StackUtils.useStonecutterCheck(player, topInv, slot, clickedInventory, true);
         }
         else if(inv instanceof CraftingInventory)
         {
