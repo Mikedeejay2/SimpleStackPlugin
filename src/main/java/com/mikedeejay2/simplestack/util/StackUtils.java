@@ -24,7 +24,7 @@ public class StackUtils
 
     // Max stack size. Changing this produces some really weird results because
     // Minecraft really doesn't know how to handle anything higher than 64.
-    public static final int MAX_AMOUNT_IN_STACK = 64;
+    public static final int MAX_AMOUNT_IN_STACK = 80;
 
     private static final NamespacedKey key = new NamespacedKey(plugin, "simplestack");
 
@@ -466,7 +466,7 @@ public class StackUtils
      */
     public static void removeUnique(ItemStack itemInSlot, NamespacedKey key)
     {
-        if(itemInSlot.getType().getMaxStackSize() == 64) return;
+        if(itemInSlot == null || itemInSlot.getType().getMaxStackSize() == 64 || !itemInSlot.hasItemMeta()) return;
         ItemMeta itemMeta = itemInSlot.getItemMeta();
         PersistentDataContainer data = itemMeta.getPersistentDataContainer();
         if(data.has(key, PersistentDataType.BYTE))

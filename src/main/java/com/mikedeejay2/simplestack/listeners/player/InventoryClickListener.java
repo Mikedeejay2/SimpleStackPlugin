@@ -34,8 +34,12 @@ public class InventoryClickListener implements Listener
         ClickType clickType = event.getClick();
         if(itemPickUp == null || action.toString().contains("DROP") || clickType.equals(ClickType.CREATIVE)) return;
 
-        boolean cancel = StackUtils.cancelStackCheck(itemPickUp.getType());
-        if(cancel || event.isCancelled()) return;
+        boolean cancel1 = StackUtils.cancelStackCheck(itemPickUp.getType());
+        boolean cancel2 = StackUtils.cancelStackCheck(itemPutDown.getType());
+        if((cancel1 && cancel2) || event.isCancelled())
+        {
+            return;
+        }
         event.setCancelled(true);
 
         StackUtils.removeUnique(itemPickUp, plugin.getKey());

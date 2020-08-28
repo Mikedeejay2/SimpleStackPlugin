@@ -343,7 +343,6 @@ public class ClickUtils
 
     /**
      * Emulates specifically placing everything in the cursor into the slot below.
-     * Probably not used, backup method if something major breaks and I don't have time to fix it.
      *
      * @param player The player that has clicked
      * @param itemInSlot The item clicked on by the cursor
