@@ -1,7 +1,9 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.ClickUtils;
+import com.mikedeejay2.simplestack.util.MoveUtils;
 import com.mikedeejay2.simplestack.util.StackUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,11 +31,11 @@ public class InventoryDragListener implements Listener
         if(!event.getType().equals(DragType.EVEN)) return;
         InventoryView inventoryView = event.getView();
         Player player = (Player) inventoryView.getPlayer();
-        if(StackUtils.cancelPlayerCheck(player)) return;
+        if(CancelUtils.cancelPlayerCheck(player)) return;
 
         ItemStack cursor = event.getOldCursor();
-        if(StackUtils.cancelStackCheck(cursor.getType())) return;
-        ClickUtils.dragItems(event, inventoryView, player, cursor);
+        if(CancelUtils.cancelStackCheck(cursor.getType())) return;
+        MoveUtils.dragItems(event, inventoryView, player, cursor);
 
         player.updateInventory();
         event.setCancelled(true);

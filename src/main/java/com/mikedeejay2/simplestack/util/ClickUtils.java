@@ -2,14 +2,11 @@ package com.mikedeejay2.simplestack.util;
 
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
-import org.bukkit.entity.Donkey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.*;
-import org.bukkit.scheduler.BukkitRunnable;
 
-public class ClickUtils
+public final class ClickUtils
 {
     private static final Simplestack plugin = Simplestack.getInstance();
 
@@ -27,30 +24,30 @@ public class ClickUtils
         Inventory clickedInv = event.getClickedInventory();
         int slot = event.getSlot();
         Inventory topInv = player.getOpenInventory().getTopInventory();
-        if(cancelMoveCursor(itemInCursor, clickedInv, slot)) return;
+        if(CancelUtils.cancelMoveCursor(itemInCursor, clickedInv, slot)) return;
         if(!StackUtils.equalsEachOther(itemInCursor, itemInSlot))
         {
-            StackUtils.useSmithingCheck(player, topInv, slot, clickedInv, false);
-            StackUtils.useAnvilCheck(player, topInv, slot, clickedInv, false);
+            CheckUtils.useSmithingCheck(player, topInv, slot, clickedInv, false);
+            CheckUtils.useAnvilCheck(player, topInv, slot, clickedInv, false);
 
             player.setItemOnCursor(itemInSlot);
             clickedInv.setItem(slot, itemInCursor);
 
-            StackUtils.useStonecutterCheck(player, topInv, slot, clickedInv, false);
+            CheckUtils.useStonecutterCheck(player, topInv, slot, clickedInv, false);
             player.updateInventory();
             return;
         }
 
         int newAmount = itemInCursor.getAmount() + itemInSlot.getAmount();
         int extraAmount = 0;
-        if(newAmount > StackUtils.MAX_AMOUNT_IN_STACK)
+        if(newAmount > Simplestack.MAX_AMOUNT_IN_STACK)
         {
-            extraAmount = (newAmount - StackUtils.MAX_AMOUNT_IN_STACK);
-            newAmount = StackUtils.MAX_AMOUNT_IN_STACK;
+            extraAmount = (newAmount - Simplestack.MAX_AMOUNT_IN_STACK);
+            newAmount = Simplestack.MAX_AMOUNT_IN_STACK;
         }
         itemInCursor.setAmount(newAmount);
         itemInSlot.setAmount(extraAmount);
-        if(shouldSwitch(clickedInv, slot))
+        if(StackUtils.shouldSwitch(clickedInv, slot))
         {
             clickedInv.setItem(slot, itemInCursor);
             player.getOpenInventory().setCursor(itemInSlot);
@@ -59,44 +56,9 @@ public class ClickUtils
         {
             clickedInv.setItem(slot, itemInSlot);
             player.setItemOnCursor(itemInCursor);
-            StackUtils.useStonecutterCheck(player, topInv, slot, clickedInv, false);
+            CheckUtils.useStonecutterCheck(player, topInv, slot, clickedInv, false);
         }
         player.updateInventory();
-    }
-
-    /**
-     * Returns whether or not this move should be cancelled or not. Cancels based on the
-     * item slot clicked being an output slot or a slot that shouldn't take an item
-     * of the clicked type.
-     *
-     * @param item Item in player's cursor
-     * @param inv Inventory being clicked on
-     * @param slot Slot that was clicked
-     * @return If move should cancel
-     */
-    private static boolean cancelMoveCursor(ItemStack item, Inventory inv, int slot)
-    {
-        if(item == null || item.getType().equals(Material.AIR)) return false;
-        Material type = item.getType();
-        String typeString = type.toString();
-        if(inv instanceof AbstractHorseInventory && slot == 0 && !type.equals(Material.SADDLE)) return true;
-        if(inv instanceof HorseInventory && slot == 1 && !typeString.endsWith("HORSE_ARMOR")) return true;
-        return false;
-    }
-
-    /**
-     * Returns whether the items between the player's cursor and the inventory slot
-     * should switch or not. This needs to be checked because there are rare occasions
-     * where an item should not switch (i.e an output slot)
-     *
-     * @param inventory Inventory that was clicked
-     * @param slot Slot that was clicked
-     * @return If items should switch or not
-     */
-    public static boolean shouldSwitch(Inventory inventory, int slot)
-    {
-        if(inventory instanceof StonecutterInventory && slot == 1) return false;
-        return true;
     }
 
     /**
@@ -113,11 +75,11 @@ public class ClickUtils
         Inventory topInv = player.getOpenInventory().getTopInventory();
         int slot = event.getSlot();
         Inventory clickedInv = event.getClickedInventory();
-        if(cancelMoveCursor(itemInCursor, clickedInv, slot)) return;
+        if(CancelUtils.cancelMoveCursor(itemInCursor, clickedInv, slot)) return;
         if(!StackUtils.equalsEachOther(itemInCursor, itemInSlot))
         {
-            StackUtils.useSmithingCheck(player, topInv, slot, clickedInv, true);
-            StackUtils.useAnvilCheck(player, topInv, slot, clickedInv, true);
+            CheckUtils.useSmithingCheck(player, topInv, slot, clickedInv, true);
+            CheckUtils.useAnvilCheck(player, topInv, slot, clickedInv, true);
 
             if(itemInSlot.getType().equals(Material.AIR) && !itemInCursor.getType().equals(Material.AIR))
             {
@@ -134,7 +96,7 @@ public class ClickUtils
                 player.setItemOnCursor(cursorItemStack);
             }
 
-            StackUtils.useStonecutterCheck(player, topInv, slot, clickedInv, false);
+            CheckUtils.useStonecutterCheck(player, topInv, slot, clickedInv, false);
             player.updateInventory();
             return;
         }
@@ -222,7 +184,7 @@ public class ClickUtils
                 topInv.setItem(0, null);
                 topInv.setItem(1, null);
             }
-            StackUtils.useStonecutterCheck(player, topInv, slot, clickedInventory, true);
+            CheckUtils.useStonecutterCheck(player, topInv, slot, clickedInventory, true);
         }
         else if(inv instanceof CraftingInventory)
         {
@@ -242,7 +204,7 @@ public class ClickUtils
             if(inv.getItem(0) != null) return;
             ItemStack itemToMove = itemInSlot.clone();
             itemToMove.setAmount(1);
-            StackUtils.moveItem(itemToMove, clickedInventory, slot, inv, startSlot, endSlot, reverse);
+            MoveUtils.moveItem(itemToMove, clickedInventory, slot, inv, startSlot, endSlot, reverse);
             itemInSlot.setAmount(itemInSlot.getAmount()-1);
             clickedInventory.setItem(slot, itemInSlot);
             return;
@@ -303,11 +265,11 @@ public class ClickUtils
         }
         if(playerOrder)
         {
-            StackUtils.moveItemPlayerOrder(itemInSlot, clickedInventory, slot, bottomInv);
+            MoveUtils.moveItemPlayerOrder(itemInSlot, clickedInventory, slot, bottomInv);
         }
         else
         {
-            StackUtils.moveItem(itemInSlot, clickedInventory, slot, inv, startSlot, endSlot, reverse);
+            MoveUtils.moveItem(itemInSlot, clickedInventory, slot, inv, startSlot, endSlot, reverse);
         }
     }
 
@@ -329,7 +291,7 @@ public class ClickUtils
         String type = itemInSlot.getType().toString();
         if(inv instanceof CraftingInventory)
         {
-            StackUtils.moveItemPlayerOrder(itemInSlot, clickedInventory, slot, bottomInv);
+            MoveUtils.moveItemPlayerOrder(itemInSlot, clickedInventory, slot, bottomInv);
             return;
         }
         if(!type.endsWith("_HELMET") &&
@@ -341,15 +303,15 @@ public class ClickUtils
         {
             if(slot < 9)
             {
-                StackUtils.moveItem(itemInSlot, clickedInventory, slot, inv, 9, 36, false);
+                MoveUtils.moveItem(itemInSlot, clickedInventory, slot, inv, 9, 36, false);
             }
             else if(slot < 36)
             {
-                StackUtils.moveItem(itemInSlot, clickedInventory, slot, inv, 0, 9, false);
+                MoveUtils.moveItem(itemInSlot, clickedInventory, slot, inv, 0, 9, false);
             }
             else
             {
-                StackUtils.moveItem(itemInSlot, clickedInventory, slot, inv, 9, 36, false);
+                MoveUtils.moveItem(itemInSlot, clickedInventory, slot, inv, 9, 36, false);
             }
         }
         else
@@ -384,7 +346,7 @@ public class ClickUtils
             }
             else
             {
-                StackUtils.moveItem(itemInSlot, clickedInventory, slot, inv, 9, 36, false);
+                MoveUtils.moveItem(itemInSlot, clickedInventory, slot, inv, 9, 36, false);
             }
         }
     }
@@ -417,10 +379,10 @@ public class ClickUtils
     {
         int newAmount = itemInSlot.getAmount() + itemInCursor.getAmount();
         int extraAmount = 0;
-        if(newAmount > StackUtils.MAX_AMOUNT_IN_STACK)
+        if(newAmount > Simplestack.MAX_AMOUNT_IN_STACK)
         {
-            extraAmount = newAmount % StackUtils.MAX_AMOUNT_IN_STACK;
-            newAmount = StackUtils.MAX_AMOUNT_IN_STACK;
+            extraAmount = newAmount % Simplestack.MAX_AMOUNT_IN_STACK;
+            newAmount = Simplestack.MAX_AMOUNT_IN_STACK;
         }
         itemInCursor.setAmount(newAmount);
         itemInSlot.setAmount(extraAmount);
@@ -459,72 +421,7 @@ public class ClickUtils
     {
         ItemStack itemPutDown;
         itemPutDown = itemInSlot.clone();
-        itemPutDown.setAmount(StackUtils.MAX_AMOUNT_IN_STACK);
+        itemPutDown.setAmount(Simplestack.MAX_AMOUNT_IN_STACK);
         player.setItemOnCursor(itemPutDown);
-    }
-
-    /**
-     * Emulates dragging items in an inventory. Uses a different algorithm because of the
-     * way that items have to combine together, still looks like the vanilla algorithm though.
-     *
-     * @param event The InventoryDragEvent that this method is being run from
-     * @param inventoryView The inventoryView of the player
-     * @param player The player dragging the items
-     * @param cursor The cursor ItemStack for modification
-     */
-    public static void dragItems(InventoryDragEvent event, InventoryView inventoryView, Player player, ItemStack cursor)
-    {
-        Integer[] slots = event.getNewItems().keySet().toArray(new Integer[0]);
-        ItemStack[] newItems = event.getNewItems().values().toArray(new ItemStack[0]);
-        ItemStack[] oldItems = new ItemStack[slots.length];
-        for(int i = 0; i < oldItems.length; i++)
-        {
-            ItemStack oldItem = inventoryView.getItem(slots[i]);
-            oldItems[i] = oldItem;
-            if(StackUtils.equalsEachOther(cursor, oldItem))
-            {
-                newItems[i].setAmount(oldItem.getAmount());
-            }
-            else
-            {
-                newItems[i].setAmount(0);
-            }
-        }
-
-        int amountOfItems = newItems.length;
-        int cursorSize = cursor.getAmount();
-        double amountPerItemRaw = (double)cursorSize/(double)amountOfItems;
-        int amountPerItem = (int) Math.floor(amountPerItemRaw);
-        int totalAmount = amountPerItem*amountOfItems;
-        int amountLeft = cursorSize-totalAmount;
-
-        int newExtraAmount = 0;
-
-        for(int i = 0; i < newItems.length; i++)
-        {
-            ItemStack item = newItems[i];
-            int newAmount = amountPerItem + item.getAmount();
-            int extraAmount = 0;
-            if(newAmount > StackUtils.MAX_AMOUNT_IN_STACK)
-            {
-                extraAmount = newAmount % StackUtils.MAX_AMOUNT_IN_STACK;
-                newAmount = StackUtils.MAX_AMOUNT_IN_STACK;
-            }
-            item.setAmount(newAmount);
-            newExtraAmount += extraAmount;
-            inventoryView.setItem(slots[i], item);
-        }
-
-        int finalNewExtraAmount = newExtraAmount;
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                ItemStack newCursor = cursor.clone();
-                newCursor.setAmount(amountLeft+ finalNewExtraAmount);
-                player.setItemOnCursor(newCursor);
-            }
-        }.runTask(plugin);
     }
 }

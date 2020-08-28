@@ -1,8 +1,11 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.util.CancelUtils;
+import com.mikedeejay2.simplestack.util.CheckUtils;
 import com.mikedeejay2.simplestack.util.ClickUtils;
 import com.mikedeejay2.simplestack.util.StackUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,15 +30,15 @@ public class InventoryClickListener implements Listener
     {
         Player player = (Player) event.getWhoClicked();
         InventoryAction action = event.getAction();
-        StackUtils.updateGUIManual(player.getOpenInventory().getTopInventory());
-        if(StackUtils.cancelPlayerCheck(player)) return;
+        CheckUtils.updateGUIManual(player.getOpenInventory().getTopInventory());
+        if(CancelUtils.cancelPlayerCheck(player)) return;
         ItemStack itemPickUp = event.getCurrentItem();
         ItemStack itemPutDown = event.getCursor();
         ClickType clickType = event.getClick();
         if(itemPickUp == null || action.toString().contains("DROP") || clickType.equals(ClickType.CREATIVE)) return;
 
-        boolean cancel1 = StackUtils.cancelStackCheck(itemPickUp.getType());
-        boolean cancel2 = StackUtils.cancelStackCheck(itemPutDown.getType());
+        boolean cancel1 = CancelUtils.cancelStackCheck(itemPickUp.getType());
+        boolean cancel2 = CancelUtils.cancelStackCheck(itemPutDown.getType());
         if((cancel1 && cancel2) || event.isCancelled())
         {
             return;

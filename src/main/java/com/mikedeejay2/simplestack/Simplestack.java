@@ -34,6 +34,10 @@ public final class Simplestack extends JavaPlugin
 
     private final String permission = "simplestack.use";
 
+    // Max stack size. Changing this produces some really weird results because
+    // Minecraft really doesn't know how to handle anything higher than 64.
+    public static final int MAX_AMOUNT_IN_STACK = 64;
+
     // For managing languages
     private LangManager langManager;
 

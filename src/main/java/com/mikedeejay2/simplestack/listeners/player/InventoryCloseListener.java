@@ -1,6 +1,8 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.util.CancelUtils;
+import com.mikedeejay2.simplestack.util.MoveUtils;
 import com.mikedeejay2.simplestack.util.StackUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -27,7 +29,7 @@ public class InventoryCloseListener implements Listener
     public void craftingTableCloseEvent(InventoryCloseEvent event)
     {
         Player player = (Player) event.getPlayer();
-        if(StackUtils.cancelPlayerCheck(player)) return;
+        if(CancelUtils.cancelPlayerCheck(player)) return;
         Inventory inv = event.getInventory();
         InventoryType type = inv.getType();
         if(!(type.equals(InventoryType.WORKBENCH) ||
@@ -38,7 +40,7 @@ public class InventoryCloseListener implements Listener
                 (plugin.getMCVersion() >= 1.16 && type.equals(InventoryType.SMITHING))
           ) ) return;
         Inventory playerInv = player.getInventory();
-        StackUtils.moveAllItemsToPlayerInv(inv, player, playerInv);
+        MoveUtils.moveAllItemsToPlayerInv(inv, player, playerInv);
 
         new BukkitRunnable()
         {
