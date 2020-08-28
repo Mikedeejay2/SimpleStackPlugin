@@ -1,8 +1,8 @@
 package com.mikedeejay2.simplestack.util;
 
 import com.mikedeejay2.simplestack.Simplestack;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Donkey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -27,12 +27,15 @@ public class ClickUtils
         Inventory clickedInv = event.getClickedInventory();
         int slot = event.getSlot();
         Inventory topInv = player.getOpenInventory().getTopInventory();
+        if(cancelMoveCursor(itemInCursor, clickedInv, slot)) return;
         if(!StackUtils.equalsEachOther(itemInCursor, itemInSlot))
         {
             StackUtils.useSmithingCheck(player, topInv, slot, clickedInv, false);
             StackUtils.useAnvilCheck(player, topInv, slot, clickedInv, false);
+
             player.setItemOnCursor(itemInSlot);
             clickedInv.setItem(slot, itemInCursor);
+
             StackUtils.useStonecutterCheck(player, topInv, slot, clickedInv, false);
             player.updateInventory();
             return;
@@ -61,6 +64,35 @@ public class ClickUtils
         player.updateInventory();
     }
 
+    /**
+     * Returns whether or not this move should be cancelled or not. Cancels based on the
+     * item slot clicked being an output slot or a slot that shouldn't take an item
+     * of the clicked type.
+     *
+     * @param item Item in player's cursor
+     * @param inv Inventory being clicked on
+     * @param slot Slot that was clicked
+     * @return If move should cancel
+     */
+    private static boolean cancelMoveCursor(ItemStack item, Inventory inv, int slot)
+    {
+        if(item == null || item.getType().equals(Material.AIR)) return false;
+        Material type = item.getType();
+        String typeString = type.toString();
+        if(inv instanceof AbstractHorseInventory && slot == 0 && !type.equals(Material.SADDLE)) return true;
+        if(inv instanceof HorseInventory && slot == 1 && !typeString.endsWith("HORSE_ARMOR")) return true;
+        return false;
+    }
+
+    /**
+     * Returns whether the items between the player's cursor and the inventory slot
+     * should switch or not. This needs to be checked because there are rare occasions
+     * where an item should not switch (i.e an output slot)
+     *
+     * @param inventory Inventory that was clicked
+     * @param slot Slot that was clicked
+     * @return If items should switch or not
+     */
     public static boolean shouldSwitch(Inventory inventory, int slot)
     {
         if(inventory instanceof StonecutterInventory && slot == 1) return false;
@@ -81,14 +113,27 @@ public class ClickUtils
         Inventory topInv = player.getOpenInventory().getTopInventory();
         int slot = event.getSlot();
         Inventory clickedInv = event.getClickedInventory();
+        if(cancelMoveCursor(itemInCursor, clickedInv, slot)) return;
         if(!StackUtils.equalsEachOther(itemInCursor, itemInSlot))
         {
             StackUtils.useSmithingCheck(player, topInv, slot, clickedInv, true);
             StackUtils.useAnvilCheck(player, topInv, slot, clickedInv, true);
-            ItemStack cursorItemStack = itemInSlot.clone();
-            cursorItemStack.setAmount((int) Math.ceil(itemInSlot.getAmount()/2.0f));
-            itemInSlot.setAmount((int) Math.floor(itemInSlot.getAmount()/2.0f));
-            player.setItemOnCursor(cursorItemStack);
+
+            if(itemInSlot.getType().equals(Material.AIR) && !itemInCursor.getType().equals(Material.AIR))
+            {
+                itemInSlot = itemInCursor.clone();
+                itemInSlot.setAmount(1);
+                itemInCursor.setAmount(itemInCursor.getAmount()-1);
+                clickedInv.setItem(slot, itemInSlot);
+            }
+            else
+            {
+                ItemStack cursorItemStack = itemInSlot.clone();
+                cursorItemStack.setAmount((int) Math.ceil(itemInSlot.getAmount() / 2.0f));
+                itemInSlot.setAmount((int) Math.floor(itemInSlot.getAmount() / 2.0f));
+                player.setItemOnCursor(cursorItemStack);
+            }
+
             StackUtils.useStonecutterCheck(player, topInv, slot, clickedInv, false);
             player.updateInventory();
             return;
@@ -167,10 +212,10 @@ public class ClickUtils
         int endSlot = inv.getSize();
         boolean reverse = false;
         boolean playerOrder = false;
+        boolean reverseHotbar = false;
         if(inv instanceof PlayerInventory)
         {
             endSlot -= 5;
-            playerOrder = true;
 
             if(topInv instanceof GrindstoneInventory)
             {
@@ -228,6 +273,24 @@ public class ClickUtils
                 endSlot = 1;
             }
             else if(itemInSlot.getType().equals(Material.PAPER))
+            {
+                startSlot = 1;
+                endSlot = 2;
+            }
+            else
+            {
+                ClickUtils.shiftClickSameInv(itemInSlot, event, bottomInv);
+                return;
+            }
+        }
+        else if(inv instanceof AbstractHorseInventory)
+        {
+            if(itemInSlot.getType().equals(Material.SADDLE))
+            {
+                startSlot = 0;
+                endSlot = 1;
+            }
+            else if(itemInSlot.getType().toString().endsWith("HORSE_ARMOR") && inv instanceof HorseInventory)
             {
                 startSlot = 1;
                 endSlot = 2;
