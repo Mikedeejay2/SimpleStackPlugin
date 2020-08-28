@@ -2,6 +2,7 @@ package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.simplestack.commands.CommandManager;
 import com.mikedeejay2.simplestack.config.Config;
+import com.mikedeejay2.simplestack.language.LangManager;
 import com.mikedeejay2.simplestack.listeners.player.*;
 import com.mikedeejay2.simplestack.listeners.InventoryMoveItemListener;
 import com.mikedeejay2.simplestack.listeners.PrepareAnvilListener;
@@ -21,7 +22,7 @@ public final class Simplestack extends JavaPlugin
     private static Simplestack instance;
     private Config customConfig;
 
-    public CommandManager commandManager;
+    private CommandManager commandManager;
 
     // A namespaced key for adding a small piece of NBT data that makes each item "Unique".
     // This has to happen because if we don't make each item unique then the InventoryClickEvent won't be called
@@ -34,6 +35,9 @@ public final class Simplestack extends JavaPlugin
 
     private final String permission = "simplestack.use";
 
+    // For managing languages
+    private LangManager langManager;
+
     @Override
     public void onEnable()
     {
@@ -45,6 +49,8 @@ public final class Simplestack extends JavaPlugin
         else if(verString.contains("1.14")) MCVersion = 1.14;
 
         setInstance(this);
+
+        this.langManager = new LangManager();
 
         key = new NamespacedKey(this, "simplestack");
 
@@ -99,5 +105,15 @@ public final class Simplestack extends JavaPlugin
     public String getPermission()
     {
         return permission;
+    }
+
+    public CommandManager getCommandManager()
+    {
+        return commandManager;
+    }
+
+    public LangManager lang()
+    {
+        return langManager;
     }
 }

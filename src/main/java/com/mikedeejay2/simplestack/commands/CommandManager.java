@@ -2,7 +2,6 @@ package com.mikedeejay2.simplestack.commands;
 
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.ChatUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -52,7 +51,7 @@ public class CommandManager implements CommandExecutor
 
             if(target == null)
             {
-                ChatUtils.sendMessage(sender, "&c" + "Error: Invalid subcommand");
+                ChatUtils.sendMessage(sender, "&c" + plugin.lang().getText(sender, "simplestack.errors.invalid_subcommand"));
                 return true;
             }
 
@@ -68,7 +67,7 @@ public class CommandManager implements CommandExecutor
             }
             catch(Exception e)
             {
-                ChatUtils.sendMessage(sender, ChatColor.RED + "An error has occurred");
+                ChatUtils.sendMessage(sender, "&c" + plugin.lang().getText(sender, "simplestack.errors.general"));
                 e.printStackTrace();
             }
         }

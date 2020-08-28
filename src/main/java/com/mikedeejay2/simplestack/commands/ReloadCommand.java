@@ -21,11 +21,11 @@ public class ReloadCommand extends SubCommand
     {
         if(!sender.hasPermission("simplestack.reload"))
         {
-            ChatUtils.sendMessage(sender, "&c" + "Error: You don't have permission to reload the config.");
+            ChatUtils.sendMessage(sender, "&c" + plugin.lang().getText(sender, "simplestack.errors.nopermission.reload"));
             return;
         }
         plugin.getCustomConfig().reload();
-        ChatUtils.sendMessage(sender, "&e&lSuccess!&r &9The config has been reloaded.");
+        ChatUtils.sendMessage(sender, "&e&l" + plugin.lang().getText(sender, "simplestack.success") + "&r &9" + plugin.lang().getText(sender, "simplestack.reload.success"));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
@@ -34,13 +34,13 @@ public class ReloadCommand extends SubCommand
     @Override
     public String name()
     {
-        return plugin.commandManager.reload;
+        return plugin.getCommandManager().reload;
     }
 
     @Override
     public String info()
     {
-        return "Update config settings in game";
+        return plugin.lang().getText("simplestack.commands.reload.info");
     }
 
     @Override

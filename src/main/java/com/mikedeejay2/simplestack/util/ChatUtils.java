@@ -58,7 +58,7 @@ public class ChatUtils
      */
     public static void sendMessage(Player p, String s)
     {
-        p.sendMessage(chat(getTitleString() + s));
+        p.sendMessage(chat(getTitleString(p) + s));
     }
 
     /**
@@ -69,18 +69,41 @@ public class ChatUtils
      */
     public static void sendMessage(CommandSender p, String s)
     {
-        p.sendMessage(chat(getTitleString() + s));
+        p.sendMessage(chat(getTitleString(p) + s));
     }
 
     /**
      * Gets a title tag that can be added to the beginning of text to define
      * what this text is coming from
-     *
      * @return The title string
      */
     public static String getTitleString()
     {
-        return "&b[&9Simple Stack&b] &r";
+        return "&b[&9" + plugin.lang().getText("simplestack.title") + "&b] &r";
+    }
+
+    /**
+     * Gets a title tag that can be added to the beginning of text to define
+     * what this text is coming from based on the language from the CommandSender
+     *
+     * @param sender Player / console to base the title's language off of
+     * @return The title string
+     */
+    public static String getTitleString(CommandSender sender)
+    {
+        return "&b[&9" + plugin.lang().getText(sender, "simplestack.title") + "&b] &r";
+    }
+
+    /**
+     * Gets a title tag that can be added to the beginning of text to define
+     * what this text is coming from based on the language from the player
+     *
+     * @param player Player to base the title's language off of
+     * @return The title string
+     */
+    public static String getTitleString(Player player)
+    {
+        return "&b[&9" + plugin.lang().getText(player, "simplestack.title") + "&b] &r";
     }
 
     /**
