@@ -50,12 +50,12 @@ public final class Simplestack extends JavaPlugin
 
         setInstance(this);
 
-        this.langManager = new LangManager();
-
         key = new NamespacedKey(this, "simplestack");
 
         customConfig = new Config();
         customConfig.onEnable();
+
+        this.langManager = new LangManager();
 
         this.commandManager = new CommandManager();
         commandManager.setup();

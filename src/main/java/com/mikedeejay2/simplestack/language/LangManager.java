@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.language;
 
+import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -7,15 +8,20 @@ import java.util.HashMap;
 
 public class LangManager
 {
+    private static final Simplestack plugin = Simplestack.getInstance();
+
     // The default language locale
-    private static String defaultLang = "en_us";
+    private static String englishLang;
+    private static String defaultLang;
 
     // Hash map of lang locales to lang files
     HashMap<String, LangFile> langFiles = new HashMap<>();
 
     public LangManager()
     {
-        LangFile english = new LangFile(defaultLang);
+        englishLang = "en_us";
+        defaultLang = plugin.getCustomConfig().LANG_LOCALE;
+        LangFile english = new LangFile(englishLang);
     }
 
     /**
@@ -58,6 +64,10 @@ public class LangManager
         {
             file = langFiles.get(defaultLang);
         }
+        if(file == null)
+        {
+            file = langFiles.get(englishLang);
+        }
         return file;
     }
 
@@ -69,7 +79,12 @@ public class LangManager
      */
     public LangFile getLang()
     {
-        return langFiles.get(defaultLang);
+        LangFile file = langFiles.get(defaultLang);
+        if(file == null)
+        {
+            file = langFiles.get(englishLang);
+        }
+        return file;
     }
 
     /**
@@ -123,7 +138,12 @@ public class LangManager
      */
     public String getText(String path)
     {
-        return getLang().getString(path);
+        String text = getText(defaultLang, path);
+        if(text == null)
+        {
+            text = getText(englishLang, path);
+        }
+        return text;
     }
 
     /**
@@ -191,7 +211,12 @@ public class LangManager
      */
     public String getText(String path, String[] toReplace, String[] replacements)
     {
-        return getText(defaultLang, path, toReplace, replacements);
+        String text = getText(defaultLang, path, toReplace, replacements);
+        if(text == null)
+        {
+            text = getText(englishLang, path, toReplace, replacements);
+        }
+        return text;
     }
 
     /**

@@ -21,11 +21,14 @@ public class Config
     //Variables
     public ListMode LIST_MODE;
     public List<Material> LIST;
+    public String LANG_LOCALE;
 
     public void onEnable()
     {
         config.options().copyDefaults();
         plugin.saveDefaultConfig();
+
+        LANG_LOCALE = config.getString("Language");
 
         String listMode = config.getString("ListMode");
         try
@@ -39,6 +42,7 @@ public class Config
             );
             LIST_MODE = ListMode.BLACKLIST;
         }
+
         List<String> matList = config.getStringList("Items");
         LIST = new ArrayList<>();
 

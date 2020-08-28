@@ -2,6 +2,10 @@
 #   * Blacklist = Items added to the list will not be stackable
 #   * Whitelist = Items added to the list will be stackable, but unstackable items will stay unstackable if they're not in the list
 # Items: Items that will or will not be stacked to 64 based on the list mode above
+# Language: The default language for in game text. If the specified language is not supported English will be used.
+# Note: Language is also based off of per-player, the language specified in this config only applies
+# to the console.
 ListMode: Blacklist
 Items:
   - 'Example Item'
+Language: en_us

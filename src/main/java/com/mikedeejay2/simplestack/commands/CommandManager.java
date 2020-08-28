@@ -14,7 +14,7 @@ import java.util.Iterator;
 public class CommandManager implements CommandExecutor
 {
     private ArrayList<SubCommand> commands = new ArrayList<SubCommand>();
-    private Simplestack plugin = Simplestack.getInstance();
+    private static final Simplestack plugin = Simplestack.getInstance();
     private CustomTabCompleter completer;
 
     public CommandManager() {}
