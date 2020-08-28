@@ -45,6 +45,11 @@ public class InventoryClickListener implements Listener
         {
             ClickUtils.cloneStack(player, itemPickUp);
         }
+        if(action.equals(InventoryAction.HOTBAR_SWAP) || action.equals(InventoryAction.HOTBAR_MOVE_AND_READD))
+        {
+            event.setCancelled(false);
+            return;
+        }
         switch(clickType)
         {
             case LEFT:
