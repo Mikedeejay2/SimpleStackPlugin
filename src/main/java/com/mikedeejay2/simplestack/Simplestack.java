@@ -8,7 +8,6 @@ import com.mikedeejay2.simplestack.listeners.InventoryMoveItemListener;
 import com.mikedeejay2.simplestack.listeners.PrepareAnvilListener;
 import com.mikedeejay2.simplestack.listeners.PrepareSmithingListener;
 import org.bukkit.NamespacedKey;
-import org.bukkit.command.Command;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 

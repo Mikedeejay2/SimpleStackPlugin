@@ -24,7 +24,7 @@ public class StackUtils
 
     // Max stack size. Changing this produces some really weird results because
     // Minecraft really doesn't know how to handle anything higher than 64.
-    public static final int MAX_AMOUNT_IN_STACK = 80;
+    public static final int MAX_AMOUNT_IN_STACK = 64;
 
     private static final NamespacedKey key = new NamespacedKey(plugin, "simplestack");
 
@@ -55,6 +55,35 @@ public class StackUtils
             inv.setItem(i, item);
             groundItem.remove();
             player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);
+            event.setCancelled(true);
+            break;
+        }
+    }
+
+    /**
+     * Emulates picking up an item that is regularly unstackable from the ground
+     * and attempting to stack it with other items in an inventory.
+     *
+     * @param event The cancellable event that this method has been called in
+     * @param groundItem The item on the ground that this method is attempting to move to an inventory
+     * @param inventory The inventory that the item is being added to
+     * @param item The ItemStack contained inside of the groundItem
+     */
+    public static void moveItemToInventory(Cancellable event, Item groundItem, Inventory inventory, ItemStack item)
+    {
+        for(int i = 0; i < inventory.getSize(); i++)
+        {
+            if(!combineItemInternal(item, inventory, i)) continue;
+            groundItem.remove();
+            event.setCancelled(true);
+            break;
+        }
+        if(item.getAmount() == 0) return;
+        for(int i = 0; i < inventory.getSize(); i++)
+        {
+            if(inventory.getItem(i) != null) continue;
+            inventory.setItem(i, item);
+            groundItem.remove();
             event.setCancelled(true);
             break;
         }

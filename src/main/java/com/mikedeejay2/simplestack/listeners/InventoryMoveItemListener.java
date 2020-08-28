@@ -41,6 +41,5 @@ public class InventoryMoveItemListener implements Listener
                 StackUtils.moveItemToInventory(item, fromInv, toInv, amountBeingMoved);
             }
         }.runTaskLater(plugin, 0);
-
     }
 }
