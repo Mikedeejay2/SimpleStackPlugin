@@ -3,7 +3,6 @@ package com.mikedeejay2.simplestack.listeners.player;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.ClickUtils;
 import com.mikedeejay2.simplestack.util.StackUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -45,7 +44,7 @@ public class InventoryClickListener implements Listener
         {
             ClickUtils.cloneStack(player, itemPickUp);
         }
-        if(action.equals(InventoryAction.HOTBAR_SWAP) || action.equals(InventoryAction.HOTBAR_MOVE_AND_READD))
+        else if(action.equals(InventoryAction.HOTBAR_SWAP) || action.equals(InventoryAction.HOTBAR_MOVE_AND_READD))
         {
             event.setCancelled(false);
             return;

@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.util.ClickUtils;
 import com.mikedeejay2.simplestack.util.StackUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,32 +33,8 @@ public class InventoryDragListener implements Listener
 
         ItemStack cursor = event.getOldCursor();
         if(StackUtils.cancelStackCheck(cursor.getType())) return;
-        Integer[] slots = event.getNewItems().keySet().toArray(new Integer[0]);
-        ItemStack[] newItems = event.getNewItems().values().toArray(new ItemStack[0]);
-        int amountOfItems = newItems.length;
-        int cursorSize = cursor.getAmount();
-        double amountPerItemRaw = (double)cursorSize/(double)amountOfItems;
-        int amountPerItem = (int) Math.floor(amountPerItemRaw);
-        int totalAmount = amountPerItem*amountOfItems;
-        int amountLeft = cursorSize-totalAmount;
+        ClickUtils.dragItems(event, inventoryView, player, cursor);
 
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                ItemStack newCursor = cursor.clone();
-                newCursor.setAmount(amountLeft);
-                player.setItemOnCursor(newCursor);
-            }
-        }.runTask(plugin);
-
-        for(int i = 0; i < newItems.length; i++)
-        {
-            ItemStack item = newItems[i];
-            item.setAmount(amountPerItem);
-            inventoryView.setItem(slots[i], item);
-        }
         player.updateInventory();
         event.setCancelled(true);
     }

@@ -5,7 +5,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.*;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class ClickUtils
 {
@@ -397,5 +399,70 @@ public class ClickUtils
         itemPutDown = itemInSlot.clone();
         itemPutDown.setAmount(StackUtils.MAX_AMOUNT_IN_STACK);
         player.setItemOnCursor(itemPutDown);
+    }
+
+    /**
+     * Emulates dragging items in an inventory. Uses a different algorithm because of the
+     * way that items have to combine together, still looks like the vanilla algorithm though.
+     *
+     * @param event The InventoryDragEvent that this method is being run from
+     * @param inventoryView The inventoryView of the player
+     * @param player The player dragging the items
+     * @param cursor The cursor ItemStack for modification
+     */
+    public static void dragItems(InventoryDragEvent event, InventoryView inventoryView, Player player, ItemStack cursor)
+    {
+        Integer[] slots = event.getNewItems().keySet().toArray(new Integer[0]);
+        ItemStack[] newItems = event.getNewItems().values().toArray(new ItemStack[0]);
+        ItemStack[] oldItems = new ItemStack[slots.length];
+        for(int i = 0; i < oldItems.length; i++)
+        {
+            ItemStack oldItem = inventoryView.getItem(slots[i]);
+            oldItems[i] = oldItem;
+            if(StackUtils.equalsEachOther(cursor, oldItem))
+            {
+                newItems[i].setAmount(oldItem.getAmount());
+            }
+            else
+            {
+                newItems[i].setAmount(0);
+            }
+        }
+
+        int amountOfItems = newItems.length;
+        int cursorSize = cursor.getAmount();
+        double amountPerItemRaw = (double)cursorSize/(double)amountOfItems;
+        int amountPerItem = (int) Math.floor(amountPerItemRaw);
+        int totalAmount = amountPerItem*amountOfItems;
+        int amountLeft = cursorSize-totalAmount;
+
+        int newExtraAmount = 0;
+
+        for(int i = 0; i < newItems.length; i++)
+        {
+            ItemStack item = newItems[i];
+            int newAmount = amountPerItem + item.getAmount();
+            int extraAmount = 0;
+            if(newAmount > StackUtils.MAX_AMOUNT_IN_STACK)
+            {
+                extraAmount = newAmount % StackUtils.MAX_AMOUNT_IN_STACK;
+                newAmount = StackUtils.MAX_AMOUNT_IN_STACK;
+            }
+            item.setAmount(newAmount);
+            newExtraAmount += extraAmount;
+            inventoryView.setItem(slots[i], item);
+        }
+
+        int finalNewExtraAmount = newExtraAmount;
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                ItemStack newCursor = cursor.clone();
+                newCursor.setAmount(amountLeft+ finalNewExtraAmount);
+                player.setItemOnCursor(newCursor);
+            }
+        }.runTask(plugin);
     }
 }
