@@ -77,41 +77,81 @@ public final class Simplestack extends JavaPlugin
         customConfig.onDisable();
     }
 
+    /**
+     * Gets the instance of this plugin
+     *
+     * @return The instance of this plugin
+     */
     public static Simplestack getInstance()
     {
         return instance;
     }
 
+    /**
+     * Set the instance of this plugin
+     *
+     * @param instance The instance to set to
+     */
     public static void setInstance(Simplestack instance)
     {
         Simplestack.instance = instance;
     }
 
+    /**
+     * Get the custom config
+     *
+     * @return This plugin's config object
+     */
     public Config getCustomConfig()
     {
         return customConfig;
     }
 
+    /**
+     * Get the namespaced key for making items unique
+     *
+     * @return The unique NamespacedKey
+     */
     public NamespacedKey getKey()
     {
         return key;
     }
 
+    /**
+     * Get the Minecraft version that this plugin is running on in double
+     *
+     * @return Minecraft's version as a double so if(MCVersion >= featureVersion)
+     */
     public double getMCVersion()
     {
         return MCVersion;
     }
 
+    /**
+     * Get the simplestack.use permission as a string
+     *
+     * @return simplestack.use String permission
+     */
     public String getPermission()
     {
         return permission;
     }
 
+    /**
+     * Get this plugin's command manager that manages /simplestack and it's subcommands
+     *
+     * @return The CommandManager object
+     */
     public CommandManager getCommandManager()
     {
         return commandManager;
     }
 
+    /**
+     * Get this plugin's lang manager
+     *
+     * @return The LangManager object
+     */
     public LangManager lang()
     {
         return langManager;
