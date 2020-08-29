@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.util;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
@@ -75,5 +76,31 @@ public final class CancelUtils
         if(plugin.getMCVersion() >= 1.16 && inv instanceof SmithingInventory && slot == 2) return true;
         if(inv instanceof GrindstoneInventory && slot == 2) return true;
         return false;
+    }
+
+    /**
+     * List of this inventories that this GUI allows through:
+     * PlayerInventory - Complete
+     * CraftingInventory - Complete
+     * GrindstoneInventory - Complete
+     * StonecutterInventory - Complete
+     * SmithingInventory - Complete
+     * AnvilInventory - Complete
+     * FurnaceInventory - Complete
+     * LoomInventory - Complete
+     * AbstractHorseInventory - Complete
+     * HorseInventory - Complete
+     * CartographyInventory - Complete
+     * EnchantingInventory - Complete
+     * BeaconInventory
+     * BrewerInventory
+     *
+     * @param inv Inventory to check
+     * @return If inventory should be cancelled
+     */
+    public static boolean cancelGUICheck(Inventory inv)
+    {
+        if(inv == null) return true;
+        return inv.getLocation() == null;
     }
 }
