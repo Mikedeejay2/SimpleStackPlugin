@@ -169,7 +169,6 @@ public final class ClickUtils
         {
             endSlot -= 5;
 
-            player.sendMessage(String.valueOf(slot));
             if(topInv instanceof GrindstoneInventory && slot == 2)
             {
                 topInv.setItem(0, null);
