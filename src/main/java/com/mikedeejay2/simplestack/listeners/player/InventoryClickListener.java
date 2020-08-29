@@ -35,7 +35,12 @@ public class InventoryClickListener implements Listener
         ItemStack itemPickUp = event.getCurrentItem();
         ItemStack itemPutDown = event.getCursor();
         ClickType clickType = event.getClick();
-        if(itemPickUp == null || action.toString().contains("DROP") || clickType.equals(ClickType.CREATIVE)) return;
+        InventoryView view = player.getOpenInventory();
+        Inventory topInv = view.getTopInventory();
+        Inventory bottomInv = view.getBottomInventory();
+        int slot = event.getSlot();
+        Inventory clickedInv = event.getClickedInventory();
+        if(itemPickUp == null || action.toString().contains("DROP") || clickType == ClickType.CREATIVE) return;
 
         boolean cancel1 = CancelUtils.cancelStackCheck(itemPickUp.getType());
         boolean cancel2 = CancelUtils.cancelStackCheck(itemPutDown.getType());
@@ -47,11 +52,13 @@ public class InventoryClickListener implements Listener
 
         StackUtils.removeUnique(itemPickUp, plugin.getKey());
 
-        if(action.equals(InventoryAction.CLONE_STACK))
+        CheckUtils.useGUICheck(player, topInv, slot, clickedInv, clickType);
+
+        if(action == InventoryAction.CLONE_STACK)
         {
             ClickUtils.cloneStack(player, itemPickUp);
         }
-        else if(action.equals(InventoryAction.HOTBAR_SWAP) || action.equals(InventoryAction.HOTBAR_MOVE_AND_READD))
+        else if(action == InventoryAction.HOTBAR_SWAP || action == InventoryAction.HOTBAR_MOVE_AND_READD)
         {
             event.setCancelled(false);
             return;

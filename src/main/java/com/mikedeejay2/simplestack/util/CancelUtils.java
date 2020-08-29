@@ -5,10 +5,7 @@ import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.AbstractHorseInventory;
-import org.bukkit.inventory.HorseInventory;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.*;
 
 public final class CancelUtils
 {
@@ -24,10 +21,9 @@ public final class CancelUtils
     public static boolean cancelStackCheck(Material material)
     {
         Config config = plugin.getCustomConfig();
-        if(material == null ||
-                material.equals(Material.AIR))
+        if(material == null || material == Material.AIR)
             return true;
-        if(plugin.getCustomConfig().LIST_MODE.equals(ListMode.BLACKLIST))
+        if(plugin.getCustomConfig().LIST_MODE == ListMode.BLACKLIST)
         {
             return config.LIST.contains(material);
         }
@@ -59,13 +55,25 @@ public final class CancelUtils
      * @param slot Slot that was clicked
      * @return If move should cancel
      */
-    public static boolean cancelMoveCursor(ItemStack item, Inventory inv, int slot)
+    public static boolean cancelMoveCheck(ItemStack item, Inventory inv, int slot)
     {
-        if(item == null || item.getType().equals(Material.AIR)) return false;
+        if(item == null || item.getType() == Material.AIR) return false;
         Material type = item.getType();
         String typeString = type.toString();
-        if(inv instanceof AbstractHorseInventory && slot == 0 && !type.equals(Material.SADDLE)) return true;
+        if(inv instanceof AbstractHorseInventory && slot == 0 && type != Material.SADDLE) return true;
         if(inv instanceof HorseInventory && slot == 1 && !typeString.endsWith("HORSE_ARMOR")) return true;
+        if(inv instanceof CraftingInventory && slot == 0) return true;
+        if(inv instanceof FurnaceInventory && slot == 2) return true;
+        if(inv instanceof StonecutterInventory && slot == 1) return true;
+        if(inv instanceof LoomInventory)
+        {
+            if(slot == 0 && !typeString.endsWith("BANNER")) return true;
+            if(slot == 1 && !typeString.endsWith("DYE")) return true;
+            if(slot == 2 && !typeString.endsWith("PATTERN")) return true;
+        }
+        if(inv instanceof AnvilInventory && slot == 2) return true;
+        if(plugin.getMCVersion() >= 1.16 && inv instanceof SmithingInventory && slot == 2) return true;
+        if(inv instanceof GrindstoneInventory && slot == 2) return true;
         return false;
     }
 }

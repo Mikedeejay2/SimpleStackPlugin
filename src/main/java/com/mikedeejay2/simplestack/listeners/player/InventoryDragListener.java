@@ -2,9 +2,7 @@ package com.mikedeejay2.simplestack.listeners.player;
 
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CancelUtils;
-import com.mikedeejay2.simplestack.util.ClickUtils;
 import com.mikedeejay2.simplestack.util.MoveUtils;
-import com.mikedeejay2.simplestack.util.StackUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,7 +10,6 @@ import org.bukkit.event.inventory.DragType;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class InventoryDragListener implements Listener
 {
@@ -28,7 +25,7 @@ public class InventoryDragListener implements Listener
     @EventHandler
     public void inventoryDragEvent(InventoryDragEvent event)
     {
-        if(!event.getType().equals(DragType.EVEN)) return;
+        if(event.getType() != DragType.EVEN) return;
         InventoryView inventoryView = event.getView();
         Player player = (Player) inventoryView.getPlayer();
         if(CancelUtils.cancelPlayerCheck(player)) return;

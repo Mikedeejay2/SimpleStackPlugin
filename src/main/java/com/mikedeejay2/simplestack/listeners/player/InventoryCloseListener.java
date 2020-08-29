@@ -32,12 +32,12 @@ public class InventoryCloseListener implements Listener
         if(CancelUtils.cancelPlayerCheck(player)) return;
         Inventory inv = event.getInventory();
         InventoryType type = inv.getType();
-        if(!(type.equals(InventoryType.WORKBENCH) ||
-                type.equals(InventoryType.ENCHANTING) ||
-                type.equals(InventoryType.ANVIL) ||
-                type.equals(InventoryType.LOOM) ||
-                type.equals(InventoryType.GRINDSTONE) ||
-                (plugin.getMCVersion() >= 1.16 && type.equals(InventoryType.SMITHING))
+        if(!(type == InventoryType.WORKBENCH ||
+                type == InventoryType.ENCHANTING ||
+                type == InventoryType.ANVIL ||
+                type == InventoryType.LOOM ||
+                type == InventoryType.GRINDSTONE ||
+                (plugin.getMCVersion() >= 1.16 && type == InventoryType.SMITHING)
           ) ) return;
         Inventory playerInv = player.getInventory();
         MoveUtils.moveAllItemsToPlayerInv(inv, player, playerInv);

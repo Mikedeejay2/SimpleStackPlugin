@@ -1,8 +1,10 @@
 package com.mikedeejay2.simplestack.util;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.*;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -55,24 +57,46 @@ public final class CheckUtils
      */
     private static void triggerStonecutterUse(Player player, Inventory topInv, boolean shiftClick)
     {
-        ItemStack itemInput = topInv.getItem(0);
-        ItemStack itemOutput = player.getItemOnCursor().clone();
-        itemOutput.setAmount(1);
-        if(shiftClick)
+        new BukkitRunnable()
         {
-            itemOutput.setAmount(itemInput.getAmount());
-            itemInput.setAmount(0);
-        }
-        else
-        {
-            itemInput.setAmount(itemInput.getAmount()-1);
-            itemOutput.setAmount(1);
-        }
-        topInv.setItem(0, null);
-        topInv.setItem(1, null);
-        topInv.setItem(0, itemInput);
-        topInv.setItem(1, itemOutput);
-        player.getWorld().playSound(player.getLocation(), Sound.UI_STONECUTTER_TAKE_RESULT, 1, 1);
+            @Override
+            public void run()
+            {
+                ItemStack itemInput = topInv.getItem(0);
+                ItemStack itemCursor = player.getItemOnCursor();
+                ItemStack itemOutput = topInv.getItem(1);
+                if(itemInput == null) return;
+                if(shiftClick)
+                {
+                    if(itemOutput == null) itemOutput = itemCursor.clone();
+                    itemOutput.setAmount(itemInput.getAmount());
+                    itemInput.setAmount(0);
+                }
+                else if(itemOutput == null)
+                {
+                    itemOutput = itemCursor.clone();
+                    itemInput.setAmount(itemInput.getAmount()-1);
+                    itemOutput.setAmount(1);
+                    itemCursor.setAmount(1);
+                }
+                else
+                {
+                    itemInput.setAmount(itemInput.getAmount()-1);
+                    itemCursor.setAmount(itemCursor.getAmount()+1);
+                    itemOutput.setAmount(1);
+                }
+                player.setItemOnCursor(itemCursor);
+                topInv.setItem(0, null);
+                topInv.setItem(1, null);
+                topInv.setItem(0, itemInput);
+                topInv.setItem(1, itemOutput);
+                if(itemInput.getAmount() == 0)
+                {
+                    topInv.setItem(1, null);
+                }
+                player.getWorld().playSound(player.getLocation(), Sound.UI_STONECUTTER_TAKE_RESULT, 1, 1);
+            }
+        }.runTask(plugin);
     }
 
     /**
@@ -173,5 +197,41 @@ public final class CheckUtils
         topInv.setItem(1, null);
         topInv.setItem(0, item1);
         topInv.setItem(1, item2);
+    }
+
+    /**
+     * Check if a GUI has been used. This has to be done manually so that the items from
+     * the GUI output are calculated properly.
+     *
+     * @param player The player activating the GUI
+     * @param topInv The player's top inventory
+     * @param slot The clicked slot
+     * @param clickedInventory The clicked Inventory
+     * @param clickType The clicktype for calculations
+     */
+    public static void useGUICheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, ClickType clickType)
+    {
+        boolean shiftClick = clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT;
+        boolean rightClick = clickType == ClickType.RIGHT;
+        useAnvilCheck(player, topInv, slot, clickedInventory, rightClick);
+        useSmithingCheck(player, topInv, slot, clickedInventory, rightClick);
+        useStonecutterCheck(player, topInv, slot, clickedInventory, shiftClick);
+        useGrindstoneCheck(player, topInv, slot, clickedInventory);
+    }
+
+    /**
+     * Check to see if a result in the grindstone has been taken. If so, remove
+     * the items in the input slots.
+     *
+     * @param player Player activating the grindstone
+     * @param topInv The top inventory (Grindstone inventory)
+     * @param slot The slot that has been clicked
+     * @param clickedInventory The clicked inventory
+     */
+    public static void useGrindstoneCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory)
+    {
+        if(!(clickedInventory instanceof GrindstoneInventory && slot == 2)) return;
+        topInv.setItem(0, null);
+        topInv.setItem(1, null);
     }
 }

@@ -24,16 +24,11 @@ public final class ClickUtils
         Inventory clickedInv = event.getClickedInventory();
         int slot = event.getSlot();
         Inventory topInv = player.getOpenInventory().getTopInventory();
-        if(CancelUtils.cancelMoveCursor(itemInCursor, clickedInv, slot)) return;
+        if(CancelUtils.cancelMoveCheck(itemInCursor, clickedInv, slot)) return;
         if(!StackUtils.equalsEachOther(itemInCursor, itemInSlot))
         {
-            CheckUtils.useSmithingCheck(player, topInv, slot, clickedInv, false);
-            CheckUtils.useAnvilCheck(player, topInv, slot, clickedInv, false);
-
             player.setItemOnCursor(itemInSlot);
             clickedInv.setItem(slot, itemInCursor);
-
-            CheckUtils.useStonecutterCheck(player, topInv, slot, clickedInv, false);
             player.updateInventory();
             return;
         }
@@ -75,13 +70,10 @@ public final class ClickUtils
         Inventory topInv = player.getOpenInventory().getTopInventory();
         int slot = event.getSlot();
         Inventory clickedInv = event.getClickedInventory();
-        if(CancelUtils.cancelMoveCursor(itemInCursor, clickedInv, slot)) return;
+        if(CancelUtils.cancelMoveCheck(itemInCursor, clickedInv, slot)) return;
         if(!StackUtils.equalsEachOther(itemInCursor, itemInSlot))
         {
-            CheckUtils.useSmithingCheck(player, topInv, slot, clickedInv, true);
-            CheckUtils.useAnvilCheck(player, topInv, slot, clickedInv, true);
-
-            if(itemInSlot.getType().equals(Material.AIR) && !itemInCursor.getType().equals(Material.AIR))
+            if(itemInSlot.getType() == Material.AIR && itemInCursor.getType() != Material.AIR)
             {
                 itemInSlot = itemInCursor.clone();
                 itemInSlot.setAmount(1);
@@ -95,8 +87,6 @@ public final class ClickUtils
                 itemInSlot.setAmount((int) Math.floor(itemInSlot.getAmount() / 2.0f));
                 player.setItemOnCursor(cursorItemStack);
             }
-
-            CheckUtils.useStonecutterCheck(player, topInv, slot, clickedInv, false);
             player.updateInventory();
             return;
         }
@@ -146,70 +136,87 @@ public final class ClickUtils
      *
      * @param itemInSlot The item clicked on by the cursor
      * @param event The InventoryClickEvent that this method was called from
-     * @param inv The Inventory that was clicked on (method reassigns this to the inventory that the items moves to)
+     * @param toInv The Inventory that was clicked on (method reassigns this to the inventory that the items moves to)
      * @param topInv The top inventory that the player is viewing
      * @param bottomInv The bottom inventory that the player is viewing
      * @param slot The slot that the player has clicked on
      */
-    private static void shiftClickSeperateInv(ItemStack itemInSlot, InventoryClickEvent event, Inventory inv, Inventory topInv, Inventory bottomInv, int slot, Player player)
+    private static void shiftClickSeperateInv(ItemStack itemInSlot, InventoryClickEvent event, Inventory toInv, Inventory topInv, Inventory bottomInv, int slot, Player player)
     {
         Inventory clickedInventory = event.getClickedInventory();
         if(clickedInventory.equals(bottomInv))
         {
             if(topInv instanceof CraftingInventory && topInv.getSize() == 5)
             {
-                inv = bottomInv;
+                toInv = bottomInv;
             }
             else
             {
-                inv = topInv;
+                toInv = topInv;
             }
         }
         else if(clickedInventory.equals(topInv))
         {
-            inv = bottomInv;
+            toInv = bottomInv;
         }
 
         int startSlot = 0;
-        int endSlot = inv.getSize();
+        int endSlot = toInv.getSize();
         boolean reverse = false;
         boolean playerOrder = false;
         boolean reverseHotbar = false;
-        if(inv instanceof PlayerInventory)
+        if(toInv instanceof PlayerInventory)
         {
             endSlot -= 5;
 
-            if(topInv instanceof GrindstoneInventory)
+            player.sendMessage(String.valueOf(slot));
+            if(topInv instanceof GrindstoneInventory && slot == 2)
             {
                 topInv.setItem(0, null);
                 topInv.setItem(1, null);
+                ClickUtils.shiftClickSameInv(itemInSlot, event, bottomInv);
+                return;
             }
-            CheckUtils.useStonecutterCheck(player, topInv, slot, clickedInventory, true);
+            else if(topInv instanceof CraftingInventory ||
+                    topInv instanceof FurnaceInventory ||
+                    topInv instanceof AnvilInventory ||
+                    (plugin.getMCVersion() >= 1.16 && topInv instanceof SmithingInventory))
+            {
+                --endSlot;
+                playerOrder = true;
+            }
+
+
+
         }
-        else if(inv instanceof CraftingInventory)
+        else if(toInv instanceof CraftingInventory)
         {
             ++startSlot;
         }
-        else if(inv instanceof FurnaceInventory)
+        else if(toInv instanceof FurnaceInventory)
         {
+            --endSlot;
             if(itemInSlot.getType().isFuel())
             {
-                --endSlot;
                 reverse = true;
             }
         }
-        else if(inv instanceof EnchantingInventory)
+        else if(toInv instanceof EnchantingInventory)
         {
             --endSlot;
-            if(inv.getItem(0) != null) return;
+            if(toInv.getItem(0) != null) return;
             ItemStack itemToMove = itemInSlot.clone();
             itemToMove.setAmount(1);
-            MoveUtils.moveItem(itemToMove, clickedInventory, slot, inv, startSlot, endSlot, reverse);
+            MoveUtils.moveItem(itemToMove, clickedInventory, slot, toInv, startSlot, endSlot, reverse);
             itemInSlot.setAmount(itemInSlot.getAmount()-1);
             clickedInventory.setItem(slot, itemInSlot);
             return;
         }
-        else if(inv instanceof LoomInventory)
+        else if(toInv instanceof AnvilInventory || (plugin.getMCVersion() >= 1.16 && toInv instanceof SmithingInventory))
+        {
+            --endSlot;
+        }
+        else if(toInv instanceof LoomInventory)
         {
             if(itemInSlot.getType().toString().endsWith("BANNER"))
             {
@@ -221,20 +228,7 @@ public final class ClickUtils
                 startSlot = 2;
                 endSlot = 3;
             }
-            else
-            {
-                ClickUtils.shiftClickSameInv(itemInSlot, event, bottomInv);
-                return;
-            }
-        }
-        else if(inv instanceof CartographyInventory)
-        {
-            if(itemInSlot.getType().equals(Material.FILLED_MAP))
-            {
-                startSlot = 0;
-                endSlot = 1;
-            }
-            else if(itemInSlot.getType().equals(Material.PAPER))
+            else if(itemInSlot.getType().toString().endsWith("DYE"))
             {
                 startSlot = 1;
                 endSlot = 2;
@@ -245,14 +239,14 @@ public final class ClickUtils
                 return;
             }
         }
-        else if(inv instanceof AbstractHorseInventory)
+        else if(toInv instanceof CartographyInventory)
         {
-            if(itemInSlot.getType().equals(Material.SADDLE))
+            if(itemInSlot.getType() == Material.FILLED_MAP)
             {
                 startSlot = 0;
                 endSlot = 1;
             }
-            else if(itemInSlot.getType().toString().endsWith("HORSE_ARMOR") && inv instanceof HorseInventory)
+            else if(itemInSlot.getType() == Material.PAPER)
             {
                 startSlot = 1;
                 endSlot = 2;
@@ -263,13 +257,39 @@ public final class ClickUtils
                 return;
             }
         }
+        else if(toInv instanceof AbstractHorseInventory)
+        {
+            if(itemInSlot.getType() == Material.SADDLE)
+            {
+                startSlot = 0;
+                endSlot = 1;
+            }
+            else if(itemInSlot.getType().toString().endsWith("HORSE_ARMOR") && toInv instanceof HorseInventory)
+            {
+                startSlot = 1;
+                endSlot = 2;
+            }
+            else
+            {
+                ClickUtils.shiftClickSameInv(itemInSlot, event, bottomInv);
+                return;
+            }
+        }
+        else if(toInv instanceof StonecutterInventory ||
+                toInv instanceof GrindstoneInventory)
+        {
+            --endSlot;
+        }
+
+
+
         if(playerOrder)
         {
             MoveUtils.moveItemPlayerOrder(itemInSlot, clickedInventory, slot, bottomInv);
         }
         else
         {
-            MoveUtils.moveItem(itemInSlot, clickedInventory, slot, inv, startSlot, endSlot, reverse);
+            MoveUtils.moveItem(itemInSlot, clickedInventory, slot, toInv, startSlot, endSlot, reverse);
         }
     }
 
