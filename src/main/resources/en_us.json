@@ -1,5 +1,4 @@
 {
-  "simplestack.language.unsupported": "The default language specified in config.yml is not currently supported by this plugin. English will be used instead.",
   "simplestack.title": "Simple Stack",
   "simplestack.version": "Version: {VERSION}",
   "simplestack.commands.click_to_run": "Click to run {COMMAND}",

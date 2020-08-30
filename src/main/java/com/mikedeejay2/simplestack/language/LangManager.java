@@ -56,7 +56,7 @@ public class LangManager
         if(!loaded)
         {
             defaultLang = englishLang;
-            plugin.getLogger().warning(getText("simplestack.language.unsupported"));
+            plugin.getLogger().warning("The default language specified in config.yml is not currently supported by this plugin. English will be used instead.");
         }
         return loaded;
     }
