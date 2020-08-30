@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.commands;
+package com.mikedeejay2.simplestack.commands.manager;
 
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.command.Command;

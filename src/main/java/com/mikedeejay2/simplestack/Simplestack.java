@@ -1,6 +1,6 @@
 package com.mikedeejay2.simplestack;
 
-import com.mikedeejay2.simplestack.commands.CommandManager;
+import com.mikedeejay2.simplestack.commands.manager.CommandManager;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.language.LangManager;
 import com.mikedeejay2.simplestack.listeners.player.*;

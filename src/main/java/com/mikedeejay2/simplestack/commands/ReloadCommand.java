@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.commands;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.commands.manager.SubCommand;
 import com.mikedeejay2.simplestack.util.ChatUtils;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -41,6 +42,12 @@ public class ReloadCommand extends SubCommand
     public String info()
     {
         return plugin.lang().getText("simplestack.commands.reload.info");
+    }
+
+    @Override
+    public String info(CommandSender sender)
+    {
+        return plugin.lang().getText(sender, "simplestack.commands.reload.info");
     }
 
     @Override

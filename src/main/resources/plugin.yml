@@ -21,3 +21,5 @@ permissions:
     description: Allow a player to access the help command help screen (admin commands)
   simplestack.reset:
     description: Allow a player to reset the simplestack config to default values
+  simplestack.setamount:
+    description: Allow a player to set the item currently held in their hand to any amount
