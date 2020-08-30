@@ -142,7 +142,7 @@ public final class ChatUtils
      */
     public static HoverEvent getHoverEvent(HoverEvent.Action action, String text)
     {
-        return new HoverEvent(action, new Text(text));
+        return new HoverEvent(action, new Text(chat(text)));
     }
 
     /**

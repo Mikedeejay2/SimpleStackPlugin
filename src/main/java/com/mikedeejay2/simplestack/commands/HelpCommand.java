@@ -35,23 +35,43 @@ public class HelpCommand extends SubCommand
         LangManager lang = plugin.lang();
         String ver = plugin.getDescription().getVersion();
         String[] ssArr = lang.getText(sender, "simplestack.title").split(" ");
-        String reloadInfo = lang.getText(sender, "simplestack.commands.reload.info");
-        String verString = lang.getText(sender, "simplestack.version", new String[]{"VERSION"}, new String[]{ver});
-        String reloadHover = lang.getText(sender, "simplestack.commands.click_to_run", new String[]{"COMMAND"}, new String[]{"/simplestack reload"});
-
+        String version = lang.getText(sender, "simplestack.version", new String[]{"VERSION"}, new String[]{ver});
+        CommandManager manager = plugin.getCommandManager();
+        String[] commands = manager.getAllCommandStrings(false);
         ArrayList<BaseComponent[]> lines = new ArrayList<>();
-        BaseComponent[] line1 = ChatUtils.getBaseComponentArray("&b &m                                                                              \n");
-        BaseComponent[] line2 = ChatUtils.getBaseComponentArray("                              &9&l" + ssArr[0] + " &d&l" + ssArr[1] + "&r                               \n");
-        BaseComponent[] line3 = ChatUtils.getBaseComponentArray("                                                                               \n");
-        BaseComponent[] line4 = ChatUtils.getBaseComponentArray("  &b/simplestack reload &d- &f" + reloadInfo + "\n");
-        BaseComponent[] line5 = ChatUtils.getBaseComponentArray("                                                                               \n");
-        BaseComponent[] line6 = ChatUtils.getBaseComponentArray("                               &7" + verString + "\n");
-        BaseComponent[] line7 = ChatUtils.getBaseComponentArray("&b &m                                                                              ");
+        String lineString = "&b &m                                                                              \n";
+        String emptyString = "                                                                               \n";
+        String titleString = "                              &9&l" + ssArr[0] + " &d&l" + ssArr[1] + "&r                               \n";
+        String versionString = "                               &7" + version + "\n";
 
-        ChatUtils.setClickEvent(line4, getClickEvent(ClickEvent.Action.RUN_COMMAND, "/simplestack reload"));
-        ChatUtils.setHoverEvent(line4, getHoverEvent(HoverEvent.Action.SHOW_TEXT, reloadHover));
+        BaseComponent[] lineComponents = ChatUtils.getBaseComponentArray(lineString);
+        BaseComponent[] emptyComponents = ChatUtils.getBaseComponentArray(emptyString);
+        BaseComponent[] titleComponents = ChatUtils.getBaseComponentArray(titleString);
+        BaseComponent[] versionComponents = ChatUtils.getBaseComponentArray(versionString);
 
-        BaseComponent[] combined = ChatUtils.combineComponents(line1, line2, line3, line4, line5, line6, line7);
+        lines.add(lineComponents);
+        lines.add(titleComponents);
+        lines.add(emptyComponents);
+
+        for(int i = 1; i < commands.length; i++)
+        {
+            String command = commands[i];
+            String commandInfo = manager.get(command).info();
+            String hoverText = "&d" + lang.getText(sender, "simplestack.commands.click_to_run", new String[]{"COMMAND"}, new String[]{"/simplestack " + command});
+
+            BaseComponent[] line = ChatUtils.getBaseComponentArray("  &b/simplestack " + command + " &d- &f" + commandInfo + "\n");
+
+            ChatUtils.setClickEvent(line, getClickEvent(ClickEvent.Action.RUN_COMMAND, "/simplestack " + command));
+            ChatUtils.setHoverEvent(line, getHoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));
+
+            lines.add(line);
+        }
+
+        lines.add(emptyComponents);
+        lines.add(versionComponents);
+        lines.add(lineComponents);
+
+        BaseComponent[] combined = ChatUtils.combineComponents(lines.toArray(new BaseComponent[0][0]));
         ChatUtils.printComponents(sender, combined);
 
         if(!(sender instanceof Player)) return;

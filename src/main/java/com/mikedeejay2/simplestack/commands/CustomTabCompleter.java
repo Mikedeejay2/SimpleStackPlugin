@@ -26,7 +26,7 @@ public class CustomTabCompleter implements TabCompleter
         switch(args.length)
         {
             case 1:
-                String[] arg1Strings = manager.getAllCommandStrings();
+                String[] arg1Strings = manager.getAllCommandStrings(true);
                 Collections.addAll(commands, arg1Strings);
                 break;
         }

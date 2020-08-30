@@ -33,8 +33,8 @@ public class CommandManager implements CommandExecutor
         plugin.getCommand(main).setTabCompleter(completer);
 
         // Add new subcommands here:
-        this.commands.add(new ReloadCommand());
         this.commands.add(new HelpCommand());
+        this.commands.add(new ReloadCommand());
         this.commands.add(new ResetCommand());
     }
 
@@ -77,7 +77,7 @@ public class CommandManager implements CommandExecutor
         return true;
     }
 
-    private SubCommand get(String name)
+    public SubCommand get(String name)
     {
         Iterator<SubCommand> subcommands = this.commands.iterator();
 
@@ -106,13 +106,13 @@ public class CommandManager implements CommandExecutor
         return null;
     }
 
-    public String[] getAllCommandStrings()
+    public String[] getAllCommandStrings(boolean aliases)
     {
         ArrayList<String> strings = new ArrayList<>();
         for(SubCommand command : commands)
         {
             strings.add(command.name());
-            Collections.addAll(strings, command.aliases());
+            if(aliases) Collections.addAll(strings, command.aliases());
         }
         return strings.toArray(new String[0]);
     }
