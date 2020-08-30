@@ -173,6 +173,19 @@ public final class MoveUtils
         }
     }
 
+    /**
+     * Moves an item from one inventory to the player inventory (shift-click) while attempting
+     * to combine unstackable items and reversing the order of the hotbar.
+     *
+     * @param itemInSlot Item to be moved (Clicked item)
+     * @param clickedInventory The inventory that was clicked
+     * @param slot The slot that was clicked
+     * @param invToMoveTo The inventory that the item should be moved to
+     * @param startingSlot The slot that the algorithm will begin attempting a move at
+     * @param endingSlot The slot that the algorithm will stop attempting to move at
+     * @param reverse Should the algorithm attempt to move in reverse
+     * @return If move was successful
+     */
     public static boolean moveItemReverseHotbar(ItemStack itemInSlot, Inventory clickedInventory, int slot, Inventory invToMoveTo)
     {
             if(moveItemToExistingStack(itemInSlot, invToMoveTo, 0, 9, true)) return true;

@@ -3,13 +3,10 @@ package com.mikedeejay2.simplestack.util;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.*;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.Stack;
 
 public final class CheckUtils
 {
@@ -50,6 +47,17 @@ public final class CheckUtils
         triggerStonecutterUse(player, topInv, shiftClick);
     }
 
+    /**
+     * Check if the crafting table has been used. If it has, appropriately calculate the output items.
+     * This is required because if the item being clicked on is a simplestack item the output has
+     * to be calculated manually otherwise duping will happen.
+     *
+     * @param player The player that might be attempting to use the stonecutter
+     * @param topInv The top inventory that the player is viewing
+     * @param slot The slot that the player has clicked
+     * @param clickedInventory The inventory that the player has clicked
+     * @param shiftClick Mark if the click was a shift click or not
+     */
     public static void useCraftingTableCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean shiftClick)
     {
         if(!(clickedInventory instanceof CraftingInventory && slot == 0)) return;
