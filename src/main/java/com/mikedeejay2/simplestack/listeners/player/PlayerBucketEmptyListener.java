@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.MoveUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,7 +24,9 @@ public class PlayerBucketEmptyListener implements Listener
     public void playerBucketEmptyEvent(PlayerBucketEmptyEvent event)
     {
         Player player = event.getPlayer();
+        if(CancelUtils.cancelPlayerCheck(player)) return;
         ItemStack stack = player.getInventory().getItemInMainHand();
+        if(CancelUtils.cancelStackCheck(stack.getType())) return;
         int slot = player.getInventory().getHeldItemSlot();
         PlayerInventory inv = player.getInventory();
         if(!stack.getType().toString().endsWith("BUCKET"))
