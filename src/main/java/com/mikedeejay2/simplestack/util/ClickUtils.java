@@ -302,6 +302,11 @@ public final class ClickUtils
                 endSlot = 5;
                 reverse = true;
             }
+            else
+            {
+                startSlot = 3;
+                endSlot = 4;
+            }
         }
         else if(toInv instanceof BeaconInventory)
         {
