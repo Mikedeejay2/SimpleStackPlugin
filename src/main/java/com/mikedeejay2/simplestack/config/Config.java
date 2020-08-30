@@ -24,6 +24,9 @@ public class Config
     public List<Material> LIST;
     public String LANG_LOCALE;
 
+    /**
+     * Enable the config. This loads all of the values into the above variables.
+     */
     public void onEnable()
     {
         config.options().copyDefaults();
@@ -59,6 +62,9 @@ public class Config
         }
     }
 
+    /**
+     * Disable the config. This isn't being used but it might be used in the future.
+     */
     public void onDisable()
     {
         //Since we're not modifying values in game, we don't have to save this on disable.
@@ -67,11 +73,17 @@ public class Config
         //saveFile();
     }
 
+    /**
+     * Save the config's file to disk.
+     */
     public void saveFile()
     {
         plugin.saveConfig();
     }
 
+    /**
+     * Reload the config from the file if it was modified from outside the game.
+     */
     public void reload()
     {
         plugin.reloadConfig();
@@ -79,6 +91,9 @@ public class Config
         onEnable();
     }
 
+    /**
+     * Reset the config and reload it to a fresh config with default values.
+     */
     public void reset()
     {
         plugin.getResource("config.yml");

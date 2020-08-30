@@ -14,6 +14,13 @@ public class SetAmountCommand extends SubCommand
 {
     public static final Simplestack plugin = Simplestack.getInstance();
 
+    /**
+     * Sets the item amount of the player's main hand item to the
+     * amount specified in args[1].
+     *
+     * @param sender The CommandSender that sent the command
+     * @param args The arguments for the command (subcommands)
+     */
     @Override
     public void onCommand(CommandSender sender, String[] args)
     {

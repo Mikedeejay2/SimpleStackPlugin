@@ -20,9 +20,12 @@ public class HelpCommand extends SubCommand
 {
     public static final Simplestack plugin = Simplestack.getInstance();
 
-    /*
+    /**
      * In game help command. It has a list of all other commands with a brief description
      * about them. The commands can be clicked on to run.
+     *
+     * @param sender The CommandSender that sent the command
+     * @param args The arguments for the command (subcommands)
      */
     @Override
     public void onCommand(CommandSender sender, String[] args)

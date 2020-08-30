@@ -56,6 +56,16 @@ public final class CheckUtils
         triggerCraftingTableUse(player, topInv, shiftClick);
     }
 
+    /**
+     * Trigger the manual use of a crafting table. This is an algorithm
+     * that emulates vanilla's crafting table taking item out of result slot
+     * algorithm because by default all events are cancelled. This fixes crafting
+     * tables duping items.
+     *
+     * @param player Player triggering crafting table use
+     * @param topInv The top inventory (The crafting table inventory)
+     * @param shiftClick If this click is a shift click
+     */
     private static void triggerCraftingTableUse(Player player, Inventory topInv, boolean shiftClick)
     {
         int GUISize = topInv.getSize();

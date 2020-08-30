@@ -2,7 +2,9 @@ package com.mikedeejay2.simplestack.commands.manager;
 
 import org.bukkit.command.CommandSender;
 
-// Subcommand holds subcommands
+/**
+ * A base to all of the subcommands of the /simplestack command
+ */
 public abstract class SubCommand
 {
     public SubCommand() {}

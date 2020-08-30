@@ -80,12 +80,17 @@ public final class ClickUtils
                 itemInCursor.setAmount(itemInCursor.getAmount()-1);
                 clickedInv.setItem(slot, itemInSlot);
             }
-            else
+            else if(!(clickedInv instanceof CraftingInventory && slot == 10))
             {
                 ItemStack cursorItemStack = itemInSlot.clone();
                 cursorItemStack.setAmount((int) Math.ceil(itemInSlot.getAmount() / 2.0f));
                 itemInSlot.setAmount((int) Math.floor(itemInSlot.getAmount() / 2.0f));
                 player.setItemOnCursor(cursorItemStack);
+            }
+            else
+            {
+                leftClick(itemInSlot, itemInCursor, player, event);
+                return;
             }
             player.updateInventory();
             return;

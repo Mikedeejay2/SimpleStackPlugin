@@ -30,6 +30,9 @@ public class CommandManager implements CommandExecutor
     public String reset = "reset";
     public String setamount = "setamount";
 
+    /**
+     * Setup the command manager by initializing all subcommands
+     */
     public void setup()
     {
         plugin.getCommand(main).setExecutor(this);
@@ -44,6 +47,15 @@ public class CommandManager implements CommandExecutor
         this.commands.add(new SetAmountCommand());
     }
 
+    /**
+     * Receive a /simplestack command
+     *
+     * @param sender The CommandSender that sent the command
+     * @param command The command that was sent
+     * @param label The label
+     * @param args The command arguments (subcommands)
+     * @return Successful or not
+     */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
@@ -83,6 +95,12 @@ public class CommandManager implements CommandExecutor
         return true;
     }
 
+    /**
+     * Get a subcommand according to it's name.
+     *
+     * @param name Name of subcommand to get
+     * @return The subcommand that corresponds to the name
+     */
     public SubCommand get(String name)
     {
         Iterator<SubCommand> subcommands = this.commands.iterator();
@@ -112,6 +130,12 @@ public class CommandManager implements CommandExecutor
         return null;
     }
 
+    /**
+     * Gets all subcommand strings for tab completion
+     *
+     * @param aliases Specify whether aliases are wanted or not
+     * @return An arraylist of strings containing the subcommands.
+     */
     public String[] getAllCommandStrings(boolean aliases)
     {
         ArrayList<String> strings = new ArrayList<>();

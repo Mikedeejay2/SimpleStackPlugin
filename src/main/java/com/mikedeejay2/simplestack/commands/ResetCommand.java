@@ -11,6 +11,14 @@ public class ResetCommand extends SubCommand
 {
     public static final Simplestack plugin = Simplestack.getInstance();
 
+    /**
+     * Resets the config to the default values. Useful for if a player has messed up
+     * their config and wants a fresh start without browsing through the files to delete
+     * the config.yml file.
+     *
+     * @param sender The CommandSender that sent the command
+     * @param args The arguments for the command (subcommands)
+     */
     @Override
     public void onCommand(CommandSender sender, String[] args)
     {

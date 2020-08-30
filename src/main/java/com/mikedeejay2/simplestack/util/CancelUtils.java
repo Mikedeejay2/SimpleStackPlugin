@@ -97,9 +97,8 @@ public final class CancelUtils
      * HorseInventory - Complete
      * CartographyInventory - Complete
      * EnchantingInventory - Complete
-     * BeaconInventory
-     * BrewerInventory
-     *
+     * BeaconInventory - Complete
+     * BrewerInventory - Complete
      * @param inv Inventory to check
      * @return If inventory should be cancelled
      */
