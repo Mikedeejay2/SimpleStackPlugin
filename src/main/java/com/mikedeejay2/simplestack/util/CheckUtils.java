@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.util;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.*;
@@ -47,6 +48,88 @@ public final class CheckUtils
     {
         if(!(clickedInventory instanceof StonecutterInventory && slot == 1)) return;
         triggerStonecutterUse(player, topInv, shiftClick);
+    }
+
+    public static void useCraftingTableCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean shiftClick)
+    {
+        if(!(clickedInventory instanceof CraftingInventory && slot == 0)) return;
+        triggerCraftingTableUse(player, topInv, shiftClick);
+    }
+
+    private static void triggerCraftingTableUse(Player player, Inventory topInv, boolean shiftClick)
+    {
+        int GUISize = topInv.getSize();
+        ItemStack resultItem = topInv.getItem(0);
+        ItemStack itemInCursor = player.getItemOnCursor();
+        if(resultItem == null) return;
+        resultItem = resultItem.clone();
+        int amountToRemove = 0;
+        if(shiftClick)
+        {
+            int smallestAmount = Integer.MAX_VALUE;
+            boolean flag = false;
+            for(int i = 1; i < GUISize; i++)
+            {
+                ItemStack stack = topInv.getItem(i);
+                if(stack == null) continue;
+                if(stack.getAmount() < smallestAmount)
+                {
+                    flag = true;
+                    smallestAmount = stack.getAmount();
+                }
+            }
+            if(flag)
+            {
+                ItemStack moveItem = resultItem.clone();
+                moveItem.setAmount(smallestAmount-1);
+                MoveUtils.moveItem(moveItem, topInv, 0, player.getInventory(), 0, 36, false);
+            }
+            amountToRemove = smallestAmount;
+        }
+        else
+        {
+            amountToRemove = 1;
+        }
+        for(int i = 1; i < GUISize; i++)
+        {
+            ItemStack stack = topInv.getItem(i);
+            if(stack == null) continue;
+            int newAmount = stack.getAmount() - amountToRemove;
+            stack.setAmount(newAmount);
+        }
+
+
+        if(StackUtils.equalsEachOther(itemInCursor, resultItem))
+        {
+            ItemStack newItem = itemInCursor.clone();
+            int newAmount = itemInCursor.getAmount() + resultItem.getAmount();
+            int extraAmount = 0;
+            if(newAmount > Simplestack.MAX_AMOUNT_IN_STACK)
+            {
+                extraAmount = newAmount % Simplestack.MAX_AMOUNT_IN_STACK;
+                newAmount = Simplestack.MAX_AMOUNT_IN_STACK;
+            }
+            newItem.setAmount(newAmount);
+            resultItem.setAmount(extraAmount);
+            player.setItemOnCursor(newItem);
+        }
+
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+
+                ItemStack tempItem = topInv.getItem(1);
+                if(tempItem == null)
+                {
+                    tempItem = new ItemStack(Material.AIR);
+                }
+                tempItem = tempItem.clone();
+                topInv.setItem(1, null);
+                topInv.setItem(1, tempItem);
+            }
+        }.runTask(plugin);
     }
 
     /**
@@ -218,6 +301,7 @@ public final class CheckUtils
         useAnvilCheck(player, topInv, slot, clickedInventory, rightClick);
         useSmithingCheck(player, topInv, slot, clickedInventory, rightClick);
         useStonecutterCheck(player, topInv, slot, clickedInventory, shiftClick);
+        useCraftingTableCheck(player, topInv, slot, clickedInventory, shiftClick);
         useGrindstoneCheck(player, topInv, slot, clickedInventory);
         useBrewingCheck(player, topInv, slot, clickedInventory);
     }
