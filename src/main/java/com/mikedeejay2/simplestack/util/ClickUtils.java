@@ -388,30 +388,45 @@ public final class ClickUtils
         {
             if(slot < 36)
             {
-                if(type.endsWith("_BOOTS"))
+                if(type.endsWith("_BOOTS") && inv.getItem(36) == null)
                 {
                     inv.setItem(36, itemInSlot);
                     inv.setItem(slot, null);
                 }
-                else if(type.endsWith("_LEGGINGS"))
+                else if(type.endsWith("_LEGGINGS") && inv.getItem(37) == null)
                 {
                     inv.setItem(37, itemInSlot);
                     inv.setItem(slot, null);
                 }
-                else if(type.endsWith("_CHESTPLATE") || type.equals("ELYTRA"))
+                else if((type.endsWith("_CHESTPLATE") || type.equals("ELYTRA"))  && inv.getItem(38) == null)
                 {
                     inv.setItem(38, itemInSlot);
                     inv.setItem(slot, null);
                 }
-                else if(type.endsWith("_HELMET"))
+                else if(type.endsWith("_HELMET") && inv.getItem(39) == null)
                 {
                     inv.setItem(39, itemInSlot);
                     inv.setItem(slot, null);
                 }
-                else if(type.equals("SHIELD"))
+                else if(type.equals("SHIELD") && inv.getItem(40) == null)
                 {
                     inv.setItem(40, itemInSlot);
                     inv.setItem(slot, null);
+                }
+                else
+                {
+                    if(slot < 9)
+                    {
+                        MoveUtils.moveItem(itemInSlot, clickedInventory, slot, inv, 9, 36, false);
+                    }
+                    else if(slot < 36)
+                    {
+                        MoveUtils.moveItem(itemInSlot, clickedInventory, slot, inv, 0, 9, false);
+                    }
+                    else
+                    {
+                        MoveUtils.moveItem(itemInSlot, clickedInventory, slot, inv, 9, 36, false);
+                    }
                 }
             }
             else
