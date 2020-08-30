@@ -279,6 +279,24 @@ public final class ClickUtils
         {
             --endSlot;
         }
+        else if(toInv instanceof BrewerInventory)
+        {
+            if(itemInSlot.getType().toString().endsWith("BOTTLE") || itemInSlot.getType().toString().endsWith("POTION"))
+            {
+                ItemStack oldItemSlot = itemInSlot;
+                itemInSlot = itemInSlot.clone();
+                itemInSlot.setAmount(1);
+                for(int i = 0; i < 3; i++)
+                {
+                    if(oldItemSlot.getAmount() == 0) break;
+                    if(toInv.getItem(i) != null) continue;
+                    oldItemSlot.setAmount(oldItemSlot.getAmount()-1);
+                    clickedInventory.setItem(slot, oldItemSlot);
+                    toInv.setItem(i, itemInSlot);
+                }
+                return;
+            }
+        }
 
 
 

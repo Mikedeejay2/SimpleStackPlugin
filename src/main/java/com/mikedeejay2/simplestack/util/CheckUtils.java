@@ -8,6 +8,8 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.*;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Stack;
+
 public final class CheckUtils
 {
     private static final Simplestack plugin = Simplestack.getInstance();
@@ -217,6 +219,7 @@ public final class CheckUtils
         useSmithingCheck(player, topInv, slot, clickedInventory, rightClick);
         useStonecutterCheck(player, topInv, slot, clickedInventory, shiftClick);
         useGrindstoneCheck(player, topInv, slot, clickedInventory);
+        useBrewingCheck(player, topInv, slot, clickedInventory);
     }
 
     /**
@@ -233,5 +236,31 @@ public final class CheckUtils
         if(!(clickedInventory instanceof GrindstoneInventory && slot == 2)) return;
         topInv.setItem(0, null);
         topInv.setItem(1, null);
+    }
+
+    public static void useBrewingCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory)
+    {
+        if(!(clickedInventory instanceof BrewerInventory && slot <= 2)) return;
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                ItemStack itemInSlot = clickedInventory.getItem(slot);
+                ItemStack itemInCursor = player.getItemOnCursor();
+                if(itemInSlot == null) return;
+
+                int newAmount = itemInSlot.getAmount()-1 + itemInCursor.getAmount();
+
+                if(itemInCursor.getType() == Material.AIR)
+                {
+                    itemInCursor = itemInSlot.clone();
+                }
+                itemInCursor.setAmount(newAmount);
+                itemInSlot.setAmount(1);
+                topInv.setItem(slot, itemInSlot);
+                player.setItemOnCursor(itemInCursor);
+            }
+        }.runTask(plugin);
     }
 }

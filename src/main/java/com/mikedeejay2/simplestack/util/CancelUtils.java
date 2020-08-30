@@ -75,6 +75,11 @@ public final class CancelUtils
         if(inv instanceof AnvilInventory && slot == 2) return true;
         if(plugin.getMCVersion() >= 1.16 && inv instanceof SmithingInventory && slot == 2) return true;
         if(inv instanceof GrindstoneInventory && slot == 2) return true;
+        if(inv instanceof BrewerInventory)
+        {
+             if(slot <= 2 && !(typeString.endsWith("BOTTLE") || typeString.endsWith("POTION"))) return true;
+             if(slot == 4 && type != Material.BLAZE_POWDER) return true;
+        }
         return false;
     }
 

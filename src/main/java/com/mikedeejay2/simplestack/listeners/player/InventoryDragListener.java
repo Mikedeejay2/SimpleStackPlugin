@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.DragType;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
@@ -27,6 +28,7 @@ public class InventoryDragListener implements Listener
     {
         if(event.getType() != DragType.EVEN) return;
         InventoryView inventoryView = event.getView();
+        if(event.getInventory() instanceof BrewerInventory) return;
         Player player = (Player) inventoryView.getPlayer();
         if(CancelUtils.cancelPlayerCheck(player)) return;
 

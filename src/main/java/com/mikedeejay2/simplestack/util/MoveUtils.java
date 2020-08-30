@@ -186,7 +186,7 @@ public final class MoveUtils
      * @param reverse Should the algorithm attempt to move in reverse
      * @return If move was successful
      */
-    private static boolean moveItemIgnoreStacks(ItemStack itemInSlot, Inventory clickedInventory, int slot, Inventory invToMoveTo, int startingSlot, int endingSlot, boolean reverse)
+    public static boolean moveItemIgnoreStacks(ItemStack itemInSlot, Inventory clickedInventory, int slot, Inventory invToMoveTo, int startingSlot, int endingSlot, boolean reverse)
     {
         if(!reverse)
         {
@@ -223,7 +223,7 @@ public final class MoveUtils
      * @param reverse Should the algorithm attempt to move in reverse
      * @return If move was successful
      */
-    private static boolean moveItemToExistingStack(ItemStack itemInSlot, Inventory invToMoveTo, int startingSlot, int endingSlot, boolean reverse)
+    public static boolean moveItemToExistingStack(ItemStack itemInSlot, Inventory invToMoveTo, int startingSlot, int endingSlot, boolean reverse)
     {
         if(!reverse)
         {
