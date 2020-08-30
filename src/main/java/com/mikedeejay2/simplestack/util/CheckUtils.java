@@ -202,6 +202,7 @@ public final class CheckUtils
         Sound sound = Sound.BLOCK_SMITHING_TABLE_USE;
         if(clickedInventory instanceof SmithingInventory && slot == 2)
         {
+            player.sendMessage("eoijeoijeoijeioe");
             triggerAnvilSmithingUse(player, topInv, rightClick, sound);
         }
     }

@@ -179,10 +179,26 @@ public final class ClickUtils
             else if(topInv instanceof CraftingInventory ||
                     topInv instanceof FurnaceInventory ||
                     topInv instanceof AnvilInventory ||
-                    (plugin.getMCVersion() >= 1.16 && topInv instanceof SmithingInventory))
+                    (plugin.getMCVersion() >= 1.16 && topInv instanceof SmithingInventory) ||
+                    topInv instanceof GrindstoneInventory)
             {
-                --endSlot;
                 playerOrder = true;
+            }
+
+
+
+            if((topInv instanceof CraftingInventory && slot == 0) ||
+            (topInv instanceof FurnaceInventory && slot == 2) ||
+            (topInv instanceof AnvilInventory && slot == 2) ||
+            (plugin.getMCVersion() >= 1.16 && topInv instanceof SmithingInventory && slot == 2) ||
+            (topInv instanceof EnchantingInventory && slot == 0) ||
+            (topInv instanceof GrindstoneInventory && slot == 2) ||
+            (topInv instanceof StonecutterInventory && slot == 2) ||
+            (topInv instanceof LoomInventory && slot == 3) ||
+            (topInv instanceof CartographyInventory && slot == 2) ||
+            (topInv instanceof BrewerInventory && slot < 3))
+            {
+                reverseHotbar = true;
             }
 
 
@@ -332,8 +348,11 @@ public final class ClickUtils
         }
 
 
-
-        if(playerOrder)
+        if(reverseHotbar)
+        {
+            MoveUtils.moveItemReverseHotbar(itemInSlot, clickedInventory, slot, bottomInv);
+        }
+        else if(playerOrder)
         {
             MoveUtils.moveItemPlayerOrder(itemInSlot, clickedInventory, slot, bottomInv);
         }

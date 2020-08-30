@@ -173,6 +173,14 @@ public final class MoveUtils
         }
     }
 
+    public static boolean moveItemReverseHotbar(ItemStack itemInSlot, Inventory clickedInventory, int slot, Inventory invToMoveTo)
+    {
+            if(moveItemToExistingStack(itemInSlot, invToMoveTo, 0, 9, true)) return true;
+        if(moveItemToExistingStack(itemInSlot, invToMoveTo, 9, 36, false)) return true;
+        if(moveItemIgnoreStacks(itemInSlot, clickedInventory, slot, invToMoveTo, 0, 9, true)) return true;
+        return moveItemIgnoreStacks(itemInSlot, clickedInventory, slot, invToMoveTo, 9, 36, false);
+    }
+
     /**
      * Attempt to move an item to a new slot in an inventory while disregarding whether it can stack with
      * other ItemStacks or not.
