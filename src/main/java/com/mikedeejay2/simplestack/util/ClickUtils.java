@@ -284,6 +284,10 @@ public final class ClickUtils
                 startSlot = 1;
                 endSlot = 2;
             }
+            else if(toInv.getSize() > 3)
+            {
+                startSlot = 2;
+            }
             else
             {
                 ClickUtils.shiftClickSameInv(itemInSlot, event, bottomInv);
