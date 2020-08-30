@@ -72,6 +72,7 @@ public final class Simplestack extends JavaPlugin
         manager.registerEvents(new PrepareAnvilListener(), this);
         if(MCVersion >= 1.16) manager.registerEvents(new PrepareSmithingListener(), this);
         manager.registerEvents(new InventoryDragListener(), this);
+        manager.registerEvents(new PlayerBucketEmptyListener(), this);
     }
 
     @Override
