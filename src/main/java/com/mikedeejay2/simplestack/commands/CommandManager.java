@@ -23,6 +23,7 @@ public class CommandManager implements CommandExecutor
     public String main = "simplestack";
     public String reload = "reload";
     public String help = "help";
+    public String reset = "reset";
 
     public void setup()
     {
@@ -34,6 +35,7 @@ public class CommandManager implements CommandExecutor
         // Add new subcommands here:
         this.commands.add(new ReloadCommand());
         this.commands.add(new HelpCommand());
+        this.commands.add(new ResetCommand());
     }
 
     @Override

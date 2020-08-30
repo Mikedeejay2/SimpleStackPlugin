@@ -21,7 +21,8 @@ public class LangManager
     {
         englishLang = "en_us";
         defaultLang = plugin.getCustomConfig().LANG_LOCALE;
-        LangFile english = new LangFile(englishLang);
+        loadLangFile(englishLang);
+        loadLangFileDefaultLang(defaultLang);
     }
 
     /**
@@ -40,6 +41,24 @@ public class LangManager
             return true;
         }
         return false;
+    }
+
+    /**
+     * Attempt to load a lang file based off of a locale.
+     * Only to be used with the locale specified in config.yml
+     *
+     * @param locale The language that will attempt to be loaded
+     * @return If loading was successful or not
+     */
+    public boolean loadLangFileDefaultLang(String locale)
+    {
+        boolean loaded = loadLangFile(locale);
+        if(!loaded)
+        {
+            defaultLang = englishLang;
+            plugin.getLogger().warning(getText("simplestack.language.unsupported"));
+        }
+        return loaded;
     }
 
     /**
@@ -122,11 +141,12 @@ public class LangManager
      */
     public String getText(String locale, String path)
     {
-        String string = getLang(locale).getString(path);
-        if(string == null)
+        LangFile file = getLang(locale);
+        if(file == null)
         {
-            string = getLang().getString(path);
+            file = getLang();
         }
+        String string = file.getString(path);
         return string;
     }
 

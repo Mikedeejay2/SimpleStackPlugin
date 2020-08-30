@@ -1,10 +1,13 @@
 {
+  "simplestack.language.unsupported": "The default language specified in config.yml is not currently supported by this plugin. English will be used instead.",
   "simplestack.title": "Simple Stack",
   "simplestack.version": "Version: {VERSION}",
   "simplestack.commands.click_to_run": "Click to run {COMMAND}",
   "simplestack.commands.help.info": "Help for simplestack commands",
   "simplestack.commands.reload.info": "Update config settings in game",
   "simplestack.reload.success": "The config has been reloaded.",
+  "simplestack.commands.reset.info": "Reset the config to defaults",
+  "simplestack.reset.success": "The config has been reset to the default values.",
   "simplestack.errors.invalid_subcommand": "Error: Invalid subcommand",
   "simplestack.errors.general": "An error has occurred",
   "simplestack.errors.nopermission.general": "Error: You don't have permission to access this command.",

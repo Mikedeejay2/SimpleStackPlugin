@@ -4,6 +4,7 @@ import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,5 +77,13 @@ public class Config
         plugin.reloadConfig();
         this.config = plugin.getConfig();
         onEnable();
+    }
+
+    public void reset()
+    {
+        plugin.getResource("config.yml");
+        File configFile = new File(plugin.getDataFolder(), "config.yml");
+        configFile.delete();
+        reload();
     }
 }

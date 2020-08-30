@@ -19,3 +19,5 @@ permissions:
     description: Allow a player to reload the simplestack config
   simplestack.help:
     description: Allow a player to access the help command help screen (admin commands)
+  simplestack.reset:
+    description: Allow a player to reset the simplestack config to default values
