@@ -296,6 +296,12 @@ public final class ClickUtils
                 }
                 return;
             }
+            else if(itemInSlot.getType() == Material.BLAZE_POWDER)
+            {
+                startSlot = 3;
+                endSlot = 5;
+                reverse = true;
+            }
         }
         else if(toInv instanceof BeaconInventory)
         {
