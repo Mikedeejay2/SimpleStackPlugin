@@ -297,6 +297,28 @@ public final class ClickUtils
                 return;
             }
         }
+        else if(toInv instanceof BeaconInventory)
+        {
+            Material type = itemInSlot.getType();
+            if((type != Material.IRON_INGOT &&
+                type != Material.GOLD_INGOT &&
+                type != Material.DIAMOND &&
+                type != Material.EMERALD &&
+                type != Material.NETHERITE_INGOT) ||
+                toInv.getItem(0) != null
+            )
+            {
+                ClickUtils.shiftClickSameInv(itemInSlot, event, bottomInv);
+                return;
+            }
+            ItemStack oldItemSlot = itemInSlot;
+            itemInSlot = itemInSlot.clone();
+            itemInSlot.setAmount(1);
+            oldItemSlot.setAmount(oldItemSlot.getAmount()-1);
+            clickedInventory.setItem(slot, oldItemSlot);
+            toInv.setItem(0, itemInSlot);
+            return;
+        }
 
 
 
