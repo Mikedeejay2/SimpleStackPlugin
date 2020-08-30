@@ -353,7 +353,7 @@ public final class MoveUtils
     }
 
     /**
-     * Emulates dragging items in an inventory. Uses a different algorithm because of the
+     * Emulates dragging items in an inventory in survival mode. Uses a different algorithm because of the
      * way that items have to combine together, still looks like the vanilla algorithm though.
      *
      * @param event The InventoryDragEvent that this method is being run from
@@ -361,7 +361,7 @@ public final class MoveUtils
      * @param player The player dragging the items
      * @param cursor The cursor ItemStack for modification
      */
-    public static void dragItems(InventoryDragEvent event, InventoryView inventoryView, Player player, ItemStack cursor)
+    public static void dragItemsSurvival(InventoryDragEvent event, InventoryView inventoryView, Player player, ItemStack cursor)
     {
         Integer[] slots = event.getNewItems().keySet().toArray(new Integer[0]);
         ItemStack[] newItems = event.getNewItems().values().toArray(new ItemStack[0]);
@@ -415,5 +415,31 @@ public final class MoveUtils
                 player.setItemOnCursor(newCursor);
             }
         }.runTask(plugin);
+    }
+
+    /**
+     * Emulates dragging items in an inventory in creative mode. Uses a different algorithm because of the
+     * way that items have to combine together, still looks like the vanilla algorithm though.
+     *
+     * @param event The InventoryDragEvent that this method is being run from
+     * @param inventoryView The inventoryView of the player
+     * @param player The player dragging the items
+     * @param cursor The cursor ItemStack for modification
+     */
+    public static void dragItemsCreative(InventoryDragEvent event, InventoryView inventoryView, Player player, ItemStack cursor)
+    {
+        Integer[] slots = event.getNewItems().keySet().toArray(new Integer[0]);
+        ItemStack[] newItems = event.getNewItems().values().toArray(new ItemStack[0]);
+        for(ItemStack item : newItems)
+        {
+            if(CancelUtils.cancelStackCheck(item.getType())) continue;
+            item.setAmount(Simplestack.MAX_AMOUNT_IN_STACK);
+        }
+        for(int i = 0; i < slots.length; i++)
+        {
+            int slot = slots[i];
+            ItemStack item = newItems[i];
+            inventoryView.setItem(slot, item);
+        }
     }
 }

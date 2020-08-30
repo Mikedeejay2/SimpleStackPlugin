@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.listeners.player;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.MoveUtils;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,7 +36,15 @@ public class InventoryDragListener implements Listener
 
         ItemStack cursor = event.getOldCursor();
         if(CancelUtils.cancelStackCheck(cursor.getType())) return;
-        MoveUtils.dragItems(event, inventoryView, player, cursor);
+        GameMode gameMode = player.getGameMode();
+        if(gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE)
+        {
+            MoveUtils.dragItemsSurvival(event, inventoryView, player, cursor);
+        }
+        else
+        {
+            MoveUtils.dragItemsCreative(event, inventoryView, player, cursor);
+        }
 
         player.updateInventory();
         event.setCancelled(true);
