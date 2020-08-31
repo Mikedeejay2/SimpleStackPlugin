@@ -41,7 +41,7 @@ public class LangFile
         if(input == null) return false;
         try
         {
-            json = (JsonObject)parser.parse(new InputStreamReader(input, "GB2312"));
+            json = (JsonObject)parser.parse(new InputStreamReader(input, StandardCharsets.UTF_8));
             return true;
         }
         catch(Exception e)
