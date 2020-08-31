@@ -27,7 +27,7 @@ public class ResetCommand extends SubCommand
             ChatUtils.sendMessage(sender, "&c" + plugin.lang().getText(sender, "simplestack.errors.nopermission.general"));
             return;
         }
-        plugin.getCustomConfig().reset();
+        plugin.config().reset();
         ChatUtils.sendMessage(sender, "&e&l" + plugin.lang().getText(sender, "simplestack.success") + "&r &9" + plugin.lang().getText(sender, "simplestack.reset.success"));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;
@@ -37,7 +37,7 @@ public class ResetCommand extends SubCommand
     @Override
     public String name()
     {
-        return plugin.getCommandManager().reset;
+        return plugin.commandManager().reset;
     }
 
     @Override

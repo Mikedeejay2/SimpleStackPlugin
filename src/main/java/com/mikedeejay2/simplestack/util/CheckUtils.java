@@ -122,10 +122,11 @@ public final class CheckUtils
             ItemStack newItem = itemInCursor.clone();
             int newAmount = itemInCursor.getAmount() + resultItem.getAmount();
             int extraAmount = 0;
-            if(newAmount > Simplestack.MAX_AMOUNT_IN_STACK)
+            int maxAmountInStack = StackUtils.getMaxAmount(newItem.getType());
+            if(newAmount > maxAmountInStack)
             {
-                extraAmount = newAmount % Simplestack.MAX_AMOUNT_IN_STACK;
-                newAmount = Simplestack.MAX_AMOUNT_IN_STACK;
+                extraAmount = newAmount % maxAmountInStack;
+                newAmount = maxAmountInStack;
             }
             newItem.setAmount(newAmount);
             resultItem.setAmount(extraAmount);

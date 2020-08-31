@@ -2,11 +2,15 @@ package com.mikedeejay2.simplestack.config;
 
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationOptions;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class Config
 {
@@ -23,6 +27,7 @@ public class Config
     public ListMode LIST_MODE;
     public List<Material> LIST;
     public String LANG_LOCALE;
+    public HashMap<Material, Integer> ITEM_AMOUNTS;
 
     /**
      * Enable the config. This loads all of the values into the above variables.
@@ -34,6 +39,39 @@ public class Config
 
         LANG_LOCALE = config.getString("Language");
 
+        getListMode();
+        fillList();
+        fillItemAmounts();
+    }
+
+    private void fillItemAmounts()
+    {
+        ITEM_AMOUNTS = new HashMap<>();
+        ConfigurationSection section = config.getConfigurationSection("Item Amounts");
+        Set<String> materialList = section.getValues(false).keySet();
+        for(String mat : materialList)
+        {
+            Material material = Material.matchMaterial(mat);
+            if(material == null && !mat.equals("Example Item"))
+            {
+                plugin.getLogger().warning(plugin.lang().getText("simplestack.warnings.invalid_material", new String[]{"MAT"}, new String[]{mat}));
+                continue;
+            }
+            int amount = section.getInt(mat);
+            if(amount == 0 || amount > Simplestack.getMaxStack())
+            {
+                plugin.getLogger().warning(plugin.lang().getText("simplestack.warnings.number_outside_of_range", new String[]{"MAT"}, new String[]{mat.toString()}));
+                continue;
+            }
+            ITEM_AMOUNTS.put(material, amount);
+        }
+    }
+
+    /**
+     * Get the list mode that the list should operate in. Whitelist or blacklist.
+     */
+    private void getListMode()
+    {
         String listMode = config.getString("ListMode");
         try
         {
@@ -46,7 +84,13 @@ public class Config
             );
             LIST_MODE = ListMode.BLACKLIST;
         }
+    }
 
+    /**
+     * Fills the LIST variable with materials specified in the config.
+     */
+    private void fillList()
+    {
         List<String> matList = config.getStringList("Items");
         LIST = new ArrayList<>();
 
@@ -100,5 +144,28 @@ public class Config
         File configFile = new File(plugin.getDataFolder(), "config.yml");
         configFile.delete();
         reload();
+    }
+
+    /**
+     * Returns whether a material has a custom amount set in the config or not.
+     *
+     * @param material The material to search for
+     * @return If this item has a custom amount set or not
+     */
+    public boolean hasCustomAmount(Material material)
+    {
+        return ITEM_AMOUNTS.containsKey(material);
+    }
+
+    /**
+     * Get the custom amount of a material that has been set in the config.
+     * A check is required before running this commands, see hasCustomAmount.
+     *
+     * @param material The material to get the custom amount for
+     * @return The custom amount for this item.
+     */
+    public int getAmount(Material material)
+    {
+        return ITEM_AMOUNTS.get(material);
     }
 }

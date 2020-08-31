@@ -3,7 +3,6 @@ package com.mikedeejay2.simplestack.util;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
@@ -21,17 +20,23 @@ public final class CancelUtils
      */
     public static boolean cancelStackCheck(Material material)
     {
-        Config config = plugin.getCustomConfig();
+        Config config = plugin.config();
         if(material == null || material == Material.AIR)
             return true;
-        if(plugin.getCustomConfig().LIST_MODE == ListMode.BLACKLIST)
+        int stackAmount = StackUtils.getMaxAmount(material);
+        if(material.getMaxStackSize() == Simplestack.getMaxStack() && stackAmount == Simplestack.getMaxStack())
+            return true;
+        boolean cancel = false;
+        if(plugin.config().LIST_MODE == ListMode.BLACKLIST)
         {
-            return config.LIST.contains(material);
+            if(config.LIST.contains(material)) cancel = true;
         }
         else
         {
-            return !config.LIST.contains(material);
+            if(!config.LIST.contains(material)) cancel = true;
         }
+        if(stackAmount == material.getMaxStackSize()) cancel = true;
+        return cancel;
     }
 
     /**

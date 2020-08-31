@@ -30,7 +30,7 @@ public final class StackUtils
     @Deprecated
     public static void makeUnique(ItemStack itemInSlot, NamespacedKey key)
     {
-        if(itemInSlot.getType().getMaxStackSize() == 64) return;
+        if(itemInSlot.getType().getMaxStackSize() == Simplestack.getMaxStack()) return;
         ItemMeta itemMeta = itemInSlot.getItemMeta();
         PersistentDataContainer data = itemMeta.getPersistentDataContainer();
         if(!data.has(key, PersistentDataType.BYTE))
@@ -49,7 +49,7 @@ public final class StackUtils
      */
     public static void removeUnique(ItemStack itemInSlot, NamespacedKey key)
     {
-        if(itemInSlot == null || itemInSlot.getType().getMaxStackSize() == 64 || !itemInSlot.hasItemMeta()) return;
+        if(itemInSlot == null || itemInSlot.getType().getMaxStackSize() == Simplestack.getMaxStack() || !itemInSlot.hasItemMeta()) return;
         ItemMeta itemMeta = itemInSlot.getItemMeta();
         PersistentDataContainer data = itemMeta.getPersistentDataContainer();
         if(data.has(key, PersistentDataType.BYTE))
@@ -89,5 +89,22 @@ public final class StackUtils
     {
         if(inventory instanceof StonecutterInventory && slot == 1) return false;
         return true;
+    }
+
+    /**
+     * Gets the max stack amount of a material regardless of whether it's in the config or not.
+     * If it's not in the config then return 64.
+     *
+     * @param material The material to find the max amount for
+     * @return The max amount for the material.
+     */
+    public static int getMaxAmount(Material material)
+    {
+        int maxAmountInStack = Simplestack.getMaxStack();
+        if(plugin.config().hasCustomAmount(material))
+        {
+            maxAmountInStack = plugin.config().getAmount(material);
+        }
+        return maxAmountInStack;
     }
 }

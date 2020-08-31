@@ -59,7 +59,7 @@ public class SetAmountCommand extends SubCommand
             return;
         }
         item.setAmount(amount);
-        if(amount > 64)
+        if(amount > Simplestack.getMaxStack())
         {
             ChatUtils.sendMessage(sender, "&e" + plugin.lang().getText(sender, "simplestack.warnings.big_number"));
         }
@@ -71,7 +71,7 @@ public class SetAmountCommand extends SubCommand
     @Override
     public String name()
     {
-        return plugin.getCommandManager().setamount;
+        return plugin.commandManager().setamount;
     }
 
     @Override

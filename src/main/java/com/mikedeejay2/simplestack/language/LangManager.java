@@ -20,7 +20,7 @@ public class LangManager
     public LangManager()
     {
         englishLang = "en_us";
-        defaultLang = plugin.getCustomConfig().LANG_LOCALE;
+        defaultLang = plugin.config().LANG_LOCALE;
         loadLangFile(englishLang);
         loadLangFileDefaultLang(defaultLang);
     }

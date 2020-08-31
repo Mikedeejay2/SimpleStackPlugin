@@ -181,9 +181,6 @@ public final class MoveUtils
      * @param clickedInventory The inventory that was clicked
      * @param slot The slot that was clicked
      * @param invToMoveTo The inventory that the item should be moved to
-     * @param startingSlot The slot that the algorithm will begin attempting a move at
-     * @param endingSlot The slot that the algorithm will stop attempting to move at
-     * @param reverse Should the algorithm attempt to move in reverse
      * @return If move was successful
      */
     public static boolean moveItemReverseHotbar(ItemStack itemInSlot, Inventory clickedInventory, int slot, Inventory invToMoveTo)
@@ -298,10 +295,11 @@ public final class MoveUtils
         if(itemStack == null || !StackUtils.equalsEachOther(itemInSlot, itemStack)) return false;
         int newAmount = itemStack.getAmount() + itemInSlot.getAmount();
         int extraAmount = 0;
-        if(newAmount > Simplestack.MAX_AMOUNT_IN_STACK)
+        int maxAmountInStack = StackUtils.getMaxAmount(itemStack.getType());
+        if(newAmount > maxAmountInStack)
         {
-            extraAmount = (newAmount - Simplestack.MAX_AMOUNT_IN_STACK);
-            newAmount = Simplestack.MAX_AMOUNT_IN_STACK;
+            extraAmount = (newAmount - maxAmountInStack);
+            newAmount = maxAmountInStack;
         }
         itemStack.setAmount(newAmount);
         itemInSlot.setAmount(extraAmount);
@@ -407,10 +405,11 @@ public final class MoveUtils
             ItemStack item = newItems[i];
             int newAmount = amountPerItem + item.getAmount();
             int extraAmount = 0;
-            if(newAmount > Simplestack.MAX_AMOUNT_IN_STACK)
+            int maxAmountInStack = StackUtils.getMaxAmount(item.getType());
+            if(newAmount > maxAmountInStack)
             {
-                extraAmount = newAmount % Simplestack.MAX_AMOUNT_IN_STACK;
-                newAmount = Simplestack.MAX_AMOUNT_IN_STACK;
+                extraAmount = newAmount % maxAmountInStack;
+                newAmount = maxAmountInStack;
             }
             item.setAmount(newAmount);
             newExtraAmount += extraAmount;
@@ -446,7 +445,8 @@ public final class MoveUtils
         for(ItemStack item : newItems)
         {
             if(CancelUtils.cancelStackCheck(item.getType())) continue;
-            item.setAmount(Simplestack.MAX_AMOUNT_IN_STACK);
+            int maxAmountInStack = StackUtils.getMaxAmount(item.getType());
+            item.setAmount(maxAmountInStack);
         }
         for(int i = 0; i < slots.length; i++)
         {

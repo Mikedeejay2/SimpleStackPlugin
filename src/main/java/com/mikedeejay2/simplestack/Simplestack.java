@@ -36,7 +36,7 @@ public final class Simplestack extends JavaPlugin
 
     // Max stack size. Changing this produces some really weird results because
     // Minecraft really doesn't know how to handle anything higher than 64.
-    public static final int MAX_AMOUNT_IN_STACK = 64;
+    private static final int MAX_AMOUNT_IN_STACK = 64;
 
     // For managing languages
     private LangManager langManager;
@@ -106,7 +106,7 @@ public final class Simplestack extends JavaPlugin
      *
      * @return This plugin's config object
      */
-    public Config getCustomConfig()
+    public Config config()
     {
         return customConfig;
     }
@@ -146,7 +146,7 @@ public final class Simplestack extends JavaPlugin
      *
      * @return The CommandManager object
      */
-    public CommandManager getCommandManager()
+    public CommandManager commandManager()
     {
         return commandManager;
     }
@@ -159,5 +159,15 @@ public final class Simplestack extends JavaPlugin
     public LangManager lang()
     {
         return langManager;
+    }
+
+    /**
+     * Gets 64.
+     *
+     * @return
+     */
+    public static int getMaxStack()
+    {
+        return MAX_AMOUNT_IN_STACK;
     }
 }

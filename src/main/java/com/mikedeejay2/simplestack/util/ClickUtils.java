@@ -35,10 +35,11 @@ public final class ClickUtils
 
         int newAmount = itemInCursor.getAmount() + itemInSlot.getAmount();
         int extraAmount = 0;
-        if(newAmount > Simplestack.MAX_AMOUNT_IN_STACK)
+        int maxAmountInStack = StackUtils.getMaxAmount(itemInCursor.getType());
+        if(newAmount > maxAmountInStack)
         {
-            extraAmount = (newAmount - Simplestack.MAX_AMOUNT_IN_STACK);
-            newAmount = Simplestack.MAX_AMOUNT_IN_STACK;
+            extraAmount = (newAmount - maxAmountInStack);
+            newAmount = maxAmountInStack;
         }
         itemInCursor.setAmount(newAmount);
         itemInSlot.setAmount(extraAmount);
@@ -492,10 +493,11 @@ public final class ClickUtils
     {
         int newAmount = itemInSlot.getAmount() + itemInCursor.getAmount();
         int extraAmount = 0;
-        if(newAmount > Simplestack.MAX_AMOUNT_IN_STACK)
+        int maxAmountInStack = StackUtils.getMaxAmount(itemInCursor.getType());
+        if(newAmount > maxAmountInStack)
         {
-            extraAmount = newAmount % Simplestack.MAX_AMOUNT_IN_STACK;
-            newAmount = Simplestack.MAX_AMOUNT_IN_STACK;
+            extraAmount = newAmount % maxAmountInStack;
+            newAmount = maxAmountInStack;
         }
         itemInCursor.setAmount(newAmount);
         itemInSlot.setAmount(extraAmount);
@@ -534,7 +536,8 @@ public final class ClickUtils
     {
         ItemStack itemPutDown;
         itemPutDown = itemInSlot.clone();
-        itemPutDown.setAmount(Simplestack.MAX_AMOUNT_IN_STACK);
+        int maxAmountInStack = StackUtils.getMaxAmount(itemInSlot.getType());
+        itemPutDown.setAmount(maxAmountInStack);
         player.setItemOnCursor(itemPutDown);
     }
 }

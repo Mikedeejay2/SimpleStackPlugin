@@ -40,7 +40,7 @@ public class HelpCommand extends SubCommand
         String ver = plugin.getDescription().getVersion();
         String[] ssArr = lang.getText(sender, "simplestack.title").split(" ");
         String version = lang.getText(sender, "simplestack.version", new String[]{"VERSION"}, new String[]{ver});
-        CommandManager manager = plugin.getCommandManager();
+        CommandManager manager = plugin.commandManager();
         String[] commands = manager.getAllCommandStrings(false);
         ArrayList<BaseComponent[]> lines = new ArrayList<>();
         String lineString = "&b &m                                                                              \n";
@@ -86,7 +86,7 @@ public class HelpCommand extends SubCommand
     @Override
     public String name()
     {
-        return plugin.getCommandManager().help;
+        return plugin.commandManager().help;
     }
 
     @Override
