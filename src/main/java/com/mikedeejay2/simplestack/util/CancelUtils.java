@@ -110,7 +110,7 @@ public final class CancelUtils
     public static boolean cancelGUICheck(Inventory inv)
     {
         if(inv == null) return true;
-        if(inv instanceof SmithingInventory) return false;
+        if(plugin.getMCVersion() >= 1.16 && inv instanceof SmithingInventory) return false;
         if(inv.getLocation() == null) return true;
         return false;
     }
