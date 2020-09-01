@@ -50,6 +50,7 @@ Overview of the config file:
 Supported Languages:
  * `en_us` - English
  * `zh_cn` - 简体中文 (Simplified Chinese) created by yueyinqiu
+
 Note: Language is also based off of per-player, the language specified in this config only applies
 to the console.
 
