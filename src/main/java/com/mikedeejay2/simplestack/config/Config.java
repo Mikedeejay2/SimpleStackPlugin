@@ -1,7 +1,7 @@
 package com.mikedeejay2.simplestack.config;
 
+import com.mikedeejay2.mikedeejay2lib.file.yaml.YamlBase;
 import com.mikedeejay2.mikedeejay2lib.language.DefaultLangProvider;
-import com.mikedeejay2.mikedeejay2lib.yaml.YamlBase;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationOptions;
@@ -20,7 +20,7 @@ public class Config extends YamlBase implements DefaultLangProvider
 
     public Config()
     {
-
+        super();
     }
 
     //Variables
@@ -32,9 +32,12 @@ public class Config extends YamlBase implements DefaultLangProvider
     /**
      * Enable the config. This loads all of the values into the above variables.
      */
+    @Override
     public void onEnable()
     {
-        LANG_LOCALE = config.getString("Language");
+        super.onEnable();
+        LANG_LOCALE = getDefaultLang();
+        plugin.lang().setDefaultLang(LANG_LOCALE);
 
         getListMode();
         fillList();
@@ -44,7 +47,7 @@ public class Config extends YamlBase implements DefaultLangProvider
     private void fillItemAmounts()
     {
         ITEM_AMOUNTS = new HashMap<>();
-        ConfigurationSection section = config.getConfigurationSection("Item Amounts");
+        ConfigurationSection section = file.getConfigurationSection("Item Amounts");
         Set<String> materialList = section.getValues(false).keySet();
         for(String mat : materialList)
         {
@@ -69,7 +72,7 @@ public class Config extends YamlBase implements DefaultLangProvider
      */
     private void getListMode()
     {
-        String listMode = config.getString("ListMode");
+        String listMode = file.getString("ListMode");
         try
         {
             LIST_MODE = ListMode.valueOf(listMode.toUpperCase().replaceAll(" ", "_"));
@@ -88,7 +91,7 @@ public class Config extends YamlBase implements DefaultLangProvider
      */
     private void fillList()
     {
-        List<String> matList = config.getStringList("Items");
+        List<String> matList = file.getStringList("Items");
         LIST = new ArrayList<>();
 
         for(String mat : matList)
@@ -106,41 +109,14 @@ public class Config extends YamlBase implements DefaultLangProvider
     /**
      * Disable the config. This isn't being used but it might be used in the future.
      */
+    @Override
     public void onDisable()
     {
+        super.onDisable();
         //Since we're not modifying values in game, we don't have to save this on disable.
         // This also fixes the bug of the chance that they modify the config.yml while server is running
         // and then when it's restarted their old config.yml gets rolled back.
         //saveFile();
-    }
-
-    /**
-     * Save the config's file to disk.
-     */
-    public void saveFile()
-    {
-        plugin.saveConfig();
-    }
-
-    /**
-     * Reload the config from the file if it was modified from outside the game.
-     */
-    public void reload()
-    {
-        plugin.reloadConfig();
-        this.config = plugin.getConfig();
-        onEnable();
-    }
-
-    /**
-     * Reset the config and reload it to a fresh config with default values.
-     */
-    public void reset()
-    {
-        plugin.getResource("config.yml");
-        File configFile = new File(plugin.getDataFolder(), "config.yml");
-        configFile.delete();
-        reload();
     }
 
     /**
@@ -175,6 +151,6 @@ public class Config extends YamlBase implements DefaultLangProvider
     @Override
     public String getDefaultLang()
     {
-        return LANG_LOCALE;
+        return file.getString("Language");
     }
 }

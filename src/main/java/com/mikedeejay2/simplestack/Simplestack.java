@@ -3,7 +3,6 @@ package com.mikedeejay2.simplestack;
 import com.mikedeejay2.mikedeejay2lib.PluginBase;
 import com.mikedeejay2.mikedeejay2lib.commands.AbstractCommandManager;
 import com.mikedeejay2.mikedeejay2lib.language.LangManager;
-import com.mikedeejay2.mikedeejay2lib.yaml.YamlBase;
 import com.mikedeejay2.simplestack.commands.manager.CommandManager;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.listeners.player.*;
