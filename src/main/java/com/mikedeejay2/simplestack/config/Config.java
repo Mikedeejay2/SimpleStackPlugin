@@ -47,7 +47,7 @@ public class Config extends YamlBase implements DefaultLangProvider
     private void fillItemAmounts()
     {
         ITEM_AMOUNTS = new HashMap<>();
-        ConfigurationSection section = file.getConfigurationSection("Item Amounts");
+        ConfigurationSection section = fileConfig.getConfigurationSection("Item Amounts");
         Set<String> materialList = section.getValues(false).keySet();
         for(String mat : materialList)
         {
@@ -72,7 +72,7 @@ public class Config extends YamlBase implements DefaultLangProvider
      */
     private void getListMode()
     {
-        String listMode = file.getString("ListMode");
+        String listMode = fileConfig.getString("ListMode");
         try
         {
             LIST_MODE = ListMode.valueOf(listMode.toUpperCase().replaceAll(" ", "_"));
@@ -91,7 +91,7 @@ public class Config extends YamlBase implements DefaultLangProvider
      */
     private void fillList()
     {
-        List<String> matList = file.getStringList("Items");
+        List<String> matList = fileConfig.getStringList("Items");
         LIST = new ArrayList<>();
 
         for(String mat : matList)
@@ -151,6 +151,6 @@ public class Config extends YamlBase implements DefaultLangProvider
     @Override
     public String getDefaultLang()
     {
-        return file.getString("Language");
+        return fileConfig.getString("Language");
     }
 }
