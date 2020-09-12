@@ -49,6 +49,8 @@ Overview of the config file:
 ##### `Language:` The default language for in game text. If the specified language is not supported English will be used.
 Supported Languages:
  * `en_us` - English
+ * `zh_cn` - 简体中文 (Simplified Chinese) created by yueyinqiu
+
 Note: Language is also based off of per-player, the language specified in this config only applies
 to the console.
 
