@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.config;
 
+import com.mikedeejay2.mikedeejay2lib.yaml.YamlBase;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationOptions;
@@ -12,15 +13,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public class Config
+public class Config extends YamlBase
 {
     private static final Simplestack plugin = Simplestack.getInstance();
 
-    private FileConfiguration config;
-
     public Config()
     {
-        this.config = plugin.getConfig();
+
     }
 
     //Variables
@@ -34,9 +33,6 @@ public class Config
      */
     public void onEnable()
     {
-        config.options().copyDefaults();
-        plugin.saveDefaultConfig();
-
         LANG_LOCALE = config.getString("Language");
 
         getListMode();

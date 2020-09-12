@@ -1,13 +1,14 @@
 package com.mikedeejay2.simplestack.commands;
 
+import com.mikedeejay2.mikedeejay2lib.commands.AbstractSubCommand;
 import com.mikedeejay2.simplestack.Simplestack;
-import com.mikedeejay2.simplestack.commands.manager.SubCommand;
+import com.mikedeejay2.simplestack.commands.manager.CommandManager;
 import com.mikedeejay2.simplestack.util.ChatUtils;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ResetCommand extends SubCommand
+public class ResetCommand extends AbstractSubCommand
 {
     public static final Simplestack plugin = Simplestack.getInstance();
 

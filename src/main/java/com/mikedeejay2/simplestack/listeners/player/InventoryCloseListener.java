@@ -37,7 +37,7 @@ public class InventoryCloseListener implements Listener
                 type == InventoryType.ANVIL ||
                 type == InventoryType.LOOM ||
                 type == InventoryType.GRINDSTONE ||
-                (plugin.getMCVersion() >= 1.16 && type == InventoryType.SMITHING)
+                (plugin.getMCVersion()[1] >= 16 && type == InventoryType.SMITHING)
           ) ) return;
         Inventory playerInv = player.getInventory();
         MoveUtils.moveAllItemsToPlayerInv(inv, player, playerInv);

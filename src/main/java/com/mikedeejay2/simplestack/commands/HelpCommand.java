@@ -1,9 +1,9 @@
 package com.mikedeejay2.simplestack.commands;
 
+import com.mikedeejay2.mikedeejay2lib.commands.AbstractSubCommand;
+import com.mikedeejay2.mikedeejay2lib.language.LangManager;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.commands.manager.CommandManager;
-import com.mikedeejay2.simplestack.commands.manager.SubCommand;
-import com.mikedeejay2.simplestack.language.LangManager;
 import com.mikedeejay2.simplestack.util.ChatUtils;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 import static com.mikedeejay2.simplestack.util.ChatUtils.*;
 
-public class HelpCommand extends SubCommand
+public class HelpCommand extends AbstractSubCommand
 {
     public static final Simplestack plugin = Simplestack.getInstance();
 

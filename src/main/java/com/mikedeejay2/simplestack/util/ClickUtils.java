@@ -185,7 +185,7 @@ public final class ClickUtils
             else if(topInv instanceof CraftingInventory ||
                     topInv instanceof FurnaceInventory ||
                     topInv instanceof AnvilInventory ||
-                    (plugin.getMCVersion() >= 1.16 && topInv instanceof SmithingInventory) ||
+                    (plugin.getMCVersion()[1] >= 16 && topInv instanceof SmithingInventory) ||
                     topInv instanceof GrindstoneInventory)
             {
                 playerOrder = true;
@@ -196,7 +196,7 @@ public final class ClickUtils
             if((topInv instanceof CraftingInventory && slot == 0) ||
             (topInv instanceof FurnaceInventory && slot == 2) ||
             (topInv instanceof AnvilInventory && slot == 2) ||
-            (plugin.getMCVersion() >= 1.16 && topInv instanceof SmithingInventory && slot == 2) ||
+            (plugin.getMCVersion()[1] >= 16 && topInv instanceof SmithingInventory && slot == 2) ||
             (topInv instanceof EnchantingInventory && slot == 0) ||
             (topInv instanceof GrindstoneInventory && slot == 2) ||
             (topInv instanceof StonecutterInventory && slot == 2) ||
@@ -233,7 +233,7 @@ public final class ClickUtils
             clickedInventory.setItem(slot, itemInSlot);
             return;
         }
-        else if(toInv instanceof AnvilInventory || (plugin.getMCVersion() >= 1.16 && toInv instanceof SmithingInventory))
+        else if(toInv instanceof AnvilInventory || (plugin.getMCVersion()[1] >= 16 && toInv instanceof SmithingInventory))
         {
             --endSlot;
         }

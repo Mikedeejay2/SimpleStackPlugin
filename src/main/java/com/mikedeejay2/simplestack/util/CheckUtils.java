@@ -217,7 +217,7 @@ public final class CheckUtils
      */
     public static void useSmithingCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean rightClick)
     {
-        if(plugin.getMCVersion() < 1.16) return;
+        if(plugin.getMCVersion()[1] >= 16) return;
         Sound sound = Sound.BLOCK_SMITHING_TABLE_USE;
         if(clickedInventory instanceof SmithingInventory && slot == 2)
         {
@@ -279,7 +279,7 @@ public final class CheckUtils
                 {
                     triggerAnvilSmithingUpdate(topInv);
                 }
-                if(plugin.getMCVersion() < 1.16) return;
+                if(plugin.getMCVersion()[1] < 16) return;
                 if(topInv instanceof SmithingInventory)
                 {
                     triggerAnvilSmithingUpdate(topInv);

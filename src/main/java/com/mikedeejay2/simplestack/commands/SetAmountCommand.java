@@ -1,7 +1,8 @@
 package com.mikedeejay2.simplestack.commands;
 
+import com.mikedeejay2.mikedeejay2lib.commands.AbstractSubCommand;
 import com.mikedeejay2.simplestack.Simplestack;
-import com.mikedeejay2.simplestack.commands.manager.SubCommand;
+import com.mikedeejay2.simplestack.commands.manager.CommandManager;
 import com.mikedeejay2.simplestack.util.ChatUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Material;
@@ -10,7 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class SetAmountCommand extends SubCommand
+public class SetAmountCommand extends AbstractSubCommand
 {
     public static final Simplestack plugin = Simplestack.getInstance();
 
