@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.config;
 
+import com.mikedeejay2.mikedeejay2lib.language.DefaultLangProvider;
 import com.mikedeejay2.mikedeejay2lib.yaml.YamlBase;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public class Config extends YamlBase
+public class Config extends YamlBase implements DefaultLangProvider
 {
     private static final Simplestack plugin = Simplestack.getInstance();
 
@@ -163,5 +164,17 @@ public class Config extends YamlBase
     public int getAmount(Material material)
     {
         return ITEM_AMOUNTS.get(material);
+    }
+
+    /**
+     * Get the default lang from the config. This is primarily for
+     * the LangManager to use without reflection
+     *
+     * @return
+     */
+    @Override
+    public String getDefaultLang()
+    {
+        return LANG_LOCALE;
     }
 }
