@@ -27,8 +27,12 @@ public class Config extends YamlFile implements DefaultLangProvider
     public Config()
     {
         super("config.yml");
-        if(!fileExists()) loadFromJar();
-        else loadFromDisk();
+        if(!fileExists())
+        {
+            loadFromJar();
+            saveToDisk();
+        }
+        loadFromDisk();
         loadData();
     }
 
