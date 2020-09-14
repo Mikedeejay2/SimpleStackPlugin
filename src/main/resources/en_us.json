@@ -1,5 +1,4 @@
 {
-  "simplestack.title": "Simple Stack",
   "simplestack.version": "Version: {VERSION}",
   "simplestack.commands.click_to_run": "Click to run {COMMAND}",
   "simplestack.commands.help.info": "Help for simplestack commands",
@@ -10,8 +9,6 @@
   "simplestack.commands.setamount.info": "Set the amount of a held item",
   "simplestack.commands.setamount.success": "Amount set successfully.",
   "simplestack.commands.setamount.format": "Command format: /simplestack setamount <number>",
-  "simplestack.errors.invalid_subcommand": "Error: Invalid subcommand",
-  "simplestack.errors.general": "An error has occurred",
   "simplestack.errors.nopermission.general": "Error: You don't have permission to access this command.",
   "simplestack.errors.nopermission.reload": "Error: You don't have permission to reload the config.",
   "simplestack.errors.player_required": "Error: You must be a player to run this command.",

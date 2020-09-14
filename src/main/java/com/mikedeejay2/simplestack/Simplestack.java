@@ -36,7 +36,9 @@ public final class Simplestack extends PluginBase
     @Override
     public void onEnable()
     {
-        super.onEnable(new Config(), new CommandManager(), "simplestack");
+        super.onEnable();
+        setCommandManager(new CommandManager(), "simplestack");
+        fileManager.addDataFile(new Config());
         key = new NamespacedKey(this, "simplestack");
 
         PluginManager manager = this.getServer().getPluginManager();
@@ -93,20 +95,13 @@ public final class Simplestack extends PluginBase
     }
 
     @Override
-    public Config config()
-    {
-        return (Config) super.config();
-    }
-
-    @Override
-    public LangManager lang()
-    {
-        return super.lang();
-    }
-
-    @Override
     public CommandManager commandManager()
     {
         return (CommandManager) super.commandManager();
+    }
+
+    public Config config()
+    {
+        return (Config)fileManager.getDataFile("config.yml");
     }
 }

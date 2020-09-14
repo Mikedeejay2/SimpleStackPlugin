@@ -91,7 +91,7 @@
                                 <filter>
                                     <artifact>com.mikedeejay2:mikedeejay2lib</artifact>
                                     <includes>
-                                        <include>com/mikedeejay2/**</include>
+                                        <include>**</include>
                                     </includes>
                                 </filter>
                             </filters>

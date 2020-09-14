@@ -2,9 +2,9 @@ package com.mikedeejay2.simplestack.commands;
 
 import com.mikedeejay2.mikedeejay2lib.commands.AbstractSubCommand;
 import com.mikedeejay2.mikedeejay2lib.language.LangManager;
+import com.mikedeejay2.mikedeejay2lib.util.chat.Chat;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.commands.manager.CommandManager;
-import com.mikedeejay2.simplestack.util.ChatUtils;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -13,8 +13,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-
-import static com.mikedeejay2.simplestack.util.ChatUtils.*;
 
 public class HelpCommand extends AbstractSubCommand
 {
@@ -32,13 +30,13 @@ public class HelpCommand extends AbstractSubCommand
     {
         if(!sender.hasPermission("simplestack.help"))
         {
-            ChatUtils.sendMessage(sender, "&c" + "Error: You don't have permission to access this command.");
+            Chat.sendMessage(sender, "&c" + "Error: You don't have permission to access this command.");
             return;
         }
 
-        LangManager lang = plugin.lang();
+        LangManager lang = plugin.langManager();
         String ver = plugin.getDescription().getVersion();
-        String[] ssArr = lang.getText(sender, "simplestack.title").split(" ");
+        String[] ssArr = {"Simple", "Stack"};
         String version = lang.getText(sender, "simplestack.version", new String[]{"VERSION"}, new String[]{ver});
         CommandManager manager = plugin.commandManager();
         String[] commands = manager.getAllCommandStrings(false);
@@ -48,10 +46,10 @@ public class HelpCommand extends AbstractSubCommand
         String titleString = "                              &9&l" + ssArr[0] + " &d&l" + ssArr[1] + "&r                               \n";
         String versionString = "                               &7" + version + "\n";
 
-        BaseComponent[] lineComponents = ChatUtils.getBaseComponentArray(lineString);
-        BaseComponent[] emptyComponents = ChatUtils.getBaseComponentArray(emptyString);
-        BaseComponent[] titleComponents = ChatUtils.getBaseComponentArray(titleString);
-        BaseComponent[] versionComponents = ChatUtils.getBaseComponentArray(versionString);
+        BaseComponent[] lineComponents = Chat.getBaseComponentArray(lineString);
+        BaseComponent[] emptyComponents = Chat.getBaseComponentArray(emptyString);
+        BaseComponent[] titleComponents = Chat.getBaseComponentArray(titleString);
+        BaseComponent[] versionComponents = Chat.getBaseComponentArray(versionString);
 
         lines.add(lineComponents);
         lines.add(titleComponents);
@@ -63,10 +61,10 @@ public class HelpCommand extends AbstractSubCommand
             String commandInfo = manager.get(command).info(sender);
             String hoverText = "&d" + lang.getText(sender, "simplestack.commands.click_to_run", new String[]{"COMMAND"}, new String[]{"/simplestack " + command});
 
-            BaseComponent[] line = ChatUtils.getBaseComponentArray("  &b/simplestack " + command + " &d- &f" + commandInfo + "\n");
+            BaseComponent[] line = Chat.getBaseComponentArray("  &b/simplestack " + command + " &d- &f" + commandInfo + "\n");
 
-            ChatUtils.setClickEvent(line, getClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/simplestack " + command));
-            ChatUtils.setHoverEvent(line, getHoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));
+            Chat.setClickEvent(line, Chat.getClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/simplestack " + command));
+            Chat.setHoverEvent(line, Chat.getHoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));
 
             lines.add(line);
         }
@@ -75,8 +73,8 @@ public class HelpCommand extends AbstractSubCommand
         lines.add(versionComponents);
         lines.add(lineComponents);
 
-        BaseComponent[] combined = ChatUtils.combineComponents(lines.toArray(new BaseComponent[0][0]));
-        ChatUtils.printComponents(sender, combined);
+        BaseComponent[] combined = Chat.combineComponents(lines.toArray(new BaseComponent[0][0]));
+        Chat.printComponents(sender, combined);
 
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;
@@ -90,15 +88,9 @@ public class HelpCommand extends AbstractSubCommand
     }
 
     @Override
-    public String info()
-    {
-        return plugin.lang().getText("simplestack.commands.help.info");
-    }
-
-    @Override
     public String info(CommandSender sender)
     {
-        return plugin.lang().getText(sender, "simplestack.commands.help.info");
+        return plugin.langManager().getText(sender, "simplestack.commands.help.info");
     }
 
     @Override

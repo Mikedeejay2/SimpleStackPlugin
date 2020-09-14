@@ -1,6 +1,6 @@
 package com.mikedeejay2.simplestack.config;
 
-import com.mikedeejay2.mikedeejay2lib.file.yaml.YamlBase;
+import com.mikedeejay2.mikedeejay2lib.file.yaml.YamlFile;
 import com.mikedeejay2.mikedeejay2lib.language.DefaultLangProvider;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
@@ -14,14 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public class Config extends YamlBase implements DefaultLangProvider
+public class Config extends YamlFile implements DefaultLangProvider
 {
     private static final Simplestack plugin = Simplestack.getInstance();
-
-    public Config()
-    {
-        super();
-    }
 
     //Variables
     public ListMode LIST_MODE;
@@ -29,15 +24,18 @@ public class Config extends YamlBase implements DefaultLangProvider
     public String LANG_LOCALE;
     public HashMap<Material, Integer> ITEM_AMOUNTS;
 
-    /**
-     * Enable the config. This loads all of the values into the above variables.
-     */
-    @Override
-    public void onEnable()
+    public Config()
     {
-        super.onEnable();
+        super("config.yml");
+        if(!fileExists()) loadFromJar();
+        else loadFromDisk();
+        loadData();
+    }
+
+    private void loadData()
+    {
         LANG_LOCALE = getDefaultLang();
-        plugin.lang().setDefaultLang(LANG_LOCALE);
+        plugin.langManager().setDefaultLang(LANG_LOCALE);
 
         getListMode();
         fillList();
@@ -47,20 +45,20 @@ public class Config extends YamlBase implements DefaultLangProvider
     private void fillItemAmounts()
     {
         ITEM_AMOUNTS = new HashMap<>();
-        ConfigurationSection section = fileConfig.getConfigurationSection("Item Amounts");
+        ConfigurationSection section = yamlFile.getConfigurationSection("Item Amounts");
         Set<String> materialList = section.getValues(false).keySet();
         for(String mat : materialList)
         {
             Material material = Material.matchMaterial(mat);
             if(material == null && !mat.equals("Example Item"))
             {
-                plugin.getLogger().warning(plugin.lang().getText("simplestack.warnings.invalid_material", new String[]{"MAT"}, new String[]{mat}));
+                plugin.getLogger().warning(plugin.langManager().getText("simplestack.warnings.invalid_material", new String[]{"MAT"}, new String[]{mat}));
                 continue;
             }
             int amount = section.getInt(mat);
             if(amount == 0 || amount > Simplestack.getMaxStack())
             {
-                plugin.getLogger().warning(plugin.lang().getText("simplestack.warnings.number_outside_of_range", new String[]{"MAT"}, new String[]{mat.toString()}));
+                plugin.getLogger().warning(plugin.langManager().getText("simplestack.warnings.number_outside_of_range", new String[]{"MAT"}, new String[]{mat.toString()}));
                 continue;
             }
             ITEM_AMOUNTS.put(material, amount);
@@ -72,7 +70,7 @@ public class Config extends YamlBase implements DefaultLangProvider
      */
     private void getListMode()
     {
-        String listMode = fileConfig.getString("ListMode");
+        String listMode = yamlFile.getString("ListMode");
         try
         {
             LIST_MODE = ListMode.valueOf(listMode.toUpperCase().replaceAll(" ", "_"));
@@ -80,7 +78,7 @@ public class Config extends YamlBase implements DefaultLangProvider
         catch(Exception e)
         {
             plugin.getLogger().warning(
-                    plugin.lang().getText("simplestack.warnings.invalid_list_mode", new String[]{"MODE"}, new String[]{listMode})
+                    plugin.langManager().getText("simplestack.warnings.invalid_list_mode", new String[]{"MODE"}, new String[]{listMode})
             );
             LIST_MODE = ListMode.BLACKLIST;
         }
@@ -91,7 +89,7 @@ public class Config extends YamlBase implements DefaultLangProvider
      */
     private void fillList()
     {
-        List<String> matList = fileConfig.getStringList("Items");
+        List<String> matList = yamlFile.getStringList("Items");
         LIST = new ArrayList<>();
 
         for(String mat : matList)
@@ -99,24 +97,11 @@ public class Config extends YamlBase implements DefaultLangProvider
             Material material = Material.matchMaterial(mat);
             if(material == null && !mat.equals("Example Item"))
             {
-                plugin.getLogger().warning(plugin.lang().getText("simplestack.warnings.invalid_material", new String[]{"MAT"}, new String[]{mat}));
+                plugin.getLogger().warning(plugin.langManager().getText("simplestack.warnings.invalid_material", new String[]{"MAT"}, new String[]{mat}));
                 continue;
             }
             LIST.add(material);
         }
-    }
-
-    /**
-     * Disable the config. This isn't being used but it might be used in the future.
-     */
-    @Override
-    public void onDisable()
-    {
-        super.onDisable();
-        //Since we're not modifying values in game, we don't have to save this on disable.
-        // This also fixes the bug of the chance that they modify the config.yml while server is running
-        // and then when it's restarted their old config.yml gets rolled back.
-        //saveFile();
     }
 
     /**
@@ -151,6 +136,14 @@ public class Config extends YamlBase implements DefaultLangProvider
     @Override
     public String getDefaultLang()
     {
-        return fileConfig.getString("Language");
+        return yamlFile.getString("Language");
+    }
+
+    @Override
+    public boolean reload()
+    {
+        boolean success = super.reload();
+        loadData();
+        return success;
     }
 }

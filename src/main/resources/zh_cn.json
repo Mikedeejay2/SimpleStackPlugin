@@ -1,5 +1,4 @@
 {
-  "simplestack.title": "Simple Stack",
   "simplestack.version": "版本：{VERSION}",
   "simplestack.commands.click_to_run": "点击执行 {COMMAND}",
   "simplestack.commands.help.info": "simplestack 命令帮助",
@@ -10,8 +9,6 @@
   "simplestack.commands.setamount.info": "设置所持物品的数量",
   "simplestack.commands.setamount.success": "数量设置成功。",
   "simplestack.commands.setamount.format": "指令格式：/simplestack setamount <数量>",
-  "simplestack.errors.invalid_subcommand": "错误：子命令不合法",
-  "simplestack.errors.general": "发生了一个错误",
   "simplestack.errors.nopermission.general": "错误：你没有使用此命令的权限。",
   "simplestack.errors.nopermission.reload": "错误：你没有重新加载配置的权限。",
   "simplestack.errors.player_required": "错误：只有玩家能执行此命令。",
