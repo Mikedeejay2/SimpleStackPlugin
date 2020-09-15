@@ -147,6 +147,8 @@ public class Config extends YamlFile implements DefaultLangProvider
     public boolean loadFromDisk()
     {
         boolean success = super.loadFromDisk();
+        updateFromJar();
+        saveToDisk();
         loadData();
         return success;
     }
