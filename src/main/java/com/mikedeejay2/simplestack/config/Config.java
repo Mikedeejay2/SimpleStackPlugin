@@ -144,9 +144,17 @@ public class Config extends YamlFile implements DefaultLangProvider
     }
 
     @Override
-    public boolean reload()
+    public boolean loadFromDisk()
     {
-        boolean success = super.reload();
+        boolean success = super.loadFromDisk();
+        loadData();
+        return success;
+    }
+
+    @Override
+    public boolean loadFromJar()
+    {
+        boolean success = super.loadFromJar();
         loadData();
         return success;
     }
