@@ -10,9 +10,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class SetAmountCommand extends AbstractSubCommand
+public class SetAmountCommand extends AbstractSubCommand<Simplestack>
 {
-    public static final Simplestack plugin = Simplestack.getInstance();
+    public SetAmountCommand(Simplestack plugin)
+    {
+        super(plugin);
+    }
 
     /**
      * Sets the item amount of the player's main hand item to the
@@ -26,39 +29,39 @@ public class SetAmountCommand extends AbstractSubCommand
     {
         if(!(sender instanceof Player))
         {
-            Chat.sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.player_required"));
+            plugin.chat().sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.player_required"));
             return;
         }
         if(args.length < 2)
         {
-            Chat.sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.number_required") + "\n" +
+            plugin.chat().sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.number_required") + "\n" +
                     plugin.langManager().getText("simplestack.commands.setamount.format"));
             return;
         }
         if(!NumberUtils.isNumber(args[1]))
         {
-            Chat.sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.not_a_number"));
+            plugin.chat().sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.not_a_number"));
             return;
         }
         int amount = Integer.parseInt(args[1]);
         if(amount < 0)
         {
-            Chat.sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.number_less_than_zero"));
+            plugin.chat().sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.number_less_than_zero"));
             return;
         }
         Player player = (Player) sender;
         ItemStack item = player.getInventory().getItemInMainHand();
         if(item.getType() == Material.AIR)
         {
-            Chat.sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.invalid_item_held"));
+            plugin.chat().sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.invalid_item_held"));
             return;
         }
         item.setAmount(amount);
         if(amount > Simplestack.getMaxStack())
         {
-            Chat.sendMessage(sender, "&e" + plugin.langManager().getTextLib(sender, "warnings.big_number"));
+            plugin.chat().sendMessage(sender, "&e" + plugin.langManager().getTextLib(sender, "warnings.big_number"));
         }
-        Chat.sendMessage(sender, "&e&l" + plugin.langManager().getTextLib(sender, "generic.success") + "&r &9" +
+        plugin.chat().sendMessage(sender, "&e&l" + plugin.langManager().getTextLib(sender, "generic.success") + "&r &9" +
                 plugin.langManager().getText(sender, "simplestack.commands.setamount.success"));
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.5f, 1f);
     }

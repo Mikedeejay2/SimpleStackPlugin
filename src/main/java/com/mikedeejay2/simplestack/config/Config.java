@@ -16,17 +16,15 @@ import java.util.Set;
 
 public class Config extends YamlFile implements DefaultLangProvider
 {
-    private static final Simplestack plugin = Simplestack.getInstance();
-
     //Variables
     public ListMode LIST_MODE;
     public List<Material> LIST;
     public String LANG_LOCALE;
     public HashMap<Material, Integer> ITEM_AMOUNTS;
 
-    public Config()
+    public Config(Simplestack plugin)
     {
-        super("config.yml");
+        super(plugin, "config.yml");
         if(!fileExists())
         {
             loadFromJar();

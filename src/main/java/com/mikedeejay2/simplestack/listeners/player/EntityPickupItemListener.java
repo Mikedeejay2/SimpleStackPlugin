@@ -1,5 +1,7 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
+import com.mikedeejay2.mikedeejay2lib.PluginBase;
+import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.MoveUtils;
@@ -10,10 +12,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class EntityPickupItemListener implements Listener
+public class EntityPickupItemListener extends PluginInstancer<Simplestack> implements Listener
 {
-    // Plugin instance for referencing
-    private static final Simplestack plugin = Simplestack.getInstance();
+    public EntityPickupItemListener(Simplestack plugin)
+    {
+        super(plugin);
+    }
 
     /**
      * EntityPickupItemEvent
@@ -29,12 +33,12 @@ public class EntityPickupItemListener implements Listener
     {
         if(!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
-        if(CancelUtils.cancelPlayerCheck(player)) return;
+        if(plugin.cancelUtils().cancelPlayerCheck(player)) return;
         ItemStack item = event.getItem().getItemStack();
 
-        boolean cancel = CancelUtils.cancelStackCheck(item.getType());
+        boolean cancel = plugin.cancelUtils().cancelStackCheck(item.getType());
         if(cancel) return;
 
-        MoveUtils.moveItemToInventory(event, event.getItem(), player, item);
+        plugin.moveUtils().moveItemToInventory(event, event.getItem(), player, item);
     }
 }

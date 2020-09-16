@@ -14,9 +14,12 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class HelpCommand extends AbstractSubCommand
+public class HelpCommand extends AbstractSubCommand<Simplestack>
 {
-    public static final Simplestack plugin = Simplestack.getInstance();
+    public HelpCommand(Simplestack plugin)
+    {
+        super(plugin);
+    }
 
     /**
      * In game help command. It has a list of all other commands with a brief description
@@ -40,10 +43,10 @@ public class HelpCommand extends AbstractSubCommand
         String titleString = "                              &9&l" + ssArr[0] + " &d&l" + ssArr[1] + "&r                               \n";
         String versionString = "                               &7" + version + "\n";
 
-        BaseComponent[] lineComponents = Chat.getBaseComponentArray(lineString);
-        BaseComponent[] emptyComponents = Chat.getBaseComponentArray(emptyString);
-        BaseComponent[] titleComponents = Chat.getBaseComponentArray(titleString);
-        BaseComponent[] versionComponents = Chat.getBaseComponentArray(versionString);
+        BaseComponent[] lineComponents = plugin.chat().getBaseComponentArray(lineString);
+        BaseComponent[] emptyComponents = plugin.chat().getBaseComponentArray(emptyString);
+        BaseComponent[] titleComponents = plugin.chat().getBaseComponentArray(titleString);
+        BaseComponent[] versionComponents = plugin.chat().getBaseComponentArray(versionString);
 
         lines.add(lineComponents);
         lines.add(titleComponents);
@@ -55,10 +58,10 @@ public class HelpCommand extends AbstractSubCommand
             String commandInfo = manager.getSubcommand(command).info(sender);
             String hoverText = "&d" + lang.getText(sender, "simplestack.commands.click_to_run", new String[]{"COMMAND"}, new String[]{"/simplestack " + command});
 
-            BaseComponent[] line = Chat.getBaseComponentArray("  &b/simplestack " + command + " &d- &f" + commandInfo + "\n");
+            BaseComponent[] line = plugin.chat().getBaseComponentArray("  &b/simplestack " + command + " &d- &f" + commandInfo + "\n");
 
-            Chat.setClickEvent(line, Chat.getClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/simplestack " + command));
-            Chat.setHoverEvent(line, Chat.getHoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));
+            plugin.chat().setClickEvent(line, plugin.chat().getClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/simplestack " + command));
+            plugin.chat().setHoverEvent(line, plugin.chat().getHoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));
 
             lines.add(line);
         }
@@ -67,8 +70,8 @@ public class HelpCommand extends AbstractSubCommand
         lines.add(versionComponents);
         lines.add(lineComponents);
 
-        BaseComponent[] combined = Chat.combineComponents(lines.toArray(new BaseComponent[0][0]));
-        Chat.printComponents(sender, combined);
+        BaseComponent[] combined = plugin.chat().combineComponents(lines.toArray(new BaseComponent[0][0]));
+        plugin.chat().printComponents(sender, combined);
 
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;

@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.commands;
 
+import com.mikedeejay2.mikedeejay2lib.PluginBase;
 import com.mikedeejay2.mikedeejay2lib.commands.AbstractSubCommand;
 import com.mikedeejay2.mikedeejay2lib.util.chat.Chat;
 import com.mikedeejay2.simplestack.Simplestack;
@@ -7,9 +8,12 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ResetCommand extends AbstractSubCommand
+public class ResetCommand extends AbstractSubCommand<Simplestack>
 {
-    public static final Simplestack plugin = Simplestack.getInstance();
+    public ResetCommand(Simplestack plugin)
+    {
+        super(plugin);
+    }
 
     /**
      * Resets the config to the default values. Useful for if a player has messed up
@@ -23,7 +27,7 @@ public class ResetCommand extends AbstractSubCommand
     public void onCommand(CommandSender sender, String[] args)
     {
         plugin.config().resetFromJar();
-        Chat.sendMessage(sender, "&e&l" + plugin.langManager().getTextLib(sender, "generic.success") + "&r &9" + plugin.langManager().getText(sender, "simplestack.reset.success"));
+        plugin.chat().sendMessage(sender, "&e&l" + plugin.langManager().getTextLib(sender, "generic.success") + "&r &9" + plugin.langManager().getText(sender, "simplestack.reset.success"));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);

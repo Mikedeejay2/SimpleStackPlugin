@@ -1,5 +1,7 @@
 package com.mikedeejay2.simplestack.listeners;
 
+import com.mikedeejay2.mikedeejay2lib.PluginBase;
+import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.MoveUtils;
@@ -11,10 +13,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class InventoryMoveItemListener implements Listener
+public class InventoryMoveItemListener extends PluginInstancer<Simplestack> implements Listener
 {
-    // Plugin instance for referencing
-    private static final Simplestack plugin = Simplestack.getInstance();
+    public InventoryMoveItemListener(Simplestack plugin)
+    {
+        super(plugin);
+    }
 
     /**
      * This patches hoppers not properly stacking unstackable items together in
@@ -27,7 +31,7 @@ public class InventoryMoveItemListener implements Listener
     {
         ItemStack item = event.getItem();
 
-        boolean cancel = CancelUtils.cancelStackCheck(item.getType());
+        boolean cancel = plugin.cancelUtils().cancelStackCheck(item.getType());
         if(cancel) return;
         event.setCancelled(true);
 
@@ -40,7 +44,7 @@ public class InventoryMoveItemListener implements Listener
             @Override
             public void run()
             {
-                MoveUtils.moveItemToInventory(item, fromInv, toInv, amountBeingMoved);
+                plugin.moveUtils().moveItemToInventory(item, fromInv, toInv, amountBeingMoved);
             }
         }.runTaskLater(plugin, 0);
     }

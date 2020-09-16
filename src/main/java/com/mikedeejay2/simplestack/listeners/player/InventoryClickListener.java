@@ -1,5 +1,7 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
+import com.mikedeejay2.mikedeejay2lib.PluginBase;
+import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.CheckUtils;
@@ -14,10 +16,12 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.*;
 
-public class InventoryClickListener implements Listener
+public class InventoryClickListener extends PluginInstancer<Simplestack> implements Listener
 {
-    // Plugin instance for referencing
-    private static final Simplestack plugin = Simplestack.getInstance();
+    public InventoryClickListener(Simplestack plugin)
+    {
+        super(plugin);
+    }
 
     /**
      * Handles clicking for any item that doesn't normally stack to 64.
@@ -30,8 +34,8 @@ public class InventoryClickListener implements Listener
     {
         Player player = (Player) event.getWhoClicked();
         InventoryAction action = event.getAction();
-        CheckUtils.updateGUIManual(player.getOpenInventory().getTopInventory());
-        if(CancelUtils.cancelPlayerCheck(player)) return;
+        plugin.checkUtils().updateGUIManual(player.getOpenInventory().getTopInventory());
+        if(plugin.cancelUtils().cancelPlayerCheck(player)) return;
         ItemStack itemPickUp = event.getCurrentItem();
         ItemStack itemPutDown = event.getCursor();
         ClickType clickType = event.getClick();
@@ -42,20 +46,20 @@ public class InventoryClickListener implements Listener
         Inventory clickedInv = event.getClickedInventory();
         if(itemPickUp == null || action.toString().contains("DROP") || clickType == ClickType.CREATIVE) return;
 
-        boolean cancel1 = CancelUtils.cancelStackCheck(itemPickUp.getType());
-        boolean cancel2 = CancelUtils.cancelStackCheck(itemPutDown.getType());
-        boolean cancel3 = CancelUtils.cancelGUICheck(clickedInv);
+        boolean cancel1 = plugin.cancelUtils().cancelStackCheck(itemPickUp.getType());
+        boolean cancel2 = plugin.cancelUtils().cancelStackCheck(itemPutDown.getType());
+        boolean cancel3 = plugin.cancelUtils().cancelGUICheck(clickedInv);
         if((cancel1 && cancel2) || event.isCancelled() || cancel3)
         {
             return;
         }
         event.setCancelled(true);
 
-        CheckUtils.useGUICheck(player, topInv, slot, clickedInv, clickType);
+        plugin.checkUtils().useGUICheck(player, topInv, slot, clickedInv, clickType);
 
         if(action == InventoryAction.CLONE_STACK)
         {
-            ClickUtils.cloneStack(player, itemPickUp);
+            plugin.clickUtils().cloneStack(player, itemPickUp);
         }
         else if(action == InventoryAction.HOTBAR_SWAP || action == InventoryAction.HOTBAR_MOVE_AND_READD)
         {
@@ -65,14 +69,14 @@ public class InventoryClickListener implements Listener
         switch(clickType)
         {
             case LEFT:
-                ClickUtils.leftClick(itemPickUp, itemPutDown, player, event);
+                plugin.clickUtils().leftClick(itemPickUp, itemPutDown, player, event);
                 break;
             case SHIFT_LEFT:
             case SHIFT_RIGHT:
-                ClickUtils.shiftClick(itemPickUp, player, event);
+                plugin.clickUtils().shiftClick(itemPickUp, player, event);
                 break;
             case RIGHT:
-                ClickUtils.rightClick(itemPickUp, itemPutDown, player, event);
+                plugin.clickUtils().rightClick(itemPickUp, itemPutDown, player, event);
                 break;
         }
     }

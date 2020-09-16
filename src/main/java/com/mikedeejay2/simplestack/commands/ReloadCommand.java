@@ -8,9 +8,12 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ReloadCommand extends AbstractSubCommand
+public class ReloadCommand extends AbstractSubCommand<Simplestack>
 {
-    public static final Simplestack plugin = Simplestack.getInstance();
+    public ReloadCommand(Simplestack plugin)
+    {
+        super(plugin);
+    }
 
     /**
      * The reload command reloads the block list in the config class based on the current
@@ -26,7 +29,7 @@ public class ReloadCommand extends AbstractSubCommand
     {
         Config config = plugin.config();
         config.reload();
-        Chat.sendMessage(sender, "&e&l" + plugin.langManager().getTextLib(sender, "generic.success") + "&r &9" + plugin.langManager().getText(sender, "simplestack.reload.success"));
+        plugin.chat().sendMessage(sender, "&e&l" + plugin.langManager().getTextLib(sender, "generic.success") + "&r &9" + plugin.langManager().getText(sender, "simplestack.reload.success"));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);

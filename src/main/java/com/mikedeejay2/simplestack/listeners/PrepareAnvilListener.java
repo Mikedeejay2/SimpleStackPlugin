@@ -1,5 +1,7 @@
 package com.mikedeejay2.simplestack.listeners;
 
+import com.mikedeejay2.mikedeejay2lib.PluginBase;
+import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -7,10 +9,12 @@ import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 
-public class PrepareAnvilListener implements Listener
+public class PrepareAnvilListener extends PluginInstancer<Simplestack> implements Listener
 {
-    // Plugin instance for referencing
-    private static final Simplestack plugin = Simplestack.getInstance();
+    public PrepareAnvilListener(Simplestack plugin)
+    {
+        super(plugin);
+    }
 
     /**
      * Patches bug where anvil number counts aren't accurate to what is

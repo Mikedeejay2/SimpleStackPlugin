@@ -10,6 +10,7 @@ import com.mikedeejay2.simplestack.listeners.player.*;
 import com.mikedeejay2.simplestack.listeners.InventoryMoveItemListener;
 import com.mikedeejay2.simplestack.listeners.PrepareAnvilListener;
 import com.mikedeejay2.simplestack.listeners.PrepareSmithingListener;
+import com.mikedeejay2.simplestack.util.*;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.PluginManager;
 
@@ -29,34 +30,46 @@ public final class Simplestack extends PluginBase
     private static final int MAX_AMOUNT_IN_STACK = 64;
 
     private Config config;
+    private StackUtils stackUtils;
+    private MoveUtils moveUtils;
+    private ClickUtils clickUtils;
+    private CheckUtils checkUtils;
+    private CancelUtils cancelUtils;
 
     @Override
     public void onEnable()
     {
         super.onEnable();
+
+        this.stackUtils = new StackUtils(this);
+        this.moveUtils = new MoveUtils(this);
+        this.clickUtils = new ClickUtils(this);
+        this.checkUtils = new CheckUtils(this);
+        this.cancelUtils = new CancelUtils(this);
+
         this.commandManager.setup("simplestack");
 
-        this.commandManager.addSubcommand(new HelpCommand());
-        this.commandManager.addSubcommand(new ReloadCommand());
-        this.commandManager.addSubcommand(new ResetCommand());
-        this.commandManager.addSubcommand(new SetAmountCommand());
+        this.commandManager.addSubcommand(new HelpCommand(this));
+        this.commandManager.addSubcommand(new ReloadCommand(this));
+        this.commandManager.addSubcommand(new ResetCommand(this));
+        this.commandManager.addSubcommand(new SetAmountCommand(this));
 
-        config = new Config();
+        config = new Config(this);
         fileManager.addDataFile(config);
 
 
         PluginManager manager = this.getServer().getPluginManager();
-        manager.registerEvents(new InventoryClickListener(), this);
-        manager.registerEvents(new EntityPickupItemListener(), this);
-        manager.registerEvents(new BlockBreakListener(), this);
-        manager.registerEvents(new InventoryMoveItemListener(), this);
-        manager.registerEvents(new InventoryCloseListener(), this);
-        manager.registerEvents(new PrepareAnvilListener(), this);
-        manager.registerEvents(new InventoryDragListener(), this);
-        manager.registerEvents(new PlayerBucketEmptyListener(), this);
+        manager.registerEvents(new InventoryClickListener(this), this);
+        manager.registerEvents(new EntityPickupItemListener(this), this);
+        manager.registerEvents(new BlockBreakListener(this), this);
+        manager.registerEvents(new InventoryMoveItemListener(this), this);
+        manager.registerEvents(new InventoryCloseListener(this), this);
+        manager.registerEvents(new PrepareAnvilListener(this), this);
+        manager.registerEvents(new InventoryDragListener(this), this);
+        manager.registerEvents(new PlayerBucketEmptyListener(this), this);
         if(getMCVersion()[1] >= 16)
         {
-            manager.registerEvents(new PrepareSmithingListener(), this);
+            manager.registerEvents(new PrepareSmithingListener(this), this);
         }
     }
 
@@ -79,20 +92,40 @@ public final class Simplestack extends PluginBase
     /**
      * Gets 64.
      *
-     * @return
+     * @return 64
      */
     public static int getMaxStack()
     {
         return MAX_AMOUNT_IN_STACK;
     }
 
-    public static Simplestack getInstance()
-    {
-        return (Simplestack)PluginBase.getInstance();
-    }
-
     public Config config()
     {
         return config;
+    }
+
+    public StackUtils stackUtils()
+    {
+        return stackUtils;
+    }
+
+    public MoveUtils moveUtils()
+    {
+        return moveUtils;
+    }
+
+    public ClickUtils clickUtils()
+    {
+        return clickUtils;
+    }
+
+    public CheckUtils checkUtils()
+    {
+        return checkUtils;
+    }
+
+    public CancelUtils cancelUtils()
+    {
+        return cancelUtils;
     }
 }

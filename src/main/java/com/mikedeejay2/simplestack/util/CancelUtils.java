@@ -1,5 +1,7 @@
 package com.mikedeejay2.simplestack.util;
 
+import com.mikedeejay2.mikedeejay2lib.PluginBase;
+import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
@@ -7,9 +9,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 
-public final class CancelUtils
+public final class CancelUtils extends PluginInstancer<Simplestack>
 {
-    private static final Simplestack plugin = Simplestack.getInstance();
+    public CancelUtils(Simplestack plugin)
+    {
+        super(plugin);
+    }
 
     /**
      * Will check to make sure that item being stacked is not blacklisted or not whitelisted
@@ -18,12 +23,12 @@ public final class CancelUtils
      * @param material Material to check
      * @return If stack event should be cancelled
      */
-    public static boolean cancelStackCheck(Material material)
+    public boolean cancelStackCheck(Material material)
     {
         Config config = plugin.config();
         if(material == null || material == Material.AIR)
             return true;
-        int stackAmount = StackUtils.getMaxAmount(material);
+        int stackAmount = plugin.stackUtils().getMaxAmount(material);
         if(material.getMaxStackSize() == Simplestack.getMaxStack() && stackAmount == Simplestack.getMaxStack())
             return true;
         boolean cancel = false;
@@ -46,7 +51,7 @@ public final class CancelUtils
      * @param player Player to check the permission for
      * @return If the event for the player should be cancelled because they don't have the permission
      */
-    public static boolean cancelPlayerCheck(Player player)
+    public boolean cancelPlayerCheck(Player player)
     {
         return !player.hasPermission(plugin.getPermission());
     }
@@ -61,7 +66,7 @@ public final class CancelUtils
      * @param slot Slot that was clicked
      * @return If move should cancel
      */
-    public static boolean cancelMoveCheck(ItemStack item, Inventory inv, int slot)
+    public boolean cancelMoveCheck(ItemStack item, Inventory inv, int slot)
     {
         if(item == null || item.getType() == Material.AIR) return false;
         Material type = item.getType();
@@ -107,7 +112,7 @@ public final class CancelUtils
      * @param inv Inventory to check
      * @return If inventory should be cancelled
      */
-    public static boolean cancelGUICheck(Inventory inv)
+    public boolean cancelGUICheck(Inventory inv)
     {
         if(inv == null) return true;
         if(plugin.getMCVersion()[1] >= 16 && inv instanceof SmithingInventory) return false;

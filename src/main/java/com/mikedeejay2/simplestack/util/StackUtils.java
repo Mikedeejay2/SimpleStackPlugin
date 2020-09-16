@@ -1,18 +1,21 @@
 package com.mikedeejay2.simplestack.util;
 
+import com.mikedeejay2.mikedeejay2lib.PluginBase;
+import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.*;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
-public final class StackUtils
+public final class StackUtils extends PluginInstancer<Simplestack>
 {
-    // Plugin instance for referencing
-    private static final Simplestack plugin = Simplestack.getInstance();
+    private final NamespacedKey key;
 
-    private static final NamespacedKey key = new NamespacedKey(plugin, "simplestack");
+    public StackUtils(Simplestack plugin)
+    {
+        super(plugin);
+        this.key = new NamespacedKey(plugin, "simplestack");
+    }
 
     /**
      * Simple helper method that takes 2 item metas and checks to see if they equal each other.
@@ -21,7 +24,7 @@ public final class StackUtils
      * @param stack2 Second ItemStack to compare with
      * @return If items are equal
      */
-    public static boolean equalsEachOther(ItemStack stack1, ItemStack stack2)
+    public boolean equalsEachOther(ItemStack stack1, ItemStack stack2)
     {
         ItemMeta meta1 = stack1.getItemMeta();
         ItemMeta meta2 = stack2.getItemMeta();
@@ -40,7 +43,7 @@ public final class StackUtils
      * @param slot Slot that was clicked
      * @return If items should switch or not
      */
-    public static boolean shouldSwitch(Inventory inventory, int slot)
+    public boolean shouldSwitch(Inventory inventory, int slot)
     {
         if(inventory instanceof StonecutterInventory && slot == 1) return false;
         return true;
@@ -53,7 +56,7 @@ public final class StackUtils
      * @param material The material to find the max amount for
      * @return The max amount for the material.
      */
-    public static int getMaxAmount(Material material)
+    public int getMaxAmount(Material material)
     {
         int maxAmountInStack = Simplestack.getMaxStack();
         if(plugin.config().hasCustomAmount(material))

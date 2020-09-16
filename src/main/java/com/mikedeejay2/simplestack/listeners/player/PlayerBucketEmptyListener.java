@@ -1,5 +1,7 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
+import com.mikedeejay2.mikedeejay2lib.PluginBase;
+import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.MoveUtils;
@@ -13,9 +15,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class PlayerBucketEmptyListener implements Listener
+public class PlayerBucketEmptyListener extends PluginInstancer<Simplestack> implements Listener
 {
-    private static final Simplestack plugin = Simplestack.getInstance();
+    public PlayerBucketEmptyListener(Simplestack plugin)
+    {
+        super(plugin);
+    }
 
     /**
      * Fix bug where player uses all buckets in a stack at a time.
@@ -27,7 +32,7 @@ public class PlayerBucketEmptyListener implements Listener
     {
         Player player = event.getPlayer();
         if(player.getGameMode() == GameMode.CREATIVE) return;
-        if(CancelUtils.cancelPlayerCheck(player)) return;
+        if(plugin.cancelUtils().cancelPlayerCheck(player)) return;
         int slot = player.getInventory().getHeldItemSlot();
         ItemStack stack = player.getInventory().getItemInMainHand();
         if(!stack.getType().toString().endsWith("BUCKET"))
@@ -35,11 +40,11 @@ public class PlayerBucketEmptyListener implements Listener
             slot = 40;
             stack = player.getInventory().getItemInOffHand();
         }
-        if(CancelUtils.cancelStackCheck(stack.getType())) return;
+        if(plugin.cancelUtils().cancelStackCheck(stack.getType())) return;
         PlayerInventory inv = player.getInventory();
         if(stack.getAmount() <= 1) return;
         stack.setAmount(stack.getAmount()-1);
-        MoveUtils.moveItem(new ItemStack(Material.BUCKET), inv, slot, inv, 0, 36, false);
+        plugin.moveUtils().moveItem(new ItemStack(Material.BUCKET), inv, slot, inv, 0, 36, false);
 
 
         int finalSlot = slot;

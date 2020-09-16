@@ -1,5 +1,7 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
+import com.mikedeejay2.mikedeejay2lib.PluginBase;
+import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.MoveUtils;
@@ -14,9 +16,12 @@ import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
-public class InventoryDragListener implements Listener
+public class InventoryDragListener extends PluginInstancer<Simplestack> implements Listener
 {
-    private static final Simplestack plugin = Simplestack.getInstance();
+    public InventoryDragListener(Simplestack plugin)
+    {
+        super(plugin);
+    }
 
     /**
      * This method properly distributes un-stackable items that have been stacked evenly
@@ -32,18 +37,18 @@ public class InventoryDragListener implements Listener
         InventoryView inventoryView = event.getView();
         if(event.getInventory() instanceof BrewerInventory || event.getInventory() instanceof BeaconInventory) return;
         Player player = (Player) inventoryView.getPlayer();
-        if(CancelUtils.cancelPlayerCheck(player)) return;
+        if(plugin.cancelUtils().cancelPlayerCheck(player)) return;
 
         ItemStack cursor = event.getOldCursor();
-        if(CancelUtils.cancelStackCheck(cursor.getType())) return;
+        if(plugin.cancelUtils().cancelStackCheck(cursor.getType())) return;
         GameMode gameMode = player.getGameMode();
         if(gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE)
         {
-            MoveUtils.dragItemsSurvival(event, inventoryView, player, cursor);
+            plugin.moveUtils().dragItemsSurvival(event, inventoryView, player, cursor);
         }
         else
         {
-            MoveUtils.dragItemsCreative(event, inventoryView, player, cursor);
+            plugin.moveUtils().dragItemsCreative(event, inventoryView, player, cursor);
         }
 
         player.updateInventory();
