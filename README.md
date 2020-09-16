@@ -59,7 +59,7 @@ Note: Items in item amounts must also be in the items list if in whitelist mode
 
 ### Translating
 
-Translating this plugin into other languages is managed on [OneSky](osu0azw.oneskyapp.com). 
+Translating this plugin into other languages is managed on [OneSky](https://osu0azw.oneskyapp.com/). 
 
 ### Downloads
 
