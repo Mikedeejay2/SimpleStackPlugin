@@ -59,10 +59,7 @@ Note: Items in item amounts must also be in the items list if in whitelist mode
 
 ### Translating
 
-Do you want to help bring this plugin to another language? If so, you can create a copy of the [en_us.json](https://github.com/Mikedeejay2/SimpleStackPlugin/blob/master/src/main/resources/en_us.json) file and fill out the
-right side of the file (all of the words after the colons, you must keep the capitalized words in the brackets in 
-English though). Then you can either create an issue or a pull request in the Github Repository or alternatively 
-upload it to a file sharing service and send it to me via a direct message or in the discussion thread on Spigot.
+Translating this plugin into other languages is managed on [OneSky](https://osu0azw.oneskyapp.com/). 
 
 ### Downloads
 
