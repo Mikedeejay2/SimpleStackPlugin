@@ -9,8 +9,6 @@
   "simplestack.commands.setamount.info": "Set the amount of a held item",
   "simplestack.commands.setamount.success": "Amount set successfully.",
   "simplestack.commands.setamount.format": "Command format: /simplestack setamount <number>",
-  "simplestack.errors.nopermission.general": "Error: You don't have permission to access this command.",
-  "simplestack.errors.nopermission.reload": "Error: You don't have permission to reload the config.",
   "simplestack.errors.player_required": "Error: You must be a player to run this command.",
   "simplestack.errors.number_required": "Error: A number is required to run this subcommand.",
   "simplestack.errors.number_less_than_zero": "Error: The number entered was less than 0. Please enter a number greater than 0.",
@@ -20,5 +18,4 @@
   "simplestack.warnings.big_number": "Warning: The number you entered is above the recommended limit and might act oddly.",
   "simplestack.warnings.invalid_material": "The material {MAT} in the config does not exist.",
   "simplestack.warnings.invalid_list_mode": "The list mode {MODE} is not a valid list mode. Defaulting to blacklist mode.",
-  "simplestack.success": "Success!"
 }

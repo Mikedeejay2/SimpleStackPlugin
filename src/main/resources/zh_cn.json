@@ -9,8 +9,6 @@
   "simplestack.commands.setamount.info": "设置所持物品的数量",
   "simplestack.commands.setamount.success": "数量设置成功。",
   "simplestack.commands.setamount.format": "指令格式：/simplestack setamount <数量>",
-  "simplestack.errors.nopermission.general": "错误：你没有使用此命令的权限。",
-  "simplestack.errors.nopermission.reload": "错误：你没有重新加载配置的权限。",
   "simplestack.errors.player_required": "错误：只有玩家能执行此命令。",
   "simplestack.errors.number_required": "错误：此子命令需要的是一个数字。",
   "simplestack.errors.number_less_than_zero": "错误：输入的数字小于零。请输入一个比零大的数字。",
@@ -20,5 +18,4 @@
   "simplestack.warnings.big_number": "警告：你输入的值超出了建议限制，可能产生不正常的表现。",
   "simplestack.warnings.invalid_material": "不存在材料 {MAT}（请检查配置文件）。",
   "simplestack.warnings.invalid_list_mode": "列表模式 {MODE} 不合法。将采用默认的黑名单模式。",
-  "simplestack.success": "成功！"
 }

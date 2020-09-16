@@ -24,11 +24,6 @@ public class SetAmountCommand extends AbstractSubCommand
     @Override
     public void onCommand(CommandSender sender, String[] args)
     {
-        if(!sender.hasPermission("simplestack.setamount"))
-        {
-            Chat.sendMessage(sender, "&c" + plugin.langManager().getText(sender, "simplestack.errors.nopermission.reload"));
-            return;
-        }
         if(!(sender instanceof Player))
         {
             Chat.sendMessage(sender, "&c" + plugin.langManager().getText(sender, "simplestack.errors.player_required"));
@@ -63,7 +58,7 @@ public class SetAmountCommand extends AbstractSubCommand
         {
             Chat.sendMessage(sender, "&e" + plugin.langManager().getText(sender, "simplestack.warnings.big_number"));
         }
-        Chat.sendMessage(sender, "&e&l" + plugin.langManager().getText(sender, "simplestack.success") + "&r &9" +
+        Chat.sendMessage(sender, "&e&l" + plugin.langManager().getTextLib(sender, "generic.success") + "&r &9" +
                 plugin.langManager().getText(sender, "simplestack.commands.setamount.success"));
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.5f, 1f);
     }
@@ -83,5 +78,11 @@ public class SetAmountCommand extends AbstractSubCommand
     public String[] aliases()
     {
         return new String[]{"rl"};
+    }
+
+    @Override
+    public String permission()
+    {
+        return "simplestack.setamount";
     }
 }

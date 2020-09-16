@@ -24,14 +24,9 @@ public class ReloadCommand extends AbstractSubCommand
     @Override
     public void onCommand(CommandSender sender, String[] args)
     {
-        if(!sender.hasPermission("simplestack.reload"))
-        {
-            Chat.sendMessage(sender, "&c" + plugin.langManager().getText(sender, "simplestack.errors.nopermission.reload"));
-            return;
-        }
         Config config = plugin.config();
         config.reload();
-        Chat.sendMessage(sender, "&e&l" + plugin.langManager().getText(sender, "simplestack.success") + "&r &9" + plugin.langManager().getText(sender, "simplestack.reload.success"));
+        Chat.sendMessage(sender, "&e&l" + plugin.langManager().getTextLib(sender, "generic.success") + "&r &9" + plugin.langManager().getText(sender, "simplestack.reload.success"));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
@@ -53,5 +48,11 @@ public class ReloadCommand extends AbstractSubCommand
     public String[] aliases()
     {
         return new String[]{"rl"};
+    }
+
+    @Override
+    public String permission()
+    {
+        return "simplestack.reload";
     }
 }

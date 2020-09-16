@@ -22,13 +22,8 @@ public class ResetCommand extends AbstractSubCommand
     @Override
     public void onCommand(CommandSender sender, String[] args)
     {
-        if(!sender.hasPermission("simplestack.reset"))
-        {
-            Chat.sendMessage(sender, "&c" + plugin.langManager().getText(sender, "simplestack.errors.nopermission.general"));
-            return;
-        }
         plugin.config().resetFromJar();
-        Chat.sendMessage(sender, "&e&l" + plugin.langManager().getText(sender, "simplestack.success") + "&r &9" + plugin.langManager().getText(sender, "simplestack.reset.success"));
+        Chat.sendMessage(sender, "&e&l" + plugin.langManager().getTextLib(sender, "generic.success") + "&r &9" + plugin.langManager().getText(sender, "simplestack.reset.success"));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
@@ -50,5 +45,11 @@ public class ResetCommand extends AbstractSubCommand
     public String[] aliases()
     {
         return new String[0];
+    }
+
+    @Override
+    public String permission()
+    {
+        return "simplestack.reset";
     }
 }

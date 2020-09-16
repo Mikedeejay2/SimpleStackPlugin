@@ -28,12 +28,6 @@ public class HelpCommand extends AbstractSubCommand
     @Override
     public void onCommand(CommandSender sender, String[] args)
     {
-        if(!sender.hasPermission("simplestack.help"))
-        {
-            Chat.sendMessage(sender, "&c" + "Error: You don't have permission to access this command.");
-            return;
-        }
-
         LangManager lang = plugin.langManager();
         String ver = plugin.getDescription().getVersion();
         String[] ssArr = {"Simple", "Stack"};
@@ -97,5 +91,11 @@ public class HelpCommand extends AbstractSubCommand
     public String[] aliases()
     {
         return new String[0];
+    }
+
+    @Override
+    public String permission()
+    {
+        return "simplestack.help";
     }
 }
