@@ -15,51 +15,6 @@ public final class StackUtils
     private static final NamespacedKey key = new NamespacedKey(plugin, "simplestack");
 
     /**
-     * This method is the work around to Minecraft not calling InventoryClickEvents on 2 items
-     * of the same type. This is also the reason why this plugin will not work below
-     * 1.14 (Because PersistentDataContainer was added in 1.14 spigot). Essentially, this method
-     * adds a entry to the NBT data of the clicked item (Key is "simplestack" with the value of 1)
-     * to trick the Minecraft client into thinking that this item is unique and sending a packet over
-     * to the server saying that they clicked the item and to do something with it.
-     *
-     * As of 1.2.0, this doesn't need to be used for some reason.
-     *
-     * @param itemInSlot The item being moved (Clicked item)
-     * @param key The key to be used when setting the NBT data ("simplestack")
-     */
-    @Deprecated
-    public static void makeUnique(ItemStack itemInSlot, NamespacedKey key)
-    {
-        if(itemInSlot.getType().getMaxStackSize() == Simplestack.getMaxStack()) return;
-        ItemMeta itemMeta = itemInSlot.getItemMeta();
-        PersistentDataContainer data = itemMeta.getPersistentDataContainer();
-        if(!data.has(key, PersistentDataType.BYTE))
-        {
-            data.set(key, PersistentDataType.BYTE, (byte) 1);
-            itemInSlot.setItemMeta(itemMeta);
-        }
-    }
-
-    /**
-     * If this plugin was used before 1.2.0, some items will be stuck on unique and others will not be unique,
-     * to fix this, this method removes the unique tag from an item being moved.
-     *
-     * @param itemInSlot The item being moved (Clicked item)
-     * @param key The key to be used when setting the NBT data ("simplestack")
-     */
-    public static void removeUnique(ItemStack itemInSlot, NamespacedKey key)
-    {
-        if(itemInSlot == null || itemInSlot.getType().getMaxStackSize() == Simplestack.getMaxStack() || !itemInSlot.hasItemMeta()) return;
-        ItemMeta itemMeta = itemInSlot.getItemMeta();
-        PersistentDataContainer data = itemMeta.getPersistentDataContainer();
-        if(data.has(key, PersistentDataType.BYTE))
-        {
-            data.remove(key);
-            itemInSlot.setItemMeta(itemMeta);
-        }
-    }
-
-    /**
      * Simple helper method that takes 2 item metas and checks to see if they equal each other.
      *
      * @param stack1 First ItemStack to check

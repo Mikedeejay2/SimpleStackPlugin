@@ -51,8 +51,6 @@ public class InventoryClickListener implements Listener
         }
         event.setCancelled(true);
 
-        StackUtils.removeUnique(itemPickUp, plugin.getKey());
-
         CheckUtils.useGUICheck(player, topInv, slot, clickedInv, clickType);
 
         if(action == InventoryAction.CLONE_STACK)

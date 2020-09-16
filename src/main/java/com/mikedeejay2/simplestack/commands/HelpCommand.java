@@ -1,10 +1,10 @@
 package com.mikedeejay2.simplestack.commands;
 
 import com.mikedeejay2.mikedeejay2lib.commands.AbstractSubCommand;
+import com.mikedeejay2.mikedeejay2lib.commands.CommandManager;
 import com.mikedeejay2.mikedeejay2lib.language.LangManager;
 import com.mikedeejay2.mikedeejay2lib.util.chat.Chat;
 import com.mikedeejay2.simplestack.Simplestack;
-import com.mikedeejay2.simplestack.commands.manager.CommandManager;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -58,7 +58,7 @@ public class HelpCommand extends AbstractSubCommand
         for(int i = 1; i < commands.length; i++)
         {
             String command = commands[i];
-            String commandInfo = manager.get(command).info(sender);
+            String commandInfo = manager.getSubcommand(command).info(sender);
             String hoverText = "&d" + lang.getText(sender, "simplestack.commands.click_to_run", new String[]{"COMMAND"}, new String[]{"/simplestack " + command});
 
             BaseComponent[] line = Chat.getBaseComponentArray("  &b/simplestack " + command + " &d- &f" + commandInfo + "\n");
@@ -84,7 +84,7 @@ public class HelpCommand extends AbstractSubCommand
     @Override
     public String name()
     {
-        return plugin.commandManager().help;
+        return "help";
     }
 
     @Override

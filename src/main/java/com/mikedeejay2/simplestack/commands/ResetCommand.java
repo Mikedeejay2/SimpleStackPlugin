@@ -37,7 +37,7 @@ public class ResetCommand extends AbstractSubCommand
     @Override
     public String name()
     {
-        return plugin.commandManager().reset;
+        return "reset";
     }
 
     @Override

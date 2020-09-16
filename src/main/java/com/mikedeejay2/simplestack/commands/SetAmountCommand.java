@@ -71,7 +71,7 @@ public class SetAmountCommand extends AbstractSubCommand
     @Override
     public String name()
     {
-        return plugin.commandManager().setamount;
+        return "setamount";
     }
 
     public String info(CommandSender sender)

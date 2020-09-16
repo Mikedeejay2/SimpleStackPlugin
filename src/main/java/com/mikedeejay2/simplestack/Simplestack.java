@@ -1,9 +1,10 @@
 package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.mikedeejay2lib.PluginBase;
-import com.mikedeejay2.mikedeejay2lib.commands.AbstractCommandManager;
-import com.mikedeejay2.mikedeejay2lib.language.LangManager;
-import com.mikedeejay2.simplestack.commands.manager.CommandManager;
+import com.mikedeejay2.simplestack.commands.HelpCommand;
+import com.mikedeejay2.simplestack.commands.ReloadCommand;
+import com.mikedeejay2.simplestack.commands.ResetCommand;
+import com.mikedeejay2.simplestack.commands.SetAmountCommand;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.listeners.player.*;
 import com.mikedeejay2.simplestack.listeners.InventoryMoveItemListener;
@@ -21,25 +22,28 @@ import java.util.Arrays;
  */
 public final class Simplestack extends PluginBase
 {
-    // A namespaced key for adding a small piece of NBT data that makes each item "Unique".
-    // This has to happen because if we don't make each item unique then the InventoryClickEvent won't be called
-    // when trying to stack 2 fully stacked items of the same type.
-    // Certainly a hacky work around, but it works.
-    private NamespacedKey key;
-
     private final String permission = "simplestack.use";
 
     // Max stack size. Changing this produces some really weird results because
     // Minecraft really doesn't know how to handle anything higher than 64.
     private static final int MAX_AMOUNT_IN_STACK = 64;
 
+    private Config config;
+
     @Override
     public void onEnable()
     {
         super.onEnable();
-        setCommandManager(new CommandManager(), "simplestack");
-        fileManager.addDataFile(new Config());
-        key = new NamespacedKey(this, "simplestack");
+        this.commandManager.setup("simplestack");
+
+        this.commandManager.addSubcommand(new HelpCommand());
+        this.commandManager.addSubcommand(new ReloadCommand());
+        this.commandManager.addSubcommand(new ResetCommand());
+        this.commandManager.addSubcommand(new SetAmountCommand());
+
+        config = new Config();
+        fileManager.addDataFile(config);
+
 
         PluginManager manager = this.getServer().getPluginManager();
         manager.registerEvents(new InventoryClickListener(), this);
@@ -48,25 +52,18 @@ public final class Simplestack extends PluginBase
         manager.registerEvents(new InventoryMoveItemListener(), this);
         manager.registerEvents(new InventoryCloseListener(), this);
         manager.registerEvents(new PrepareAnvilListener(), this);
-        if(getMCVersion()[1] >= 16) manager.registerEvents(new PrepareSmithingListener(), this);
         manager.registerEvents(new InventoryDragListener(), this);
         manager.registerEvents(new PlayerBucketEmptyListener(), this);
+        if(getMCVersion()[1] >= 16)
+        {
+            manager.registerEvents(new PrepareSmithingListener(), this);
+        }
     }
 
     @Override
     public void onDisable()
     {
         super.onDisable();
-    }
-
-    /**
-     * Get the namespaced key for making items unique
-     *
-     * @return The unique NamespacedKey
-     */
-    public NamespacedKey getKey()
-    {
-        return key;
     }
 
     /**
@@ -94,14 +91,8 @@ public final class Simplestack extends PluginBase
         return (Simplestack)PluginBase.getInstance();
     }
 
-    @Override
-    public CommandManager commandManager()
-    {
-        return (CommandManager) super.commandManager();
-    }
-
     public Config config()
     {
-        return (Config)fileManager.getDataFile("config.yml");
+        return config;
     }
 }

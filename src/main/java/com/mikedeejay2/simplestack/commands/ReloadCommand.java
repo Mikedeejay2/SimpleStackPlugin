@@ -40,7 +40,7 @@ public class ReloadCommand extends AbstractSubCommand
     @Override
     public String name()
     {
-        return plugin.commandManager().reload;
+        return "reload";
     }
 
     @Override
