@@ -222,11 +222,10 @@ public final class CheckUtils extends PluginInstancer<Simplestack>
      */
     public void useSmithingCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean rightClick)
     {
-        if(plugin.getMCVersion()[1] >= 16) return;
+        if(plugin.getMCVersion()[1] < 16) return;
         Sound sound = Sound.BLOCK_SMITHING_TABLE_USE;
         if(clickedInventory instanceof SmithingInventory && slot == 2)
         {
-            player.sendMessage("eoijeoijeoijeioe");
             triggerAnvilSmithingUse(player, topInv, rightClick, sound);
         }
     }
