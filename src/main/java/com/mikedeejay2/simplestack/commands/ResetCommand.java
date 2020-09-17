@@ -26,7 +26,7 @@ public class ResetCommand extends AbstractSubCommand<Simplestack>
     @Override
     public void onCommand(CommandSender sender, String[] args)
     {
-        plugin.config().resetFromJar();
+        plugin.config().resetFromJar(true);
         plugin.chat().sendMessage(sender, "&e&l" + plugin.langManager().getTextLib(sender, "generic.success") + "&r &9" + plugin.langManager().getText(sender, "simplestack.reset.success"));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;

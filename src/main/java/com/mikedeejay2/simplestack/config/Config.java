@@ -27,10 +27,10 @@ public class Config extends YamlFile implements DefaultLangProvider
         super(plugin, "config.yml");
         if(!fileExists())
         {
-            loadFromJar();
-            saveToDisk();
+            loadFromJar(true);
+            saveToDisk(true);
         }
-        loadFromDisk();
+        loadFromDisk(true);
         loadData();
     }
 
@@ -142,19 +142,19 @@ public class Config extends YamlFile implements DefaultLangProvider
     }
 
     @Override
-    public boolean loadFromDisk()
+    public boolean loadFromDisk(boolean throwErrors)
     {
-        boolean success = super.loadFromDisk();
-        updateFromJar();
-        saveToDisk();
+        boolean success = super.loadFromDisk(throwErrors);
+        updateFromJar(throwErrors);
+        saveToDisk(throwErrors);
         loadData();
         return success;
     }
 
     @Override
-    public boolean loadFromJar()
+    public boolean loadFromJar(boolean throwErrors)
     {
-        boolean success = super.loadFromJar();
+        boolean success = super.loadFromJar(throwErrors);
         loadData();
         return success;
     }

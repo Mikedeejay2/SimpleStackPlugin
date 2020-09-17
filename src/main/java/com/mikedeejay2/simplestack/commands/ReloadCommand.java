@@ -28,7 +28,7 @@ public class ReloadCommand extends AbstractSubCommand<Simplestack>
     public void onCommand(CommandSender sender, String[] args)
     {
         Config config = plugin.config();
-        config.reload();
+        config.reload(true);
         plugin.chat().sendMessage(sender, "&e&l" + plugin.langManager().getTextLib(sender, "generic.success") + "&r &9" + plugin.langManager().getText(sender, "simplestack.reload.success"));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;
