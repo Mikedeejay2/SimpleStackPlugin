@@ -190,6 +190,13 @@ public final class CheckUtils extends PluginInstancer<Simplestack>
         {
             ItemStack stack = topInv.getItem(i);
             if(stack == null) continue;
+            if(stack.getType().toString().endsWith("BUCKET"))
+            {
+                ItemStack newStack = stack.clone();
+                newStack.setType(Material.BUCKET);
+                newStack.setAmount(amountToRemove);
+                plugin.moveUtils().moveItemPlayerOrder(newStack, topInv, i, player.getInventory());
+            }
             int newAmount = stack.getAmount() - amountToRemove;
             stack.setAmount(newAmount);
         }
