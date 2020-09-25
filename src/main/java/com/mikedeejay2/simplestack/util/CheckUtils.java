@@ -10,6 +10,8 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.*;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.List;
+
 public final class CheckUtils extends PluginInstancer<Simplestack>
 {
     public CheckUtils(Simplestack plugin)
@@ -67,6 +69,77 @@ public final class CheckUtils extends PluginInstancer<Simplestack>
     {
         if(!(clickedInventory instanceof CraftingInventory && slot == 0)) return;
         triggerCraftingTableUse(player, topInv, shiftClick);
+    }
+
+    /**
+     * Check if a villager has been traded with. If it has, appropriately calculate the output items.
+     * This is required because if the item being clicked on is a simplestack item the output has
+     * to be calculated manually otherwise duping will happen.
+     *
+     * @param player The player that might be attempting to use the villager
+     * @param topInv The top inventory that the player is viewing
+     * @param slot The slot that the player has clicked
+     * @param clickedInventory The inventory that the player has clicked
+     * @param shiftClick Mark if the click was a shift click or not
+     */
+    public void useVillagerCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean shiftClick)
+    {
+        if(!(clickedInventory instanceof MerchantInventory && slot == 2)) return;
+        triggerVillagerUse(player, topInv, shiftClick);
+    }
+
+    /**
+     * Trigger the manual use of a villager trade. This is an algorithm
+     * that emulates vanilla's villager trading algorithm because by default all
+     * events are cancelled. This fixes villagers duping items.
+     *
+     * @param player Player triggering villager use
+     * @param topInv The top inventory (The merchant inventory)
+     * @param shiftClick If this click is a shift click
+     */
+    private void triggerVillagerUse(Player player, Inventory topInv, boolean shiftClick)
+    {
+        MerchantInventory inventory = (MerchantInventory) topInv;
+        MerchantRecipe recipe = inventory.getSelectedRecipe();
+        List<ItemStack> ingredients = recipe.getIngredients();
+        int maxUses = recipe.getMaxUses();
+        int curUses = recipe.getUses();
+        ItemStack inItem1 = topInv.getItem(0);
+        ItemStack ingredient1 = ingredients.size() >= 1 ? ingredients.get(0) : null;
+        ItemStack inItem2 = topInv.getItem(1);
+        ItemStack ingredient2 = ingredients.size() >= 2 ? ingredients.get(1) : null;
+        ItemStack result = topInv.getItem(2);
+
+        if(!shiftClick)
+        {
+            if(inItem1 != null && ingredient1 != null) inItem1.setAmount(inItem1.getAmount() - ingredient1.getAmount());
+            if(inItem2 != null && ingredient2 != null) inItem2.setAmount(inItem2.getAmount() - ingredient2.getAmount());
+            ++curUses;
+        }
+        else
+        {
+            int resultAmount = result.getAmount();
+            for(int i = 0; i < Simplestack.getMaxStack(); i++)
+            {
+                if(result.getAmount() + resultAmount > Simplestack.getMaxStack() + 1 || curUses >= maxUses) break;
+                if(inItem1 != null && ingredient1 != null)
+                {
+                    if(inItem1.getAmount() - ingredient1.getAmount() < 0)
+                    {
+                        break;
+                    }
+                    inItem1.setAmount(inItem1.getAmount() - ingredient1.getAmount());
+                }
+                if(inItem2 != null && ingredient2 != null)
+                {
+                    if(inItem2.getAmount() - ingredient2.getAmount() < 0) break;
+                    inItem2.setAmount(inItem2.getAmount() - ingredient2.getAmount());
+                }
+                result.setAmount(result.getAmount() + resultAmount);
+                ++curUses;
+            }
+            result.setAmount(result.getAmount() - 1);
+        }
     }
 
     /**
@@ -326,6 +399,7 @@ public final class CheckUtils extends PluginInstancer<Simplestack>
         useSmithingCheck(player, topInv, slot, clickedInventory, rightClick);
         useStonecutterCheck(player, topInv, slot, clickedInventory, shiftClick);
         useCraftingTableCheck(player, topInv, slot, clickedInventory, shiftClick);
+        useVillagerCheck(player, topInv, slot, clickedInventory, shiftClick);
         useGrindstoneCheck(player, topInv, slot, clickedInventory);
         useBrewingCheck(player, topInv, slot, clickedInventory);
     }

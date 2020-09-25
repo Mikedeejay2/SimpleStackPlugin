@@ -1,12 +1,9 @@
 package com.mikedeejay2.simplestack.config;
 
 import com.mikedeejay2.mikedeejay2lib.file.yaml.YamlFile;
-import com.mikedeejay2.mikedeejay2lib.language.DefaultLangProvider;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationOptions;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public class Config extends YamlFile implements DefaultLangProvider
+public class Config extends YamlFile
 {
     //Variables
     public ListMode LIST_MODE;
@@ -135,7 +132,6 @@ public class Config extends YamlFile implements DefaultLangProvider
      *
      * @return
      */
-    @Override
     public String getDefaultLang()
     {
         return yamlFile.getString("Language");
