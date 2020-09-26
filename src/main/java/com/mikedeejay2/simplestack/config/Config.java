@@ -1,11 +1,10 @@
 package com.mikedeejay2.simplestack.config;
 
+import com.mikedeejay2.mikedeejay2lib.file.section.SectionAccessor;
 import com.mikedeejay2.mikedeejay2lib.file.yaml.YamlFile;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,8 +43,8 @@ public class Config extends YamlFile
     private void fillItemAmounts()
     {
         ITEM_AMOUNTS = new HashMap<>();
-        ConfigurationSection section = yamlFile.getConfigurationSection("Item Amounts");
-        Set<String> materialList = section.getValues(false).keySet();
+        SectionAccessor section = accessor.getSection("Item Amounts");
+        Set<String> materialList = section.getKeys(false);
         for(String mat : materialList)
         {
             Material material = Material.matchMaterial(mat);
@@ -69,7 +68,7 @@ public class Config extends YamlFile
      */
     private void getListMode()
     {
-        String listMode = yamlFile.getString("ListMode");
+        String listMode = accessor.getString("ListMode");
         try
         {
             LIST_MODE = ListMode.valueOf(listMode.toUpperCase().replaceAll(" ", "_"));
@@ -88,7 +87,7 @@ public class Config extends YamlFile
      */
     private void fillList()
     {
-        List<String> matList = yamlFile.getStringList("Items");
+        List<String> matList = accessor.getStringList("Items");
         LIST = new ArrayList<>();
 
         for(String mat : matList)
@@ -134,7 +133,7 @@ public class Config extends YamlFile
      */
     public String getDefaultLang()
     {
-        return yamlFile.getString("Language");
+        return accessor.getString("Language");
     }
 
     @Override
