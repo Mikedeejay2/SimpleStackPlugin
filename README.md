@@ -72,4 +72,4 @@ This plugin can be downloaded through any of the below links:
 
 [Bukkit](https://dev.bukkit.org/projects/simple-stack)
 
-If you enjoy this plugin and want to throw money at me: [Donation Link](paypal.me/mikedeejay2)
+If you enjoy this plugin and want to throw money at me: [Donation Link](https://www.paypal.com/paypalme/mikedeejay2)
