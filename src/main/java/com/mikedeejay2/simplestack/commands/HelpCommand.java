@@ -101,4 +101,10 @@ public class HelpCommand extends AbstractSubCommand<Simplestack>
     {
         return "simplestack.help";
     }
+
+    @Override
+    public boolean playerRequired()
+    {
+        return false;
+    }
 }

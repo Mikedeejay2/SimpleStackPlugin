@@ -27,11 +27,6 @@ public class SetAmountCommand extends AbstractSubCommand<Simplestack>
     @Override
     public void onCommand(CommandSender sender, String[] args)
     {
-        if(!(sender instanceof Player))
-        {
-            plugin.chat().sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.player_required"));
-            return;
-        }
         if(args.length < 2)
         {
             plugin.chat().sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.number_required") + "\n" +
@@ -87,5 +82,11 @@ public class SetAmountCommand extends AbstractSubCommand<Simplestack>
     public String permission()
     {
         return "simplestack.setamount";
+    }
+
+    @Override
+    public boolean playerRequired()
+    {
+        return true;
     }
 }

@@ -56,4 +56,10 @@ public class ResetCommand extends AbstractSubCommand<Simplestack>
     {
         return "simplestack.reset";
     }
+
+    @Override
+    public boolean playerRequired()
+    {
+        return false;
+    }
 }

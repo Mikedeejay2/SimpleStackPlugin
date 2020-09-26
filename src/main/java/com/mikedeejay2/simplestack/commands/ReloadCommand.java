@@ -1,7 +1,6 @@
 package com.mikedeejay2.simplestack.commands;
 
 import com.mikedeejay2.mikedeejay2lib.commands.AbstractSubCommand;
-import com.mikedeejay2.mikedeejay2lib.util.chat.Chat;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
 import org.bukkit.Sound;
@@ -57,5 +56,11 @@ public class ReloadCommand extends AbstractSubCommand<Simplestack>
     public String permission()
     {
         return "simplestack.reload";
+    }
+
+    @Override
+    public boolean playerRequired()
+    {
+        return false;
     }
 }
