@@ -1,0 +1,13 @@
+{
+    "simplestack.version": "Version: {VERSION}",
+    "simplestack.commands.click_to_run": "Click para ejecutar {COMMAND}",
+    "simplestack.commands.help.info": "Lista de comandos de simplestacks",
+    "simplestack.commands.reload.info": "Recarga la configuración en el juego",
+    "simplestack.reload.success": "La configuración fue recargada",
+    "simplestack.commands.reset.info": "Resetear la configuración",
+    "simplestack.reset.success": "La configuración fue reseteada",
+    "simplestack.commands.setamount.success": "Monto de items correctamente establecido.",
+    "simplestack.commands.setamount.format": "Formato valido: /simplestack setamount <numero>",
+    "simplestack.warnings.number_outside_of_range": "El monto establecido para {MAT} esta fuera del alcance valido. Por defecto es 64",
+    "simplestack.warnings.invalid_material": "El material {MAT} no existe en la configuracion.",
+}
