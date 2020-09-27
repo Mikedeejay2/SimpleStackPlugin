@@ -58,19 +58,20 @@ public final class Simplestack extends PluginBase
         fileManager.addDataFile(config);
 
 
-        PluginManager manager = this.getServer().getPluginManager();
-        manager.registerEvents(new InventoryClickListener(this), this);
-        manager.registerEvents(new EntityPickupItemListener(this), this);
-        manager.registerEvents(new BlockBreakListener(this), this);
-        manager.registerEvents(new InventoryMoveItemListener(this), this);
-        manager.registerEvents(new InventoryCloseListener(this), this);
-        manager.registerEvents(new PrepareAnvilListener(this), this);
-        manager.registerEvents(new InventoryDragListener(this), this);
-        manager.registerEvents(new PlayerBucketEmptyListener(this), this);
+        listenerManager.addListener(new InventoryClickListener(this));
+        listenerManager.addListener(new InventoryClickListener(this));
+        listenerManager.addListener(new EntityPickupItemListener(this));
+        listenerManager.addListener(new BlockBreakListener(this));
+        listenerManager.addListener(new InventoryMoveItemListener(this));
+        listenerManager.addListener(new InventoryCloseListener(this));
+        listenerManager.addListener(new PrepareAnvilListener(this));
+        listenerManager.addListener(new InventoryDragListener(this));
+        listenerManager.addListener(new PlayerBucketEmptyListener(this));
         if(getMCVersion()[1] >= 16)
         {
-            manager.registerEvents(new PrepareSmithingListener(this), this);
+            listenerManager.addListener(new PrepareSmithingListener(this));
         }
+        listenerManager.registerAll();
     }
 
     @Override
