@@ -32,15 +32,6 @@ public class ItemMergeListener extends PluginInstancer<Simplestack> implements L
         event.setCancelled(true);
         ItemStack resultStack = resultItem.getItemStack();
         ItemStack targetStack = targetItem.getItemStack();
-        int maxAmountInStack = plugin.stackUtils().getMaxAmount(resultStack.getType());
-        int newAmount = resultStack.getAmount() + targetStack.getAmount();
-        int extraAmount = 0;
-        if(newAmount > maxAmountInStack)
-        {
-            extraAmount = (newAmount - maxAmountInStack);
-            newAmount = maxAmountInStack;
-        }
-        resultStack.setAmount(extraAmount);
-        targetStack.setAmount(newAmount);
+        plugin.moveUtils().mergeItems(resultStack, targetStack);
     }
 }

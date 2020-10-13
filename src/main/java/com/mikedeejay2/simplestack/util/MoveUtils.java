@@ -463,4 +463,24 @@ public final class MoveUtils extends PluginInstancer<Simplestack>
             inventoryView.setItem(slot, item);
         }
     }
+
+    /**
+     * A method that attempts to combine an inputStack into the targetStack
+     *
+     * @param inputStack The input stack
+     * @param targetStack The target stack (result stack)
+     */
+    public void mergeItems(ItemStack inputStack, ItemStack targetStack)
+    {
+        int maxAmountInStack = plugin.stackUtils().getMaxAmount(inputStack.getType());
+        int newAmount = inputStack.getAmount() + targetStack.getAmount();
+        int extraAmount = 0;
+        if(newAmount > maxAmountInStack)
+        {
+            extraAmount = (newAmount - maxAmountInStack);
+            newAmount = maxAmountInStack;
+        }
+        inputStack.setAmount(extraAmount);
+        targetStack.setAmount(newAmount);
+    }
 }
