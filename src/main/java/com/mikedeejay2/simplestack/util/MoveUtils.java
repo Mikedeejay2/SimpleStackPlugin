@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -31,30 +32,32 @@ public final class MoveUtils extends PluginInstancer<Simplestack>
      *
      * @param event The cancellable event that this method has been called in
      * @param groundItem The item on the ground that this method is attempting to move to a player's inventory
-     * @param player The player attempting to pick up the groundItem
+     * @param entity The entity attempting to pick up the item
      * @param item The ItemStack contained inside of the groundItem
+     * @return Whether the move was successful or not
      */
-    public void moveItemToInventory(Cancellable event, Item groundItem, Player player, ItemStack item)
+    public boolean moveItemToInventory(Cancellable event, Item groundItem, LivingEntity entity, ItemStack item)
     {
-        PlayerInventory inv = player.getInventory();
-        for(int i = 0; i < inv.getSize(); i++)
+        Inventory inv = ((InventoryHolder)entity).getInventory();
+        for(int i = 0; i < inv.getStorageContents().length; i++)
         {
             if(!combineItemInternal(item, inv, i)) continue;
             groundItem.remove();
-            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);
+            entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);
             event.setCancelled(true);
             break;
         }
-        if(item.getAmount() == 0) return;
-        for(int i = 0; i < inv.getSize(); i++)
+        if(item.getAmount() == 0) return true;
+        for(int i = 0; i < inv.getStorageContents().length; i++)
         {
             if(inv.getItem(i) != null) continue;
             inv.setItem(i, item);
             groundItem.remove();
-            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);
+            entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);
             event.setCancelled(true);
-            break;
+            return true;
         }
+        return false;
     }
 
     /**

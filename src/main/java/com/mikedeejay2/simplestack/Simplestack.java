@@ -6,16 +6,9 @@ import com.mikedeejay2.simplestack.commands.ReloadCommand;
 import com.mikedeejay2.simplestack.commands.ResetCommand;
 import com.mikedeejay2.simplestack.commands.SetAmountCommand;
 import com.mikedeejay2.simplestack.config.Config;
-import com.mikedeejay2.simplestack.listeners.ItemMergeListener;
+import com.mikedeejay2.simplestack.listeners.*;
 import com.mikedeejay2.simplestack.listeners.player.*;
-import com.mikedeejay2.simplestack.listeners.InventoryMoveItemListener;
-import com.mikedeejay2.simplestack.listeners.PrepareAnvilListener;
-import com.mikedeejay2.simplestack.listeners.PrepareSmithingListener;
 import com.mikedeejay2.simplestack.util.*;
-import org.bukkit.NamespacedKey;
-import org.bukkit.plugin.PluginManager;
-
-import java.util.Arrays;
 
 /*
  * Simple Stacking plugin by Mikedeejay2
