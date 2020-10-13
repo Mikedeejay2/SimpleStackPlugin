@@ -26,21 +26,6 @@ public class PrepareAnvilListener extends PluginInstancer<Simplestack> implement
     public void prepareAnvilEvent(PrepareAnvilEvent event)
     {
         AnvilInventory inv = event.getInventory();
-        ItemStack result = event.getResult();
-        ItemStack item1 = inv.getItem(0);
-        ItemStack item2 = inv.getItem(1);
-        if(item2 == null || result == null || item1 == null) return;
-        if(item1.getAmount() < item2.getAmount())
-        {
-            result.setAmount(item1.getAmount());
-        }
-        else if(item1.getAmount() > item2.getAmount())
-        {
-            result.setAmount(item2.getAmount());
-        }
-        else if(item1.getAmount() == item2.getAmount())
-        {
-            result.setAmount(item1.getAmount());
-        }
+        plugin.checkUtils().prepareSmithingAnvil(event.getResult(), inv.getItem(0), inv.getItem(1));
     }
 }

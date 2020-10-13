@@ -7,6 +7,8 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryEvent;
+import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -451,5 +453,30 @@ public final class CheckUtils extends PluginInstancer<Simplestack>
                 player.setItemOnCursor(itemInCursor);
             }
         }.runTask(plugin);
+    }
+
+    /**
+     * Prepare (calculate) the output item for an anvil or a smithing table
+     *
+     * @param result The current result item of the table
+     * @param inItem1 The input item of the table
+     * @param inItem2 The second input item of the table (possibly null)
+     */
+    public void prepareSmithingAnvil(ItemStack result, ItemStack inItem1, ItemStack inItem2)
+    {
+        if(inItem2 == null || result == null || inItem1 == null) return;
+        if(inItem1.getAmount() < inItem2.getAmount())
+        {
+            result.setAmount(inItem1.getAmount());
+        }
+        else if(inItem1.getAmount() > inItem2.getAmount())
+        {
+            result.setAmount(inItem2.getAmount());
+        }
+        else if(inItem1.getAmount() == inItem2.getAmount())
+        {
+            result.setAmount(inItem1.getAmount());
+
+        }
     }
 }
