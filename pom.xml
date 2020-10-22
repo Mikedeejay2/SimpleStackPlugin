@@ -82,19 +82,23 @@
                         </goals>
                         <configuration>
                             <finalName>${project.artifactId}-${project.version}</finalName>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.mikedeejay2.simplestack.Simplestack</mainClass>
-                                </transformer>
-                            </transformers>
                             <filters>
                                 <filter>
-                                    <artifact>com.mikedeejay2:mikedeejay2lib</artifact>
-                                    <includes>
-                                        <include>**</include>
-                                    </includes>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
                                 </filter>
                             </filters>
+                            <relocations>
+                                <relocation>
+                                    <pattern>com.mikedeejay2.mikedeejay2lib</pattern>
+                                    <shadedPattern>com.mikedeejay2.testlib.internal.mikedeejay2lib
+                                    </shadedPattern>
+                                </relocation>
+                            </relocations>
                             <minimizeJar>true</minimizeJar>
                             <!-- This is the location to my development server. You should change this. -->
                             <outputFile>C:\Users\mdeej\IdeaProjects\MINECRAFT SPIGOT PLUGIN TOOLS\Dev Server Latest\plugins\${project.artifactId}-${project.version}.jar</outputFile>
