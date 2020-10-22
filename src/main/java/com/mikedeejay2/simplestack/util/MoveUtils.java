@@ -1,7 +1,5 @@
 package com.mikedeejay2.simplestack.util;
 
-import com.mikedeejay2.mikedeejay2lib.PluginBase;
-import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,11 +17,13 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public final class MoveUtils extends PluginInstancer<Simplestack>
+public final class MoveUtils
 {
+    private final Simplestack plugin;
+
     public MoveUtils(Simplestack plugin)
     {
-        super(plugin);
+        this.plugin = plugin;
     }
 
     /**

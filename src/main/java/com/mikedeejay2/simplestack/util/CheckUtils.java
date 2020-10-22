@@ -1,24 +1,22 @@
 package com.mikedeejay2.simplestack.util;
 
-import com.mikedeejay2.mikedeejay2lib.PluginBase;
-import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryEvent;
-import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
-public final class CheckUtils extends PluginInstancer<Simplestack>
+public final class CheckUtils
 {
+    private final Simplestack plugin;
+
     public CheckUtils(Simplestack plugin)
     {
-        super(plugin);
+        this.plugin = plugin;
     }
 
     /**

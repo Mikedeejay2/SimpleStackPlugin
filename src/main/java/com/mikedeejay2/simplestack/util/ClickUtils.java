@@ -1,18 +1,18 @@
 package com.mikedeejay2.simplestack.util;
 
-import com.mikedeejay2.mikedeejay2lib.PluginBase;
-import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.*;
 
-public final class ClickUtils extends PluginInstancer<Simplestack>
+public final class ClickUtils
 {
+    private final Simplestack plugin;
+
     public ClickUtils(Simplestack plugin)
     {
-        super(plugin);
+        this.plugin = plugin;
     }
 
     /**

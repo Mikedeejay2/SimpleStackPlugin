@@ -1,19 +1,18 @@
 package com.mikedeejay2.simplestack.listeners;
 
-import com.mikedeejay2.mikedeejay2lib.PluginBase;
-import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.SmithingInventory;
 
-public class PrepareSmithingListener extends PluginInstancer<Simplestack> implements Listener
+public class PrepareSmithingListener implements Listener
 {
+    private final Simplestack plugin;
+
     public PrepareSmithingListener(Simplestack plugin)
     {
-        super(plugin);
+        this.plugin = plugin;
     }
 
     /**

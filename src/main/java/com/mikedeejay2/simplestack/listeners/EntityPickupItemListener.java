@@ -1,25 +1,20 @@
 package com.mikedeejay2.simplestack.listeners;
 
-import com.mikedeejay2.mikedeejay2lib.PluginBase;
-import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
-import com.mikedeejay2.simplestack.util.CancelUtils;
-import com.mikedeejay2.simplestack.util.MoveUtils;
-import com.mikedeejay2.simplestack.util.StackUtils;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-public class EntityPickupItemListener extends PluginInstancer<Simplestack> implements Listener
+public class EntityPickupItemListener implements Listener
 {
+    private final Simplestack plugin;
+
     public EntityPickupItemListener(Simplestack plugin)
     {
-        super(plugin);
+        this.plugin = plugin;
     }
 
     /**

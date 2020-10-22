@@ -1,21 +1,19 @@
 package com.mikedeejay2.simplestack.listeners;
 
-import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.ItemMergeEvent;
-import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.SmithingInventory;
 
-public class ItemMergeListener extends PluginInstancer<Simplestack> implements Listener
+public class ItemMergeListener implements Listener
 {
+    private final Simplestack plugin;
+
     public ItemMergeListener(Simplestack plugin)
     {
-        super(plugin);
+        this.plugin = plugin;
     }
 
     /**

@@ -1,10 +1,7 @@
 package com.mikedeejay2.simplestack.listeners;
 
-import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
@@ -15,11 +12,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
-public class ItemSpawnListener extends PluginInstancer<Simplestack> implements Listener
+public class ItemSpawnListener implements Listener
 {
+    private final Simplestack plugin;
+
     public ItemSpawnListener(Simplestack plugin)
     {
-        super(plugin);
+        this.plugin = plugin;
     }
 
     /**

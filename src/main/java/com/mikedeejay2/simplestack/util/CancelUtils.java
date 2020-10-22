@@ -1,7 +1,5 @@
 package com.mikedeejay2.simplestack.util;
 
-import com.mikedeejay2.mikedeejay2lib.PluginBase;
-import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
@@ -9,11 +7,13 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 
-public final class CancelUtils extends PluginInstancer<Simplestack>
+public final class CancelUtils
 {
+    private final Simplestack plugin;
+
     public CancelUtils(Simplestack plugin)
     {
-        super(plugin);
+        this.plugin = plugin;
     }
 
     /**

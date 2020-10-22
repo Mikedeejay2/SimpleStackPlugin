@@ -7,11 +7,13 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ReloadCommand extends AbstractSubCommand<Simplestack>
+public class ReloadCommand extends AbstractSubCommand
 {
+    private final Simplestack plugin;
+
     public ReloadCommand(Simplestack plugin)
     {
-        super(plugin);
+        this.plugin = plugin;
     }
 
     /**

@@ -14,11 +14,13 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class HelpCommand extends AbstractSubCommand<Simplestack>
+public class HelpCommand extends AbstractSubCommand
 {
+    private final Simplestack plugin;
+
     public HelpCommand(Simplestack plugin)
     {
-        super(plugin);
+        this.plugin = plugin;
     }
 
     /**

@@ -1,13 +1,6 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
-import com.mikedeejay2.mikedeejay2lib.PluginBase;
-import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
-import com.mikedeejay2.simplestack.util.CancelUtils;
-import com.mikedeejay2.simplestack.util.CheckUtils;
-import com.mikedeejay2.simplestack.util.ClickUtils;
-import com.mikedeejay2.simplestack.util.StackUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,11 +9,13 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.*;
 
-public class InventoryClickListener extends PluginInstancer<Simplestack> implements Listener
+public class InventoryClickListener implements Listener
 {
+    private final Simplestack plugin;
+
     public InventoryClickListener(Simplestack plugin)
     {
-        super(plugin);
+        this.plugin = plugin;
     }
 
     /**

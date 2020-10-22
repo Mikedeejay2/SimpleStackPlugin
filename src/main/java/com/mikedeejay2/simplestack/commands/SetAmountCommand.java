@@ -10,11 +10,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class SetAmountCommand extends AbstractSubCommand<Simplestack>
+public class SetAmountCommand extends AbstractSubCommand
 {
+    private final Simplestack plugin;
+
     public SetAmountCommand(Simplestack plugin)
     {
-        super(plugin);
+        this.plugin = plugin;
     }
 
     /**

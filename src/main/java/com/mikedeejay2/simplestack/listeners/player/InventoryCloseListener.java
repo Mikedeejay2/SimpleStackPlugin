@@ -1,6 +1,5 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
-import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,11 +9,13 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class InventoryCloseListener extends PluginInstancer<Simplestack> implements Listener
+public class InventoryCloseListener implements Listener
 {
+    private final Simplestack plugin;
+
     public InventoryCloseListener(Simplestack plugin)
     {
-        super(plugin);
+        this.plugin = plugin;
     }
 
     /**

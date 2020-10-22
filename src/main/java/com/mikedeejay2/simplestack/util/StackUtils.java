@@ -1,20 +1,17 @@
 package com.mikedeejay2.simplestack.util;
 
-import com.mikedeejay2.mikedeejay2lib.PluginBase;
-import com.mikedeejay2.mikedeejay2lib.util.PluginInstancer;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.*;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public final class StackUtils extends PluginInstancer<Simplestack>
+public final class StackUtils
 {
-    private final NamespacedKey key;
+    private final Simplestack plugin;
 
     public StackUtils(Simplestack plugin)
     {
-        super(plugin);
-        this.key = new NamespacedKey(plugin, "simplestack");
+        this.plugin = plugin;
     }
 
     /**
