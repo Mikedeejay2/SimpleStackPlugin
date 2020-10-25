@@ -95,7 +95,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.mikedeejay2.mikedeejay2lib</pattern>
-                                    <shadedPattern>com.mikedeejay2.testlib.internal.mikedeejay2lib
+                                    <shadedPattern>${project.groupId}.${project.artifactId}.internal.mikedeejay2lib
                                     </shadedPattern>
                                 </relocation>
                             </relocations>

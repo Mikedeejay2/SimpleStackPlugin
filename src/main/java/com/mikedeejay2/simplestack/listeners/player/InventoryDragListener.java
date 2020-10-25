@@ -39,6 +39,7 @@ public class InventoryDragListener implements Listener
 
         ItemStack cursor = event.getOldCursor();
         if(plugin.cancelUtils().cancelStackCheck(cursor.getType())) return;
+        if(plugin.cancelUtils().cancelGUICheck(event.getInventory())) return;
         GameMode gameMode = player.getGameMode();
         if(gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE)
         {
