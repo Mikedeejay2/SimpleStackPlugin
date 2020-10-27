@@ -23,6 +23,7 @@ public final class StackUtils
      */
     public boolean equalsEachOther(ItemStack stack1, ItemStack stack2)
     {
+        if(stack1 == null || stack2 == null) return false;
         ItemMeta meta1 = stack1.getItemMeta();
         ItemMeta meta2 = stack2.getItemMeta();
         if(meta1 == null || meta2 == null) return false;
