@@ -389,6 +389,7 @@ public final class MoveUtils
         {
             ItemStack oldItem = inventoryView.getItem(slots[i]);
             oldItems[i] = oldItem;
+            if(oldItem == null) continue;
             if(plugin.stackUtils().equalsEachOther(cursor, oldItem))
             {
                 newItems[i].setAmount(oldItem.getAmount());
