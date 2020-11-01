@@ -1,5 +1,8 @@
 package com.mikedeejay2.simplestack.config;
 
+import com.mikedeejay2.mikedeejay2lib.file.DataFile;
+import com.mikedeejay2.mikedeejay2lib.file.FileManager;
+import com.mikedeejay2.mikedeejay2lib.file.json.JsonFile;
 import com.mikedeejay2.mikedeejay2lib.file.section.SectionAccessor;
 import com.mikedeejay2.mikedeejay2lib.file.yaml.YamlFile;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
@@ -107,13 +110,22 @@ public class Config extends YamlFile
      */
     private void loadItemList()
     {
-        List<ItemStack> itemList = accessor.getItemStackList("Unique Items");
+        FileManager fileManager = plugin.fileManager();
+        if(!fileManager.containsFile("unique_items.json"))
+        {
+            DataFile uniqueItems = new JsonFile(plugin, "unique_items.json");
+            fileManager.addDataFile(uniqueItems);
+            uniqueItems.saveToDisk(true);
+        }
+        JsonFile json = (JsonFile) fileManager.getDataFile("unique_items.json");
+        json.loadFromDisk(true);
+        List<ItemStack> itemList = json.getAccessor().getItemStackList("items");
         uniqueItemList = new ArrayList<>();
         if(itemList == null) return;
 
         for(ItemStack item : itemList)
         {
-            if(item == null)
+            if(item == null || item.getType().isAir())
             {
                 plugin.getLogger().warning(plugin.langManager().getText("simplestack.warnings.invalid_unique_item"));
                 continue;

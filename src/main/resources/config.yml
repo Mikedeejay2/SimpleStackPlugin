@@ -25,15 +25,3 @@ Item Amounts:
 # Note: Language is also based off of per-player, the language specified in this config only applies
 # to the console.
 Language: en_us
-
-# Unique Items: Items that are specifically matched to be stacked.
-# It's recommended to use the in game configuration editor to edit this list.
-Unique Items:
-  - ==: org.bukkit.inventory.ItemStack
-    v: 2580
-    type: BEDROCK
-    amount: 10
-    meta:
-      ==: ItemMeta
-      meta-type: UNSPECIFIC
-      display-name: Example Item
