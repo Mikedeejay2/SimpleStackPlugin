@@ -46,7 +46,7 @@ public class Config extends YamlFile
     private void loadItemAmounts()
     {
         itemAmounts = new HashMap<>();
-        SectionAccessor section = accessor.getSection("Item Amounts");
+        SectionAccessor<YamlFile, Object> section = accessor.getSection("Item Amounts");
         Set<String> materialList = section.getKeys(false);
         for(String mat : materialList)
         {
@@ -115,9 +115,9 @@ public class Config extends YamlFile
         {
             DataFile uniqueItems = new JsonFile(plugin, "unique_items.json");
             fileManager.addDataFile(uniqueItems);
-            uniqueItems.saveToDisk(true);
         }
         JsonFile json = (JsonFile) fileManager.getDataFile("unique_items.json");
+        if(!json.fileExists()) json.saveToDisk(true);
         json.loadFromDisk(true);
         List<ItemStack> itemList = json.getAccessor().getItemStackList("items");
         uniqueItemList = new ArrayList<>();

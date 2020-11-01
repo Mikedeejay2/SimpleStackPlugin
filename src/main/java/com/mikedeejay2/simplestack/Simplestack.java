@@ -77,7 +77,6 @@ public final class Simplestack extends PluginBase
     public void onDisable()
     {
         super.onDisable();
-        fileManager.saveAllFiles();
     }
 
     /**
