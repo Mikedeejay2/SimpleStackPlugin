@@ -87,11 +87,13 @@ public final class ClickUtils
                 itemInCursor.setAmount(itemInCursor.getAmount()-1);
                 clickedInv.setItem(slot, itemInSlot);
             }
-            else if(!(clickedInv instanceof CraftingInventory && slot == 10))
+            else if(!(clickedInv instanceof CraftingInventory && slot == 10) && itemInCursor.getType() == Material.AIR)
             {
                 ItemStack cursorItemStack = itemInSlot.clone();
-                cursorItemStack.setAmount((int) Math.ceil(itemInSlot.getAmount() / 2.0f));
-                itemInSlot.setAmount((int) Math.floor(itemInSlot.getAmount() / 2.0f));
+                int topAmount = (int) Math.ceil(itemInSlot.getAmount() / 2.0f);
+                int bottomAmount = (int) Math.floor(itemInSlot.getAmount() / 2.0f);
+                cursorItemStack.setAmount(topAmount);
+                itemInSlot.setAmount(bottomAmount);
                 player.setItemOnCursor(cursorItemStack);
             }
             else
