@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.util;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -202,7 +203,7 @@ public final class CheckUtils
         }
 
 
-        if(plugin.stackUtils().equalsEachOther(itemInCursor, resultItem))
+        if(ItemComparison.equalsEachOther(itemInCursor, resultItem))
         {
             ItemStack newItem = itemInCursor.clone();
             int newAmount = itemInCursor.getAmount() + resultItem.getAmount();

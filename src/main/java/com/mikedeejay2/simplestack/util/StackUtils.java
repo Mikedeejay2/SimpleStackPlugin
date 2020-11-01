@@ -15,23 +15,6 @@ public final class StackUtils
     }
 
     /**
-     * Simple helper method that takes 2 item metas and checks to see if they equal each other.
-     *
-     * @param stack1 First ItemStack to check
-     * @param stack2 Second ItemStack to compare with
-     * @return If items are equal
-     */
-    public boolean equalsEachOther(ItemStack stack1, ItemStack stack2)
-    {
-        ItemMeta meta1 = stack1.getItemMeta();
-        ItemMeta meta2 = stack2.getItemMeta();
-        if(meta1 == null || meta2 == null) return false;
-        if(!meta1.equals(meta2)) return false;
-        if(stack1.getType() != stack2.getType()) return false;
-        return true;
-    }
-
-    /**
      * Returns whether the items between the player's cursor and the inventory slot
      * should switch or not. This needs to be checked because there are rare occasions
      * where an item should not switch (i.e an output slot)

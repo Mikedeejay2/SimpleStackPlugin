@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.util;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -138,7 +139,7 @@ public final class MoveUtils
         {
             ItemStack curItem = inv.getItem(i);
             if(curItem == null) continue;
-            if(!plugin.stackUtils().equalsEachOther(curItem, item)) continue;
+            if(!ItemComparison.equalsEachOther(curItem, item)) continue;
             if(amount > curItem.getAmount())
             {
                 amount -= curItem.getAmount();
@@ -300,7 +301,7 @@ public final class MoveUtils
     public boolean combineItemInternal(ItemStack itemInSlot, Inventory inv, int slot)
     {
         ItemStack itemStack = inv.getItem(slot);
-        if(itemStack == null || !plugin.stackUtils().equalsEachOther(itemInSlot, itemStack)) return false;
+        if(itemStack == null || !ItemComparison.equalsEachOther(itemInSlot, itemStack)) return false;
         int newAmount = itemStack.getAmount() + itemInSlot.getAmount();
         int extraAmount = 0;
         int maxAmountInStack = plugin.stackUtils().getMaxAmount(itemStack);
@@ -390,7 +391,7 @@ public final class MoveUtils
             ItemStack oldItem = inventoryView.getItem(slots[i]);
             oldItems[i] = oldItem;
             if(oldItem == null) continue;
-            if(plugin.stackUtils().equalsEachOther(cursor, oldItem))
+            if(ItemComparison.equalsEachOther(cursor, oldItem))
             {
                 newItems[i].setAmount(oldItem.getAmount());
             }

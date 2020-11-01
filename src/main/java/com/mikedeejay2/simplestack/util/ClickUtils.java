@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.util;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -30,7 +31,7 @@ public final class ClickUtils
         int slot = event.getSlot();
         Inventory topInv = player.getOpenInventory().getTopInventory();
         if(plugin.cancelUtils().cancelMoveCheck(itemInCursor, clickedInv, slot)) return;
-        if(!plugin.stackUtils().equalsEachOther(itemInCursor, itemInSlot))
+        if(!ItemComparison.equalsEachOther(itemInCursor, itemInSlot))
         {
             player.setItemOnCursor(itemInSlot);
             clickedInv.setItem(slot, itemInCursor);
@@ -77,7 +78,7 @@ public final class ClickUtils
         int slot = event.getSlot();
         Inventory clickedInv = event.getClickedInventory();
         if(plugin.cancelUtils().cancelMoveCheck(itemInCursor, clickedInv, slot)) return;
-        if(!plugin.stackUtils().equalsEachOther(itemInCursor, itemInSlot))
+        if(!ItemComparison.equalsEachOther(itemInCursor, itemInSlot))
         {
             if(itemInSlot.getType() == Material.AIR && itemInCursor.getType() != Material.AIR)
             {

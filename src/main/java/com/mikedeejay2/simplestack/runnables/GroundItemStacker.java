@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.runnables;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -46,7 +47,7 @@ public class GroundItemStacker extends BukkitRunnable
                 if(!(entity instanceof Item)) continue;
                 Item newItem = (Item) entity;
                 ItemStack newStack = newItem.getItemStack();
-                if(!plugin.stackUtils().equalsEachOther(stack, newStack)) continue;
+                if(!ItemComparison.equalsEachOther(stack, newStack)) continue;
                 plugin.moveUtils().mergeItems(stack, newStack);
                 newItem.setItemStack(newStack);
                 if(!stack.getType().isAir()) item.setItemStack(stack);
