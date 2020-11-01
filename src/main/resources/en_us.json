@@ -11,5 +11,6 @@
   "simplestack.commands.setamount.format": "Command format: /simplestack setamount <number>",
   "simplestack.warnings.number_outside_of_range": "The amount specified for {MAT} is outside of the valid range. Defaulting to 64.",
   "simplestack.warnings.invalid_material": "The material {MAT} in the config does not exist.",
+  "simplestack.warnings.invalid_unique_item": "An item listed in the unique items list could not be loaded.",
   "simplestack.warnings.invalid_list_mode": "The list mode {MODE} is not a valid list mode. Defaulting to blacklist mode."
 }

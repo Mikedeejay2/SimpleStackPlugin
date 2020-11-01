@@ -37,7 +37,7 @@ public class EntityPickupItemListener implements Listener
         }
         ItemStack item = event.getItem().getItemStack();
 
-        boolean cancel = plugin.cancelUtils().cancelStackCheck(item.getType());
+        boolean cancel = plugin.cancelUtils().cancelStackCheck(item);
         if(cancel) return;
 
         boolean success = plugin.moveUtils().moveItemToInventory(event, event.getItem(), entity, item);

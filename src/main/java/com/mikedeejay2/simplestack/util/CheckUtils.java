@@ -207,7 +207,7 @@ public final class CheckUtils
             ItemStack newItem = itemInCursor.clone();
             int newAmount = itemInCursor.getAmount() + resultItem.getAmount();
             int extraAmount = 0;
-            int maxAmountInStack = plugin.stackUtils().getMaxAmount(newItem.getType());
+            int maxAmountInStack = plugin.stackUtils().getMaxAmount(newItem);
             if(newAmount > maxAmountInStack)
             {
                 extraAmount = newAmount % maxAmountInStack;

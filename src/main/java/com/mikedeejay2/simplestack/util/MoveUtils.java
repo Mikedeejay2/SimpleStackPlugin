@@ -303,7 +303,7 @@ public final class MoveUtils
         if(itemStack == null || !plugin.stackUtils().equalsEachOther(itemInSlot, itemStack)) return false;
         int newAmount = itemStack.getAmount() + itemInSlot.getAmount();
         int extraAmount = 0;
-        int maxAmountInStack = plugin.stackUtils().getMaxAmount(itemStack.getType());
+        int maxAmountInStack = plugin.stackUtils().getMaxAmount(itemStack);
         if(newAmount > maxAmountInStack)
         {
             extraAmount = (newAmount - maxAmountInStack);
@@ -363,7 +363,7 @@ public final class MoveUtils
             ItemStack stack = invToMove.getItem(i);
             if(stack == null) continue;
 
-            boolean cancel = plugin.cancelUtils().cancelStackCheck(stack.getType());
+            boolean cancel = plugin.cancelUtils().cancelStackCheck(stack);
             if(cancel) continue;
 
             moveItem(stack, invToMove, i, playerInv, 0, 36, false);
@@ -414,7 +414,7 @@ public final class MoveUtils
             ItemStack item = newItems[i];
             int newAmount = amountPerItem + item.getAmount();
             int extraAmount = 0;
-            int maxAmountInStack = plugin.stackUtils().getMaxAmount(item.getType());
+            int maxAmountInStack = plugin.stackUtils().getMaxAmount(item);
             if(newAmount > maxAmountInStack)
             {
                 extraAmount = newAmount % maxAmountInStack;
@@ -453,8 +453,8 @@ public final class MoveUtils
         ItemStack[] newItems = event.getNewItems().values().toArray(new ItemStack[0]);
         for(ItemStack item : newItems)
         {
-            if(plugin.cancelUtils().cancelStackCheck(item.getType())) continue;
-            int maxAmountInStack = plugin.stackUtils().getMaxAmount(item.getType());
+            if(plugin.cancelUtils().cancelStackCheck(item)) continue;
+            int maxAmountInStack = plugin.stackUtils().getMaxAmount(item);
             item.setAmount(maxAmountInStack);
         }
         for(int i = 0; i < slots.length; i++)
@@ -473,7 +473,7 @@ public final class MoveUtils
      */
     public void mergeItems(ItemStack inputStack, ItemStack targetStack)
     {
-        int maxAmountInStack = plugin.stackUtils().getMaxAmount(inputStack.getType());
+        int maxAmountInStack = plugin.stackUtils().getMaxAmount(inputStack);
         int newAmount = inputStack.getAmount() + targetStack.getAmount();
         int extraAmount = 0;
         if(newAmount > maxAmountInStack)

@@ -32,7 +32,7 @@ public class ItemSpawnListener implements Listener
         Item item = event.getEntity();
         ItemStack stack = item.getItemStack();
         Material material = stack.getType();
-        if(plugin.stackUtils().getMaxAmount(material) == material.getMaxStackSize()) return;
+        if(plugin.stackUtils().getMaxAmount(stack) == material.getMaxStackSize()) return;
         new BukkitRunnable()
         {
             @Override

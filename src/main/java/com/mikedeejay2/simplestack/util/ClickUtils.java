@@ -40,7 +40,7 @@ public final class ClickUtils
 
         int newAmount = itemInCursor.getAmount() + itemInSlot.getAmount();
         int extraAmount = 0;
-        int maxAmountInStack = plugin.stackUtils().getMaxAmount(itemInCursor.getType());
+        int maxAmountInStack = plugin.stackUtils().getMaxAmount(itemInCursor);
         if(newAmount > maxAmountInStack)
         {
             extraAmount = (newAmount - maxAmountInStack);
@@ -498,7 +498,7 @@ public final class ClickUtils
     {
         int newAmount = itemInSlot.getAmount() + itemInCursor.getAmount();
         int extraAmount = 0;
-        int maxAmountInStack = plugin.stackUtils().getMaxAmount(itemInCursor.getType());
+        int maxAmountInStack = plugin.stackUtils().getMaxAmount(itemInCursor);
         if(newAmount > maxAmountInStack)
         {
             extraAmount = newAmount % maxAmountInStack;
@@ -541,7 +541,7 @@ public final class ClickUtils
     {
         ItemStack itemPutDown;
         itemPutDown = itemInSlot.clone();
-        int maxAmountInStack = plugin.stackUtils().getMaxAmount(itemInSlot.getType());
+        int maxAmountInStack = plugin.stackUtils().getMaxAmount(itemInSlot);
         itemPutDown.setAmount(maxAmountInStack);
         player.setItemOnCursor(itemPutDown);
     }

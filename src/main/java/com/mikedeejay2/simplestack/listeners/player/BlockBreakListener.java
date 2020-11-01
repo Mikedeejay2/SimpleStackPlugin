@@ -31,7 +31,7 @@ public class BlockBreakListener implements Listener
         Block block = event.getBlock();
         if(!block.getType().toString().endsWith("SHULKER_BOX")) return;
 
-        boolean cancel = plugin.cancelUtils().cancelStackCheck(block.getType());
+        boolean cancel = plugin.cancelUtils().cancelStackCheck(block.getState().getData().toItemStack(1));
         if(cancel) return;
 
         plugin.moveUtils().preserveShulkerBox(event, block);

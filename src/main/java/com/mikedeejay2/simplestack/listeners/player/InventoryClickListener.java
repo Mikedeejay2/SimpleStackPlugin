@@ -41,8 +41,8 @@ public class InventoryClickListener implements Listener
         Inventory clickedInv = event.getClickedInventory();
         if(itemPickUp == null || action.toString().contains("DROP") || clickType == ClickType.CREATIVE) return;
 
-        boolean cancel1 = plugin.cancelUtils().cancelStackCheck(itemPickUp.getType());
-        boolean cancel2 = plugin.cancelUtils().cancelStackCheck(itemPutDown.getType());
+        boolean cancel1 = plugin.cancelUtils().cancelStackCheck(itemPickUp);
+        boolean cancel2 = plugin.cancelUtils().cancelStackCheck(itemPutDown);
         boolean cancel3 = plugin.cancelUtils().cancelGUICheck(topInv);
         if((cancel1 && cancel2) || event.isCancelled() || cancel3)
         {

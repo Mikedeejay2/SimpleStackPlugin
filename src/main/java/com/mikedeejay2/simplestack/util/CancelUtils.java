@@ -18,29 +18,30 @@ public final class CancelUtils
 
     /**
      * Will check to make sure that item being stacked is not blacklisted or not whitelisted
-     * or is not null or max stack size is 64 or is of the air material.
+     * or is not null or max stack size is 64 or is of the air item.
      *
-     * @param material Material to check
+     * @param item Item to check
      * @return If stack event should be cancelled
      */
-    public boolean cancelStackCheck(Material material)
+    public boolean cancelStackCheck(ItemStack item)
     {
         Config config = plugin.config();
-        if(material == null || material == Material.AIR)
-            return true;
-        int stackAmount = plugin.stackUtils().getMaxAmount(material);
+        Material material = item.getType();
+        if(material == Material.AIR) return true;
+        int stackAmount = plugin.stackUtils().getMaxAmount(item);
         if(material.getMaxStackSize() == Simplestack.getMaxStack() && stackAmount == Simplestack.getMaxStack())
             return true;
         boolean cancel = false;
-        if(plugin.config().LIST_MODE == ListMode.BLACKLIST)
+        if(plugin.config().getListMode() == ListMode.BLACKLIST)
         {
-            if(config.LIST.contains(material)) cancel = true;
+            if(config.getMaterialList().contains(material)) cancel = true;
         }
         else
         {
-            if(!config.LIST.contains(material)) cancel = true;
+            if(!config.getMaterialList().contains(material)) cancel = true;
         }
         if(stackAmount == material.getMaxStackSize()) cancel = true;
+        if(config.containsUniqueItem(item)) cancel = false;
         return cancel;
     }
 

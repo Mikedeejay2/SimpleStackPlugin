@@ -28,7 +28,7 @@ public class InventoryMoveItemListener implements Listener
     {
         ItemStack item = event.getItem();
 
-        boolean cancel = plugin.cancelUtils().cancelStackCheck(item.getType());
+        boolean cancel = plugin.cancelUtils().cancelStackCheck(item);
         if(cancel) return;
         event.setCancelled(true);
 

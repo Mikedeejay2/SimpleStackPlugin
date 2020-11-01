@@ -38,7 +38,7 @@ public class PlayerBucketEmptyListener implements Listener
             slot = 40;
             stack = player.getInventory().getItemInOffHand();
         }
-        if(plugin.cancelUtils().cancelStackCheck(stack.getType())) return;
+        if(plugin.cancelUtils().cancelStackCheck(stack)) return;
         PlayerInventory inv = player.getInventory();
         if(stack.getAmount() <= 1) return;
         stack.setAmount(stack.getAmount()-1);

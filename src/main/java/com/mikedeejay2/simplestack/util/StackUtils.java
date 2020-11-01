@@ -47,19 +47,14 @@ public final class StackUtils
     }
 
     /**
-     * Gets the max stack amount of a material regardless of whether it's in the config or not.
+     * Gets the max stack amount of an item regardless of whether it's in the config or not.
      * If it's not in the config then return 64.
      *
-     * @param material The material to find the max amount for
-     * @return The max amount for the material.
+     * @param item The item to find the max amount for
+     * @return The max amount for the item.
      */
-    public int getMaxAmount(Material material)
+    public int getMaxAmount(ItemStack item)
     {
-        int maxAmountInStack = Simplestack.getMaxStack();
-        if(plugin.config().hasCustomAmount(material))
-        {
-            maxAmountInStack = plugin.config().getAmount(material);
-        }
-        return maxAmountInStack;
+        return plugin.config().getAmount(item);
     }
 }
