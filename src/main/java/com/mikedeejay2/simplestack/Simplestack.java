@@ -9,6 +9,7 @@ import com.mikedeejay2.simplestack.commands.SetAmountCommand;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.listeners.*;
 import com.mikedeejay2.simplestack.listeners.player.*;
+import com.mikedeejay2.simplestack.runnables.GroundItemStacker;
 import com.mikedeejay2.simplestack.util.*;
 
 /*
@@ -62,12 +63,14 @@ public final class Simplestack extends PluginBase
         listenerManager.addListener(new InventoryDragListener(this));
         listenerManager.addListener(new PlayerBucketEmptyListener(this));
         listenerManager.addListener(new ItemMergeListener(this));
-        listenerManager.addListener(new ItemSpawnListener(this));
         if(getMCVersion()[1] >= 16)
         {
             listenerManager.addListener(new PrepareSmithingListener(this));
         }
         listenerManager.registerAll();
+
+        GroundItemStacker stacker = new GroundItemStacker(this);
+        stacker.runTaskTimer(this, 0, 20);
     }
 
     @Override
