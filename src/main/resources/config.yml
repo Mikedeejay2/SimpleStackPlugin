@@ -25,3 +25,7 @@ Item Amounts:
 # Note: Language is also based off of per-player, the language specified in this config only applies
 # to the console.
 Language: en_us
+
+# Default Max Amount: Set the default max amount for ALL items in Minecraft
+# This setting could be dangerous, do proper testing before changing this value.
+Default Max Amount: 64

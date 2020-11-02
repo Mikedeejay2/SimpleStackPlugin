@@ -54,7 +54,7 @@ public class SetAmountCommand extends AbstractSubCommand
             return;
         }
         item.setAmount(amount);
-        if(amount > Simplestack.getMaxStack())
+        if(amount > plugin.config().getMaxAmount())
         {
             plugin.chat().sendMessage(sender, "&e" + plugin.langManager().getTextLib(sender, "warnings.big_number"));
         }

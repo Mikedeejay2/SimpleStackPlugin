@@ -20,6 +20,7 @@ public class Config extends YamlFile
     private String langLocale;
     private Map<Material, Integer> itemAmounts;
     private List<ItemStack> uniqueItemList;
+    private int maxAmount;
 
     public Config(Simplestack plugin)
     {
@@ -37,10 +38,21 @@ public class Config extends YamlFile
         langLocale = getDefaultLang();
         plugin.langManager().setDefaultLang(langLocale);
 
+        loadDefaultAmount();
         loadListMode();
         loadMaterialList();
         loadItemList();
         loadItemAmounts();
+    }
+
+    private void loadDefaultAmount()
+    {
+        maxAmount = accessor.getInt("Default Max Amount");
+        if(maxAmount > 64 || maxAmount <= 0)
+        {
+            maxAmount = 64;
+            plugin.chat().sendMessageLang("simplestack.warnings.invalid_max_amount");
+        }
     }
 
     private void loadItemAmounts()
@@ -57,7 +69,7 @@ public class Config extends YamlFile
                 continue;
             }
             int amount = section.getInt(mat);
-            if(amount == 0 || amount > Simplestack.getMaxStack())
+            if(amount == 0 || amount > 64)
             {
                 plugin.getLogger().warning(plugin.langManager().getText("simplestack.warnings.number_outside_of_range", new String[]{"MAT"}, new String[]{mat.toString()}));
                 continue;
@@ -162,7 +174,7 @@ public class Config extends YamlFile
         {
             return itemAmounts.get(item.getType());
         }
-        return Simplestack.getMaxStack();
+        return getMaxAmount();
     }
 
     /**
@@ -239,6 +251,12 @@ public class Config extends YamlFile
         return itemAmounts;
     }
 
+    /**
+     * Return whether the config contains a unique item that matches the item specified
+     *
+     * @param item The <tt>ItemStack</tt> to search for
+     * @return Whether the item was found in the config
+     */
     public boolean containsUniqueItem(ItemStack item)
     {
         for(ItemStack curItem : uniqueItemList)
@@ -249,6 +267,12 @@ public class Config extends YamlFile
         return false;
     }
 
+    /**
+     * Get a unique item from the config based off of a reference item of the same properties
+     *
+     * @param item The <tt>ItemStack</tt> to find in the config
+     * @return The <tt>ItemStack</tt> found with the same properties in the config
+     */
     public ItemStack getUniqueItem(ItemStack item)
     {
         for(ItemStack curItem : uniqueItemList)
@@ -257,5 +281,15 @@ public class Config extends YamlFile
             return curItem;
         }
         return null;
+    }
+
+    /**
+     * Get the default max amount for items
+     *
+     * @return The default max amount for items
+     */
+    public int getMaxAmount()
+    {
+        return maxAmount;
     }
 }

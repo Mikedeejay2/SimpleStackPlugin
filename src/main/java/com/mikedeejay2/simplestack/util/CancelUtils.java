@@ -29,7 +29,7 @@ public final class CancelUtils
         Material material = item.getType();
         if(material == Material.AIR) return true;
         int stackAmount = plugin.stackUtils().getMaxAmount(item);
-        if(material.getMaxStackSize() == Simplestack.getMaxStack() && stackAmount == Simplestack.getMaxStack())
+        if(material.getMaxStackSize() == plugin.config().getMaxAmount() && stackAmount == plugin.config().getMaxAmount())
             return true;
         boolean cancel = false;
         if(plugin.config().getListMode() == ListMode.BLACKLIST)

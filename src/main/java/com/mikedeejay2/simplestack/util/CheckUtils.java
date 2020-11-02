@@ -120,9 +120,9 @@ public final class CheckUtils
         else
         {
             int resultAmount = result.getAmount();
-            for(int i = 0; i < Simplestack.getMaxStack(); i++)
+            for(int i = 0; i < plugin.config().getMaxAmount(); i++)
             {
-                if(result.getAmount() + resultAmount > Simplestack.getMaxStack() + 1 || curUses >= maxUses) break;
+                if(result.getAmount() + resultAmount > plugin.config().getMaxAmount() + 1 || curUses >= maxUses) break;
                 if(inItem1 != null && ingredient1 != null)
                 {
                     if(inItem1.getAmount() - ingredient1.getAmount() < 0)

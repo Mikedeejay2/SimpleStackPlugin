@@ -21,10 +21,6 @@ public final class Simplestack extends PluginBase
 {
     private final String permission = "simplestack.use";
 
-    // Max stack size. Changing this produces some really weird results because
-    // Minecraft really doesn't know how to handle anything higher than 64.
-    private static final int MAX_AMOUNT_IN_STACK = 64;
-
     private Config config;
     private StackUtils stackUtils;
     private MoveUtils moveUtils;
@@ -87,16 +83,6 @@ public final class Simplestack extends PluginBase
     public String getPermission()
     {
         return permission;
-    }
-
-    /**
-     * Gets 64.
-     *
-     * @return 64
-     */
-    public static int getMaxStack()
-    {
-        return MAX_AMOUNT_IN_STACK;
     }
 
     public Config config()
