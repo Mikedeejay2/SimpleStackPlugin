@@ -32,6 +32,9 @@ public class GroundItemStacker extends BukkitRunnable
             for(Entity entity : world.getEntities())
             {
                 if(!(entity instanceof Item)) continue;
+                Item item = (Item) entity;
+                ItemStack stack = item.getItemStack();
+                if(plugin.cancelUtils().cancelStackCheck(stack)) return;
                 items.add((Item)entity);
             }
         }
