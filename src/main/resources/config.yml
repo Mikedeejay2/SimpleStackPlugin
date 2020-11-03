@@ -1,16 +1,16 @@
-# ListMode: The mode that the list below will operate in
+# List Mode: The mode that the item types list will operate in
 #   * Blacklist = Items added to the list will not be stackable
 #   * Whitelist = Items added to the list will be stackable, but unstackable items will stay unstackable if they're not in the list
-ListMode: Blacklist
+List Mode: Blacklist
 
-# Items: Items that will or will not be stacked to 64 based on the list mode above
-Items:
-  - 'Example Item'
+# Item Types: Item types that will or will not be stacked to 64 based on the list mode above
+Item Types:
+  - Example Item
 
 # Item Amounts: Set the amount of items that an item of that type can hold.
 # Note: Items in item amounts must also be in the items list if in whitelist mode
 Item Amounts:
-  Example Item: 32
+  Example Item: 64
 
 # Language: The default language for in game text. If the specified language is not supported English will be used.
 # Supported Languages:
@@ -23,7 +23,7 @@ Item Amounts:
 #   * es_uy - Español (Uruguayan Spanish)
 #   * es_ve - Español (Venezuelan Spanish)
 # Note: Language is also based off of per-player, the language specified in this config only applies
-# to the console.
+# to the console or unknown languages.
 Language: en_us
 
 # Default Max Amount: Set the default max amount for ALL items in Minecraft

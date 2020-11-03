@@ -2,10 +2,7 @@ package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.mikedeejay2lib.PluginBase;
 import com.mikedeejay2.mikedeejay2lib.file.json.JsonFile;
-import com.mikedeejay2.simplestack.commands.HelpCommand;
-import com.mikedeejay2.simplestack.commands.ReloadCommand;
-import com.mikedeejay2.simplestack.commands.ResetCommand;
-import com.mikedeejay2.simplestack.commands.SetAmountCommand;
+import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.listeners.*;
 import com.mikedeejay2.simplestack.listeners.player.*;
@@ -45,6 +42,7 @@ public final class Simplestack extends PluginBase
         this.commandManager.addSubcommand(new ReloadCommand(this));
         this.commandManager.addSubcommand(new ResetCommand(this));
         this.commandManager.addSubcommand(new SetAmountCommand(this));
+        this.commandManager.addSubcommand(new AddItemCommand(this));
 
         this.config = new Config(this);
         fileManager.addDataFile(config);
@@ -73,6 +71,10 @@ public final class Simplestack extends PluginBase
     public void onDisable()
     {
         super.onDisable();
+        if(config.isModified())
+        {
+            config.saveToDisk(true);
+        }
     }
 
     /**

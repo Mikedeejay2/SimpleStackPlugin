@@ -1,13 +1,13 @@
 package com.mikedeejay2.simplestack.config;
 
-import com.mikedeejay2.mikedeejay2lib.file.DataFile;
-import com.mikedeejay2.mikedeejay2lib.file.FileManager;
+import com.google.gson.JsonElement;
 import com.mikedeejay2.mikedeejay2lib.file.json.JsonFile;
 import com.mikedeejay2.mikedeejay2lib.file.section.SectionAccessor;
 import com.mikedeejay2.mikedeejay2lib.file.yaml.YamlFile;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -22,9 +22,16 @@ public class Config extends YamlFile
     private List<ItemStack> uniqueItemList;
     private int maxAmount;
 
+    // Internal config data
+    private JsonFile uniqueItems;
+    private boolean modified;
+    private boolean loaded;
+
     public Config(Simplestack plugin)
     {
         super(plugin, "config.yml");
+        this.modified = false;
+        this.loaded = false;
         if(!fileExists())
         {
             loadFromJar(true);
@@ -43,6 +50,8 @@ public class Config extends YamlFile
         loadMaterialList();
         loadItemList();
         loadItemAmounts();
+
+        loaded = true;
     }
 
     private void loadDefaultAmount()
@@ -83,7 +92,7 @@ public class Config extends YamlFile
      */
     private void loadListMode()
     {
-        String listMode = accessor.getString("ListMode");
+        String listMode = accessor.getString("List Mode");
         try
         {
             this.listMode = ListMode.valueOf(listMode.toUpperCase().replaceAll(" ", "_"));
@@ -102,7 +111,7 @@ public class Config extends YamlFile
      */
     private void loadMaterialList()
     {
-        List<String> matList = accessor.getStringList("Items");
+        List<String> matList = accessor.getStringList("Item Types");
         materialList = new ArrayList<>();
 
         for(String mat : matList)
@@ -122,16 +131,10 @@ public class Config extends YamlFile
      */
     private void loadItemList()
     {
-        FileManager fileManager = plugin.fileManager();
-        if(!fileManager.containsFile("unique_items.json"))
-        {
-            DataFile uniqueItems = new JsonFile(plugin, "unique_items.json");
-            fileManager.addDataFile(uniqueItems);
-        }
-        JsonFile json = (JsonFile) fileManager.getDataFile("unique_items.json");
-        if(!json.fileExists()) json.saveToDisk(true);
-        json.loadFromDisk(true);
-        List<ItemStack> itemList = json.getAccessor().getItemStackList("items");
+        this.uniqueItems = new JsonFile(plugin, "unique_items.json");
+        if(!uniqueItems.fileExists()) uniqueItems.saveToDisk(true);
+        uniqueItems.loadFromDisk(true);
+        List<ItemStack> itemList = uniqueItems.getAccessor().getItemStackList("items");
         uniqueItemList = new ArrayList<>();
         if(itemList == null) return;
 
@@ -147,14 +150,14 @@ public class Config extends YamlFile
     }
 
     /**
-     * Returns whether an item has a custom amount set in the config or not.
+     * Returns whether a material has a custom amount set in the config or not.
      *
-     * @param item The item to search for
+     * @param material The material to search for
      * @return If this item has a custom amount set or not
      */
-    public boolean hasCustomAmount(ItemStack item)
+    public boolean hasCustomAmount(Material material)
     {
-        return itemAmounts.containsKey(item.getType());
+        return itemAmounts.containsKey(material);
     }
 
     /**
@@ -170,7 +173,7 @@ public class Config extends YamlFile
         {
             return getUniqueItem(item).getAmount();
         }
-        else if(hasCustomAmount(item))
+        else if(hasCustomAmount(item.getType()))
         {
             return itemAmounts.get(item.getType());
         }
@@ -188,6 +191,14 @@ public class Config extends YamlFile
         return accessor.getString("Language");
     }
 
+    /**
+     * Overridden method from <tt>DataFile</tt> that loads from disk.
+     * This method also loads the data into the above variables for quick access.
+     * This method will also attempt to update the yaml file in case it is outdated.
+     *
+     * @param throwErrors Whether this method should throw errors it encounters or not
+     * @return Whether the load was successful or not
+     */
     @Override
     public boolean loadFromDisk(boolean throwErrors)
     {
@@ -198,12 +209,90 @@ public class Config extends YamlFile
         return success;
     }
 
+    /**
+     * Overridden method from <tt>DataFile</tt> that loads from a jar file.
+     * This method also loads the data into the above variables for quick access.
+     *
+     * @param throwErrors Whether this method should throw errors it encounters or not
+     * @return Whether the load was successful or not
+     */
     @Override
     public boolean loadFromJar(boolean throwErrors)
     {
         boolean success = super.loadFromJar(throwErrors);
         loadData();
         return success;
+    }
+
+    /**
+     * Overridden method from <tt>DataFile</tt> that saves the current config file to the disk.
+     * This method also saves the "unique_items.json" file that this config file controls.
+     *
+     * @param throwErrors Whether this method should throw errors it encounters or not
+     * @return Whether the file save was successful or not
+     */
+    @Override
+    public boolean saveToDisk(boolean throwErrors)
+    {
+        if(loaded)
+        {
+            accessor.setString("List Mode", listMode == ListMode.BLACKLIST ? "Blacklist" : "Whitelist");
+            accessor.setMaterialList("Item Types", materialList);
+            accessor.setString("Language", langLocale);
+            accessor.setInt("Default Max Amount", maxAmount);
+
+            SectionAccessor<YamlFile, Object> itemAmtAccessor = accessor.getSection("Item Amounts");
+            itemAmounts.forEach((material, amount) -> {if(material != null) itemAmtAccessor.setInt(material.toString(), amount);});
+
+            SectionAccessor<JsonFile, JsonElement> uniqueItemsAccessor = uniqueItems.getAccessor();
+            uniqueItemsAccessor.setItemStackList("items", uniqueItemList);
+        }
+        setModified(false);
+
+        boolean success;
+        success = super.saveToDisk(throwErrors);
+        if(uniqueItems != null) success = uniqueItems.saveToDisk(true) && success;
+
+        return success;
+    }
+
+    /**
+     * Overridden method from <tt>DataFile</tt> that resets the config to its default state.
+     *
+     * @param throwErrors Whether this method should throw errors it encounters or not
+     * @return Whether the reset was successful or not
+     */
+    @Override
+    public boolean resetFromJar(boolean throwErrors)
+    {
+        this.loaded = false;
+        return super.resetFromJar(throwErrors);
+    }
+
+    /**
+     * Overridden method from <tt>DataFile</tt> that attempts to update the current file with
+     * any new values found inside of the jar. This method will also update old naming conventions
+     * that might be found in the file as well.
+     *
+     * @param throwErrors Whether this method should throw errors it encounters or not
+     * @return Whether the update from jar was successful or not
+     */
+    @Override
+    public boolean updateFromJar(boolean throwErrors)
+    {
+        if(accessor.contains("Items"))
+        {
+            List<Material> matList = accessor.getMaterialList("Items");
+            accessor.delete("Items");
+            accessor.setMaterialList("Item Types", matList);
+        }
+        if(accessor.contains("ListMode"))
+        {
+            String listMode = accessor.getString("ListMode");
+            accessor.delete("ListMode");
+            accessor.setString("List Mode", listMode);
+        }
+        return super.updateFromJar(throwErrors);
     }
 
     /**
@@ -284,6 +373,17 @@ public class Config extends YamlFile
     }
 
     /**
+     * Return whether the material list contains a specific material or not
+     *
+     * @param material The material to search for
+     * @return Whether the material was found or not
+     */
+    public boolean containsMaterial(Material material)
+    {
+        return materialList.contains(material);
+    }
+
+    /**
      * Get the default max amount for items
      *
      * @return The default max amount for items
@@ -291,5 +391,156 @@ public class Config extends YamlFile
     public int getMaxAmount()
     {
         return maxAmount;
+    }
+
+    /**
+     * Add a unique item to the config at the player's request. <p>
+     * This method does not save the config, only modifies it.
+     *
+     * @param player The player that requested the action
+     * @param item The item to add to the config
+     */
+    public void addUniqueItem(Player player, ItemStack item)
+    {
+        if(containsUniqueItem(item))
+        {
+            plugin.chat().sendMessageLang(player, "simplestack.warnings.unique_item_already_exists");
+            return;
+        }
+        uniqueItemList.add(item);
+        setModified(true);
+    }
+
+    /**
+     * Add a material to the config at the player's request. <p>
+     * This method does not save the config, only modifies it.
+     *
+     * @param player The player that requested the action
+     * @param material The material to add to the config
+     */
+    public void addMaterial(Player player, Material material)
+    {
+        if(containsMaterial(material))
+        {
+            plugin.chat().sendMessageLang(player, "simplestack.warnings.material_already_exists");
+            return;
+        }
+        materialList.add(material);
+        setModified(true);
+    }
+
+    /**
+     * Removes a unique item from the config at the player's request. <p>
+     * This method does not save the config, only modifies it.
+     *
+     * @param player The player that requested the action
+     * @param item The item to from from the config
+     */
+    public void removeUniqueItem(Player player, ItemStack item)
+    {
+        if(!containsUniqueItem(item))
+        {
+            plugin.chat().sendMessageLang(player, "simplestack.warnings.unique_item_does_not_exist");
+            return;
+        }
+        uniqueItemList.remove(item);
+        setModified(true);
+    }
+
+    /**
+     * Removes a material from the config at the player's request. <p>
+     * This method does not save the config, only modifies it.
+     *
+     * @param player The player that requested the action
+     * @param material The material to remove from the config
+     */
+    public void removeMaterial(Player player, Material material)
+    {
+        if(!containsMaterial(material))
+        {
+            plugin.chat().sendMessageLang(player, "simplestack.warnings.material_does_not_exist");
+            return;
+        }
+        materialList.remove(material);
+        setModified(true);
+    }
+
+    /**
+     * Set the <tt>ListMode</tt> of the config. <p>
+     * This method does not save the config, only modifies it.
+     *
+     * @param newMode The new <tt>ListMode</tt> to use in the config
+     */
+    public void setListMode(ListMode newMode)
+    {
+        this.listMode = newMode;
+        setModified(true);
+    }
+
+    /**
+     * Set the lang locale of the config. This automatically updates the <tt>LangManager</tt>
+     * as well. <p>
+     * This method does not save the config, only modifies it.
+     *
+     * @param newLocale
+     */
+    public void setLangLocale(String newLocale)
+    {
+        this.langLocale = newLocale;
+        plugin.langManager().setDefaultLang(newLocale);
+        setModified(true);
+    }
+
+    /**
+     * Add a material and custom amount to the config at the player's request. <p>
+     * This method does not save the config, only modifies it.
+     *
+     * @param player The player that requested the action
+     * @param material The material to add to the config
+     * @param amount The new max amount of the item
+     */
+    public void addCustomAmount(Player player, Material material, int amount)
+    {
+        if(hasCustomAmount(material)) removeCustomAmount(player, material);
+        itemAmounts.put(material, amount);
+        setModified(true);
+    }
+
+    /**
+     * Removes a material from the custom amount list at the player's request. <p>
+     * This method does not save the config, only modifies it.
+     *
+     * @param player The player that requested the action
+     * @param material The material to remove from the config
+     */
+    public void removeCustomAmount(Player player, Material material)
+    {
+        if(!hasCustomAmount(material))
+        {
+            plugin.chat().sendMessageLang(player, "simplestack.warnings.custom_amount_does_not_exist");
+            return;
+        }
+        itemAmounts.remove(material);
+        setModified(true);
+    }
+
+    /**
+     * Get whether this file has been modified or not
+     *
+     * @return Whether this files has been modified
+     */
+    public boolean isModified()
+    {
+        return modified;
+    }
+
+    /**
+     * set whether this file has been modified or not
+     *
+     * @param modified The new modified state of this file
+     */
+    public void setModified(boolean modified)
+    {
+        this.modified = modified;
     }
 }
