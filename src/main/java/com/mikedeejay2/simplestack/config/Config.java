@@ -350,7 +350,7 @@ public class Config extends YamlFile
     {
         for(ItemStack curItem : uniqueItemList)
         {
-            if(!ItemComparison.equalsEachOther(curItem, item)) continue;
+            if(!ItemComparison.equalsEachOther(curItem, item) && curItem.getAmount() == item.getAmount()) continue;
             return true;
         }
         return false;
@@ -399,16 +399,14 @@ public class Config extends YamlFile
      *
      * @param player The player that requested the action
      * @param item The item to add to the config
+     * @return Whether the action was successful or not
      */
-    public void addUniqueItem(Player player, ItemStack item)
+    public boolean addUniqueItem(Player player, ItemStack item)
     {
-        if(containsUniqueItem(item))
-        {
-            plugin.chat().sendMessageLang(player, "simplestack.warnings.unique_item_already_exists");
-            return;
-        }
+        removeUniqueItem(player, item);
         uniqueItemList.add(item);
         setModified(true);
+        return true;
     }
 
     /**
@@ -417,16 +415,18 @@ public class Config extends YamlFile
      *
      * @param player The player that requested the action
      * @param material The material to add to the config
+     * @return Whether the action was successful or not
      */
-    public void addMaterial(Player player, Material material)
+    public boolean addMaterial(Player player, Material material)
     {
         if(containsMaterial(material))
         {
             plugin.chat().sendMessageLang(player, "simplestack.warnings.material_already_exists");
-            return;
+            return false;
         }
         materialList.add(material);
         setModified(true);
+        return true;
     }
 
     /**
@@ -435,16 +435,18 @@ public class Config extends YamlFile
      *
      * @param player The player that requested the action
      * @param item The item to from from the config
+     * @return Whether the action was successful or not
      */
-    public void removeUniqueItem(Player player, ItemStack item)
+    public boolean removeUniqueItem(Player player, ItemStack item)
     {
-        if(!containsUniqueItem(item))
+        for(ItemStack curItem : uniqueItemList)
         {
-            plugin.chat().sendMessageLang(player, "simplestack.warnings.unique_item_does_not_exist");
-            return;
+            if(!ItemComparison.equalsEachOther(item, curItem)) continue;
+            uniqueItemList.remove(curItem);
+            setModified(true);
+            break;
         }
-        uniqueItemList.remove(item);
-        setModified(true);
+        return true;
     }
 
     /**
@@ -453,16 +455,13 @@ public class Config extends YamlFile
      *
      * @param player The player that requested the action
      * @param material The material to remove from the config
+     * @return Whether the action was successful or not
      */
-    public void removeMaterial(Player player, Material material)
+    public boolean removeMaterial(Player player, Material material)
     {
-        if(!containsMaterial(material))
-        {
-            plugin.chat().sendMessageLang(player, "simplestack.warnings.material_does_not_exist");
-            return;
-        }
         materialList.remove(material);
         setModified(true);
+        return true;
     }
 
     /**

@@ -19,10 +19,7 @@
   "simplestack.warnings.invalid_unique_item": "An item listed in the unique items list could not be loaded.",
   "simplestack.warnings.invalid_list_mode": "The list mode {MODE} is not a valid list mode. Defaulting to blacklist mode.",
   "simplestack.warnings.invalid_max_amount": "The default max amount specified in the config is outside of the required range (1 - 64)",
-  "simplestack.warnings.unique_item_already_exists": "That item already exists in the config.",
   "simplestack.warnings.material_already_exists": "That material already exists in the config.",
-  "simplestack.warnings.unique_item_does_not_exist:": "That item does not exist in the config.",
-  "simplestack.warnings.material_does_not_exist": "That material does not exist in the config.",
   "simplestack.warnings.custom_amount_does_not_exist": "A customized amount for that item type does not exist in the config.",
   "simplestack.warnings.held_item_required": "You must hold an item to run this command."
 }
