@@ -350,7 +350,7 @@ public class Config extends YamlFile
     {
         for(ItemStack curItem : uniqueItemList)
         {
-            if(!ItemComparison.equalsEachOther(curItem, item) && curItem.getAmount() == item.getAmount()) continue;
+            if(!ItemComparison.equalsEachOther(curItem, item)) continue;
             return true;
         }
         return false;
