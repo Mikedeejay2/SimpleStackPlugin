@@ -40,9 +40,9 @@ public class HelpCommand extends AbstractSubCommand
         CommandManager manager = plugin.commandManager();
         String[] commands = manager.getAllCommandStrings(false);
         ArrayList<BaseComponent[]> lines = new ArrayList<>();
-        String lineString = "&b &m                                                                              \n";
+        String lineString = "&b &m                                                                              ";
         String emptyString = "                                                                               \n";
-        String titleString = "                              &9&l" + ssArr[0] + " &d&l" + ssArr[1] + "&r                               \n";
+        String titleString = "\n                              &9&l" + ssArr[0] + " &d&l" + ssArr[1] + "&r                               \n";
         String versionString = "                               &7" + version + "\n";
 
         BaseComponent[] lineComponents = plugin.chat().getBaseComponentArray(lineString);

@@ -23,3 +23,7 @@ permissions:
     description: Allow a player to reset the simplestack config to default values
   simplestack.setamount:
     description: Allow a player to set the item currently held in their hand to any amount
+  simplestack.additem:
+    description: Allow a player to add a unique item to the unique items list.
+  simplestack.removeitem:
+    description: Allow a player to remove a unique item from the unique items list.

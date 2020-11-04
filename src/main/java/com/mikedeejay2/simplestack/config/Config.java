@@ -399,14 +399,12 @@ public class Config extends YamlFile
      *
      * @param player The player that requested the action
      * @param item The item to add to the config
-     * @return Whether the action was successful or not
      */
-    public boolean addUniqueItem(Player player, ItemStack item)
+    public void addUniqueItem(Player player, ItemStack item)
     {
         removeUniqueItem(player, item);
         uniqueItemList.add(item);
         setModified(true);
-        return true;
     }
 
     /**
