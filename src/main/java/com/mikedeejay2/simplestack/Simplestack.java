@@ -1,7 +1,6 @@
 package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.mikedeejay2lib.PluginBase;
-import com.mikedeejay2.mikedeejay2lib.file.json.JsonFile;
 import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.listeners.*;
@@ -42,8 +41,9 @@ public final class Simplestack extends PluginBase
         this.commandManager.addSubcommand(new ReloadCommand(this));
         this.commandManager.addSubcommand(new ResetCommand(this));
         this.commandManager.addSubcommand(new SetAmountCommand(this));
-        this.commandManager.addSubcommand(new AddItemCommand(this));
-        this.commandManager.addSubcommand(new RemoveItemCommand(this));
+        this.commandManager.addSubcommand(new ConfigCommand(this));
+//        this.commandManager.addSubcommand(new AddItemCommand(this));
+//        this.commandManager.addSubcommand(new RemoveItemCommand(this));
 
         this.config = new Config(this);
         fileManager.addDataFile(config);

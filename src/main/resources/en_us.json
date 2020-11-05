@@ -15,6 +15,7 @@
   "simplestack.commands.removeitem.success": "The held item has been removed from the config.",
   "simplestack.commands.additemtype.info": "Add the player's held item to item types list",
   "simplestack.commands.removeitemtype.info": "Remove the player's held item from item types list",
+  "simplestack.commands.config.info": "Open the configuration GUI",
   "simplestack.warnings.number_outside_of_range": "The amount specified for {MAT} is outside of the valid range. Defaulting to 64.",
   "simplestack.warnings.invalid_material": "The material {MAT} in the config does not exist.",
   "simplestack.warnings.invalid_unique_item": "An item listed in the unique items list could not be loaded.",
