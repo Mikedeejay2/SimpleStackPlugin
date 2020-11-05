@@ -54,8 +54,8 @@ public class GroundItemStacker extends BukkitRunnable
                 Item newItem = (Item) entity;
                 ItemStack newStack = newItem.getItemStack();
                 if(!ItemComparison.equalsEachOther(stack, newStack)) continue;
-                MoveUtils.mergeItems(plugin, stack, newStack);
-                newItem.setItemStack(newStack);
+                MoveUtils.mergeItems(plugin, newStack, stack);
+                if(!newStack.getType().isAir())newItem.setItemStack(newStack);
                 if(!stack.getType().isAir()) item.setItemStack(stack);
             }
         }
