@@ -9,13 +9,6 @@ import org.bukkit.inventory.*;
 
 public final class CancelUtils
 {
-    private final Simplestack plugin;
-
-    public CancelUtils(Simplestack plugin)
-    {
-        this.plugin = plugin;
-    }
-
     /**
      * Will check to make sure that item being stacked is not blacklisted or not whitelisted
      * or is not null or max stack size is 64 or is of the air item.
@@ -23,12 +16,12 @@ public final class CancelUtils
      * @param item Item to check
      * @return If stack event should be cancelled
      */
-    public boolean cancelStackCheck(ItemStack item)
+    public static boolean cancelStackCheck(Simplestack plugin, ItemStack item)
     {
         Config config = plugin.config();
         Material material = item.getType();
         if(material == Material.AIR) return true;
-        int stackAmount = plugin.stackUtils().getMaxAmount(item);
+        int stackAmount = StackUtils.getMaxAmount(plugin, item);
         if(material.getMaxStackSize() == plugin.config().getMaxAmount() && stackAmount == plugin.config().getMaxAmount())
             return true;
         boolean cancel = false;
@@ -52,7 +45,7 @@ public final class CancelUtils
      * @param player Player to check the permission for
      * @return If the event for the player should be cancelled because they don't have the permission
      */
-    public boolean cancelPlayerCheck(Player player)
+    public static boolean cancelPlayerCheck(Simplestack plugin, Player player)
     {
         return !player.hasPermission(plugin.getPermission());
     }
@@ -67,7 +60,7 @@ public final class CancelUtils
      * @param slot Slot that was clicked
      * @return If move should cancel
      */
-    public boolean cancelMoveCheck(ItemStack item, Inventory inv, int slot)
+    public static boolean cancelMoveCheck(Simplestack plugin, ItemStack item, Inventory inv, int slot)
     {
         if(item == null || item.getType() == Material.AIR) return false;
         Material type = item.getType();
@@ -95,25 +88,12 @@ public final class CancelUtils
     }
 
     /**
-     * List of this inventories that this GUI allows through:
-     * PlayerInventory - Complete
-     * CraftingInventory - Complete
-     * GrindstoneInventory - Complete
-     * StonecutterInventory - Complete
-     * SmithingInventory - Complete
-     * AnvilInventory - Complete
-     * FurnaceInventory - Complete
-     * LoomInventory - Complete
-     * AbstractHorseInventory - Complete
-     * HorseInventory - Complete
-     * CartographyInventory - Complete
-     * EnchantingInventory - Complete
-     * BeaconInventory - Complete
-     * BrewerInventory - Complete
+     * Cancels a few specific GUI use cases
+     *
      * @param inv Inventory to check
      * @return If inventory should be cancelled
      */
-    public boolean cancelGUICheck(Inventory inv)
+    public static boolean cancelGUICheck(Simplestack plugin, Inventory inv)
     {
         if(inv == null) return true;
         if(plugin.getMCVersion()[1] >= 16 && inv instanceof SmithingInventory) return false;

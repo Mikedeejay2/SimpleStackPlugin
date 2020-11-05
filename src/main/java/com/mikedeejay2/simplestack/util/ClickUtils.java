@@ -9,13 +9,6 @@ import org.bukkit.inventory.*;
 
 public final class ClickUtils
 {
-    private final Simplestack plugin;
-
-    public ClickUtils(Simplestack plugin)
-    {
-        this.plugin = plugin;
-    }
-
     /**
      * Emulates a left click event that includes stacking items together that
      * regularly wouldn't be stacked.
@@ -25,12 +18,12 @@ public final class ClickUtils
      * @param player The player that has clicked
      * @param event The InventoryClickEvent that this method was called from
      */
-    public void leftClick(ItemStack itemInSlot, ItemStack itemInCursor, Player player, InventoryClickEvent event)
+    public static void leftClick(Simplestack plugin, ItemStack itemInSlot, ItemStack itemInCursor, Player player, InventoryClickEvent event)
     {
         Inventory clickedInv = event.getClickedInventory();
         int slot = event.getSlot();
         Inventory topInv = player.getOpenInventory().getTopInventory();
-        if(plugin.cancelUtils().cancelMoveCheck(itemInCursor, clickedInv, slot)) return;
+        if(CancelUtils.cancelMoveCheck(plugin, itemInCursor, clickedInv, slot)) return;
         if(!ItemComparison.equalsEachOther(itemInCursor, itemInSlot))
         {
             player.setItemOnCursor(itemInSlot);
@@ -41,7 +34,7 @@ public final class ClickUtils
 
         int newAmount = itemInCursor.getAmount() + itemInSlot.getAmount();
         int extraAmount = 0;
-        int maxAmountInStack = plugin.stackUtils().getMaxAmount(itemInCursor);
+        int maxAmountInStack = StackUtils.getMaxAmount(plugin, itemInCursor);
         if(newAmount > maxAmountInStack)
         {
             extraAmount = (newAmount - maxAmountInStack);
@@ -49,7 +42,7 @@ public final class ClickUtils
         }
         itemInCursor.setAmount(newAmount);
         itemInSlot.setAmount(extraAmount);
-        if(plugin.stackUtils().shouldSwitch(clickedInv, slot))
+        if(StackUtils.shouldSwitch(clickedInv, slot))
         {
             clickedInv.setItem(slot, itemInCursor);
             player.getOpenInventory().setCursor(itemInSlot);
@@ -58,7 +51,7 @@ public final class ClickUtils
         {
             clickedInv.setItem(slot, itemInSlot);
             player.setItemOnCursor(itemInCursor);
-            plugin.checkUtils().useStonecutterCheck(player, topInv, slot, clickedInv, false);
+            CheckUtils.useStonecutterCheck(plugin, player, topInv, slot, clickedInv, false);
         }
         player.updateInventory();
     }
@@ -72,12 +65,12 @@ public final class ClickUtils
      * @param player The player that has clicked
      * @param event The InventoryClickEvent that this method was called from
      */
-    public void rightClick(ItemStack itemInSlot, ItemStack itemInCursor, Player player, InventoryClickEvent event)
+    public static void rightClick(Simplestack plugin, ItemStack itemInSlot, ItemStack itemInCursor, Player player, InventoryClickEvent event)
     {
         Inventory topInv = player.getOpenInventory().getTopInventory();
         int slot = event.getSlot();
         Inventory clickedInv = event.getClickedInventory();
-        if(plugin.cancelUtils().cancelMoveCheck(itemInCursor, clickedInv, slot)) return;
+        if(CancelUtils.cancelMoveCheck(plugin, itemInCursor, clickedInv, slot)) return;
         if(!ItemComparison.equalsEachOther(itemInCursor, itemInSlot))
         {
             if(itemInSlot.getType() == Material.AIR && itemInCursor.getType() != Material.AIR)
@@ -98,7 +91,7 @@ public final class ClickUtils
             }
             else
             {
-                leftClick(itemInSlot, itemInCursor, player, event);
+                leftClick(plugin, itemInSlot, itemInCursor, player, event);
                 return;
             }
             player.updateInventory();
@@ -125,7 +118,7 @@ public final class ClickUtils
      * @param player The player that has clicked
      * @param event The InventoryClickEvent that this method was called from
      */
-    public void shiftClick(ItemStack itemInSlot, Player player, InventoryClickEvent event)
+    public static void shiftClick(Simplestack plugin, ItemStack itemInSlot, Player player, InventoryClickEvent event)
     {
         Inventory inv = null;
         Inventory topInv = player.getOpenInventory().getTopInventory();
@@ -133,11 +126,11 @@ public final class ClickUtils
         int slot = event.getSlot();
         if(!(bottomInv instanceof PlayerInventory) || !(topInv instanceof CraftingInventory && topInv.getSize() == 5))
         {
-            shiftClickSeperateInv(itemInSlot, event, inv, topInv, bottomInv, slot, player);
+            shiftClickSeperateInv(plugin, itemInSlot, event, inv, topInv, bottomInv, slot, player);
         }
         else
         {
-            shiftClickSameInv(itemInSlot, event, bottomInv);
+            shiftClickSameInv(plugin, itemInSlot, event, bottomInv);
         }
         player.updateInventory();
         event.setCancelled(true);
@@ -155,7 +148,7 @@ public final class ClickUtils
      * @param bottomInv The bottom inventory that the player is viewing
      * @param slot The slot that the player has clicked on
      */
-    private void shiftClickSeperateInv(ItemStack itemInSlot, InventoryClickEvent event, Inventory toInv, Inventory topInv, Inventory bottomInv, int slot, Player player)
+    private static void shiftClickSeperateInv(Simplestack plugin, ItemStack itemInSlot, InventoryClickEvent event, Inventory toInv, Inventory topInv, Inventory bottomInv, int slot, Player player)
     {
         Inventory clickedInventory = event.getClickedInventory();
         if(clickedInventory.equals(bottomInv))
@@ -187,7 +180,7 @@ public final class ClickUtils
             {
                 topInv.setItem(0, null);
                 topInv.setItem(1, null);
-                plugin.clickUtils().shiftClickSameInv(itemInSlot, event, bottomInv);
+                ClickUtils.shiftClickSameInv(plugin, itemInSlot, event, bottomInv);
                 return;
             }
             else if(topInv instanceof CraftingInventory ||
@@ -236,7 +229,7 @@ public final class ClickUtils
             if(toInv.getItem(0) != null) return;
             ItemStack itemToMove = itemInSlot.clone();
             itemToMove.setAmount(1);
-            plugin.moveUtils().moveItem(itemToMove, clickedInventory, slot, toInv, startSlot, endSlot, reverse);
+            MoveUtils.moveItem(plugin, itemToMove, clickedInventory, slot, toInv, startSlot, endSlot, reverse);
             itemInSlot.setAmount(itemInSlot.getAmount()-1);
             clickedInventory.setItem(slot, itemInSlot);
             return;
@@ -264,7 +257,7 @@ public final class ClickUtils
             }
             else
             {
-                plugin.clickUtils().shiftClickSameInv(itemInSlot, event, bottomInv);
+                ClickUtils.shiftClickSameInv(plugin, itemInSlot, event, bottomInv);
                 return;
             }
         }
@@ -282,7 +275,7 @@ public final class ClickUtils
             }
             else
             {
-                plugin.clickUtils().shiftClickSameInv(itemInSlot, event, bottomInv);
+                ClickUtils.shiftClickSameInv(plugin, itemInSlot, event, bottomInv);
                 return;
             }
         }
@@ -304,7 +297,7 @@ public final class ClickUtils
             }
             else
             {
-                plugin.clickUtils().shiftClickSameInv(itemInSlot, event, bottomInv);
+                ClickUtils.shiftClickSameInv(plugin, itemInSlot, event, bottomInv);
                 return;
             }
         }
@@ -353,7 +346,7 @@ public final class ClickUtils
                 toInv.getItem(0) != null
             )
             {
-                plugin.clickUtils().shiftClickSameInv(itemInSlot, event, bottomInv);
+                ClickUtils.shiftClickSameInv(plugin, itemInSlot, event, bottomInv);
                 return;
             }
             ItemStack oldItemSlot = itemInSlot;
@@ -368,15 +361,15 @@ public final class ClickUtils
 
         if(reverseHotbar)
         {
-            plugin.moveUtils().moveItemReverseHotbar(itemInSlot, clickedInventory, slot, bottomInv);
+            MoveUtils.moveItemReverseHotbar(plugin, itemInSlot, clickedInventory, slot, bottomInv);
         }
         else if(playerOrder)
         {
-            plugin.moveUtils().moveItemPlayerOrder(itemInSlot, clickedInventory, slot, bottomInv);
+            MoveUtils.moveItemPlayerOrder(plugin, itemInSlot, clickedInventory, slot, bottomInv);
         }
         else
         {
-            plugin.moveUtils().moveItem(itemInSlot, clickedInventory, slot, toInv, startSlot, endSlot, reverse);
+            MoveUtils.moveItem(plugin, itemInSlot, clickedInventory, slot, toInv, startSlot, endSlot, reverse);
         }
     }
 
@@ -389,7 +382,7 @@ public final class ClickUtils
      * @param event The InventoryClickEvent that this method was called from
      * @param bottomInv The inventory that will be used (This method only uses the player's inventory)
      */
-    private void shiftClickSameInv(ItemStack itemInSlot, InventoryClickEvent event, Inventory bottomInv)
+    private static void shiftClickSameInv(Simplestack plugin, ItemStack itemInSlot, InventoryClickEvent event, Inventory bottomInv)
     {
         Inventory clickedInventory = event.getClickedInventory();
         Inventory inv;
@@ -398,7 +391,7 @@ public final class ClickUtils
         String type = itemInSlot.getType().toString();
         if(inv instanceof CraftingInventory)
         {
-            plugin.moveUtils().moveItemPlayerOrder(itemInSlot, clickedInventory, slot, bottomInv);
+            MoveUtils.moveItemPlayerOrder(plugin, itemInSlot, clickedInventory, slot, bottomInv);
             return;
         }
         if(!type.endsWith("_HELMET") &&
@@ -410,15 +403,15 @@ public final class ClickUtils
         {
             if(slot < 9)
             {
-                plugin.moveUtils().moveItem(itemInSlot, clickedInventory, slot, inv, 9, 36, false);
+                MoveUtils.moveItem(plugin, itemInSlot, clickedInventory, slot, inv, 9, 36, false);
             }
             else if(slot < 36)
             {
-                plugin.moveUtils().moveItem(itemInSlot, clickedInventory, slot, inv, 0, 9, false);
+                MoveUtils.moveItem(plugin, itemInSlot, clickedInventory, slot, inv, 0, 9, false);
             }
             else
             {
-                plugin.moveUtils().moveItem(itemInSlot, clickedInventory, slot, inv, 9, 36, false);
+                MoveUtils.moveItem(plugin, itemInSlot, clickedInventory, slot, inv, 9, 36, false);
             }
         }
         else
@@ -454,21 +447,21 @@ public final class ClickUtils
                 {
                     if(slot < 9)
                     {
-                        plugin.moveUtils().moveItem(itemInSlot, clickedInventory, slot, inv, 9, 36, false);
+                        MoveUtils.moveItem(plugin, itemInSlot, clickedInventory, slot, inv, 9, 36, false);
                     }
                     else if(slot < 36)
                     {
-                        plugin.moveUtils().moveItem(itemInSlot, clickedInventory, slot, inv, 0, 9, false);
+                        MoveUtils.moveItem(plugin, itemInSlot, clickedInventory, slot, inv, 0, 9, false);
                     }
                     else
                     {
-                        plugin.moveUtils().moveItem(itemInSlot, clickedInventory, slot, inv, 9, 36, false);
+                        MoveUtils.moveItem(plugin, itemInSlot, clickedInventory, slot, inv, 9, 36, false);
                     }
                 }
             }
             else
             {
-                plugin.moveUtils().moveItem(itemInSlot, clickedInventory, slot, inv, 9, 36, false);
+                MoveUtils.moveItem(plugin, itemInSlot, clickedInventory, slot, inv, 9, 36, false);
             }
         }
     }
@@ -482,7 +475,7 @@ public final class ClickUtils
      * @param inventoryView The player's inventory view
      * @param rawSlot The raw inventory slot that has been clicked on
      */
-    public void pickupAll(Player player, ItemStack itemInSlot, InventoryView inventoryView, int rawSlot)
+    public static void pickupAll(Player player, ItemStack itemInSlot, InventoryView inventoryView, int rawSlot)
     {
         player.setItemOnCursor(itemInSlot);
         inventoryView.setItem(rawSlot, null);
@@ -497,11 +490,11 @@ public final class ClickUtils
      * @param inventoryView The player's inventory view
      * @param rawSlot The raw inventory slot that has been clicked on
      */
-    public void placeAll(Player player, ItemStack itemInSlot, ItemStack itemInCursor, InventoryView inventoryView, int rawSlot)
+    public static void placeAll(Simplestack plugin, Player player, ItemStack itemInSlot, ItemStack itemInCursor, InventoryView inventoryView, int rawSlot)
     {
         int newAmount = itemInSlot.getAmount() + itemInCursor.getAmount();
         int extraAmount = 0;
-        int maxAmountInStack = plugin.stackUtils().getMaxAmount(itemInCursor);
+        int maxAmountInStack = StackUtils.getMaxAmount(plugin, itemInCursor);
         if(newAmount > maxAmountInStack)
         {
             extraAmount = newAmount % maxAmountInStack;
@@ -522,7 +515,7 @@ public final class ClickUtils
      * @param inventoryView The player's inventory view
      * @param rawSlot The raw inventory slot that has been clicked on
      */
-    public void pickupHalf(Player player, ItemStack itemInSlot, InventoryView inventoryView, int rawSlot)
+    public static void pickupHalf(Player player, ItemStack itemInSlot, InventoryView inventoryView, int rawSlot)
     {
         ItemStack itemPutDown;
         int totalAmount = itemInSlot.getAmount();
@@ -540,11 +533,11 @@ public final class ClickUtils
      * @param player The player that has clicked
      * @param itemInSlot The item clicked on by the cursor
      */
-    public void cloneStack(Player player, ItemStack itemInSlot)
+    public static void cloneStack(Simplestack plugin, Player player, ItemStack itemInSlot)
     {
         ItemStack itemPutDown;
         itemPutDown = itemInSlot.clone();
-        int maxAmountInStack = plugin.stackUtils().getMaxAmount(itemInSlot);
+        int maxAmountInStack = StackUtils.getMaxAmount(plugin, itemInSlot);
         itemPutDown.setAmount(maxAmountInStack);
         player.setItemOnCursor(itemPutDown);
     }

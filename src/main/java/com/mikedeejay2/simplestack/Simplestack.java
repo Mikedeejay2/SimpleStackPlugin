@@ -18,22 +18,11 @@ public final class Simplestack extends PluginBase
     private final String permission = "simplestack.use";
 
     private Config config;
-    private StackUtils stackUtils;
-    private MoveUtils moveUtils;
-    private ClickUtils clickUtils;
-    private CheckUtils checkUtils;
-    private CancelUtils cancelUtils;
 
     @Override
     public void onEnable()
     {
         super.onEnable();
-
-        this.stackUtils = new StackUtils(this);
-        this.moveUtils = new MoveUtils(this);
-        this.clickUtils = new ClickUtils(this);
-        this.checkUtils = new CheckUtils(this);
-        this.cancelUtils = new CancelUtils(this);
 
         this.commandManager.setup("simplestack");
 
@@ -91,30 +80,5 @@ public final class Simplestack extends PluginBase
     public Config config()
     {
         return config;
-    }
-
-    public StackUtils stackUtils()
-    {
-        return stackUtils;
-    }
-
-    public MoveUtils moveUtils()
-    {
-        return moveUtils;
-    }
-
-    public ClickUtils clickUtils()
-    {
-        return clickUtils;
-    }
-
-    public CheckUtils checkUtils()
-    {
-        return checkUtils;
-    }
-
-    public CancelUtils cancelUtils()
-    {
-        return cancelUtils;
     }
 }

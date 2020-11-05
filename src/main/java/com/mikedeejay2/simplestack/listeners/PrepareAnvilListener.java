@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.listeners;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.util.CheckUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
@@ -25,6 +26,6 @@ public class PrepareAnvilListener implements Listener
     public void prepareAnvilEvent(PrepareAnvilEvent event)
     {
         AnvilInventory inv = event.getInventory();
-        plugin.checkUtils().prepareSmithingAnvil(event.getResult(), inv.getItem(0), inv.getItem(1));
+        CheckUtils.prepareSmithingAnvil(event.getResult(), inv.getItem(0), inv.getItem(1));
     }
 }

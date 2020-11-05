@@ -1,6 +1,8 @@
 package com.mikedeejay2.simplestack.listeners;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.util.CancelUtils;
+import com.mikedeejay2.simplestack.util.MoveUtils;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,14 +35,14 @@ public class EntityPickupItemListener implements Listener
         if(entity instanceof Player)
         {
             Player player = (Player)event.getEntity();
-            if(plugin.cancelUtils().cancelPlayerCheck(player)) return;
+            if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
         }
         ItemStack item = event.getItem().getItemStack();
 
-        boolean cancel = plugin.cancelUtils().cancelStackCheck(item);
+        boolean cancel = CancelUtils.cancelStackCheck(plugin, item);
         if(cancel) return;
 
-        boolean success = plugin.moveUtils().moveItemToInventory(event, event.getItem(), entity, item);
+        boolean success = MoveUtils.moveItemToInventory(plugin, event, event.getItem(), entity, item);
         if(!success) event.setCancelled(true);
     }
 }

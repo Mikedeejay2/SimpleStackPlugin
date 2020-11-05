@@ -13,13 +13,6 @@ import java.util.List;
 
 public final class CheckUtils
 {
-    private final Simplestack plugin;
-
-    public CheckUtils(Simplestack plugin)
-    {
-        this.plugin = plugin;
-    }
-
     /**
      * Check if an anvil has been used. If it has, appropriately calculate the output items.
      * This is required for edge cases like having more items in slot 1 than in slot 2 so that
@@ -32,7 +25,7 @@ public final class CheckUtils
      * @param clickedInventory The inventory that the player has clicked
      * @param rightClick Mark if the click was a right click or not to account for resulting in half of the output
      */
-    public void useAnvilCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean rightClick)
+    public static void useAnvilCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean rightClick)
     {
         if(!(clickedInventory instanceof AnvilInventory && slot == 2)) return;
         triggerAnvilSmithingUse(player, topInv, rightClick, Sound.BLOCK_ANVIL_USE);
@@ -49,10 +42,10 @@ public final class CheckUtils
      * @param clickedInventory The inventory that the player has clicked
      * @param shiftClick Mark if the click was a shift click or not
      */
-    public void useStonecutterCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean shiftClick)
+    public static void useStonecutterCheck(Simplestack plugin, Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean shiftClick)
     {
         if(!(clickedInventory instanceof StonecutterInventory && slot == 1)) return;
-        triggerStonecutterUse(player, topInv, shiftClick);
+        triggerStonecutterUse(plugin, player, topInv, shiftClick);
     }
 
     /**
@@ -66,10 +59,10 @@ public final class CheckUtils
      * @param clickedInventory The inventory that the player has clicked
      * @param shiftClick Mark if the click was a shift click or not
      */
-    public void useCraftingTableCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean shiftClick)
+    public static void useCraftingTableCheck(Simplestack plugin, Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean shiftClick)
     {
         if(!(clickedInventory instanceof CraftingInventory && slot == 0)) return;
-        triggerCraftingTableUse(player, topInv, shiftClick);
+        triggerCraftingTableUse(plugin, player, topInv, shiftClick);
     }
 
     /**
@@ -83,10 +76,10 @@ public final class CheckUtils
      * @param clickedInventory The inventory that the player has clicked
      * @param shiftClick Mark if the click was a shift click or not
      */
-    public void useVillagerCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean shiftClick)
+    public static void useVillagerCheck(Simplestack plugin, Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean shiftClick)
     {
         if(!(clickedInventory instanceof MerchantInventory && slot == 2)) return;
-        triggerVillagerUse(player, topInv, shiftClick);
+        triggerVillagerUse(plugin, player, topInv, shiftClick);
     }
 
     /**
@@ -98,7 +91,7 @@ public final class CheckUtils
      * @param topInv The top inventory (The merchant inventory)
      * @param shiftClick If this click is a shift click
      */
-    private void triggerVillagerUse(Player player, Inventory topInv, boolean shiftClick)
+    private static void triggerVillagerUse(Simplestack plugin, Player player, Inventory topInv, boolean shiftClick)
     {
         MerchantInventory inventory = (MerchantInventory) topInv;
         MerchantRecipe recipe = inventory.getSelectedRecipe();
@@ -153,7 +146,7 @@ public final class CheckUtils
      * @param topInv The top inventory (The crafting table inventory)
      * @param shiftClick If this click is a shift click
      */
-    private void triggerCraftingTableUse(Player player, Inventory topInv, boolean shiftClick)
+    private static void triggerCraftingTableUse(Simplestack plugin, Player player, Inventory topInv, boolean shiftClick)
     {
         int GUISize = topInv.getSize();
         ItemStack resultItem = topInv.getItem(0);
@@ -179,7 +172,7 @@ public final class CheckUtils
             {
                 ItemStack moveItem = resultItem.clone();
                 moveItem.setAmount(smallestAmount-1);
-                plugin.moveUtils().moveItem(moveItem, topInv, 0, player.getInventory(), 0, 36, false);
+                MoveUtils.moveItem(plugin, moveItem, topInv, 0, player.getInventory(), 0, 36, false);
             }
             amountToRemove = smallestAmount;
         }
@@ -196,7 +189,7 @@ public final class CheckUtils
                 ItemStack newStack = stack.clone();
                 newStack.setType(Material.BUCKET);
                 newStack.setAmount(amountToRemove);
-                plugin.moveUtils().moveItemPlayerOrder(newStack, topInv, i, player.getInventory());
+                MoveUtils.moveItemPlayerOrder(plugin, newStack, topInv, i, player.getInventory());
             }
             int newAmount = stack.getAmount() - amountToRemove;
             stack.setAmount(newAmount);
@@ -208,7 +201,7 @@ public final class CheckUtils
             ItemStack newItem = itemInCursor.clone();
             int newAmount = itemInCursor.getAmount() + resultItem.getAmount();
             int extraAmount = 0;
-            int maxAmountInStack = plugin.stackUtils().getMaxAmount(newItem);
+            int maxAmountInStack = StackUtils.getMaxAmount(plugin, newItem);
             if(newAmount > maxAmountInStack)
             {
                 extraAmount = newAmount % maxAmountInStack;
@@ -245,7 +238,7 @@ public final class CheckUtils
      * @param topInv The top inventory that the player is viewing
      * @param shiftClick Mark if the click was a shift click or not
      */
-    private void triggerStonecutterUse(Player player, Inventory topInv, boolean shiftClick)
+    private static void triggerStonecutterUse(Simplestack plugin, Player player, Inventory topInv, boolean shiftClick)
     {
         new BukkitRunnable()
         {
@@ -301,7 +294,7 @@ public final class CheckUtils
      * @param clickedInventory The inventory that the player has clicked
      * @param rightClick Mark if the click was a right click or not to account for resulting in half of the output
      */
-    public void useSmithingCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean rightClick)
+    public static void useSmithingCheck(Simplestack plugin, Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean rightClick)
     {
         if(plugin.getMCVersion()[1] < 16) return;
         Sound sound = Sound.BLOCK_SMITHING_TABLE_USE;
@@ -320,7 +313,7 @@ public final class CheckUtils
      * @param rightClick Mark if the click was a right click or not to account for resulting in half of the output
      * @param sound The sound that will be played on use
      */
-    public void triggerAnvilSmithingUse(Player player, Inventory topInv, boolean rightClick, Sound sound)
+    public static void triggerAnvilSmithingUse(Player player, Inventory topInv, boolean rightClick, Sound sound)
     {
         ItemStack item1 = topInv.getItem(0);
         ItemStack item2 = topInv.getItem(1);
@@ -353,7 +346,7 @@ public final class CheckUtils
      *
      * @param topInv Player's top inventory that will be updated
      */
-    public void updateGUIManual(Inventory topInv)
+    public static void updateGUIManual(Simplestack plugin, Inventory topInv)
     {
         new BukkitRunnable()
         {
@@ -379,7 +372,7 @@ public final class CheckUtils
      *
      * @param topInv Player's top inventory that will be updated
      */
-    private void triggerAnvilSmithingUpdate(Inventory topInv)
+    private static void triggerAnvilSmithingUpdate(Inventory topInv)
     {
         ItemStack item1 = topInv.getItem(0);
         ItemStack item2 = topInv.getItem(1);
@@ -399,17 +392,17 @@ public final class CheckUtils
      * @param clickedInventory The clicked Inventory
      * @param clickType The clicktype for calculations
      */
-    public void useGUICheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, ClickType clickType)
+    public static void useGUICheck(Simplestack plugin, Player player, Inventory topInv, int slot, Inventory clickedInventory, ClickType clickType)
     {
         boolean shiftClick = clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT;
         boolean rightClick = clickType == ClickType.RIGHT;
         useAnvilCheck(player, topInv, slot, clickedInventory, rightClick);
-        useSmithingCheck(player, topInv, slot, clickedInventory, rightClick);
-        useStonecutterCheck(player, topInv, slot, clickedInventory, shiftClick);
-        useCraftingTableCheck(player, topInv, slot, clickedInventory, shiftClick);
-        useVillagerCheck(player, topInv, slot, clickedInventory, shiftClick);
+        useSmithingCheck(plugin, player, topInv, slot, clickedInventory, rightClick);
+        useStonecutterCheck(plugin, player, topInv, slot, clickedInventory, shiftClick);
+        useCraftingTableCheck(plugin, player, topInv, slot, clickedInventory, shiftClick);
+        useVillagerCheck(plugin, player, topInv, slot, clickedInventory, shiftClick);
         useGrindstoneCheck(player, topInv, slot, clickedInventory);
-        useBrewingCheck(player, topInv, slot, clickedInventory);
+        useBrewingCheck(plugin, player, topInv, slot, clickedInventory);
     }
 
     /**
@@ -421,14 +414,14 @@ public final class CheckUtils
      * @param slot The slot that has been clicked
      * @param clickedInventory The clicked inventory
      */
-    public void useGrindstoneCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory)
+    public static void useGrindstoneCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory)
     {
         if(!(clickedInventory instanceof GrindstoneInventory && slot == 2)) return;
         topInv.setItem(0, null);
         topInv.setItem(1, null);
     }
 
-    public void useBrewingCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory)
+    public static void useBrewingCheck(Simplestack plugin, Player player, Inventory topInv, int slot, Inventory clickedInventory)
     {
         if(!(clickedInventory instanceof BrewerInventory && slot <= 2)) return;
         new BukkitRunnable()
@@ -461,7 +454,7 @@ public final class CheckUtils
      * @param inItem1 The input item of the table
      * @param inItem2 The second input item of the table (possibly null)
      */
-    public void prepareSmithingAnvil(ItemStack result, ItemStack inItem1, ItemStack inItem2)
+    public static void prepareSmithingAnvil(ItemStack result, ItemStack inItem1, ItemStack inItem2)
     {
         if(inItem2 == null || result == null || inItem1 == null) return;
         if(inItem1.getAmount() < inItem2.getAmount())

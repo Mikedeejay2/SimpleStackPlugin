@@ -1,6 +1,8 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.util.CancelUtils;
+import com.mikedeejay2.simplestack.util.MoveUtils;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,19 +37,19 @@ public class InventoryDragListener implements Listener
         InventoryView inventoryView = event.getView();
         if(event.getInventory() instanceof BrewerInventory || event.getInventory() instanceof BeaconInventory) return;
         Player player = (Player) inventoryView.getPlayer();
-        if(plugin.cancelUtils().cancelPlayerCheck(player)) return;
+        if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
 
         ItemStack cursor = event.getOldCursor();
-        if(plugin.cancelUtils().cancelStackCheck(cursor)) return;
-        if(plugin.cancelUtils().cancelGUICheck(event.getInventory())) return;
+        if(CancelUtils.cancelStackCheck(plugin, cursor)) return;
+        if(CancelUtils.cancelGUICheck(plugin, event.getInventory())) return;
         GameMode gameMode = player.getGameMode();
         if(gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE)
         {
-            plugin.moveUtils().dragItemsSurvival(event, inventoryView, player, cursor);
+            MoveUtils.dragItemsSurvival(plugin, event, inventoryView, player, cursor);
         }
         else
         {
-            plugin.moveUtils().dragItemsCreative(event, inventoryView, player, cursor);
+            MoveUtils.dragItemsCreative(plugin, event, inventoryView, player, cursor);
         }
 
         player.updateInventory();

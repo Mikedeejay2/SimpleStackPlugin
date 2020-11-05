@@ -1,6 +1,8 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.util.CancelUtils;
+import com.mikedeejay2.simplestack.util.MoveUtils;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -31,13 +33,13 @@ public class BlockBreakListener implements Listener
     public void blockBreakEvent(BlockBreakEvent event)
     {
         Player player = event.getPlayer();
-        if(plugin.cancelUtils().cancelPlayerCheck(player)) return;
+        if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
         Block block = event.getBlock();
         if(!block.getType().toString().endsWith("SHULKER_BOX")) return;
 
-        boolean cancel = plugin.cancelUtils().cancelStackCheck((ItemStack) block.getDrops().toArray()[0]);
+        boolean cancel = CancelUtils.cancelStackCheck(plugin, (ItemStack) block.getDrops().toArray()[0]);
         if(cancel) return;
 
-        plugin.moveUtils().preserveShulkerBox(event, block);
+        MoveUtils.preserveShulkerBox(event, block);
     }
 }

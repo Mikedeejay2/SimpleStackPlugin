@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.listeners;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.util.MoveUtils;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,6 +31,6 @@ public class ItemMergeListener implements Listener
         event.setCancelled(true);
         ItemStack resultStack = resultItem.getItemStack();
         ItemStack targetStack = targetItem.getItemStack();
-        plugin.moveUtils().mergeItems(resultStack, targetStack);
+        MoveUtils.mergeItems(plugin, resultStack, targetStack);
     }
 }

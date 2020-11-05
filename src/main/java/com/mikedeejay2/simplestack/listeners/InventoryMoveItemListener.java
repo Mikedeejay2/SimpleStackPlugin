@@ -1,6 +1,8 @@
 package com.mikedeejay2.simplestack.listeners;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.util.CancelUtils;
+import com.mikedeejay2.simplestack.util.MoveUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -28,7 +30,7 @@ public class InventoryMoveItemListener implements Listener
     {
         ItemStack item = event.getItem();
 
-        boolean cancel = plugin.cancelUtils().cancelStackCheck(item);
+        boolean cancel = CancelUtils.cancelStackCheck(plugin, item);
         if(cancel) return;
         event.setCancelled(true);
 
@@ -41,7 +43,7 @@ public class InventoryMoveItemListener implements Listener
             @Override
             public void run()
             {
-                plugin.moveUtils().moveItemToInventory(item, fromInv, toInv, amountBeingMoved);
+                MoveUtils.moveItemToInventory(plugin, item, fromInv, toInv, amountBeingMoved);
             }
         }.runTaskLater(plugin, 0);
     }

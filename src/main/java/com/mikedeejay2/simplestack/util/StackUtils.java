@@ -1,19 +1,10 @@
 package com.mikedeejay2.simplestack.util;
 
 import com.mikedeejay2.simplestack.Simplestack;
-import org.bukkit.*;
 import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public final class StackUtils
 {
-    private final Simplestack plugin;
-
-    public StackUtils(Simplestack plugin)
-    {
-        this.plugin = plugin;
-    }
-
     /**
      * Returns whether the items between the player's cursor and the inventory slot
      * should switch or not. This needs to be checked because there are rare occasions
@@ -23,7 +14,7 @@ public final class StackUtils
      * @param slot Slot that was clicked
      * @return If items should switch or not
      */
-    public boolean shouldSwitch(Inventory inventory, int slot)
+    public static boolean shouldSwitch(Inventory inventory, int slot)
     {
         if(inventory instanceof StonecutterInventory && slot == 1) return false;
         return true;
@@ -36,7 +27,7 @@ public final class StackUtils
      * @param item The item to find the max amount for
      * @return The max amount for the item.
      */
-    public int getMaxAmount(ItemStack item)
+    public static int getMaxAmount(Simplestack plugin, ItemStack item)
     {
         return plugin.config().getAmount(item);
     }
