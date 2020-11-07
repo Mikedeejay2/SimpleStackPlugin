@@ -6,10 +6,10 @@ import com.mikedeejay2.mikedeejay2lib.gui.interact.normal.GUIInteractHandlerDefa
 import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.animation.GUIAnimationModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIAnimStrips;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIOutlineModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemCreator;
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.gui.modules.GUIConfigModule;
 import org.bukkit.Material;
 
 public class GUICreator
@@ -22,9 +22,11 @@ public class GUICreator
         GUIAnimationModule animation = new GUIAnimationModule(plugin, 1);
         GUIAnimStrips outlineModule = new GUIAnimStrips(getAnimItem());
         GUINavigatorModule naviModule = new GUINavigatorModule(plugin, "config");
+        GUIConfigModule configModule = new GUIConfigModule(plugin);
         gui.addModule(animation);
         gui.addModule(outlineModule);
         gui.addModule(naviModule);
+        gui.addModule(configModule);
         GUIInteractHandler handler = new GUIInteractHandlerDefault(64);
         gui.setInteractionHandler(handler);
 

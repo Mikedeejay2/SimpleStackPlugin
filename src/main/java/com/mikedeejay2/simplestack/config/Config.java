@@ -540,4 +540,9 @@ public class Config extends YamlFile
     {
         this.modified = modified;
     }
+
+    public void setMaxAmount(int maxAmount)
+    {
+        this.maxAmount = maxAmount;
+    }
 }
