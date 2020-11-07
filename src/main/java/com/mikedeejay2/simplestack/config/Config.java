@@ -295,6 +295,19 @@ public class Config extends YamlFile
         return super.updateFromJar(throwErrors);
     }
 
+    @Override
+    public boolean reload(boolean throwErrors)
+    {
+        if(modified)
+        {
+            return saveToDisk(true);
+        }
+        else
+        {
+            return super.reload(throwErrors);
+        }
+    }
+
     /**
      * Get the Material list's <tt>ListMode</tt>.
      * The list mode is either:
