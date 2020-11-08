@@ -557,5 +557,6 @@ public class Config extends YamlFile
     public void setMaxAmount(int maxAmount)
     {
         this.maxAmount = maxAmount;
+        setModified(true);
     }
 }

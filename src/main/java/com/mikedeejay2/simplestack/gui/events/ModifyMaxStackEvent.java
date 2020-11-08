@@ -54,6 +54,5 @@ public class ModifyMaxStackEvent implements GUIEvent
         }
         int amount = item.getAmount();
         config.setMaxAmount(amount);
-        config.setModified(true);
     }
 }
