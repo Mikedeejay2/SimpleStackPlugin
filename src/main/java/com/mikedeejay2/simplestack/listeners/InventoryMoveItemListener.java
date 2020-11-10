@@ -6,6 +6,7 @@ import com.mikedeejay2.simplestack.util.MoveUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -31,12 +32,15 @@ public class InventoryMoveItemListener implements Listener
         if(!plugin.config().isHopperMovement()) return;
         ItemStack item = event.getItem();
 
+        Inventory fromInv = event.getSource();
+        Inventory toInv = event.getDestination();
+        InventoryType invType = toInv.getType();
+        if(invType == InventoryType.BREWING) return;
+
         boolean cancel = CancelUtils.cancelStackCheck(plugin, item);
         if(cancel) return;
         event.setCancelled(true);
 
-        Inventory fromInv = event.getSource();
-        Inventory toInv = event.getDestination();
         int amountBeingMoved = item.getAmount();
 
 
