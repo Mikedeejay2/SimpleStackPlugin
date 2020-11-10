@@ -95,22 +95,32 @@ public final class MoveUtils
     public static void moveItemToInventory(Simplestack plugin, ItemStack item, Inventory fromInv, Inventory toInv, int amountBeingMoved)
     {
         int amountLeft = amountBeingMoved;
+        if(item.getType() == Material.AIR) return;
         item = item.clone();
         item.setAmount(amountBeingMoved);
         ItemStack origItem = item.clone();
-        Inventory inv = toInv;
-        for(int i = 0; i < inv.getSize(); i++)
+        boolean valid = false;
+        for(int i = 0; i < fromInv.getSize(); ++i)
         {
-            if(!combineItemInternal(plugin, item, inv, i)) continue;
+            ItemStack curItem = fromInv.getItem(i);
+            if(curItem == null) continue;
+            if(!ItemComparison.equalsEachOther(origItem, curItem) && item.getAmount() >= origItem.getAmount()) continue;
+            valid = true;
+            break;
+        }
+        if(!valid) return;
+        for(int i = 0; i < toInv.getSize(); ++i)
+        {
+            if(!combineItemInternal(plugin, item, toInv, i)) continue;
             amountLeft -= item.getAmount();
             break;
         }
         if(amountBeingMoved != 0)
         {
-            for(int i = 0; i < inv.getSize(); i++)
+            for(int i = 0; i < toInv.getSize(); i++)
             {
-                if(inv.getItem(i) != null) continue;
-                inv.setItem(i, item);
+                if(toInv.getItem(i) != null) continue;
+                toInv.setItem(i, item);
                 amountLeft = 0;
                 break;
             }
@@ -128,23 +138,24 @@ public final class MoveUtils
      */
     public static void removeItemFromInventory(ItemStack item, Inventory inv, int amount)
     {
+        int newAmount = amount;
         for(int i = 0; i < inv.getSize(); i++)
         {
             ItemStack curItem = inv.getItem(i);
             if(curItem == null) continue;
             if(!ItemComparison.equalsEachOther(curItem, item)) continue;
-            if(amount > curItem.getAmount())
+            if(newAmount > curItem.getAmount())
             {
-                amount -= curItem.getAmount();
+                newAmount -= curItem.getAmount();
                 curItem.setAmount(0);
             }
             else
             {
-                curItem.setAmount(curItem.getAmount() - amount);
-                amount = 0;
+                curItem.setAmount(curItem.getAmount() - newAmount);
+                newAmount = 0;
             }
             inv.setItem(i, curItem);
-            if(amount == 0) break;
+            if(newAmount == 0) break;
         }
     }
 
