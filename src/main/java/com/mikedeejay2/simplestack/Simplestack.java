@@ -30,7 +30,7 @@ public final class Simplestack extends PluginBase
         this.commandManager.addSubcommand(new ReloadCommand(this));
         this.commandManager.addSubcommand(new ResetCommand(this));
         this.commandManager.addSubcommand(new SetAmountCommand(this));
-        this.commandManager.addSubcommand(new ConfigCommand(this));
+//        this.commandManager.addSubcommand(new ConfigCommand(this));
 //        this.commandManager.addSubcommand(new AddItemCommand(this));
 //        this.commandManager.addSubcommand(new RemoveItemCommand(this));
 

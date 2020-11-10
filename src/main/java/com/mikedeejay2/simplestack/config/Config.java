@@ -21,6 +21,7 @@ public class Config extends YamlFile
     private Map<Material, Integer> itemAmounts;
     private List<ItemStack> uniqueItemList;
     private int maxAmount;
+    private boolean hopperMovement;
 
     // Internal config data
     private JsonFile uniqueItems;
@@ -50,8 +51,14 @@ public class Config extends YamlFile
         loadMaterialList();
         loadItemList();
         loadItemAmounts();
+        loadHopperMovement();
 
         loaded = true;
+    }
+
+    private void loadHopperMovement()
+    {
+        hopperMovement = accessor.getBoolean("Hopper Movement Checks");
     }
 
     private void loadDefaultAmount()
@@ -557,6 +564,17 @@ public class Config extends YamlFile
     public void setMaxAmount(int maxAmount)
     {
         this.maxAmount = maxAmount;
+        setModified(true);
+    }
+
+    public boolean isHopperMovement()
+    {
+        return hopperMovement;
+    }
+
+    public void setHopperMovement(boolean hopperMovement)
+    {
+        this.hopperMovement = hopperMovement;
         setModified(true);
     }
 }

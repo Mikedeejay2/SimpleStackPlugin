@@ -28,6 +28,7 @@ public class InventoryMoveItemListener implements Listener
     @EventHandler
     public void inventoryMoveItemEvent(InventoryMoveItemEvent event)
     {
+        if(!plugin.config().isHopperMovement()) return;
         ItemStack item = event.getItem();
 
         boolean cancel = CancelUtils.cancelStackCheck(plugin, item);

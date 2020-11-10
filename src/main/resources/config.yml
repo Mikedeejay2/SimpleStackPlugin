@@ -29,3 +29,8 @@ Language: en_us
 # Default Max Amount: Set the default max amount for ALL items in Minecraft
 # This setting could be dangerous, do proper testing before changing this value.
 Default Max Amount: 64
+
+# Hopper Movement Checks: Hoppers will attempt to stack unstackable items together.
+# Setting this to false will stop hopper checks which could increase performance but will
+# Stop stacking of unstackables when moving through hoppers.
+Hopper Movement Checks: true
