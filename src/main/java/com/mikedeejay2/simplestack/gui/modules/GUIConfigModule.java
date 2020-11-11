@@ -30,8 +30,8 @@ public class GUIConfigModule extends GUIModule
 
         GUIItem itemTypeList = getGUIItemItemTypeList();
         GUIItem uniqueItemList = getGUIItemUniqueItemList();
-        GUIItem defaultMaxAmount = getGUIItemDefaultMaxAmount(config);
         GUIItem language = getGUIItemLanguage();
+        GUIItem defaultMaxAmount = getGUIItemDefaultMaxAmount(config);
         GUIItem hopperMovement = getGUIItemHopperMovement(config);
 
         layer.setItem(3, 3, itemTypeList);
@@ -69,7 +69,7 @@ public class GUIConfigModule extends GUIModule
 
     private GUIItem getGUIItemDefaultMaxAmount(Config config)
     {
-        GUIItem defaultMaxAmount = new GUIItem(ItemCreator.createItem(Material.POTION, config.getMaxAmount(),
+        GUIItem defaultMaxAmount = new GUIItem(ItemCreator.createItem(Material.BOOK, config.getMaxAmount(),
                 "&fDefault Max Amount",
                 "&7Sets the default maximum stack amount",
                 "&7for ALL items in Minecraft",
@@ -82,13 +82,13 @@ public class GUIConfigModule extends GUIModule
 
     private GUIItem getGUIItemUniqueItemList()
     {
-        return new GUIItem(ItemCreator.createItem(Material.BLUE_CONCRETE, 1,
-                    "&fUnique Item List"));
+        return new GUIItem(ItemCreator.createItem(Material.DIAMOND_AXE, 1,
+                "&fUnique Item List"));
     }
 
     private GUIItem getGUIItemItemTypeList()
     {
-        return new GUIItem(ItemCreator.createItem(Material.STONE, 1,
-                    "&fItem Type List"));
+        return new GUIItem(ItemCreator.createItem(Material.ENDER_PEARL, 1,
+                "&fItem Type List"));
     }
 }
