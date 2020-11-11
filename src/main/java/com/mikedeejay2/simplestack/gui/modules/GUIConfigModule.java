@@ -2,12 +2,14 @@ package com.mikedeejay2.simplestack.gui.modules;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
-import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
+import com.mikedeejay2.mikedeejay2lib.util.head.Base64Heads;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemCreator;
 import com.mikedeejay2.simplestack.Simplestack;
-import com.mikedeejay2.simplestack.gui.events.ModifyMaxStackEvent;
+import com.mikedeejay2.simplestack.config.Config;
+import com.mikedeejay2.simplestack.gui.events.GUIHopperMovementEvent;
+import com.mikedeejay2.simplestack.gui.events.GUIMaxStackEvent;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -24,19 +26,69 @@ public class GUIConfigModule extends GUIModule
     public void onOpenHead(Player player, GUIContainer gui)
     {
         GUILayer layer = gui.getLayer(0);
-        GUIItem itemTypeList = new GUIItem(ItemCreator.createItem(Material.PISTON, 1, "Item Type List"));
-        GUIItem uniqueItemList = new GUIItem(ItemCreator.createItem(Material.CYAN_CONCRETE_POWDER, 1, "Unique Item List"));
-        GUIItem language = new GUIItem(ItemCreator.createItem(Material.BLUE_CONCRETE, 1, "Default Language"));
-        GUIItem defaultMaxAmount = new GUIItem(ItemCreator.createItem(Material.RED_CONCRETE, plugin.config().getMaxAmount(),
-                "Default Max Amount",
-                "Sets the default maximum stack amount",
-                " for ALL items in Minecraft"));
-        GUIEvent maxAmountEvent = new ModifyMaxStackEvent(plugin);
-        defaultMaxAmount.addEvent(maxAmountEvent);
+        Config config = plugin.config();
 
-        layer.setItem(3, 4, itemTypeList);
-        layer.setItem(3, 5, uniqueItemList);
-        layer.setItem(4, 5, language);
+        GUIItem itemTypeList = getGUIItemItemTypeList();
+        GUIItem uniqueItemList = getGUIItemUniqueItemList();
+        GUIItem defaultMaxAmount = getGUIItemDefaultMaxAmount(config);
+        GUIItem language = getGUIItemLanguage();
+        GUIItem hopperMovement = getGUIItemHopperMovement(config);
+
+        layer.setItem(3, 3, itemTypeList);
+        layer.setItem(3, 4, uniqueItemList);
+        layer.setItem(3, 5, language);
         layer.setItem(3, 6, defaultMaxAmount);
+        layer.setItem(3, 7, hopperMovement);
+    }
+
+    private GUIItem getGUIItemHopperMovement(Config config)
+    {
+        GUIItem hopperMovement = new GUIItem(null);
+        if(config.isHopperMovement())
+        {
+            hopperMovement.setItem(ItemCreator.createHeadItem(Base64Heads.GREEN, 1,
+                    "&fStack Hopper Movements",
+                    "&aEnabled"));
+        }
+        else
+        {
+            hopperMovement.setItem(ItemCreator.createHeadItem(Base64Heads.RED, 1,
+                    "&fStack Hopper Movements",
+                    "&cDisabled"));
+        }
+        GUIHopperMovementEvent hopperMovementEvent = new GUIHopperMovementEvent(plugin);
+        hopperMovement.addEvent(hopperMovementEvent);
+        return hopperMovement;
+    }
+
+    private GUIItem getGUIItemLanguage()
+    {
+        return new GUIItem(ItemCreator.createHeadItem(Base64Heads.GLOBE, 1,
+                    "&fDefault Language"));
+    }
+
+    private GUIItem getGUIItemDefaultMaxAmount(Config config)
+    {
+        GUIItem defaultMaxAmount = new GUIItem(ItemCreator.createItem(Material.POTION, config.getMaxAmount(),
+                "&fDefault Max Amount",
+                "&7Sets the default maximum stack amount",
+                "&7for ALL items in Minecraft",
+                "&7Left click to decrease the max amount",
+                "&7Right click to increase the max amount"));
+        GUIMaxStackEvent maxAmountEvent = new GUIMaxStackEvent(plugin);
+        defaultMaxAmount.addEvent(maxAmountEvent);
+        return defaultMaxAmount;
+    }
+
+    private GUIItem getGUIItemUniqueItemList()
+    {
+        return new GUIItem(ItemCreator.createItem(Material.BLUE_CONCRETE, 1,
+                    "&fUnique Item List"));
+    }
+
+    private GUIItem getGUIItemItemTypeList()
+    {
+        return new GUIItem(ItemCreator.createItem(Material.STONE, 1,
+                    "&fItem Type List"));
     }
 }

@@ -9,11 +9,11 @@ import com.mikedeejay2.simplestack.config.Config;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class ModifyMaxStackEvent implements GUIEvent
+public class GUIMaxStackEvent implements GUIEvent
 {
     private final Simplestack plugin;
 
-    public ModifyMaxStackEvent(Simplestack plugin)
+    public GUIMaxStackEvent(Simplestack plugin)
     {
         this.plugin = plugin;
     }
