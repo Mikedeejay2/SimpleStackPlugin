@@ -37,6 +37,10 @@
                 <updatePolicy>always</updatePolicy>
             </snapshots>
         </repository>
+        <repository>
+            <id>CodeMC</id>
+            <url>https://repo.codemc.org/repository/maven-public</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -56,6 +60,11 @@
             <groupId>com.mikedeejay2</groupId>
             <artifactId>mikedeejay2lib</artifactId>
             <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>1.7</version>
         </dependency>
     </dependencies>
 
@@ -95,8 +104,11 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.mikedeejay2.mikedeejay2lib</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.internal.mikedeejay2lib
-                                    </shadedPattern>
+                                    <shadedPattern>${project.groupId}.${project.artifactId}.internal.mikedeejay2lib</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>${project.groupId}.${project.artifactId}.internal.bstats</shadedPattern>
                                 </relocation>
                             </relocations>
                             <minimizeJar>true</minimizeJar>
