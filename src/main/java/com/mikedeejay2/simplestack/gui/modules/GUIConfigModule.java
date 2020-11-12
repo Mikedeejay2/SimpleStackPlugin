@@ -2,12 +2,18 @@ package com.mikedeejay2.simplestack.gui.modules;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
+import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUIOpenNewEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIListModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.animation.GUIAnimationModule;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIBorderModule;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Heads;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemCreator;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
+import com.mikedeejay2.simplestack.gui.GUICreator;
 import com.mikedeejay2.simplestack.gui.events.GUIHopperMovementEvent;
 import com.mikedeejay2.simplestack.gui.events.GUIMaxStackEvent;
 import org.bukkit.Material;
@@ -63,8 +69,22 @@ public class GUIConfigModule extends GUIModule
 
     private GUIItem getGUIItemLanguage()
     {
-        return new GUIItem(ItemCreator.createHeadItem(Base64Heads.GLOBE, 1,
-                    "&fDefault Language"));
+        GUIItem language = new GUIItem(ItemCreator.createHeadItem(Base64Heads.GLOBE, 1,
+                "&fDefault Language"));
+        language.addEvent(new GUIOpenNewEvent(plugin, () -> {
+            GUIContainer langListGUI = new GUIContainer(plugin, "Change Language...", 5);
+            GUIBorderModule border = new GUIBorderModule();
+            langListGUI.addModule(border);
+            GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
+            langListGUI.addModule(navi);
+            GUIListModule langList = new GUIListModule(plugin);
+            langListGUI.addModule(langList);
+            langList.setGUIItems(GUICreator.getLanguageList(plugin));
+            GUIAnimationModule animModule = new GUIAnimationModule(plugin, 10);
+            langListGUI.addModule(animModule);
+            return langListGUI;
+        }));
+        return language;
     }
 
     private GUIItem getGUIItemDefaultMaxAmount(Config config)

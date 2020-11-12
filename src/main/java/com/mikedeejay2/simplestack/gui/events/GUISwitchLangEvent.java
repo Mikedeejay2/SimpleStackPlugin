@@ -1,0 +1,47 @@
+package com.mikedeejay2.simplestack.gui.events;
+
+import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
+import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
+import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEvent;
+import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
+import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIListModule;
+import com.mikedeejay2.mikedeejay2lib.util.item.ItemCreator;
+import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.config.Config;
+import com.mikedeejay2.simplestack.gui.GUICreator;
+import org.bukkit.Material;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class GUISwitchLangEvent implements GUIEvent
+{
+    private final Simplestack plugin;
+    private String locale;
+
+    public GUISwitchLangEvent(Simplestack plugin, String locale)
+    {
+        this.plugin = plugin;
+        this.locale = locale;
+    }
+
+    @Override
+    public void execute(InventoryClickEvent event, GUIContainer gui)
+    {
+        Config config = plugin.config();
+        config.setLangLocale(locale);
+        GUIListModule listModule = gui.getModule(GUIListModule.class);
+        List<GUIItem> langItems = GUICreator.getLanguageList(plugin);
+        listModule.setGUIItems(langItems);
+    }
+
+    public String getLocale()
+    {
+        return locale;
+    }
+}
