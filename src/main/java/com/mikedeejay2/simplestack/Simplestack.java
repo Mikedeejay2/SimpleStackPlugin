@@ -24,6 +24,8 @@ public final class Simplestack extends PluginBase
     {
         super.onEnable();
 
+        this.bStats.init(9379);
+
         this.commandManager.setup("simplestack");
 
         this.commandManager.addSubcommand(new HelpCommand(this));
