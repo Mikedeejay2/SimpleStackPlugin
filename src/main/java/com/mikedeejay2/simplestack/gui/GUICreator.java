@@ -135,7 +135,7 @@ public class GUICreator
 
         newLangItem.addFrame(curItem, 10);
         String[] lore = curItemMeta.getLore().toArray(new String[0]);
-        newLangItem.addFrame(ItemCreator.createItem(Material.YELLOW_STAINED_GLASS_PANE, 1, curItemMeta.getDisplayName(), lore), 10);
+        newLangItem.addFrame(ItemCreator.createHeadItem(Base64Heads.CONCRETE_LIME, 1, curItemMeta.getDisplayName(), lore), 10);
         items.remove(index);
         items.add(index, newLangItem);
         return items;
