@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 public class EntityPickupItemListener implements Listener
@@ -32,6 +33,7 @@ public class EntityPickupItemListener implements Listener
     public void entityPickupItemEvent(EntityPickupItemEvent event)
     {
         LivingEntity entity = event.getEntity();
+        if(!(entity instanceof InventoryHolder)) return;
         if(entity instanceof Player)
         {
             Player player = (Player)event.getEntity();
