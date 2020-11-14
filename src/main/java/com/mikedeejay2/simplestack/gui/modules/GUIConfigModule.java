@@ -30,10 +30,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GUIConfigModule extends GUIModule
 {
@@ -171,7 +168,9 @@ public class GUIConfigModule extends GUIModule
     private GUIItem getGUIItemLanguage()
     {
         GUIItem language = new GUIItem(ItemCreator.createHeadItem(Base64Heads.GLOBE, 1,
-                "&fDefault Language"));
+                "&fDefault Language",
+                "&7Click to select a new language",
+                "&7Currently selected: " + plugin.config().getLangLocale()));
         language.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, "Change Language...", 5);
             GUIBorderModule border = new GUIBorderModule();
