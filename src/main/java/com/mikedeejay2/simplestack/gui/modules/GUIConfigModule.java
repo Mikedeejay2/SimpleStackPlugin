@@ -109,7 +109,7 @@ public class GUIConfigModule extends GUIModule
                 itemMeta.setDisplayName(itemTypeAmountList.getName());
                 itemMeta.setLore(itemTypeAmountList.getLore());
                 item.setItemMeta(itemMeta);
-                itemTypeAmountList.addFrame(item, 10);
+                itemTypeAmountList.addFrame(item, 20);
             }
         }
         itemTypeAmountList.addEvent(new GUIOpenNewEvent(plugin, () -> {
@@ -227,7 +227,7 @@ public class GUIConfigModule extends GUIModule
                 itemMeta.setDisplayName(uniqueItemList.getName());
                 itemMeta.setLore(uniqueItemList.getLore());
                 newItem.setItemMeta(itemMeta);
-                uniqueItemList.addFrame(newItem, 10);
+                uniqueItemList.addFrame(newItem, 20);
             }
         }
         uniqueItemList.addEvent(new GUIOpenNewEvent(plugin, () -> {
@@ -286,7 +286,7 @@ public class GUIConfigModule extends GUIModule
                 itemMeta.setDisplayName(itemTypeList.getName());
                 itemMeta.setLore(itemTypeList.getLore());
                 item.setItemMeta(itemMeta);
-                itemTypeList.addFrame(item, 10);
+                itemTypeList.addFrame(item, 20);
             }
         }
         itemTypeList.addEvent(new GUIOpenNewEvent(plugin, () -> {
