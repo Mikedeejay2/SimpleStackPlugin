@@ -577,4 +577,21 @@ public class Config extends YamlFile
         this.hopperMovement = hopperMovement;
         setModified(true);
     }
+
+    public List<ItemStack> getUniqueItemList()
+    {
+        return uniqueItemList;
+    }
+
+    public void setMaterialList(List<Material> materialList)
+    {
+        this.materialList = materialList;
+        setModified(true);
+    }
+
+    public void setUniqueItemList(List<ItemStack> uniqueItemList)
+    {
+        this.uniqueItemList = uniqueItemList;
+        setModified(true);
+    }
 }

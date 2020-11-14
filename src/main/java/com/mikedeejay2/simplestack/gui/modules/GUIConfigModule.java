@@ -3,6 +3,10 @@ package com.mikedeejay2.simplestack.gui.modules;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
 import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUIOpenNewEvent;
+import com.mikedeejay2.mikedeejay2lib.gui.interact.GUIInteractHandler;
+import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractExecutorList;
+import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractExecutorListSI;
+import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractHandlerList;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIListModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
@@ -18,6 +22,9 @@ import com.mikedeejay2.simplestack.gui.events.GUIHopperMovementEvent;
 import com.mikedeejay2.simplestack.gui.events.GUIMaxStackEvent;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 public class GUIConfigModule extends GUIModule
 {
@@ -72,17 +79,17 @@ public class GUIConfigModule extends GUIModule
         GUIItem language = new GUIItem(ItemCreator.createHeadItem(Base64Heads.GLOBE, 1,
                 "&fDefault Language"));
         language.addEvent(new GUIOpenNewEvent(plugin, () -> {
-            GUIContainer langListGUI = new GUIContainer(plugin, "Change Language...", 5);
+            GUIContainer gui = new GUIContainer(plugin, "Change Language...", 5);
             GUIBorderModule border = new GUIBorderModule();
-            langListGUI.addModule(border);
+            gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
-            langListGUI.addModule(navi);
+            gui.addModule(navi);
             GUIListModule langList = new GUIListModule(plugin);
-            langListGUI.addModule(langList);
+            gui.addModule(langList);
             langList.setGUIItems(GUICreator.getLanguageList(plugin));
             GUIAnimationModule animModule = new GUIAnimationModule(plugin, 10);
-            langListGUI.addModule(animModule);
-            return langListGUI;
+            gui.addModule(animModule);
+            return gui;
         }));
         return language;
     }
@@ -102,8 +109,34 @@ public class GUIConfigModule extends GUIModule
 
     private GUIItem getGUIItemUniqueItemList()
     {
-        return new GUIItem(ItemCreator.createItem(Material.DIAMOND_AXE, 1,
+        GUIItem uniqueItemList = new GUIItem(ItemCreator.createItem(Material.DIAMOND_AXE, 1,
                 "&fUnique Item List"));
+        uniqueItemList.addEvent(new GUIOpenNewEvent(plugin, () -> {
+            GUIContainer gui = new GUIContainer(plugin, "Unique Item List", 6);
+            GUIBorderModule border = new GUIBorderModule();
+            gui.addModule(border);
+            GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
+            gui.addModule(navi);
+            GUIListModule listModule = new GUIListModule(plugin);
+            listModule.addEndItem(new GUIItem(null));
+            List<ItemStack> uniqueItems = plugin.config().getUniqueItemList();
+            for(ItemStack item : uniqueItems)
+            {
+                GUIItem guiItem = new GUIItem(item);
+                guiItem.setMovable(true);
+                listModule.addListItem(guiItem);
+            }
+            gui.addModule(listModule);
+            GUIInteractHandler interaction = new GUIInteractHandlerList(64);
+            interaction.removeExecutor(GUIInteractExecutorList.class);
+            interaction.addExecutor(new GUIInteractExecutorListSI(64));
+            gui.setDefaultMoveState(true);
+            gui.setInteractionHandler(interaction);
+            GUIUniqueItemListModule uniqueItemModule = new GUIUniqueItemListModule(plugin);
+            gui.addModule(uniqueItemModule);
+            return gui;
+        }));
+        return uniqueItemList;
     }
 
     private GUIItem getGUIItemItemTypeList()
