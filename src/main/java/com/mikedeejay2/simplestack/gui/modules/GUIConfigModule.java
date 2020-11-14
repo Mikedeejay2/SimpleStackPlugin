@@ -2,6 +2,7 @@ package com.mikedeejay2.simplestack.gui.modules;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
+import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUICloseEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUIOpenNewEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.GUIInteractHandler;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractExecutorList;
@@ -43,16 +44,35 @@ public class GUIConfigModule extends GUIModule
         Config config = plugin.config();
 
         GUIItem itemTypeList = getGUIItemItemTypeList();
+        GUIItem itemTypeAmountList = getGUIItemItemTypeAmountList();
         GUIItem uniqueItemList = getGUIItemUniqueItemList();
         GUIItem language = getGUIItemLanguage();
         GUIItem defaultMaxAmount = getGUIItemDefaultMaxAmount(config);
         GUIItem hopperMovement = getGUIItemHopperMovement(config);
 
-        layer.setItem(3, 3, itemTypeList);
-        layer.setItem(3, 4, uniqueItemList);
-        layer.setItem(3, 5, language);
-        layer.setItem(3, 6, defaultMaxAmount);
-        layer.setItem(3, 7, hopperMovement);
+        layer.setItem(2, 3, itemTypeList);
+        layer.setItem(2, 4, itemTypeAmountList);
+        layer.setItem(2, 5, uniqueItemList);
+        layer.setItem(2, 6, language);
+        layer.setItem(2, 7, defaultMaxAmount);
+        layer.setItem(3, 3, hopperMovement);
+
+        GUIItem closeItem = getGUIItemCloseItem();
+        layer.setItem(5, 5, closeItem);
+    }
+
+    private GUIItem getGUIItemCloseItem()
+    {
+        GUIItem closeItem = new GUIItem(ItemCreator.createHeadItem(Base64Heads.X_RED, 1, "&fClose this menu"));
+        closeItem.addEvent(new GUICloseEvent(plugin));
+        return closeItem;
+    }
+
+    private GUIItem getGUIItemItemTypeAmountList()
+    {
+        GUIItem itemTypeAmountList = new GUIItem(ItemCreator.createItem(Material.WATER_BUCKET, 23,
+                "&fItem Type Amounts List"));
+        return itemTypeAmountList;
     }
 
     private GUIItem getGUIItemHopperMovement(Config config)
