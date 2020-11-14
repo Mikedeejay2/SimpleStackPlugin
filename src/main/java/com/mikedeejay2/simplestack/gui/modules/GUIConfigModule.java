@@ -162,7 +162,7 @@ public class GUIConfigModule extends GUIModule
 
     private GUIItem getGUIItemUniqueItemList()
     {
-        GUIItem uniqueItemList = new GUIItem(ItemCreator.createItem(Material.DIAMOND_AXE, 1,
+        GUIItem uniqueItemList = new GUIItem(ItemCreator.createItem(Material.CYAN_CONCRETE_POWDER, 1,
                 "&fUnique Item List"));
         uniqueItemList.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, "Unique Item List", 6);
