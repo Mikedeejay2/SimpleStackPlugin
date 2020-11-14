@@ -16,6 +16,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.animation.GUIAnimationModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIBorderModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
+import com.mikedeejay2.mikedeejay2lib.util.chat.Chat;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Heads;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemCreator;
 import com.mikedeejay2.simplestack.Simplestack;
@@ -23,11 +24,13 @@ import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.gui.GUICreator;
 import com.mikedeejay2.simplestack.gui.events.GUIHopperMovementEvent;
 import com.mikedeejay2.simplestack.gui.events.GUIMaxStackEvent;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +38,8 @@ import java.util.Map;
 public class GUIConfigModule extends GUIModule
 {
     private final Simplestack plugin;
+    protected final int LIST_ANIM_AMOUNT = 8;
+    protected final int LIST_PREVIEW_AMOUNT = 5;
 
     public GUIConfigModule(Simplestack plugin)
     {
@@ -79,10 +84,26 @@ public class GUIConfigModule extends GUIModule
         final Map<Material, Integer> itemAmounts = plugin.config().getItemAmounts();
         if(itemAmounts.size() > 0)
         {
-            Iterator<Map.Entry<Material, Integer>> iter = itemAmounts.entrySet().iterator();
-            for(int i = 0; i < Math.min(8, itemAmounts.size()); ++i)
+            Iterator<Map.Entry<Material, Integer>> iter1 = itemAmounts.entrySet().iterator();
+            List<String> lore = itemTypeAmountList.getLore() == null ? new ArrayList<>() : itemTypeAmountList.getLore();
+            for(int i = 0; i < Math.min(LIST_PREVIEW_AMOUNT, itemAmounts.size()); ++i)
             {
-                Map.Entry<Material, Integer> entry = iter.next();
+                Map.Entry<Material, Integer> entry = iter1.next();
+                Material material = entry.getKey();
+                if(material == null) continue;
+                int amount = entry.getValue();
+                String name = WordUtils.capitalize(material.toString().replace("_", " ").toLowerCase());
+                lore.add(Chat.chat("&7" + name + " x" + amount));
+            }
+            if(itemAmounts.size() > LIST_PREVIEW_AMOUNT)
+            {
+                lore.add(Chat.chat("&7and " + (itemAmounts.size() - LIST_PREVIEW_AMOUNT) + " more..."));
+            }
+            itemTypeAmountList.setLore(lore);
+            Iterator<Map.Entry<Material, Integer>> iter2 = itemAmounts.entrySet().iterator();
+            for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, itemAmounts.size()); ++i)
+            {
+                Map.Entry<Material, Integer> entry = iter2.next();
                 Material material = entry.getKey();
                 if(material == null) continue;
                 int amount = entry.getValue();
@@ -187,7 +208,19 @@ public class GUIConfigModule extends GUIModule
         final List<ItemStack> uniqueItems = plugin.config().getUniqueItemList();
         if(uniqueItems.size() > 0)
         {
-            for(int i = 0; i < Math.min(8, uniqueItems.size()); ++i)
+            List<String> lore = uniqueItemList.getLore() == null ? new ArrayList<>() : uniqueItemList.getLore();
+            for(int i = 0; i < Math.min(LIST_PREVIEW_AMOUNT, uniqueItems.size()); ++i)
+            {
+                ItemStack item = uniqueItems.get(i);
+                String name = WordUtils.capitalize(item.getType().toString().replace("_", " ").toLowerCase());
+                lore.add(Chat.chat("&7" + name));
+            }
+            if(uniqueItems.size() > LIST_PREVIEW_AMOUNT)
+            {
+                lore.add(Chat.chat("&7and " + (uniqueItems.size() - LIST_PREVIEW_AMOUNT) + " more..."));
+            }
+            uniqueItemList.setLore(lore);
+            for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, uniqueItems.size()); ++i)
             {
                 ItemStack item = uniqueItems.get(i);
                 ItemStack newItem = item.clone();
@@ -234,7 +267,19 @@ public class GUIConfigModule extends GUIModule
         final List<Material> materialItems = plugin.config().getMaterialList();
         if(materialItems.size() > 0)
         {
-            for(int i = 0; i < Math.min(8, materialItems.size()); ++i)
+            List<String> lore = itemTypeList.getLore() == null ? new ArrayList<>() : itemTypeList.getLore();
+            for(int i = 0; i < Math.min(LIST_PREVIEW_AMOUNT, materialItems.size()); ++i)
+            {
+                Material material = materialItems.get(i);
+                String name = WordUtils.capitalize(material.toString().replace("_", " ").toLowerCase());
+                lore.add(Chat.chat("&7" + name));
+            }
+            if(materialItems.size() > LIST_PREVIEW_AMOUNT)
+            {
+                lore.add(Chat.chat("&7and " + (materialItems.size() - LIST_PREVIEW_AMOUNT) + " more..."));
+            }
+            itemTypeList.setLore(lore);
+            for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, materialItems.size()); ++i)
             {
                 Material material = materialItems.get(i);
                 ItemStack item = new ItemStack(material);
