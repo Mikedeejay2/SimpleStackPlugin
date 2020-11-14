@@ -129,6 +129,7 @@ public class Config extends YamlFile
                 plugin.getLogger().warning(plugin.langManager().getText("simplestack.warnings.invalid_material", new String[]{"MAT"}, new String[]{mat}));
                 continue;
             }
+            if(material == null) continue;
             materialList.add(material);
         }
     }
@@ -244,7 +245,13 @@ public class Config extends YamlFile
         if(loaded)
         {
             accessor.setString("List Mode", listMode == ListMode.BLACKLIST ? "Blacklist" : "Whitelist");
-            accessor.setMaterialList("Item Types", materialList);
+            List<String> materials = new ArrayList<>();
+            for(Material material : materialList)
+            {
+                if(material == null) continue;
+                materials.add(material.toString());
+            }
+            accessor.setStringList("Item Types", materials);
             accessor.setString("Language", langLocale);
             accessor.setInt("Default Max Amount", maxAmount);
 
@@ -585,7 +592,12 @@ public class Config extends YamlFile
 
     public void setMaterialList(List<Material> materialList)
     {
-        this.materialList = materialList;
+        this.materialList.clear();
+        for(Material material : materialList)
+        {
+            if(material == null) continue;
+            this.materialList.add(material);
+        }
         setModified(true);
     }
 

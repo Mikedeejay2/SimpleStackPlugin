@@ -45,7 +45,7 @@ public class GUIItemTypeListModule extends GUIModule
     }
 
     @Override
-    public void onClickedTail(InventoryClickEvent event, GUIContainer gui)
+    public void onClose(Player player, GUIContainer gui)
     {
         GUIListModule list = gui.getModule(GUIListModule.class);
         List<GUIItem> listItems = list.getList();

@@ -5,6 +5,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIListModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
 import com.mikedeejay2.simplestack.Simplestack;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -21,7 +22,7 @@ public class GUIUniqueItemListModule extends GUIModule
     }
 
     @Override
-    public void onClickedTail(InventoryClickEvent event, GUIContainer gui)
+    public void onClose(Player player, GUIContainer gui)
     {
         GUIListModule list = gui.getModule(GUIListModule.class);
         List<GUIItem> listItems = list.getList();
