@@ -606,4 +606,10 @@ public class Config extends YamlFile
         this.uniqueItemList = uniqueItemList;
         setModified(true);
     }
+
+    public void setItemAmounts(Map<Material, Integer> itemAmounts)
+    {
+        this.itemAmounts = itemAmounts;
+        setModified(true);
+    }
 }

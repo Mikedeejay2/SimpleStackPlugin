@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Map;
 
 public class GUIConfigModule extends GUIModule
 {
@@ -72,6 +73,37 @@ public class GUIConfigModule extends GUIModule
     {
         GUIItem itemTypeAmountList = new GUIItem(ItemCreator.createItem(Material.WATER_BUCKET, 23,
                 "&fItem Type Amounts List"));
+        itemTypeAmountList.addEvent(new GUIOpenNewEvent(plugin, () -> {
+            GUIContainer gui = new GUIContainer(plugin, "Item Type Amounts List", 6);
+            GUIBorderModule border = new GUIBorderModule();
+            gui.addModule(border);
+            GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
+            gui.addModule(navi);
+            GUIListModule listModule = new GUIListModule(plugin);
+            GUIItem padItem = new GUIItem(null);
+            padItem.setMovable(true);
+            listModule.addEndItem(padItem);
+            Map<Material, Integer> itemAmounts = plugin.config().getItemAmounts();
+            for(Map.Entry<Material, Integer> entry : itemAmounts.entrySet())
+            {
+                Material material = entry.getKey();
+                if(material == null) continue;
+                int amount = entry.getValue();
+                ItemStack item = new ItemStack(material, amount);
+                GUIItem guiItem = new GUIItem(item);
+                guiItem.setMovable(true);
+                listModule.addListItem(guiItem);
+            }
+            gui.addModule(listModule);
+            GUIInteractHandler interaction = new GUIInteractHandlerList(64);
+            interaction.removeExecutor(GUIInteractExecutorList.class);
+            interaction.addExecutor(new GUIInteractExecutorListSM(64));
+            gui.setDefaultMoveState(true);
+            gui.setInteractionHandler(interaction);
+            GUIItemTypeAmountModule itemTypeAmountModule = new GUIItemTypeAmountModule(plugin);
+            gui.addModule(itemTypeAmountModule);
+            return gui;
+        }));
         return itemTypeAmountList;
     }
 
