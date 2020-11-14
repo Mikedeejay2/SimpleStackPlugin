@@ -6,6 +6,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUIOpenNewEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.GUIInteractHandler;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractExecutorList;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractExecutorListSI;
+import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractExecutorListSM;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractHandlerList;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIListModule;
@@ -118,7 +119,9 @@ public class GUIConfigModule extends GUIModule
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
             gui.addModule(navi);
             GUIListModule listModule = new GUIListModule(plugin);
-            listModule.addEndItem(new GUIItem(null));
+            GUIItem padItem = new GUIItem(null);
+            padItem.setMovable(true);
+            listModule.addEndItem(padItem);
             List<ItemStack> uniqueItems = plugin.config().getUniqueItemList();
             for(ItemStack item : uniqueItems)
             {
@@ -141,7 +144,35 @@ public class GUIConfigModule extends GUIModule
 
     private GUIItem getGUIItemItemTypeList()
     {
-        return new GUIItem(ItemCreator.createItem(Material.ENDER_PEARL, 1,
+        GUIItem itemTypeList = new GUIItem(ItemCreator.createItem(Material.ENDER_PEARL, 1,
                 "&fItem Type List"));
+        itemTypeList.addEvent(new GUIOpenNewEvent(plugin, () -> {
+            GUIContainer gui = new GUIContainer(plugin, "Item Type List", 6);
+            GUIBorderModule border = new GUIBorderModule();
+            gui.addModule(border);
+            GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
+            gui.addModule(navi);
+            GUIListModule listModule = new GUIListModule(plugin);
+            GUIItem padItem = new GUIItem(null);
+            padItem.setMovable(true);
+            listModule.addEndItem(padItem);
+            List<Material> materialItems = plugin.config().getMaterialList();
+            for(Material material : materialItems)
+            {
+                GUIItem guiItem = new GUIItem(new ItemStack(material));
+                guiItem.setMovable(true);
+                listModule.addListItem(guiItem);
+            }
+            gui.addModule(listModule);
+            GUIInteractHandler interaction = new GUIInteractHandlerList(1);
+            interaction.removeExecutor(GUIInteractExecutorList.class);
+            interaction.addExecutor(new GUIInteractExecutorListSM(1));
+            gui.setDefaultMoveState(true);
+            gui.setInteractionHandler(interaction);
+            GUIItemTypeListModule uniqueItemModule = new GUIItemTypeListModule(plugin);
+            gui.addModule(uniqueItemModule);
+            return gui;
+        }));
+        return itemTypeList;
     }
 }
