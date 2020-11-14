@@ -9,6 +9,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractExecutorList;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractExecutorListSI;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractExecutorListSM;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractHandlerList;
+import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIListModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
@@ -25,7 +26,9 @@ import com.mikedeejay2.simplestack.gui.events.GUIMaxStackEvent;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -71,8 +74,26 @@ public class GUIConfigModule extends GUIModule
 
     private GUIItem getGUIItemItemTypeAmountList()
     {
-        GUIItem itemTypeAmountList = new GUIItem(ItemCreator.createItem(Material.WATER_BUCKET, 23,
-                "&fItem Type Amounts List"));
+        AnimatedGUIItem itemTypeAmountList = new AnimatedGUIItem(ItemCreator.createItem(Material.WATER_BUCKET, 23,
+                "&fItem Type Amounts List"), true);
+        final Map<Material, Integer> itemAmounts = plugin.config().getItemAmounts();
+        if(itemAmounts.size() > 0)
+        {
+            Iterator<Map.Entry<Material, Integer>> iter = itemAmounts.entrySet().iterator();
+            for(int i = 0; i < Math.min(8, itemAmounts.size()); ++i)
+            {
+                Map.Entry<Material, Integer> entry = iter.next();
+                Material material = entry.getKey();
+                if(material == null) continue;
+                int amount = entry.getValue();
+                ItemStack item = new ItemStack(material, amount);
+                ItemMeta itemMeta = item.getItemMeta();
+                itemMeta.setDisplayName(itemTypeAmountList.getName());
+                itemMeta.setLore(itemTypeAmountList.getLore());
+                item.setItemMeta(itemMeta);
+                itemTypeAmountList.addFrame(item, 10);
+            }
+        }
         itemTypeAmountList.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, "Item Type Amounts List", 6);
             GUIBorderModule border = new GUIBorderModule();
@@ -83,7 +104,6 @@ public class GUIConfigModule extends GUIModule
             GUIItem padItem = new GUIItem(null);
             padItem.setMovable(true);
             listModule.addEndItem(padItem);
-            Map<Material, Integer> itemAmounts = plugin.config().getItemAmounts();
             for(Map.Entry<Material, Integer> entry : itemAmounts.entrySet())
             {
                 Material material = entry.getKey();
@@ -162,8 +182,22 @@ public class GUIConfigModule extends GUIModule
 
     private GUIItem getGUIItemUniqueItemList()
     {
-        GUIItem uniqueItemList = new GUIItem(ItemCreator.createItem(Material.CYAN_CONCRETE_POWDER, 1,
-                "&fUnique Item List"));
+        AnimatedGUIItem uniqueItemList = new AnimatedGUIItem(ItemCreator.createItem(Material.CYAN_CONCRETE_POWDER, 1,
+                "&fUnique Item List"), true);
+        final List<ItemStack> uniqueItems = plugin.config().getUniqueItemList();
+        if(uniqueItems.size() > 0)
+        {
+            for(int i = 0; i < Math.min(8, uniqueItems.size()); ++i)
+            {
+                ItemStack item = uniqueItems.get(i);
+                ItemStack newItem = item.clone();
+                ItemMeta itemMeta = newItem.getItemMeta();
+                itemMeta.setDisplayName(uniqueItemList.getName());
+                itemMeta.setLore(uniqueItemList.getLore());
+                newItem.setItemMeta(itemMeta);
+                uniqueItemList.addFrame(newItem, 10);
+            }
+        }
         uniqueItemList.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, "Unique Item List", 6);
             GUIBorderModule border = new GUIBorderModule();
@@ -174,7 +208,6 @@ public class GUIConfigModule extends GUIModule
             GUIItem padItem = new GUIItem(null);
             padItem.setMovable(true);
             listModule.addEndItem(padItem);
-            List<ItemStack> uniqueItems = plugin.config().getUniqueItemList();
             for(ItemStack item : uniqueItems)
             {
                 GUIItem guiItem = new GUIItem(item);
@@ -196,8 +229,22 @@ public class GUIConfigModule extends GUIModule
 
     private GUIItem getGUIItemItemTypeList()
     {
-        GUIItem itemTypeList = new GUIItem(ItemCreator.createItem(Material.ENDER_PEARL, 1,
-                "&fItem Type List"));
+        AnimatedGUIItem itemTypeList = new AnimatedGUIItem(ItemCreator.createItem(Material.ENDER_PEARL, 1,
+                "&fItem Type List"), true);
+        final List<Material> materialItems = plugin.config().getMaterialList();
+        if(materialItems.size() > 0)
+        {
+            for(int i = 0; i < Math.min(8, materialItems.size()); ++i)
+            {
+                Material material = materialItems.get(i);
+                ItemStack item = new ItemStack(material);
+                ItemMeta itemMeta = item.getItemMeta();
+                itemMeta.setDisplayName(itemTypeList.getName());
+                itemMeta.setLore(itemTypeList.getLore());
+                item.setItemMeta(itemMeta);
+                itemTypeList.addFrame(item, 10);
+            }
+        }
         itemTypeList.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, "Item Type List", 6);
             GUIBorderModule border = new GUIBorderModule();
@@ -208,7 +255,6 @@ public class GUIConfigModule extends GUIModule
             GUIItem padItem = new GUIItem(null);
             padItem.setMovable(true);
             listModule.addEndItem(padItem);
-            List<Material> materialItems = plugin.config().getMaterialList();
             for(Material material : materialItems)
             {
                 GUIItem guiItem = new GUIItem(new ItemStack(material));
