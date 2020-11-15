@@ -5,6 +5,7 @@ import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.*;
 
 public final class CancelUtils
@@ -65,6 +66,24 @@ public final class CancelUtils
         if(item == null || item.getType() == Material.AIR) return false;
         Material type = item.getType();
         String typeString = type.toString();
+        if((inv instanceof PlayerInventory && slot >= 36 && slot <= 39))
+        {
+            switch(slot)
+            {
+                case 36: // Boots
+                    if(!typeString.endsWith("_BOOTS")) return true;
+                    break;
+                case 37: // Leggings
+                    if(!typeString.endsWith("_LEGGINGS")) return true;
+                    break;
+                case 38: // Chestplate
+                    if(!typeString.endsWith("_CHESTPLATE") && type != Material.ELYTRA) return true;
+                    break;
+                case 39: // Helmet
+                    if(!typeString.endsWith("HELMET")) return true;
+                    break;
+            }
+        }
         if(inv instanceof AbstractHorseInventory && slot == 0 && type != Material.SADDLE) return true;
         if(inv instanceof HorseInventory && slot == 1 && !typeString.endsWith("HORSE_ARMOR")) return true;
         if(inv instanceof CraftingInventory && slot == 0) return true;
