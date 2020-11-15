@@ -65,6 +65,26 @@ public class GUIConfigModule extends GUIModule
 
         GUIItem closeItem = getGUIItemCloseItem();
         layer.setItem(5, 5, closeItem);
+
+        GUIItem aboutItem = getGUIItemAboutItem();
+        layer.setItem(1, 5, aboutItem);
+    }
+
+    private GUIItem getGUIItemAboutItem()
+    {
+        String name = "About...";
+        AnimatedGUIItem aboutItem = new AnimatedGUIItem(ItemCreator.createItem(Material.BOOK, 1, Chat.chat("&f" + name)), true);
+        aboutItem.addFrame(ItemCreator.createItem(Material.WRITABLE_BOOK, 1, Chat.chat("&f" + name)), 10);
+        aboutItem.addFrame(ItemCreator.createItem(Material.WRITABLE_BOOK, 1, Chat.chat("&f&o" + name)), 10);
+        aboutItem.addEvent(new GUIOpenNewEvent(plugin, () -> {
+            GUIContainer gui = new GUIContainer(plugin, "About", 6);
+            GUIAnimationModule animModule = new GUIAnimationModule(plugin, 1);
+            gui.addModule(animModule);
+            GUIAboutModule aboutModule = new GUIAboutModule();
+            gui.addModule(aboutModule);
+            return gui;
+        }));
+        return aboutItem;
     }
 
     private GUIItem getGUIItemCloseItem()

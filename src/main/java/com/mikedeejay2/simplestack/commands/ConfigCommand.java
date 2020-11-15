@@ -2,6 +2,7 @@ package com.mikedeejay2.simplestack.commands;
 
 import com.mikedeejay2.mikedeejay2lib.commands.AbstractSubCommand;
 import com.mikedeejay2.mikedeejay2lib.gui.manager.PlayerGUI;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.gui.GUICreator;
 import org.bukkit.Sound;
@@ -34,9 +35,13 @@ public class ConfigCommand extends AbstractSubCommand
         {
             playerGUI.setGUI(GUICreator.createMainGUI(plugin));
         }
-        else
+        else if(playerGUI.getGUI().containsModule(GUINavigatorModule.class))
         {
             playerGUI.openGUI();
+        }
+        else
+        {
+            playerGUI.setGUI(GUICreator.createMainGUI(plugin));
         }
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
     }

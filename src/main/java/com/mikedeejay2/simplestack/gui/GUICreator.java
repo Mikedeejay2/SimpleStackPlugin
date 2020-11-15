@@ -65,35 +65,35 @@ public class GUICreator
         List<GUIItem> items = new ArrayList<>();
         String clickMessage = Chat.chat("&f" + "Click to make this language the default language");
         GUIItem english = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_UNITED_STATES, 1,
-                "&fEnglish", clickMessage, Chat.chat("&7en_us")));
+                "&eEnglish", clickMessage, Chat.chat("&7en_us")));
         english.addEvent(new GUISwitchLangEvent(plugin, "en_us"));
 
         GUIItem simplifiedChinese = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_CHINA, 1,
-                "&f简体中文 (Simplified Chinese)", clickMessage, Chat.chat("&7zh_cn")));
+                "&e简体中文 (Simplified Chinese)", clickMessage, Chat.chat("&7zh_cn")));
         simplifiedChinese.addEvent(new GUISwitchLangEvent(plugin, "zh_cn"));
 
         GUIItem korean = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_SOUTH_KOREA, 1,
-                "&f한국어 (Korean)", clickMessage, Chat.chat("&7ko_kr")));
+                "&e한국어 (Korean)", clickMessage, Chat.chat("&7ko_kr")));
         korean.addEvent(new GUISwitchLangEvent(plugin, "ko_kr"));
 
         GUIItem argentina = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_ARGENTINA, 1,
-                "&fEspañol (Argentinian Spanish)", clickMessage, Chat.chat("&7es_ar")));
+                "&eEspañol (Argentinian Spanish)", clickMessage, Chat.chat("&7es_ar")));
         argentina.addEvent(new GUISwitchLangEvent(plugin, "es_ar"));
 
         GUIItem chilean = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_CHILE, 1,
-                "&fEspañol (Chilean Spanish)", clickMessage, Chat.chat("&7es_cl")));
+                "&eEspañol (Chilean Spanish)", clickMessage, Chat.chat("&7es_cl")));
         chilean.addEvent(new GUISwitchLangEvent(plugin, "es_cl"));
 
         GUIItem mexican = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_MEXICO, 1,
-                "&fEspañol (Mexican Spanish)", clickMessage, Chat.chat("&7es_mx")));
+                "&eEspañol (Mexican Spanish)", clickMessage, Chat.chat("&7es_mx")));
         mexican.addEvent(new GUISwitchLangEvent(plugin, "es_mx"));
 
         GUIItem uruguay = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_URUGUAY, 1,
-                "&fEspañol (Uruguayan Spanish)", clickMessage, Chat.chat("&7es_uy")));
+                "&eEspañol (Uruguayan Spanish)", clickMessage, Chat.chat("&7es_uy")));
         uruguay.addEvent(new GUISwitchLangEvent(plugin, "es_uy"));
 
         GUIItem venezuela = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_VENEZUELA, 1,
-                "&fEspañol (Venezuelan Spanish)", clickMessage, Chat.chat("&7es_ve")));
+                "&eEspañol (Venezuelan Spanish)", clickMessage, Chat.chat("&7es_ve")));
         venezuela.addEvent(new GUISwitchLangEvent(plugin, "es_ve"));
 
         items.add(english);
