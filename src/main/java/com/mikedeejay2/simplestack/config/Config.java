@@ -255,6 +255,7 @@ public class Config extends YamlFile
             accessor.setString("Language", langLocale);
             accessor.setInt("Default Max Amount", maxAmount);
 
+            accessor.delete("Item Amounts");
             SectionAccessor<YamlFile, Object> itemAmtAccessor = accessor.getSection("Item Amounts");
             itemAmounts.forEach((material, amount) -> {if(material != null) itemAmtAccessor.setInt(material.toString(), amount);});
 
