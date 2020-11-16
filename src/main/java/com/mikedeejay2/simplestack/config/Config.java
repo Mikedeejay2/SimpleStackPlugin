@@ -90,7 +90,7 @@ public class Config extends YamlFile
                 plugin.getLogger().warning(plugin.langManager().getText("simplestack.warnings.number_outside_of_range", new String[]{"MAT"}, new String[]{mat.toString()}));
                 continue;
             }
-            itemAmounts.put(material, amount);
+            if(material != null) itemAmounts.put(material, amount);
         }
     }
 

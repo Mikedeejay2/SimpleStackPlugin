@@ -34,14 +34,18 @@ public class GUIHopperMovementEvent implements GUIEvent
         if(newHopper)
         {
             item.setItem(ItemCreator.createHeadItem(Base64Heads.GREEN, 1,
-                    "&fStack Hopper Movements",
-                    "&aEnabled"));
+                    "&eStack Hopper Movements",
+                    "",
+                    "&a&l⊳ Enabled",
+                    "&7  Disabled"));
         }
         else
         {
             item.setItem(ItemCreator.createHeadItem(Base64Heads.RED, 1,
-                    "&fStack Hopper Movements",
-                    "&cDisabled"));
+                    "&eStack Hopper Movements",
+                    "",
+                    "&7  Enabled",
+                    "&c&l⊳ Disabled"));
         }
         config.setHopperMovement(newHopper);
     }

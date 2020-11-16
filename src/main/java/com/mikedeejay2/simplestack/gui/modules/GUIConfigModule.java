@@ -89,7 +89,7 @@ public class GUIConfigModule extends GUIModule
 
     private GUIItem getGUIItemCloseItem()
     {
-        GUIItem closeItem = new GUIItem(ItemCreator.createHeadItem(Base64Heads.X_RED, 1, "&fClose this menu"));
+        GUIItem closeItem = new GUIItem(ItemCreator.createHeadItem(Base64Heads.X_RED, 1, "&c&oClose this menu"));
         closeItem.addEvent(new GUICloseEvent(plugin));
         return closeItem;
     }
@@ -97,12 +97,14 @@ public class GUIConfigModule extends GUIModule
     private GUIItem getGUIItemItemTypeAmountList()
     {
         AnimatedGUIItem itemTypeAmountList = new AnimatedGUIItem(ItemCreator.createItem(Material.WATER_BUCKET, 23,
-                "&fItem Type Amounts List"), true);
+                "&eItem Type Amounts List",
+                "&7Set the max amounts of item types"), true);
         final Map<Material, Integer> itemAmounts = plugin.config().getItemAmounts();
         if(itemAmounts.size() > 0)
         {
             Iterator<Map.Entry<Material, Integer>> iter1 = itemAmounts.entrySet().iterator();
             List<String> lore = itemTypeAmountList.getLore() == null ? new ArrayList<>() : itemTypeAmountList.getLore();
+            lore.add("");
             for(int i = 0; i < Math.min(LIST_PREVIEW_AMOUNT, itemAmounts.size()); ++i)
             {
                 Map.Entry<Material, Integer> entry = iter1.next();
@@ -171,14 +173,18 @@ public class GUIConfigModule extends GUIModule
         if(config.isHopperMovement())
         {
             hopperMovement.setItem(ItemCreator.createHeadItem(Base64Heads.GREEN, 1,
-                    "&fStack Hopper Movements",
-                    "&aEnabled"));
+                    "&eStack Hopper Movements",
+                    "",
+                    "&a&l⊳ Enabled",
+                    "&7  Disabled"));
         }
         else
         {
             hopperMovement.setItem(ItemCreator.createHeadItem(Base64Heads.RED, 1,
-                    "&fStack Hopper Movements",
-                    "&cDisabled"));
+                    "&eStack Hopper Movements",
+                    "",
+                    "&7  Enabled",
+                    "&c&l⊳ Disabled"));
         }
         GUIHopperMovementEvent hopperMovementEvent = new GUIHopperMovementEvent(plugin);
         hopperMovement.addEvent(hopperMovementEvent);
@@ -188,7 +194,7 @@ public class GUIConfigModule extends GUIModule
     private GUIItem getGUIItemLanguage()
     {
         GUIItem language = new GUIItem(ItemCreator.createHeadItem(Base64Heads.GLOBE, 1,
-                "&fDefault Language",
+                "&eDefault Language",
                 "&7Click to select a new language",
                 "&7Currently selected: " + plugin.config().getLangLocale()));
         language.addEvent(new GUIOpenNewEvent(plugin, () -> {
@@ -210,7 +216,7 @@ public class GUIConfigModule extends GUIModule
     private GUIItem getGUIItemDefaultMaxAmount(Config config)
     {
         GUIItem defaultMaxAmount = new GUIItem(ItemCreator.createItem(Material.BOOK, config.getMaxAmount(),
-                "&fDefault Max Amount",
+                "&eDefault Max Amount",
                 "&7Sets the default maximum stack amount",
                 "&7for ALL items in Minecraft",
                 "&7Left click to decrease the max amount",
@@ -223,11 +229,15 @@ public class GUIConfigModule extends GUIModule
     private GUIItem getGUIItemUniqueItemList()
     {
         AnimatedGUIItem uniqueItemList = new AnimatedGUIItem(ItemCreator.createItem(Material.CYAN_CONCRETE_POWDER, 1,
-                "&fUnique Item List"), true);
+                "&eUnique Item List",
+                "&7A list for unique items.",
+                "&7Unique items are matched exactly!",
+                "&7(All item data must match)"), true);
         final List<ItemStack> uniqueItems = plugin.config().getUniqueItemList();
         if(uniqueItems.size() > 0)
         {
             List<String> lore = uniqueItemList.getLore() == null ? new ArrayList<>() : uniqueItemList.getLore();
+            lore.add("");
             for(int i = 0; i < Math.min(LIST_PREVIEW_AMOUNT, uniqueItems.size()); ++i)
             {
                 ItemStack item = uniqueItems.get(i);
@@ -282,11 +292,15 @@ public class GUIConfigModule extends GUIModule
     private GUIItem getGUIItemItemTypeList()
     {
         AnimatedGUIItem itemTypeList = new AnimatedGUIItem(ItemCreator.createItem(Material.ENDER_PEARL, 1,
-                "&fItem Type List"), true);
+                "&eItem Type List",
+                "&7A list of item types",
+                "&7Items in this list can either be",
+                "&7Blacklist or whitelist."), true);
         final List<Material> materialItems = plugin.config().getMaterialList();
         if(materialItems.size() > 0)
         {
             List<String> lore = itemTypeList.getLore() == null ? new ArrayList<>() : itemTypeList.getLore();
+            lore.add("");
             for(int i = 0; i < Math.min(LIST_PREVIEW_AMOUNT, materialItems.size()); ++i)
             {
                 Material material = materialItems.get(i);
