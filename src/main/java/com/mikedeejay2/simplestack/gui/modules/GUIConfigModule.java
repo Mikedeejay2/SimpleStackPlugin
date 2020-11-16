@@ -80,7 +80,7 @@ public class GUIConfigModule extends GUIModule
             GUIContainer gui = new GUIContainer(plugin, "About", 6);
             GUIAnimationModule animModule = new GUIAnimationModule(plugin, 1);
             gui.addModule(animModule);
-            GUIAboutModule aboutModule = new GUIAboutModule();
+            GUIAboutModule aboutModule = new GUIAboutModule(plugin);
             gui.addModule(aboutModule);
             return gui;
         }));

@@ -3,11 +3,14 @@ package com.mikedeejay2.simplestack.gui.modules;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
 import com.mikedeejay2.mikedeejay2lib.gui.animation.MovementType;
+import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUIOpenNewEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Heads;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemCreator;
+import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.gui.GUICreator;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -17,6 +20,13 @@ import java.util.Random;
 
 public class GUIAboutModule extends GUIModule
 {
+    private final Simplestack plugin;
+
+    public GUIAboutModule(Simplestack plugin)
+    {
+        this.plugin = plugin;
+    }
+
     @Override
     public void onClickedHead(InventoryClickEvent event, GUIContainer gui)
     {
@@ -148,11 +158,49 @@ public class GUIAboutModule extends GUIModule
         GUILayer clickLayer = gui.getLayer("click");
         GUILayer flyLayer = gui.getLayer("fly");
         GUILayer textLayer = gui.getLayer("text");
+        GUILayer aboutLayer = gui.getLayer("about");
         int rows = gui.getRows();
         int cols = gui.getCols();
         genBackground(base);
         genFly(flyLayer);
         genText(textLayer);
+        genAbout(textLayer, aboutLayer);
+        genBackButton(player, textLayer);
+    }
+
+    private void genBackButton(Player player, GUILayer textLayer)
+    {
+        AnimatedGUIItem backItem = new AnimatedGUIItem(null, false, 60);
+        backItem.addFrame(ItemCreator.createHeadItem(Base64Heads.ARROW_BACKWARD_WHITE, 1, "&f" + plugin.langManager().getTextLib(player, "gui.modules.navigator.backward")), 1);
+        backItem.addEvent(new GUIOpenNewEvent(plugin, () -> GUICreator.createMainGUI(plugin)));
+        textLayer.setItem(6, 5, backItem);
+    }
+
+    private void genAbout(GUILayer textLayer, GUILayer aboutLayer)
+    {
+        int start = 40;
+        AnimatedGUIItem item1 = new AnimatedGUIItem(null, false, start);
+        item1.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 0, 1 ,MovementType.OVERRIDE_ITEM, true, 2);
+        item1.addFrame(0, 1 ,MovementType.OVERRIDE_ITEM, true, 2);
+        item1.addFrame(0, 1 ,MovementType.OVERRIDE_ITEM, true, 2);
+        item1.addFrame(0, 1 ,MovementType.OVERRIDE_ITEM, true, 2);
+        AnimatedGUIItem item2 = new AnimatedGUIItem(null, false, start);
+        item2.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 0, -1 ,MovementType.OVERRIDE_ITEM, true, 2);
+        item2.addFrame(0, -1 ,MovementType.OVERRIDE_ITEM, true, 2);
+        item2.addFrame(0, -1 ,MovementType.OVERRIDE_ITEM, true, 2);
+        item2.addFrame(0, -1 ,MovementType.OVERRIDE_ITEM, true, 2);
+        textLayer.setItem(5, 1, item1);
+        textLayer.setItem(5, 9, item2);
+        AnimatedGUIItem aboutItem = new AnimatedGUIItem(null, false, start + 10);
+        aboutItem.addFrame(ItemCreator.createItem(Material.DRAGON_EGG, 1,
+                "&b&lSimple Stack v" + plugin.getDescription().getVersion(),
+                "&5Simple Stack is a plugin that makes unstackable items stack.",
+                "",
+                "&9Credits:",
+                "&5Code by Mikedeejay2 (Open Source on Github!)",
+                "&5Translations provided by contributors on OneSky and Github",
+                "&5Bug reports submitted by contributors on Github"), 1);
+        aboutLayer.setItem(5, 5, aboutItem);
     }
 
     private void genText(GUILayer textLayer)
