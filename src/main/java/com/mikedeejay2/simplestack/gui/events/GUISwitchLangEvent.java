@@ -7,6 +7,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIListModule;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.gui.GUICreator;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
@@ -25,10 +26,11 @@ public class GUISwitchLangEvent implements GUIEvent
     @Override
     public void execute(InventoryClickEvent event, GUIContainer gui)
     {
+        Player player = (Player) event.getWhoClicked();
         Config config = plugin.config();
         config.setLangLocale(locale);
         GUIListModule listModule = gui.getModule(GUIListModule.class);
-        List<GUIItem> langItems = GUICreator.getLanguageList(plugin);
+        List<GUIItem> langItems = GUICreator.getLanguageList(plugin, player);
         listModule.setGUIItems(langItems);
     }
 

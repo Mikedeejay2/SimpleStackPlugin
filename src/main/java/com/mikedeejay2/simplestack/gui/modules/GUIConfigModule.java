@@ -49,12 +49,12 @@ public class GUIConfigModule extends GUIModule
         GUILayer layer = gui.getLayer(0);
         Config config = plugin.config();
 
-        GUIItem itemTypeList = getGUIItemItemTypeList();
-        GUIItem itemTypeAmountList = getGUIItemItemTypeAmountList();
-        GUIItem uniqueItemList = getGUIItemUniqueItemList();
-        GUIItem language = getGUIItemLanguage();
-        GUIItem defaultMaxAmount = getGUIItemDefaultMaxAmount(config);
-        GUIItem hopperMovement = getGUIItemHopperMovement(config);
+        GUIItem itemTypeList = getGUIItemItemTypeList(player);
+        GUIItem itemTypeAmountList = getGUIItemItemTypeAmountList(player);
+        GUIItem uniqueItemList = getGUIItemUniqueItemList(player);
+        GUIItem language = getGUIItemLanguage(player);
+        GUIItem defaultMaxAmount = getGUIItemDefaultMaxAmount(config, player);
+        GUIItem hopperMovement = getGUIItemHopperMovement(config, player);
 
         layer.setItem(2, 3, itemTypeList);
         layer.setItem(2, 4, itemTypeAmountList);
@@ -63,21 +63,21 @@ public class GUIConfigModule extends GUIModule
         layer.setItem(2, 7, defaultMaxAmount);
         layer.setItem(3, 3, hopperMovement);
 
-        GUIItem closeItem = getGUIItemCloseItem();
+        GUIItem closeItem = getGUIItemCloseItem(player);
         layer.setItem(5, 5, closeItem);
 
-        GUIItem aboutItem = getGUIItemAboutItem();
+        GUIItem aboutItem = getGUIItemAboutItem(player);
         layer.setItem(1, 5, aboutItem);
     }
 
-    private GUIItem getGUIItemAboutItem()
+    private GUIItem getGUIItemAboutItem(Player player)
     {
-        String name = "About...";
+        String name = plugin.langManager().getText(player, "simplestack.gui.config.about_select");
         AnimatedGUIItem aboutItem = new AnimatedGUIItem(ItemCreator.createItem(Material.BOOK, 1, Chat.chat("&f" + name)), true);
         aboutItem.addFrame(ItemCreator.createItem(Material.WRITABLE_BOOK, 1, Chat.chat("&f" + name)), 10);
         aboutItem.addFrame(ItemCreator.createItem(Material.WRITABLE_BOOK, 1, Chat.chat("&f&o" + name)), 10);
         aboutItem.addEvent(new GUIOpenNewEvent(plugin, () -> {
-            GUIContainer gui = new GUIContainer(plugin, "About", 6);
+            GUIContainer gui = new GUIContainer(plugin, name, 6);
             GUIAnimationModule animModule = new GUIAnimationModule(plugin, 1);
             gui.addModule(animModule);
             GUIAboutModule aboutModule = new GUIAboutModule(plugin);
@@ -87,18 +87,19 @@ public class GUIConfigModule extends GUIModule
         return aboutItem;
     }
 
-    private GUIItem getGUIItemCloseItem()
+    private GUIItem getGUIItemCloseItem(Player player)
     {
-        GUIItem closeItem = new GUIItem(ItemCreator.createHeadItem(Base64Heads.X_RED, 1, "&c&oClose this menu"));
+        GUIItem closeItem = new GUIItem(ItemCreator.createHeadItem(Base64Heads.X_RED, 1,
+                "&c&o" + plugin.langManager().getText(player, "simplestack.gui.config.close_select")));
         closeItem.addEvent(new GUICloseEvent(plugin));
         return closeItem;
     }
 
-    private GUIItem getGUIItemItemTypeAmountList()
+    private GUIItem getGUIItemItemTypeAmountList(Player player)
     {
         AnimatedGUIItem itemTypeAmountList = new AnimatedGUIItem(ItemCreator.createItem(Material.WATER_BUCKET, 23,
-                "&eItem Type Amounts List",
-                "&fSet the max amounts of item types"), true);
+                "&e" + plugin.langManager().getText(player, "simplestack.gui.item_type_amts.title"),
+                "&f" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_description")), true);
         final Map<Material, Integer> itemAmounts = plugin.config().getItemAmounts();
         if(itemAmounts.size() > 0 && plugin.langManager().getDefaultLang().equals("en_us"))
         {
@@ -116,7 +117,9 @@ public class GUIConfigModule extends GUIModule
             }
             if(itemAmounts.size() > LIST_PREVIEW_AMOUNT)
             {
-                lore.add(Chat.chat("&7and " + (itemAmounts.size() - LIST_PREVIEW_AMOUNT) + " more..."));
+                lore.add(Chat.chat("&7" + plugin.langManager().getText(player, "simplestack.gui.config.preview_list_more",
+                        new String[]{"AMT"},
+                        new String[]{String.valueOf((itemAmounts.size() - LIST_PREVIEW_AMOUNT))})));
             }
             itemTypeAmountList.setLore(lore);
             Iterator<Map.Entry<Material, Integer>> iter2 = itemAmounts.entrySet().iterator();
@@ -135,7 +138,7 @@ public class GUIConfigModule extends GUIModule
             }
         }
         itemTypeAmountList.addEvent(new GUIOpenNewEvent(plugin, () -> {
-            GUIContainer gui = new GUIContainer(plugin, "Item Type Amounts List", 6);
+            GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.item_type_amts.title"), 6);
             GUIBorderModule border = new GUIBorderModule();
             gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
@@ -167,45 +170,48 @@ public class GUIConfigModule extends GUIModule
         return itemTypeAmountList;
     }
 
-    private GUIItem getGUIItemHopperMovement(Config config)
+    private GUIItem getGUIItemHopperMovement(Config config, Player player)
     {
         GUIItem hopperMovement = new GUIItem(null);
         if(config.isHopperMovement())
         {
             hopperMovement.setItem(ItemCreator.createHeadItem(Base64Heads.GREEN, 1,
-                    "&eStack Hopper Movements",
+                    "&e" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
                     "",
-                    "&a&l⊳ Enabled",
-                    "&7  Disabled"));
+                    "&a&l⊳ " + plugin.langManager().getTextLib(player, "generic.enabled"),
+                    "&7  " + plugin.langManager().getTextLib(player, "generic.disabled")));
         }
         else
         {
             hopperMovement.setItem(ItemCreator.createHeadItem(Base64Heads.RED, 1,
-                    "&eStack Hopper Movements",
+                    "&e" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
                     "",
-                    "&7  Enabled",
-                    "&c&l⊳ Disabled"));
+                    "&7  " + plugin.langManager().getTextLib(player, "generic.enabled"),
+                    "&c&l⊳ " + plugin.langManager().getTextLib(player, "generic.disabled")));
         }
         GUIHopperMovementEvent hopperMovementEvent = new GUIHopperMovementEvent(plugin);
         hopperMovement.addEvent(hopperMovementEvent);
         return hopperMovement;
     }
 
-    private GUIItem getGUIItemLanguage()
+    private GUIItem getGUIItemLanguage(Player player)
     {
         GUIItem language = new GUIItem(ItemCreator.createHeadItem(Base64Heads.GLOBE, 1,
-                "&eDefault Language",
-                "&fClick to select a new language",
-                "&7Currently selected: " + plugin.config().getLangLocale()));
+                "&e" + plugin.langManager().getText(player, "simplestack.gui.config.language_select"),
+                "&f" + plugin.langManager().getText(player, "simplestack.gui.config.language_description"),
+                "&7Currently selected: " + plugin.langManager().getText(player, "simplestack.gui.config.language_selected",
+                        new String[]{"LANG"},
+                        new String[]{plugin.config().getLangLocale()})
+        ));
         language.addEvent(new GUIOpenNewEvent(plugin, () -> {
-            GUIContainer gui = new GUIContainer(plugin, "Change Language...", 5);
+            GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.language.title"), 5);
             GUIBorderModule border = new GUIBorderModule();
             gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
             gui.addModule(navi);
             GUIListModule langList = new GUIListModule(plugin);
             gui.addModule(langList);
-            langList.setGUIItems(GUICreator.getLanguageList(plugin));
+            langList.setGUIItems(GUICreator.getLanguageList(plugin, player));
             GUIAnimationModule animModule = new GUIAnimationModule(plugin, 10);
             gui.addModule(animModule);
             return gui;
@@ -213,26 +219,26 @@ public class GUIConfigModule extends GUIModule
         return language;
     }
 
-    private GUIItem getGUIItemDefaultMaxAmount(Config config)
+    private GUIItem getGUIItemDefaultMaxAmount(Config config, Player player)
     {
         GUIItem defaultMaxAmount = new GUIItem(ItemCreator.createItem(Material.BOOK, config.getMaxAmount(),
-                "&eDefault Max Amount",
-                "&fSets the default maximum stack amount",
-                "&ffor ALL items in Minecraft",
-                "&7Left click to decrease the max amount",
-                "&7Right click to increase the max amount"));
+                "&e" + plugin.langManager().getText(player, "simplestack.gui.config.default_max_select"),
+                "&f" + plugin.langManager().getText(player, "simplestack.gui.config.default_max_desc_l1"),
+                "&f" + plugin.langManager().getText(player, "simplestack.gui.config.default_max_desc_l2"),
+                "&7" + plugin.langManager().getText(player, "simplestack.gui.config.default_max_desc_l3"),
+                "&7" + plugin.langManager().getText(player, "simplestack.gui.config.default_max_desc_l4")));
         GUIMaxStackEvent maxAmountEvent = new GUIMaxStackEvent(plugin);
         defaultMaxAmount.addEvent(maxAmountEvent);
         return defaultMaxAmount;
     }
 
-    private GUIItem getGUIItemUniqueItemList()
+    private GUIItem getGUIItemUniqueItemList(Player player)
     {
         AnimatedGUIItem uniqueItemList = new AnimatedGUIItem(ItemCreator.createItem(Material.CYAN_CONCRETE_POWDER, 1,
-                "&eUnique Item List",
-                "&fA list for unique items",
-                "&7Unique items are matched exactly!",
-                "&7(All item data must match)"), true);
+                "&e" + plugin.langManager().getText(player, "simplestack.gui.unique_items.title"),
+                "&f" + plugin.langManager().getText(player, "simplestack.gui.config.unique_item_desc_l1"),
+                "&7" + plugin.langManager().getText(player, "simplestack.gui.config.unique_item_desc_l2"),
+                "&7" + plugin.langManager().getText(player, "simplestack.gui.config.unique_item_desc_l3")), true);
         final List<ItemStack> uniqueItems = plugin.config().getUniqueItemList();
         if(uniqueItems.size() > 0 && plugin.langManager().getDefaultLang().equals("en_us"))
         {
@@ -246,7 +252,9 @@ public class GUIConfigModule extends GUIModule
             }
             if(uniqueItems.size() > LIST_PREVIEW_AMOUNT)
             {
-                lore.add(Chat.chat("&7and " + (uniqueItems.size() - LIST_PREVIEW_AMOUNT) + " more..."));
+                lore.add(Chat.chat("&7" + plugin.langManager().getText(player, "simplestack.gui.config.preview_list_more",
+                        new String[]{"AMT"},
+                        new String[]{String.valueOf((uniqueItems.size() - LIST_PREVIEW_AMOUNT))})));
             }
             uniqueItemList.setLore(lore);
             for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, uniqueItems.size()); ++i)
@@ -261,7 +269,7 @@ public class GUIConfigModule extends GUIModule
             }
         }
         uniqueItemList.addEvent(new GUIOpenNewEvent(plugin, () -> {
-            GUIContainer gui = new GUIContainer(plugin, "Unique Item List", 6);
+            GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.unique_items.title"), 6);
             GUIBorderModule border = new GUIBorderModule();
             gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
@@ -289,13 +297,13 @@ public class GUIConfigModule extends GUIModule
         return uniqueItemList;
     }
 
-    private GUIItem getGUIItemItemTypeList()
+    private GUIItem getGUIItemItemTypeList(Player player)
     {
         AnimatedGUIItem itemTypeList = new AnimatedGUIItem(ItemCreator.createItem(Material.ENDER_PEARL, 1,
-                "&eItem Type List",
-                "&fA list of item types",
-                "&7Items in this list can either be",
-                "&7Blacklist or whitelist."), true);
+                "&e" + plugin.langManager().getText(player, "simplestack.gui.item_types.title"),
+                "&f" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_desc_l1"),
+                "&7" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_desc_l2"),
+                "&7" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_desc_l3")), true);
         final List<Material> materialItems = plugin.config().getMaterialList();
         if(materialItems.size() > 0 && plugin.langManager().getDefaultLang().equals("en_us"))
         {
@@ -324,7 +332,7 @@ public class GUIConfigModule extends GUIModule
             }
         }
         itemTypeList.addEvent(new GUIOpenNewEvent(plugin, () -> {
-            GUIContainer gui = new GUIContainer(plugin, "Item Type List", 6);
+            GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.item_types.title"), 6);
             GUIBorderModule border = new GUIBorderModule();
             gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");

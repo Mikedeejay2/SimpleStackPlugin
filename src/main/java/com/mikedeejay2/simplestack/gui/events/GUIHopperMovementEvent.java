@@ -8,6 +8,7 @@ import com.mikedeejay2.mikedeejay2lib.util.head.Base64Heads;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemCreator;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
@@ -23,6 +24,7 @@ public class GUIHopperMovementEvent implements GUIEvent
     @Override
     public void execute(InventoryClickEvent event, GUIContainer gui)
     {
+        Player player = (Player) event.getWhoClicked();
         GUILayer layer = gui.getLayer(0);
         Config config = plugin.config();
         if(event.getClick() != ClickType.LEFT) return;
@@ -34,18 +36,18 @@ public class GUIHopperMovementEvent implements GUIEvent
         if(newHopper)
         {
             item.setItem(ItemCreator.createHeadItem(Base64Heads.GREEN, 1,
-                    "&eStack Hopper Movements",
+                    "&e" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
                     "",
-                    "&a&l⊳ Enabled",
-                    "&7  Disabled"));
+                    "&a&l⊳ " + plugin.langManager().getTextLib(player, "generic.enabled"),
+                    "&7  " + plugin.langManager().getTextLib(player, "generic.disabled")));
         }
         else
         {
             item.setItem(ItemCreator.createHeadItem(Base64Heads.RED, 1,
-                    "&eStack Hopper Movements",
+                    "&e" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
                     "",
-                    "&7  Enabled",
-                    "&c&l⊳ Disabled"));
+                    "&7  " + plugin.langManager().getTextLib(player, "generic.enabled"),
+                    "&c&l⊳ " + plugin.langManager().getTextLib(player, "generic.disabled")));
         }
         config.setHopperMovement(newHopper);
     }

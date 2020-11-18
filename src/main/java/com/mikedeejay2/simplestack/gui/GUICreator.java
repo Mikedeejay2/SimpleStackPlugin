@@ -1,7 +1,6 @@
 package com.mikedeejay2.simplestack.gui;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
-import com.mikedeejay2.mikedeejay2lib.gui.event.list.GUISwitchListPageEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.GUIInteractHandler;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.normal.GUIInteractHandlerDefault;
 import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
@@ -16,20 +15,20 @@ import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.gui.events.GUISwitchLangEvent;
 import com.mikedeejay2.simplestack.gui.modules.GUIConfigModule;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class GUICreator
 {
     private static AnimatedGUIItem animatedGUIItem = null;
 
-    public static GUIContainer createMainGUI(Simplestack plugin)
+    public static GUIContainer createMainGUI(Simplestack plugin, Player player)
     {
-        GUIContainer gui = new GUIContainer(plugin, "Configuration GUI", 5);
+        GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.config.title"), 5);
         GUIAnimationModule animation = new GUIAnimationModule(plugin, 1);
         GUIAnimStrips outlineModule = new GUIAnimStrips(getAnimItem());
         GUINavigatorModule naviModule = new GUINavigatorModule(plugin, "config");
@@ -60,10 +59,10 @@ public class GUICreator
         return animatedGUIItem;
     }
 
-    public static List<GUIItem> getLanguageList(Simplestack plugin)
+    public static List<GUIItem> getLanguageList(Simplestack plugin, Player player)
     {
         List<GUIItem> items = new ArrayList<>();
-        String clickMessage = Chat.chat("&f" + "Click to make this language the default language");
+        String clickMessage = Chat.chat("&f" + plugin.langManager().getText(player, "simplestack.gui.language.language_select"));
         GUIItem english = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_UNITED_STATES, 1,
                 "&eEnglish", clickMessage, Chat.chat("&7en_us")));
         english.addEvent(new GUISwitchLangEvent(plugin, "en_us"));
@@ -128,7 +127,7 @@ public class GUICreator
         ItemStack curItem = curLangItem.getItemBase();
         ItemMeta curItemMeta = curItem.getItemMeta();
         List<String> newLore = new ArrayList<>();
-        newLore.add(Chat.chat("&aSelected"));
+        newLore.add(Chat.chat("&a" + plugin.langManager().getTextLib(player, "generic.enabled")));
         newLore.add(Chat.chat("&7" + curLocale));
         curItemMeta.setLore(newLore);
         curItem.setItemMeta(curItemMeta);

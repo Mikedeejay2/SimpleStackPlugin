@@ -169,7 +169,7 @@ public class GUIAboutModule extends GUIModule
     {
         AnimatedGUIItem backItem = new AnimatedGUIItem(null, false, 60);
         backItem.addFrame(ItemCreator.createHeadItem(Base64Heads.ARROW_BACKWARD_WHITE, 1, "&f" + plugin.langManager().getTextLib(player, "gui.modules.navigator.backward")), 1);
-        backItem.addEvent(new GUIOpenNewEvent(plugin, () -> GUICreator.createMainGUI(plugin)));
+        backItem.addEvent(new GUIOpenNewEvent(plugin, () -> GUICreator.createMainGUI(plugin, player)));
         textLayer.setItem(6, 5, backItem);
     }
 

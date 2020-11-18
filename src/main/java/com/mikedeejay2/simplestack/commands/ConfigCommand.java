@@ -33,7 +33,7 @@ public class ConfigCommand extends AbstractSubCommand
         PlayerGUI playerGUI = plugin.guiManager().getPlayer(player);
         if(playerGUI.getGUI() == null)
         {
-            playerGUI.setGUI(GUICreator.createMainGUI(plugin));
+            playerGUI.setGUI(GUICreator.createMainGUI(plugin, player));
         }
         else if(playerGUI.getGUI().containsModule(GUINavigatorModule.class))
         {
@@ -41,7 +41,7 @@ public class ConfigCommand extends AbstractSubCommand
         }
         else
         {
-            playerGUI.setGUI(GUICreator.createMainGUI(plugin));
+            playerGUI.setGUI(GUICreator.createMainGUI(plugin, player));
         }
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
     }
