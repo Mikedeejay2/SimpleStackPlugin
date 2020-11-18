@@ -234,7 +234,7 @@ public class GUIConfigModule extends GUIModule
                 "&7Unique items are matched exactly!",
                 "&7(All item data must match)"), true);
         final List<ItemStack> uniqueItems = plugin.config().getUniqueItemList();
-        if(uniqueItems.size() > 0)
+        if(uniqueItems.size() > 0 && plugin.langManager().getDefaultLang().equals("en_us"))
         {
             List<String> lore = uniqueItemList.getLore() == null ? new ArrayList<>() : uniqueItemList.getLore();
             lore.add("");
@@ -297,7 +297,7 @@ public class GUIConfigModule extends GUIModule
                 "&7Items in this list can either be",
                 "&7Blacklist or whitelist."), true);
         final List<Material> materialItems = plugin.config().getMaterialList();
-        if(materialItems.size() > 0)
+        if(materialItems.size() > 0 && plugin.langManager().getDefaultLang().equals("en_us"))
         {
             List<String> lore = itemTypeList.getLore() == null ? new ArrayList<>() : itemTypeList.getLore();
             lore.add("");
