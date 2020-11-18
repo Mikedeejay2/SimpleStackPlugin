@@ -100,7 +100,7 @@ public class GUIConfigModule extends GUIModule
                 "&eItem Type Amounts List",
                 "&fSet the max amounts of item types"), true);
         final Map<Material, Integer> itemAmounts = plugin.config().getItemAmounts();
-        if(itemAmounts.size() > 0)
+        if(itemAmounts.size() > 0 && plugin.langManager().getDefaultLang().equals("en_us"))
         {
             Iterator<Map.Entry<Material, Integer>> iter1 = itemAmounts.entrySet().iterator();
             List<String> lore = itemTypeAmountList.getLore() == null ? new ArrayList<>() : itemTypeAmountList.getLore();
@@ -157,7 +157,7 @@ public class GUIConfigModule extends GUIModule
             gui.addModule(listModule);
             GUIInteractHandler interaction = new GUIInteractHandlerList(64);
             interaction.removeExecutor(GUIInteractExecutorList.class);
-            interaction.addExecutor(new GUIInteractExecutorListSM(64));
+            interaction.addExecutor(new GUIInteractExecutorListSM(64, false));
             gui.setDefaultMoveState(true);
             gui.setInteractionHandler(interaction);
             GUIItemTypeAmountModule itemTypeAmountModule = new GUIItemTypeAmountModule(plugin);
@@ -279,7 +279,7 @@ public class GUIConfigModule extends GUIModule
             gui.addModule(listModule);
             GUIInteractHandler interaction = new GUIInteractHandlerList(64);
             interaction.removeExecutor(GUIInteractExecutorList.class);
-            interaction.addExecutor(new GUIInteractExecutorListSI(64));
+            interaction.addExecutor(new GUIInteractExecutorListSI(64, false));
             gui.setDefaultMoveState(true);
             gui.setInteractionHandler(interaction);
             GUIUniqueItemListModule uniqueItemModule = new GUIUniqueItemListModule(plugin);
@@ -342,7 +342,7 @@ public class GUIConfigModule extends GUIModule
             gui.addModule(listModule);
             GUIInteractHandler interaction = new GUIInteractHandlerList(1);
             interaction.removeExecutor(GUIInteractExecutorList.class);
-            interaction.addExecutor(new GUIInteractExecutorListSM(1));
+            interaction.addExecutor(new GUIInteractExecutorListSM(1, false));
             gui.setDefaultMoveState(true);
             gui.setInteractionHandler(interaction);
             GUIItemTypeListModule uniqueItemModule = new GUIItemTypeListModule(plugin);
