@@ -257,7 +257,14 @@ public class Config extends YamlFile
 
             accessor.delete("Item Amounts");
             SectionAccessor<YamlFile, Object> itemAmtAccessor = accessor.getSection("Item Amounts");
-            itemAmounts.forEach((material, amount) -> {if(material != null) itemAmtAccessor.setInt(material.toString(), amount);});
+            for(Map.Entry<Material, Integer> entry : itemAmounts.entrySet())
+            {
+                Material material = entry.getKey();
+                if(material == null || material == Material.AIR) continue;
+                int amount = entry.getValue();
+                String materialStr = material.toString();
+                itemAmtAccessor.setInt(materialStr, amount);
+            }
 
             SectionAccessor<JsonFile, JsonElement> uniqueItemsAccessor = uniqueItems.getAccessor();
             uniqueItemsAccessor.setItemStackList("items", uniqueItemList);
