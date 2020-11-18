@@ -155,12 +155,9 @@ public class GUIAboutModule extends GUIModule
     public void onOpenHead(Player player, GUIContainer gui)
     {
         GUILayer base = gui.getLayer(0);
-        GUILayer clickLayer = gui.getLayer("click");
         GUILayer flyLayer = gui.getLayer("fly");
         GUILayer textLayer = gui.getLayer("text");
         GUILayer aboutLayer = gui.getLayer("about");
-        int rows = gui.getRows();
-        int cols = gui.getCols();
         genBackground(base);
         genFly(flyLayer);
         genText(textLayer);
@@ -194,12 +191,15 @@ public class GUIAboutModule extends GUIModule
         AnimatedGUIItem aboutItem = new AnimatedGUIItem(null, false, start + 10);
         aboutItem.addFrame(ItemCreator.createItem(Material.DRAGON_EGG, 1,
                 "&b&lSimple Stack v" + plugin.getDescription().getVersion(),
-                "&5Simple Stack is a plugin that makes unstackable items stack.",
+                "&5Simple Stack is a plugin ",
+                "&5that makes unstackable items stack.",
                 "",
                 "&9Credits:",
-                "&5Code by Mikedeejay2 (Open Source on Github!)",
-                "&5Translations provided by contributors on OneSky and Github",
-                "&5Bug reports submitted by contributors on Github"), 1);
+                "&5• Code by Mikedeejay2",
+                "&5• Translations provided by ",
+                "&5  contributors on OneSky and Github",
+                "&5• Bug reports submitted by ",
+                "&5  contributors on Github"), 1);
         aboutLayer.setItem(5, 5, aboutItem);
     }
 

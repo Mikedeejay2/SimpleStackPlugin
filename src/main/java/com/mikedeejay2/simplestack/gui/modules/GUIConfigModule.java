@@ -98,7 +98,7 @@ public class GUIConfigModule extends GUIModule
     {
         AnimatedGUIItem itemTypeAmountList = new AnimatedGUIItem(ItemCreator.createItem(Material.WATER_BUCKET, 23,
                 "&eItem Type Amounts List",
-                "&7Set the max amounts of item types"), true);
+                "&fSet the max amounts of item types"), true);
         final Map<Material, Integer> itemAmounts = plugin.config().getItemAmounts();
         if(itemAmounts.size() > 0)
         {
@@ -195,7 +195,7 @@ public class GUIConfigModule extends GUIModule
     {
         GUIItem language = new GUIItem(ItemCreator.createHeadItem(Base64Heads.GLOBE, 1,
                 "&eDefault Language",
-                "&7Click to select a new language",
+                "&fClick to select a new language",
                 "&7Currently selected: " + plugin.config().getLangLocale()));
         language.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, "Change Language...", 5);
@@ -217,8 +217,8 @@ public class GUIConfigModule extends GUIModule
     {
         GUIItem defaultMaxAmount = new GUIItem(ItemCreator.createItem(Material.BOOK, config.getMaxAmount(),
                 "&eDefault Max Amount",
-                "&7Sets the default maximum stack amount",
-                "&7for ALL items in Minecraft",
+                "&fSets the default maximum stack amount",
+                "&ffor ALL items in Minecraft",
                 "&7Left click to decrease the max amount",
                 "&7Right click to increase the max amount"));
         GUIMaxStackEvent maxAmountEvent = new GUIMaxStackEvent(plugin);
@@ -230,7 +230,7 @@ public class GUIConfigModule extends GUIModule
     {
         AnimatedGUIItem uniqueItemList = new AnimatedGUIItem(ItemCreator.createItem(Material.CYAN_CONCRETE_POWDER, 1,
                 "&eUnique Item List",
-                "&7A list for unique items.",
+                "&fA list for unique items",
                 "&7Unique items are matched exactly!",
                 "&7(All item data must match)"), true);
         final List<ItemStack> uniqueItems = plugin.config().getUniqueItemList();
@@ -293,7 +293,7 @@ public class GUIConfigModule extends GUIModule
     {
         AnimatedGUIItem itemTypeList = new AnimatedGUIItem(ItemCreator.createItem(Material.ENDER_PEARL, 1,
                 "&eItem Type List",
-                "&7A list of item types",
+                "&fA list of item types",
                 "&7Items in this list can either be",
                 "&7Blacklist or whitelist."), true);
         final List<Material> materialItems = plugin.config().getMaterialList();
