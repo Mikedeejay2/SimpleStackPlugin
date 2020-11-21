@@ -52,5 +52,13 @@
   "simplestack.gui.item_types.change_mode_whitelist": "Click to toggle to whitelist",
   "simplestack.gui.config.item_type_desc_l1": "A list of item types",
   "simplestack.gui.config.item_type_desc_l2": "Items in this list can either be",
-  "simplestack.gui.config.item_type_desc_l3": "Blacklist or whitelist."
+  "simplestack.gui.config.item_type_desc_l3": "Blacklist or whitelist.",
+  "simplestack.gui.about.desc_l1": "Simple Stack is a plugin",
+  "simplestack.gui.about.desc_l2": "that makes unstackable items stack.",
+  "simplestack.gui.about.desc_l3": "Credits:",
+  "simplestack.gui.about.desc_l4": "Code by Mikedeejay2",
+  "simplestack.gui.about.desc_l5": "Translations provided by",
+  "simplestack.gui.about.desc_l6": "contributors on OneSky and Github",
+  "simplestack.gui.about.desc_l7": "Bug reports submitted by",
+  "simplestack.gui.about.desc_l8": "contributors on Github"
 }

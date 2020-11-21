@@ -162,7 +162,7 @@ public class GUIAboutModule extends GUIModule
         genBackground(base);
         genFly(flyLayer);
         genText(textLayer);
-        genAbout(textLayer, aboutLayer);
+        genAbout(textLayer, aboutLayer, player);
         genBackButton(player, textLayer);
     }
 
@@ -174,7 +174,7 @@ public class GUIAboutModule extends GUIModule
         textLayer.setItem(6, 5, backItem);
     }
 
-    private void genAbout(GUILayer textLayer, GUILayer aboutLayer)
+    private void genAbout(GUILayer textLayer, GUILayer aboutLayer, Player player)
     {
         int start = 40;
         AnimatedGUIItem item1 = new AnimatedGUIItem(null, false, start);
@@ -192,15 +192,15 @@ public class GUIAboutModule extends GUIModule
         AnimatedGUIItem aboutItem = new AnimatedGUIItem(null, false, start + 10);
         aboutItem.addFrame(ItemCreator.createItem(Material.DRAGON_EGG, 1,
                 "&b&lSimple Stack v" + plugin.getDescription().getVersion(),
-                "&5Simple Stack is a plugin ",
-                "&5that makes unstackable items stack.",
+                "&5" + plugin.langManager().getText(player, "simplestack.gui.about.desc_l1"),
+                "&5" + plugin.langManager().getText(player, "simplestack.gui.about.desc_l2"),
                 "",
-                "&9Credits:",
-                "&5• Code by Mikedeejay2",
-                "&5• Translations provided by ",
-                "&5  contributors on OneSky and Github",
-                "&5• Bug reports submitted by ",
-                "&5  contributors on Github"), 1);
+                "&9" + plugin.langManager().getText(player, "simplestack.gui.about.desc_l3"),
+                "&5• " + plugin.langManager().getText(player, "simplestack.gui.about.desc_l4"),
+                "&5• " + plugin.langManager().getText(player, "simplestack.gui.about.desc_l5"),
+                "&5  " + plugin.langManager().getText(player, "simplestack.gui.about.desc_l6"),
+                "&5• " + plugin.langManager().getText(player, "simplestack.gui.about.desc_l7"),
+                "&5  " + plugin.langManager().getText(player, "simplestack.gui.about.desc_l8")), 1);
         aboutLayer.setItem(5, 5, aboutItem);
     }
 
