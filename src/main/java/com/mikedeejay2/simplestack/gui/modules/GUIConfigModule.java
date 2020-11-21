@@ -5,10 +5,10 @@ import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
 import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUICloseEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUIOpenNewEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.GUIInteractHandler;
+import com.mikedeejay2.mikedeejay2lib.gui.interact.GUIInteractType;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractExecutorList;
-import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractExecutorListSI;
-import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractExecutorListSM;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractHandlerList;
+import com.mikedeejay2.mikedeejay2lib.gui.interact.normal.GUIInteractExecutorDefaultInv;
 import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIListModule;
@@ -159,8 +159,9 @@ public class GUIConfigModule extends GUIModule
             }
             gui.addModule(listModule);
             GUIInteractHandler interaction = new GUIInteractHandlerList(64);
-            interaction.removeExecutor(GUIInteractExecutorList.class);
-            interaction.addExecutor(new GUIInteractExecutorListSM(64, false));
+            interaction.resetExecutors();
+            interaction.addExecutor(new GUIInteractExecutorDefaultInv(64));
+            interaction.addExecutor(new GUIInteractExecutorList(GUIInteractType.SINGLE_MATERIAL, 64, false));
             gui.setDefaultMoveState(true);
             gui.setInteractionHandler(interaction);
             GUIItemTypeAmountModule itemTypeAmountModule = new GUIItemTypeAmountModule(plugin);
@@ -286,8 +287,9 @@ public class GUIConfigModule extends GUIModule
             }
             gui.addModule(listModule);
             GUIInteractHandler interaction = new GUIInteractHandlerList(64);
-            interaction.removeExecutor(GUIInteractExecutorList.class);
-            interaction.addExecutor(new GUIInteractExecutorListSI(64, false));
+            interaction.resetExecutors();
+            interaction.addExecutor(new GUIInteractExecutorDefaultInv(64));
+            interaction.addExecutor(new GUIInteractExecutorList(GUIInteractType.SINGLE_ITEM, 64, false));
             gui.setDefaultMoveState(true);
             gui.setInteractionHandler(interaction);
             GUIUniqueItemListModule uniqueItemModule = new GUIUniqueItemListModule(plugin);
@@ -348,9 +350,10 @@ public class GUIConfigModule extends GUIModule
                 listModule.addListItem(guiItem);
             }
             gui.addModule(listModule);
-            GUIInteractHandler interaction = new GUIInteractHandlerList(1);
-            interaction.removeExecutor(GUIInteractExecutorList.class);
-            interaction.addExecutor(new GUIInteractExecutorListSM(1, false));
+            GUIInteractHandler interaction = new GUIInteractHandlerList(64);
+            interaction.resetExecutors();
+            interaction.addExecutor(new GUIInteractExecutorDefaultInv(64));
+            interaction.addExecutor(new GUIInteractExecutorList(GUIInteractType.SINGLE_MATERIAL, 1, false));
             gui.setDefaultMoveState(true);
             gui.setInteractionHandler(interaction);
             GUIItemTypeListModule uniqueItemModule = new GUIItemTypeListModule(plugin);
