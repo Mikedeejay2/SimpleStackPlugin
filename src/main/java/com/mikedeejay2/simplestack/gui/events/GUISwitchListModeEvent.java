@@ -38,14 +38,20 @@ public class GUISwitchListModeEvent implements GUIEvent
         if(plugin.config().getListMode() == ListMode.BLACKLIST)
         {
             switchListMode.setItem(ItemCreator.createHeadItem(Base64Heads.X_BLACK, 1,
-                    "&f" + plugin.langManager().getText(player, "simplestack.list_type.blacklist"),
-                    "&7" + plugin.langManager().getText(player, "simplestack.gui.item_types.change_mode_whitelist")));
+                    "&b&l" + plugin.langManager().getText(player, "simplestack.list_type.blacklist"),
+                    "&7" + plugin.langManager().getText(player, "simplestack.gui.item_types.change_mode_whitelist"),
+                    "",
+                    "&a&l⊳ " + plugin.langManager().getText(player, "simplestack.list_type.blacklist"),
+                    "&7  " + plugin.langManager().getText(player, "simplestack.list_type.whitelist")));
         }
         else
         {
             switchListMode.setItem(ItemCreator.createHeadItem(Base64Heads.CHECKMARK_WHITE, 1,
-                    "&f" + plugin.langManager().getText(player, "simplestack.list_type.blacklist"),
-                    "&7" + plugin.langManager().getText(player, "simplestack.gui.item_types.change_mode_blacklist")));
+                    "&b&l" + plugin.langManager().getText(player, "simplestack.list_type.whitelist"),
+                    "&7" + plugin.langManager().getText(player, "simplestack.gui.item_types.change_mode_blacklist"),
+                    "",
+                    "&7  " + plugin.langManager().getText(player, "simplestack.list_type.blacklist"),
+                    "&a&l⊳ " + plugin.langManager().getText(player, "simplestack.list_type.whitelist")));
         }
     }
 }
