@@ -98,7 +98,7 @@ public class GUIConfigModule extends GUIModule
     private GUIItem getGUIItemItemTypeAmountList(Player player)
     {
         AnimatedGUIItem itemTypeAmountList = new AnimatedGUIItem(ItemCreator.createItem(Material.WATER_BUCKET, 23,
-                "&e" + plugin.langManager().getText(player, "simplestack.gui.item_type_amts.title"),
+                "&b&l" + plugin.langManager().getText(player, "simplestack.gui.item_type_amts.title"),
                 "&f" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_description")), true);
         final Map<Material, Integer> itemAmounts = plugin.config().getItemAmounts();
         if(itemAmounts.size() > 0 && plugin.langManager().getDefaultLang().equals("en_us"))
@@ -177,7 +177,7 @@ public class GUIConfigModule extends GUIModule
         if(config.isHopperMovement())
         {
             hopperMovement.setItem(ItemCreator.createHeadItem(Base64Heads.GREEN, 1,
-                    "&e" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
+                    "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
                     "",
                     "&a&l⊳ " + plugin.langManager().getTextLib(player, "generic.enabled"),
                     "&7  " + plugin.langManager().getTextLib(player, "generic.disabled")));
@@ -185,7 +185,7 @@ public class GUIConfigModule extends GUIModule
         else
         {
             hopperMovement.setItem(ItemCreator.createHeadItem(Base64Heads.RED, 1,
-                    "&e" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
+                    "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
                     "",
                     "&7  " + plugin.langManager().getTextLib(player, "generic.enabled"),
                     "&c&l⊳ " + plugin.langManager().getTextLib(player, "generic.disabled")));
@@ -198,7 +198,7 @@ public class GUIConfigModule extends GUIModule
     private GUIItem getGUIItemLanguage(Player player)
     {
         GUIItem language = new GUIItem(ItemCreator.createHeadItem(Base64Heads.GLOBE, 1,
-                "&e" + plugin.langManager().getText(player, "simplestack.gui.config.language_select"),
+                "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.language_select"),
                 "&f" + plugin.langManager().getText(player, "simplestack.gui.config.language_description"),
                 "&7Currently selected: " + plugin.langManager().getText(player, "simplestack.gui.config.language_selected",
                         new String[]{"LANG"},
@@ -223,7 +223,7 @@ public class GUIConfigModule extends GUIModule
     private GUIItem getGUIItemDefaultMaxAmount(Config config, Player player)
     {
         GUIItem defaultMaxAmount = new GUIItem(ItemCreator.createItem(Material.BOOK, config.getMaxAmount(),
-                "&e" + plugin.langManager().getText(player, "simplestack.gui.config.default_max_select"),
+                "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.default_max_select"),
                 "&f" + plugin.langManager().getText(player, "simplestack.gui.config.default_max_desc_l1"),
                 "&f" + plugin.langManager().getText(player, "simplestack.gui.config.default_max_desc_l2"),
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.default_max_desc_l3"),
@@ -236,7 +236,7 @@ public class GUIConfigModule extends GUIModule
     private GUIItem getGUIItemUniqueItemList(Player player)
     {
         AnimatedGUIItem uniqueItemList = new AnimatedGUIItem(ItemCreator.createItem(Material.CYAN_CONCRETE_POWDER, 1,
-                "&e" + plugin.langManager().getText(player, "simplestack.gui.unique_items.title"),
+                "&b&l" + plugin.langManager().getText(player, "simplestack.gui.unique_items.title"),
                 "&f" + plugin.langManager().getText(player, "simplestack.gui.config.unique_item_desc_l1"),
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.unique_item_desc_l2"),
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.unique_item_desc_l3")), true);
@@ -302,7 +302,7 @@ public class GUIConfigModule extends GUIModule
     private GUIItem getGUIItemItemTypeList(Player player)
     {
         AnimatedGUIItem itemTypeList = new AnimatedGUIItem(ItemCreator.createItem(Material.ENDER_PEARL, 1,
-                "&e" + plugin.langManager().getText(player, "simplestack.gui.item_types.title"),
+                "&b&l" + plugin.langManager().getText(player, "simplestack.gui.item_types.title"),
                 "&f" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_desc_l1"),
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_desc_l2"),
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_desc_l3")), true);

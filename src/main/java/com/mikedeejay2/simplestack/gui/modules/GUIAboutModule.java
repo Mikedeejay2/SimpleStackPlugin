@@ -156,6 +156,7 @@ public class GUIAboutModule extends GUIModule
     {
         GUILayer base = gui.getLayer(0);
         GUILayer flyLayer = gui.getLayer("fly");
+        gui.addLayer(2, "click", false);
         GUILayer textLayer = gui.getLayer("text");
         GUILayer aboutLayer = gui.getLayer("about");
         genBackground(base);

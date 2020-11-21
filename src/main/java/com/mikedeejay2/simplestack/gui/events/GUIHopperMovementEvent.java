@@ -36,7 +36,7 @@ public class GUIHopperMovementEvent implements GUIEvent
         if(newHopper)
         {
             item.setItem(ItemCreator.createHeadItem(Base64Heads.GREEN, 1,
-                    "&e" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
+                    "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
                     "",
                     "&a&l⊳ " + plugin.langManager().getTextLib(player, "generic.enabled"),
                     "&7  " + plugin.langManager().getTextLib(player, "generic.disabled")));
@@ -44,7 +44,7 @@ public class GUIHopperMovementEvent implements GUIEvent
         else
         {
             item.setItem(ItemCreator.createHeadItem(Base64Heads.RED, 1,
-                    "&e" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
+                    "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
                     "",
                     "&7  " + plugin.langManager().getTextLib(player, "generic.enabled"),
                     "&c&l⊳ " + plugin.langManager().getTextLib(player, "generic.disabled")));
