@@ -33,6 +33,7 @@
   "simplestack.gui.config.preview_list_more": "and {AMT} more...",
   "simplestack.gui.item_type_amts.title": "Item Type Amounts List",
   "simplestack.gui.config.hopper_move_select": "Stack Hopper Movements",
+  "simplestack.gui.config.ground_stacking_select": "Stack Unstackable Ground Items",
   "simplestack.gui.config.language_select": "Default Language",
   "simplestack.gui.config.language_description": "Click to select a new language",
   "simplestack.gui.config.language_selected": "Currently selected: {LANG}",

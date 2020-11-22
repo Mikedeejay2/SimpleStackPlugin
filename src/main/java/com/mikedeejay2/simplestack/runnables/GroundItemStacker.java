@@ -28,6 +28,7 @@ public class GroundItemStacker extends BukkitRunnable
     @Override
     public void run()
     {
+        if(!plugin.config().shouldStackGroundItems()) return;
         List<World> worlds = Bukkit.getWorlds();
         List<Item> items = new ArrayList<>();
         for(World world : worlds)

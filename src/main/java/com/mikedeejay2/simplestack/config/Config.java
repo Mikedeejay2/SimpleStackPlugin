@@ -22,6 +22,7 @@ public class Config extends YamlFile
     private List<ItemStack> uniqueItemList;
     private int maxAmount;
     private boolean hopperMovement;
+    private boolean groundStacks;
 
     // Internal config data
     private JsonFile uniqueItems;
@@ -52,6 +53,7 @@ public class Config extends YamlFile
         loadItemList();
         loadItemAmounts();
         loadHopperMovement();
+        loadGroundStacks();
 
         loaded = true;
     }
@@ -59,6 +61,11 @@ public class Config extends YamlFile
     private void loadHopperMovement()
     {
         hopperMovement = accessor.getBoolean("Hopper Movement Checks");
+    }
+
+    private void loadGroundStacks()
+    {
+        groundStacks = accessor.getBoolean("Ground Stacking Checks");
     }
 
     private void loadDefaultAmount()
@@ -268,6 +275,8 @@ public class Config extends YamlFile
 
             SectionAccessor<JsonFile, JsonElement> uniqueItemsAccessor = uniqueItems.getAccessor();
             uniqueItemsAccessor.setItemStackList("items", uniqueItemList);
+            accessor.setBoolean("Hopper Movement Checks", hopperMovement);
+            accessor.setBoolean("Ground Stacking Checks", groundStacks);
         }
         setModified(false);
 
@@ -618,6 +627,17 @@ public class Config extends YamlFile
     public void setItemAmounts(Map<Material, Integer> itemAmounts)
     {
         this.itemAmounts = itemAmounts;
+        setModified(true);
+    }
+
+    public boolean shouldStackGroundItems()
+    {
+        return groundStacks;
+    }
+
+    public void setGroundStacks(boolean groundStacks)
+    {
+        this.groundStacks = groundStacks;
         setModified(true);
     }
 }

@@ -22,6 +22,7 @@ import com.mikedeejay2.mikedeejay2lib.util.item.ItemCreator;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.gui.GUICreator;
+import com.mikedeejay2.simplestack.gui.events.GUIGroundStackingEvent;
 import com.mikedeejay2.simplestack.gui.events.GUIHopperMovementEvent;
 import com.mikedeejay2.simplestack.gui.events.GUIMaxStackEvent;
 import org.apache.commons.lang.WordUtils;
@@ -55,6 +56,7 @@ public class GUIConfigModule extends GUIModule
         GUIItem language = getGUIItemLanguage(player);
         GUIItem defaultMaxAmount = getGUIItemDefaultMaxAmount(config, player);
         GUIItem hopperMovement = getGUIItemHopperMovement(config, player);
+        GUIItem groundStacking = getGUIItemGroundStacking(config, player);
 
         layer.setItem(2, 3, itemTypeList);
         layer.setItem(2, 4, itemTypeAmountList);
@@ -62,6 +64,7 @@ public class GUIConfigModule extends GUIModule
         layer.setItem(2, 6, language);
         layer.setItem(2, 7, defaultMaxAmount);
         layer.setItem(3, 3, hopperMovement);
+        layer.setItem(3, 4, groundStacking);
 
         GUIItem closeItem = getGUIItemCloseItem(player);
         layer.setItem(5, 5, closeItem);
@@ -193,6 +196,30 @@ public class GUIConfigModule extends GUIModule
         GUIHopperMovementEvent hopperMovementEvent = new GUIHopperMovementEvent(plugin);
         hopperMovement.addEvent(hopperMovementEvent);
         return hopperMovement;
+    }
+
+    private GUIItem getGUIItemGroundStacking(Config config, Player player)
+    {
+        GUIItem groundStacking = new GUIItem(null);
+        if(config.shouldStackGroundItems())
+        {
+            groundStacking.setItem(ItemCreator.createHeadItem(Base64Heads.GREEN, 1,
+                    "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.ground_stacking_select"),
+                    "",
+                    "&a&l⊳ " + plugin.langManager().getTextLib(player, "generic.enabled"),
+                    "&7  " + plugin.langManager().getTextLib(player, "generic.disabled")));
+        }
+        else
+        {
+            groundStacking.setItem(ItemCreator.createHeadItem(Base64Heads.RED, 1,
+                    "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.ground_stacking_select"),
+                    "",
+                    "&7  " + plugin.langManager().getTextLib(player, "generic.enabled"),
+                    "&c&l⊳ " + plugin.langManager().getTextLib(player, "generic.disabled")));
+        }
+        GUIGroundStackingEvent groundStackingEvent = new GUIGroundStackingEvent(plugin);
+        groundStacking.addEvent(groundStackingEvent);
+        return groundStacking;
     }
 
     private GUIItem getGUIItemLanguage(Player player)

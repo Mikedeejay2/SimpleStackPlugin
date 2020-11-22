@@ -34,3 +34,9 @@ Default Max Amount: 64
 # Setting this to false will stop hopper checks which could increase performance but will
 # Stop stacking of unstackables when moving through hoppers.
 Hopper Movement Checks: true
+
+# Ground Stacking Checks: Simple Stack will check whether unstackable items on the ground
+# will stack together or not.
+# Setting this to false will stop unstackables stacking when on the ground and could
+# increase performance at the cost of unstackables not stacking when on the ground.
+Ground Stacking Checks: true
