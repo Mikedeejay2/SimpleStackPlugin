@@ -3,16 +3,18 @@ package com.mikedeejay2.simplestack.listeners.player;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.MoveUtils;
-import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Listens for block breaking events
+ *
+ * @author Mikedeejay2
+ */
 public class BlockBreakListener implements Listener
 {
     private final Simplestack plugin;

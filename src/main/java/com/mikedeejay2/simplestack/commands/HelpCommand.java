@@ -3,7 +3,6 @@ package com.mikedeejay2.simplestack.commands;
 import com.mikedeejay2.mikedeejay2lib.commands.AbstractSubCommand;
 import com.mikedeejay2.mikedeejay2lib.commands.CommandManager;
 import com.mikedeejay2.mikedeejay2lib.language.LangManager;
-import com.mikedeejay2.mikedeejay2lib.util.chat.Chat;
 import com.mikedeejay2.simplestack.Simplestack;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -14,6 +13,11 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
+/**
+ * Command for helping the player find the command that they're looking for.
+ *
+ * @author Mikedeejay2
+ */
 public class HelpCommand extends AbstractSubCommand
 {
     private final Simplestack plugin;

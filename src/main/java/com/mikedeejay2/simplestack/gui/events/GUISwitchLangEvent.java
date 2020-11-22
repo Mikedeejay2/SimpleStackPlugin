@@ -12,6 +12,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
 
+/**
+ * A <tt>GUIEvent</tt> that changes the default language of Simple Stack to a new language
+ * from the config.
+ *
+ * @author Mikedeejay2
+ */
 public class GUISwitchLangEvent implements GUIEvent
 {
     private final Simplestack plugin;

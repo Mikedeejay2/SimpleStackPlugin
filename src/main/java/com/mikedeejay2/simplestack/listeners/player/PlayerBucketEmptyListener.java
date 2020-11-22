@@ -13,6 +13,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
+/**
+ * Listens for Player Bucket Empty events
+ *
+ * @author Mikedeejay2
+ */
 public class PlayerBucketEmptyListener implements Listener
 {
     private final Simplestack plugin;

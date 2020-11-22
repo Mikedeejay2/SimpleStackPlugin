@@ -5,9 +5,13 @@ import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.*;
 
+/**
+ * Utilities for cancelling an item movement.
+ *
+ * @author Mikedeejay2
+ */
 public final class CancelUtils
 {
     /**

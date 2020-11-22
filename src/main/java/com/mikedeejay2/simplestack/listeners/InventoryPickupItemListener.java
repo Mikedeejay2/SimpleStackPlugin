@@ -6,11 +6,9 @@ import com.mikedeejay2.simplestack.util.MoveUtils;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class InventoryPickupItemListener implements Listener
 {
@@ -30,7 +28,7 @@ public class InventoryPickupItemListener implements Listener
     @EventHandler
     public void inventoryPickupItemEvent(InventoryPickupItemEvent event)
     {
-        if(!plugin.config().isHopperMovement()) return;
+        if(!plugin.config().shouldProcessHoppers()) return;
         Item item = event.getItem();
         ItemStack stack = item.getItemStack();
 

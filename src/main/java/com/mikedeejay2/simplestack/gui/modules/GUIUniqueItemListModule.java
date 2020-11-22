@@ -11,6 +11,12 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The <tt>GUIModule</tt> for the unique items list.
+ * This module is simply for saving the list upon close
+ *
+ * @author Mikedeejay2
+ */
 public class GUIUniqueItemListModule extends GUIModule
 {
     private final Simplestack plugin;
@@ -20,6 +26,13 @@ public class GUIUniqueItemListModule extends GUIModule
         this.plugin = plugin;
     }
 
+    /**
+     * Overridden <tt>onClose</tt> method for saving the unique items list
+     * to the config after it's been modified
+     *
+     * @param player The player that closed the GUI
+     * @param gui The GUIContainer
+     */
     @Override
     public void onClose(Player player, GUIContainer gui)
     {

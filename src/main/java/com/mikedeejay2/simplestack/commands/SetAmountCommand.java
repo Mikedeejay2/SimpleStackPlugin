@@ -10,6 +10,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Command that sets the amount of the player's held item to the specified amount in args[1].
+ * Basically just a helper command for if a player wants an item that they can't normally stack to.
+ *
+ * @author Mikedeejay2
+ */
 public class SetAmountCommand extends AbstractSubCommand
 {
     private final Simplestack plugin;

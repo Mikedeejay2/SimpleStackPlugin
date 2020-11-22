@@ -12,21 +12,38 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
+/**
+ * Config class for holding all configuration values for Simple Stack and
+ * managing file saving / loading.
+ *
+ * @author Mikedeejay2
+ */
 public class Config extends YamlFile
 {
     //Variables
+    // List mode of the material list. Either Blacklist of Whitelist.
     private ListMode listMode;
+    // Material list of the config (Item Type list in config)
     private List<Material> materialList;
+    // Localization code specified in the config
     private String langLocale;
+    // Item amounts based on the item's material (Item Type amounts list in config)
     private Map<Material, Integer> itemAmounts;
+    // Unique items list from the unique_items.json
     private List<ItemStack> uniqueItemList;
+    // The max amount for all items in minecraft
     private int maxAmount;
+    // Whether custom hopper stacking occurs or not
     private boolean hopperMovement;
+    // Whether custom ground stacking occurs or not
     private boolean groundStacks;
 
     // Internal config data
+    // The unique items json file
     private JsonFile uniqueItems;
+    // Whether this config has been modified or not
     private boolean modified;
+    // Whether this config has been loaded or not
     private boolean loaded;
 
     public Config(Simplestack plugin)
@@ -42,6 +59,9 @@ public class Config extends YamlFile
         loadFromDisk(true);
     }
 
+    /**
+     * Load all data from the config files into this class.
+     */
     private void loadData()
     {
         langLocale = getDefaultLang();
@@ -58,16 +78,25 @@ public class Config extends YamlFile
         loaded = true;
     }
 
+    /**
+     * Load hopper movement into the <tt>hopperMovement</tt> variable of this config
+     */
     private void loadHopperMovement()
     {
         hopperMovement = accessor.getBoolean("Hopper Movement Checks");
     }
 
+    /**
+     * Load ground stacking into the <tt>groundStacks</tt> variable of this config
+     */
     private void loadGroundStacks()
     {
         groundStacks = accessor.getBoolean("Ground Stacking Checks");
     }
 
+    /**
+     * Load the default max amount into the <tt>maxAmount</tt> variable for this config
+     */
     private void loadDefaultAmount()
     {
         maxAmount = accessor.getInt("Default Max Amount");
@@ -78,6 +107,9 @@ public class Config extends YamlFile
         }
     }
 
+    /**
+     * Load item amounts into the <tt>itemAmounts</tt> map for this config
+     */
     private void loadItemAmounts()
     {
         itemAmounts = new HashMap<>();
@@ -102,7 +134,7 @@ public class Config extends YamlFile
     }
 
     /**
-     * Get the list mode that the list should operate in. Whitelist or blacklist.
+     * Load the list mode into the <tt>ListMode</tt> variable for this config
      */
     private void loadListMode()
     {
@@ -121,7 +153,7 @@ public class Config extends YamlFile
     }
 
     /**
-     * Fills the LIST variable with materials specified in the config.
+     * Load the material list into the <tt>materialList</tt> list for this config
      */
     private void loadMaterialList()
     {
@@ -142,7 +174,7 @@ public class Config extends YamlFile
     }
 
     /**
-     * Fills the LIST variable with materials specified in the config.
+     * Load the unique items list into the <tt>uniqueItems</tt> list for this config
      */
     private void loadItemList()
     {
@@ -326,6 +358,14 @@ public class Config extends YamlFile
         return super.updateFromJar(throwErrors);
     }
 
+    /**
+     * Overridden method from <tt>DataFile</tt> that reloads the config from disk
+     * if the file hasn't been modified in game, and saves the file to disk if the
+     * file has been modified in game. This prevents data loss from reloads.
+     *
+     * @param throwErrors Whether this method should throw any errors it encounters to console or not
+     * @return Whether the reload was successful or not
+     */
     @Override
     public boolean reload(boolean throwErrors)
     {
@@ -576,7 +616,7 @@ public class Config extends YamlFile
     }
 
     /**
-     * set whether this file has been modified or not
+     * Set whether this file has been modified or not
      *
      * @param modified The new modified state of this file
      */
@@ -585,28 +625,53 @@ public class Config extends YamlFile
         this.modified = modified;
     }
 
+    /**
+     * Set a new max stack amount for items
+     *
+     * @param maxAmount The new max stack amount
+     */
     public void setMaxAmount(int maxAmount)
     {
         this.maxAmount = maxAmount;
         setModified(true);
     }
 
-    public boolean isHopperMovement()
+    /**
+     * Returns whether hoppers should process custom stacking or not
+     *
+     * @return Should process hoppers
+     */
+    public boolean shouldProcessHoppers()
     {
         return hopperMovement;
     }
 
+    /**
+     * Set whether hoppers should be processed for unstackables or not
+     *
+     * @param hopperMovement The new hopper processing state
+     */
     public void setHopperMovement(boolean hopperMovement)
     {
         this.hopperMovement = hopperMovement;
         setModified(true);
     }
 
+    /**
+     * Get the list of unique items from the config
+     *
+     * @return The list of unique items
+     */
     public List<ItemStack> getUniqueItemList()
     {
         return uniqueItemList;
     }
 
+    /**
+     * Set a new material list for the config
+     *
+     * @param materialList The new list of materials to use
+     */
     public void setMaterialList(List<Material> materialList)
     {
         this.materialList.clear();
@@ -618,23 +683,43 @@ public class Config extends YamlFile
         setModified(true);
     }
 
+    /**
+     * Set the unique items list of the config to a new list
+     *
+     * @param uniqueItemList The new items list to use
+     */
     public void setUniqueItemList(List<ItemStack> uniqueItemList)
     {
         this.uniqueItemList = uniqueItemList;
         setModified(true);
     }
 
+    /**
+     * Set a new item amounts list for the config
+     *
+     * @param itemAmounts The new item amounts list
+     */
     public void setItemAmounts(Map<Material, Integer> itemAmounts)
     {
         this.itemAmounts = itemAmounts;
         setModified(true);
     }
 
-    public boolean shouldStackGroundItems()
+    /**
+     * Get whether ground items should be processed to stack unstackables
+     *
+     * @return The ground stacking state
+     */
+    public boolean processGroundItems()
     {
         return groundStacks;
     }
 
+    /**
+     * Set whether the config should process ground item movements for unstackables or not
+     *
+     * @param groundStacks The new state for ground item stacking
+     */
     public void setGroundStacks(boolean groundStacks)
     {
         this.groundStacks = groundStacks;

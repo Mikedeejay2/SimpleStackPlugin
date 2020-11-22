@@ -9,6 +9,12 @@ import com.mikedeejay2.simplestack.config.Config;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+/**
+ * A <tt>GUIEvent</tt> that modifies the max stack amount for all items in Minecraft.
+ * Value is changed in the Simple Stack config.
+ *
+ * @author Mikedeejay2
+ */
 public class GUIMaxStackEvent implements GUIEvent
 {
     private final Simplestack plugin;

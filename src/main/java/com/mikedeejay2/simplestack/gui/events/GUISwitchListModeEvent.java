@@ -13,6 +13,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+/**
+ * A <tt>GUIEvent</tt> that switches the list mode in the config to another
+ * mode.
+ *
+ * @author Mikedeejay2
+ */
 public class GUISwitchListModeEvent implements GUIEvent
 {
     private final Simplestack plugin;

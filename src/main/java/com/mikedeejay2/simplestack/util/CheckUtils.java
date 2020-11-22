@@ -11,6 +11,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
+/**
+ * Utilities for checking whether an item should be moved or not.
+ *
+ * @author Mikedeejay2
+ */
 public final class CheckUtils
 {
     /**

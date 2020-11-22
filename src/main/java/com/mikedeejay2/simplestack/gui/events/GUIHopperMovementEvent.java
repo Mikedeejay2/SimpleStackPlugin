@@ -12,6 +12,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+/**
+ * A <tt>GUIEvent</tt> that changes whether hopper movement should be processed by
+ * Simple Stack in the config.
+ *
+ * @author Mikedeejay2
+ */
 public class GUIHopperMovementEvent implements GUIEvent
 {
     private final Simplestack plugin;
@@ -32,7 +38,7 @@ public class GUIHopperMovementEvent implements GUIEvent
         int row = layer.getRowFromSlot(slot);
         int col = layer.getColFromSlot(slot);
         GUIItem item = layer.getItem(row, col);
-        boolean newHopper = !config.isHopperMovement();
+        boolean newHopper = !config.shouldProcessHoppers();
         if(newHopper)
         {
             item.setItem(ItemCreator.createHeadItem(Base64Heads.GREEN, 1,

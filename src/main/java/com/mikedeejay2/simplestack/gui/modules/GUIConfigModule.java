@@ -33,6 +33,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
+/**
+ * The <tt>GUIModule</tt> for the main configuration GUI screen
+ *
+ * @author Mikedeejay2
+ */
 public class GUIConfigModule extends GUIModule
 {
     private final Simplestack plugin;
@@ -44,6 +49,13 @@ public class GUIConfigModule extends GUIModule
         this.plugin = plugin;
     }
 
+    /**
+     * Overridden <tt>onOpenHead</tt> method that generates the configuration screen
+     * when the GUI is opened
+     *
+     * @param player The player that opened the GUI
+     * @param gui The <tt>GUIContainer</tt> that the config GUI is contained in
+     */
     @Override
     public void onOpenHead(Player player, GUIContainer gui)
     {
@@ -73,6 +85,12 @@ public class GUIConfigModule extends GUIModule
         layer.setItem(1, 5, aboutItem);
     }
 
+    /**
+     * Get the <tt>GUIItem</tt> for the "about" button
+     *
+     * @param player The player (For localization)
+     * @return The about item
+     */
     private GUIItem getGUIItemAboutItem(Player player)
     {
         String name = plugin.langManager().getText(player, "simplestack.gui.config.about_select");
@@ -90,6 +108,12 @@ public class GUIConfigModule extends GUIModule
         return aboutItem;
     }
 
+    /**
+     * Get the <tt>GUIItem</tt> for the close button
+     *
+     * @param player The player (For localization)
+     * @return The close button
+     */
     private GUIItem getGUIItemCloseItem(Player player)
     {
         GUIItem closeItem = new GUIItem(ItemCreator.createHeadItem(Base64Heads.X_RED, 1,
@@ -98,13 +122,19 @@ public class GUIConfigModule extends GUIModule
         return closeItem;
     }
 
+    /**
+     * Get the <tt>GUIItem</tt> for the item type amount list button
+     *
+     * @param player The player (For localization)
+     * @return The item type amount list button
+     */
     private GUIItem getGUIItemItemTypeAmountList(Player player)
     {
         AnimatedGUIItem itemTypeAmountList = new AnimatedGUIItem(ItemCreator.createItem(Material.WATER_BUCKET, 23,
                 "&b&l" + plugin.langManager().getText(player, "simplestack.gui.item_type_amts.title"),
                 "&f" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_description")), true);
         final Map<Material, Integer> itemAmounts = plugin.config().getItemAmounts();
-        if(itemAmounts.size() > 0 && plugin.langManager().getDefaultLang().equals("en_us"))
+        if(itemAmounts.size() > 0 && player.getLocale().startsWith("en_"))
         {
             Iterator<Map.Entry<Material, Integer>> iter1 = itemAmounts.entrySet().iterator();
             List<String> lore = itemTypeAmountList.getLore() == null ? new ArrayList<>() : itemTypeAmountList.getLore();
@@ -174,10 +204,17 @@ public class GUIConfigModule extends GUIModule
         return itemTypeAmountList;
     }
 
+    /**
+     * Get the <tt>GUIItem</tt> for the hopper movement button
+     *
+     * @param config The <tt>Config</tt> reference
+     * @param player The player (For localization)
+     * @return The hopper movement button
+     */
     private GUIItem getGUIItemHopperMovement(Config config, Player player)
     {
         GUIItem hopperMovement = new GUIItem(null);
-        if(config.isHopperMovement())
+        if(config.shouldProcessHoppers())
         {
             hopperMovement.setItem(ItemCreator.createHeadItem(Base64Heads.GREEN, 1,
                     "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
@@ -198,10 +235,17 @@ public class GUIConfigModule extends GUIModule
         return hopperMovement;
     }
 
+    /**
+     * Get the <tt>GUIItem</tt> for the ground stacking button
+     *
+     * @param config The <tt>Config</tt> reference
+     * @param player The player (For localization)
+     * @return The ground stacking button
+     */
     private GUIItem getGUIItemGroundStacking(Config config, Player player)
     {
         GUIItem groundStacking = new GUIItem(null);
-        if(config.shouldStackGroundItems())
+        if(config.processGroundItems())
         {
             groundStacking.setItem(ItemCreator.createHeadItem(Base64Heads.GREEN, 1,
                     "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.ground_stacking_select"),
@@ -222,6 +266,12 @@ public class GUIConfigModule extends GUIModule
         return groundStacking;
     }
 
+    /**
+     * Get the <tt>GUIItem</tt> for the language select button
+     *
+     * @param player The player (For localization)
+     * @return The language button
+     */
     private GUIItem getGUIItemLanguage(Player player)
     {
         GUIItem language = new GUIItem(ItemCreator.createHeadItem(Base64Heads.GLOBE, 1,
@@ -247,6 +297,13 @@ public class GUIConfigModule extends GUIModule
         return language;
     }
 
+    /**
+     * Get the <tt>GUIItem</tt> for the default max amount button
+     *
+     * @param config A reference to the Simple Stack config
+     * @param player The player (For Localization)
+     * @return The default max amount button
+     */
     private GUIItem getGUIItemDefaultMaxAmount(Config config, Player player)
     {
         GUIItem defaultMaxAmount = new GUIItem(ItemCreator.createItem(Material.BOOK, config.getMaxAmount(),
@@ -260,6 +317,12 @@ public class GUIConfigModule extends GUIModule
         return defaultMaxAmount;
     }
 
+    /**
+     * Get the <tt>GUIItem</tt> for the unique item list button
+     *
+     * @param player The player (For localization)
+     * @return The unique item list button
+     */
     private GUIItem getGUIItemUniqueItemList(Player player)
     {
         AnimatedGUIItem uniqueItemList = new AnimatedGUIItem(ItemCreator.createItem(Material.CYAN_CONCRETE_POWDER, 1,
@@ -268,7 +331,7 @@ public class GUIConfigModule extends GUIModule
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.unique_item_desc_l2"),
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.unique_item_desc_l3")), true);
         final List<ItemStack> uniqueItems = plugin.config().getUniqueItemList();
-        if(uniqueItems.size() > 0 && plugin.langManager().getDefaultLang().equals("en_us"))
+        if(uniqueItems.size() > 0 && player.getLocale().startsWith("en_"))
         {
             List<String> lore = uniqueItemList.getLore() == null ? new ArrayList<>() : uniqueItemList.getLore();
             lore.add("");
@@ -326,6 +389,12 @@ public class GUIConfigModule extends GUIModule
         return uniqueItemList;
     }
 
+    /**
+     * Get the <tt>GUIItem</tt> for the item type list button
+     *
+     * @param player The player (For localization)
+     * @return The item type list button
+     */
     private GUIItem getGUIItemItemTypeList(Player player)
     {
         AnimatedGUIItem itemTypeList = new AnimatedGUIItem(ItemCreator.createItem(Material.ENDER_PEARL, 1,
@@ -334,7 +403,7 @@ public class GUIConfigModule extends GUIModule
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_desc_l2"),
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_desc_l3")), true);
         final List<Material> materialItems = plugin.config().getMaterialList();
-        if(materialItems.size() > 0 && plugin.langManager().getDefaultLang().equals("en_us"))
+        if(materialItems.size() > 0 && player.getLocale().startsWith("en_"))
         {
             List<String> lore = itemTypeList.getLore() == null ? new ArrayList<>() : itemTypeList.getLore();
             lore.add("");

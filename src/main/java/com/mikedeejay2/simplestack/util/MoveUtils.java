@@ -18,6 +18,11 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+/**
+ * Utilities for moving items from one location to another
+ *
+ * @author Mikedeejay2
+ */
 public final class MoveUtils
 {
     /**

@@ -4,7 +4,6 @@ import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.CheckUtils;
 import com.mikedeejay2.simplestack.util.ClickUtils;
-import com.mikedeejay2.simplestack.util.MoveUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,6 +12,11 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.*;
 
+/**
+ * Listens for Inventory Click events
+ *
+ * @author Mikedeejay2
+ */
 public class InventoryClickListener implements Listener
 {
     private final Simplestack plugin;

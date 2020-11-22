@@ -11,6 +11,11 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
+/**
+ * Listens for Inventory Close events
+ *
+ * @author Mikedeejay2
+ */
 public class InventoryCloseListener implements Listener
 {
     private final Simplestack plugin;

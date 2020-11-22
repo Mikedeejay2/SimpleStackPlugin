@@ -16,6 +16,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Custom item stacking runnable for stacking unstackable items when they are on
+ * the ground.
+ *
+ * @author Mikedeejay2
+ */
 public class GroundItemStacker extends BukkitRunnable
 {
     private final Simplestack plugin;
@@ -28,7 +34,7 @@ public class GroundItemStacker extends BukkitRunnable
     @Override
     public void run()
     {
-        if(!plugin.config().shouldStackGroundItems()) return;
+        if(!plugin.config().processGroundItems()) return;
         List<World> worlds = Bukkit.getWorlds();
         List<Item> items = new ArrayList<>();
         for(World world : worlds)

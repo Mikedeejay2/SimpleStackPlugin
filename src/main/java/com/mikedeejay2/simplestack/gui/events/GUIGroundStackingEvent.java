@@ -12,6 +12,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+/**
+ * A <tt>GUIEvent</tt> that changes the ground items stacking state in the
+ * Simple Stack config.
+ *
+ * @author Mikedeejay2
+ */
 public class GUIGroundStackingEvent implements GUIEvent
 {
     private final Simplestack plugin;
@@ -32,7 +38,7 @@ public class GUIGroundStackingEvent implements GUIEvent
         int row = layer.getRowFromSlot(slot);
         int col = layer.getColFromSlot(slot);
         GUIItem item = layer.getItem(row, col);
-        boolean newHopper = !config.shouldStackGroundItems();
+        boolean newHopper = !config.processGroundItems();
         if(newHopper)
         {
             item.setItem(ItemCreator.createHeadItem(Base64Heads.GREEN, 1,

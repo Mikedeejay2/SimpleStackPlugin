@@ -12,6 +12,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
+/**
+ * Listens for Item Spawn events. <p>
+ * <b>Currently unused</b>
+ *
+ * @author Mikedeejay2
+ */
 public class ItemSpawnListener implements Listener
 {
     private final Simplestack plugin;

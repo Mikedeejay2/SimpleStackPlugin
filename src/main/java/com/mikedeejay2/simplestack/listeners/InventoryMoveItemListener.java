@@ -29,7 +29,7 @@ public class InventoryMoveItemListener implements Listener
     @EventHandler
     public void inventoryMoveItemEvent(InventoryMoveItemEvent event)
     {
-        if(!plugin.config().isHopperMovement()) return;
+        if(!plugin.config().shouldProcessHoppers()) return;
         ItemStack item = event.getItem();
 
         Inventory fromInv = event.getSource();

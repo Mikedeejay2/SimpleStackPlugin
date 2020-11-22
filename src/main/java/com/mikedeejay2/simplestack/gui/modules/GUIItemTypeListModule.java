@@ -18,6 +18,13 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The <tt>GUIModule</tt> for the item type list.
+ * This module is simply for saving the list upon close and
+ * adding the blacklist / whitelis button.
+ *
+ * @author Mikedeejay2
+ */
 public class GUIItemTypeListModule extends GUIModule
 {
     private final Simplestack plugin;
@@ -27,6 +34,13 @@ public class GUIItemTypeListModule extends GUIModule
         this.plugin = plugin;
     }
 
+    /**
+     * Overridden <tt>onOpenHead</tt> method for adding the
+     * blacklist / whitelist button.
+     *
+     * @param player The player that opened the GUI
+     * @param gui The <tt>GUIContainer</tt> of the GUI
+     */
     @Override
     public void onOpenHead(Player player, GUIContainer gui)
     {
@@ -54,6 +68,13 @@ public class GUIItemTypeListModule extends GUIModule
         layer.setItem(1, 8, switchListMode);
     }
 
+    /**
+     * Overridden <tt>onClose</tt> method that saves the modified list to the
+     * config.
+     *
+     * @param player The player that closed the GUI
+     * @param gui The <tt>GUIContainer</tt> of the GUI
+     */
     @Override
     public void onClose(Player player, GUIContainer gui)
     {

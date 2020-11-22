@@ -9,6 +9,11 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+/**
+ * A command that opens a GUI for the player to configure the Simple Stack's config.
+ *
+ * @author Mikedeejay2
+ */
 public class ConfigCommand extends AbstractSubCommand
 {
     private final Simplestack plugin;
@@ -19,9 +24,7 @@ public class ConfigCommand extends AbstractSubCommand
     }
 
     /**
-     * Resets the config to the default values. Useful for if a player has messed up
-     * their config and wants a fresh start without browsing through the files to delete
-     * the config.yml file.
+     * Opens a configuration GUI for the player that ran the command.
      *
      * @param sender The CommandSender that sent the command
      * @param args The arguments for the command (subcommands)

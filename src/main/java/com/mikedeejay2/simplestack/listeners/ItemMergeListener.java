@@ -8,6 +8,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Listens for Item Merge events
+ *
+ * @author Mikedeejay2
+ */
 public class ItemMergeListener implements Listener
 {
     private final Simplestack plugin;

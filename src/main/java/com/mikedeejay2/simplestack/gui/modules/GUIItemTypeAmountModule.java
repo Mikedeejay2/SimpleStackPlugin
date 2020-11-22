@@ -14,6 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The <tt>GUIModule</tt> for the item type amount list.
+ * This module is simply for saving the list upon close
+ *
+ * @author Mikedeejay2
+ */
 public class GUIItemTypeAmountModule extends GUIModule
 {
     private final Simplestack plugin;
@@ -23,6 +29,13 @@ public class GUIItemTypeAmountModule extends GUIModule
         this.plugin = plugin;
     }
 
+    /**
+     * Overridden <tt>onClose</tt> method for saving the list
+     * to the config
+     *
+     * @param player The player closing the GUI
+     * @param gui The <tt>GUIContainer</tt> of the GUI
+     */
     @Override
     public void onClose(Player player, GUIContainer gui)
     {

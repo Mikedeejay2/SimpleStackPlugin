@@ -6,6 +6,11 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+/**
+ * Command to reset the config to its default values easily.
+ *
+ * @author Mikedeejay2
+ */
 public class ResetCommand extends AbstractSubCommand
 {
     private final Simplestack plugin;

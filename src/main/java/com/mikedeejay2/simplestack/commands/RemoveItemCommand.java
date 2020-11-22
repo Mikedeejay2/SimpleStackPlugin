@@ -9,6 +9,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Command that removes the held item of the player running the command from the unique items list
+ * of the config.
+ *
+ * @author Mikedeejay2
+ */
 public class RemoveItemCommand extends AbstractSubCommand
 {
     private final Simplestack plugin;
@@ -19,9 +25,7 @@ public class RemoveItemCommand extends AbstractSubCommand
     }
 
     /**
-     * Resets the config to the default values. Useful for if a player has messed up
-     * their config and wants a fresh start without browsing through the files to delete
-     * the config.yml file.
+     * Removes the item of the player's held item from the unique items list of the config.
      *
      * @param sender The CommandSender that sent the command
      * @param args The arguments for the command (subcommands)

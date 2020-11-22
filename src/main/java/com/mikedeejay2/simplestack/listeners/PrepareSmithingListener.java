@@ -7,6 +7,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.inventory.SmithingInventory;
 
+/**
+ * Listens for Prepare Smithing events
+ *
+ * @author Mikedeejay2
+ */
 public class PrepareSmithingListener implements Listener
 {
     private final Simplestack plugin;

@@ -7,6 +7,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
 
+/**
+ * Listens for Prepare Anvil events
+ *
+ * @author Mikedeejay2
+ */
 public class PrepareAnvilListener implements Listener
 {
     private final Simplestack plugin;

@@ -14,6 +14,11 @@ import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Listens for Inventory Drag events
+ *
+ * @author Mikedeejay2
+ */
 public class InventoryDragListener implements Listener
 {
     private final Simplestack plugin;

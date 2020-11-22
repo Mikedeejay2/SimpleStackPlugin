@@ -3,6 +3,11 @@ package com.mikedeejay2.simplestack.util;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.inventory.*;
 
+/**
+ * Miscellaneous utilities for methods that don't fit in any other category.
+ *
+ * @author Mikedeejay2
+ */
 public final class StackUtils
 {
     /**

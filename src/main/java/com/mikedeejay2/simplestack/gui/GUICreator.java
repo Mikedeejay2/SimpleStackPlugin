@@ -22,10 +22,24 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Miscellaneous static methods to create GUIs or GUI-related objects.
+ *
+ * @author Mikedeejay2
+ */
 public class GUICreator
 {
+    // The animated gui item seen on the main configuration screen.
+    // It's stored so that it doesn't need to be created many times.
     private static AnimatedGUIItem animatedGUIItem = null;
 
+    /**
+     * Create the main configuration GUI
+     *
+     * @param plugin A reference to the Simple Stack plugin class
+     * @param player The player requesting to open the GUI (For localization)
+     * @return The <tt>GUIContainer</tt> for the main GUI
+     */
     public static GUIContainer createMainGUI(Simplestack plugin, Player player)
     {
         GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.config.title"), 5);
@@ -43,6 +57,12 @@ public class GUICreator
         return gui;
     }
 
+    /**
+     * Get the animated GUI item for the main GUI screen.
+     * If the item hasn't already been created a new item will be created.
+     *
+     * @return The animated item
+     */
     public static AnimatedGUIItem getAnimItem()
     {
         if(animatedGUIItem == null)
@@ -59,6 +79,13 @@ public class GUICreator
         return animatedGUIItem;
     }
 
+    /**
+     * Get the language list used in the Language Select GUI screen.
+     *
+     * @param plugin A reference to Simple Stack's plugin class
+     * @param player The player (For localization)
+     * @return A list of GUIItems for each language
+     */
     public static List<GUIItem> getLanguageList(Simplestack plugin, Player player)
     {
         List<GUIItem> items = new ArrayList<>();

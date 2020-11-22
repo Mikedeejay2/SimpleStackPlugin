@@ -17,12 +17,12 @@ public class ReloadCommand extends AbstractSubCommand
     }
 
     /**
-     * The reload command reloads the block list in the config class based on the current
-     * config file. If the server was opened and then the config file was modified,
+     * The reload command reloads the config file from disk.
+     * If the server was opened and then the config file was modified,
      * /simplestack reload could be run to reload the config in the server and make the
      * plugin function with the modified config.
      *
-     * @param sender The CommandSender that sent the command
+     * @param sender The <tt>CommandSender</tt> that sent the command
      * @param args The arguments for the command (subcommands)
      */
     @Override

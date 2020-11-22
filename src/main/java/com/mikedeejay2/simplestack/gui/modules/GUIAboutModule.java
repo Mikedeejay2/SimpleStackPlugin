@@ -18,6 +18,11 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Random;
 
+/**
+ * The <tt>GUIModule</tt> for the about screen in the GUI.
+ *
+ * @author Mikedeejay2
+ */
 public class GUIAboutModule extends GUIModule
 {
     private final Simplestack plugin;
@@ -27,6 +32,14 @@ public class GUIAboutModule extends GUIModule
         this.plugin = plugin;
     }
 
+    /**
+     * Overridden <tt>onClickedHead</tt> that creates a click effect on screen.
+     * Why? Because I was bored and wanted to show off what my GUI library can
+     * do.
+     *
+     * @param event The original <tt>InventoryClickEvent</tt>
+     * @param gui The <tt>GUIContainer</tt> that was clicked
+     */
     @Override
     public void onClickedHead(InventoryClickEvent event, GUIContainer gui)
     {
@@ -146,11 +159,26 @@ public class GUIAboutModule extends GUIModule
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
     }
 
-    private boolean validCheck(int rows, int cols, int newRow, int newCol)
+    /**
+     * Helper method for making sure that an item is actually in the GUI
+     *
+     * @param rows The maximum rows of the GUI
+     * @param cols The maximum columns of the GUI
+     * @param curRow The current row of the item
+     * @param curCol The current column of the item
+     * @return Whether the item placement is valid or not
+     */
+    private boolean validCheck(int rows, int cols, int curRow, int curCol)
     {
-        return newRow > 0 && newCol > 0 && newRow <= rows && newCol <= cols;
+        return curRow > 0 && curCol > 0 && curRow <= rows && curCol <= cols;
     }
 
+    /**
+     * Overridden method <tt>onOpenHead</tt> that generates the about screen
+     *
+     * @param player The player the opened the GUI
+     * @param gui The <tt>GUIContainer</tt> that the about screen is located in
+     */
     @Override
     public void onOpenHead(Player player, GUIContainer gui)
     {
@@ -166,6 +194,12 @@ public class GUIAboutModule extends GUIModule
         genBackButton(player, textLayer);
     }
 
+    /**
+     * Generate the back button for the about screen
+     *
+     * @param player The player that opened the GUI (For the player's locale)
+     * @param textLayer The text <tt>GUILayer</tt> that will be used
+     */
     private void genBackButton(Player player, GUILayer textLayer)
     {
         AnimatedGUIItem backItem = new AnimatedGUIItem(null, false, 60);
@@ -174,6 +208,13 @@ public class GUIAboutModule extends GUIModule
         textLayer.setItem(6, 5, backItem);
     }
 
+    /**
+     * Generate the about section with the about text and intro animation
+     *
+     * @param textLayer The text <tt>GUILayer</tt> that will be used
+     * @param aboutLayer The about <tt>GUILayer</tt> that will be used
+     * @param player The player that opened the GUI (For the player's locale)
+     */
     private void genAbout(GUILayer textLayer, GUILayer aboutLayer, Player player)
     {
         int start = 40;
@@ -204,6 +245,11 @@ public class GUIAboutModule extends GUIModule
         aboutLayer.setItem(5, 5, aboutItem);
     }
 
+    /**
+     * Generate the Simple Stack title text and animation
+     *
+     * @param textLayer The text <tt>GUILayer</tt> that will be used
+     */
     private void genText(GUILayer textLayer)
     {
         AnimatedGUIItem item1 = new AnimatedGUIItem(null, false, 10);
@@ -309,6 +355,11 @@ public class GUIAboutModule extends GUIModule
         textLayer.setItem(4, 8, item11);
     }
 
+    /**
+     * Generate the background flying block animation
+     *
+     * @param flyLayer The fly <tt>GUILayer</tt> that will be used
+     */
     private void genFly(GUILayer flyLayer)
     {
         for(int col = 1; col <= 9; ++col)
@@ -318,6 +369,12 @@ public class GUIAboutModule extends GUIModule
         }
     }
 
+    /**
+     * Generate the background of the about screen. This includes
+     * the cool transition from nothing to purple.
+     *
+     * @param base The base <tt>GUILayer</tt> that will be used
+     */
     private void genBackground(GUILayer base)
     {
         AnimatedGUIItem item1 = getBackgroundItem(2);
@@ -356,6 +413,13 @@ public class GUIAboutModule extends GUIModule
         }
     }
 
+    /**
+     * Get the background <tt>AnimatedGUIItem</tt> of the background with the transition
+     * animation
+     *
+     * @param delay The delay of the animation
+     * @return The new background item
+     */
     private AnimatedGUIItem getBackgroundItem(int delay)
     {
         AnimatedGUIItem item = new AnimatedGUIItem(null, false, delay);
@@ -365,6 +429,12 @@ public class GUIAboutModule extends GUIModule
         return item;
     }
 
+    /**
+     * Get the item that flies around in the background on the about screen.
+     *
+     * @param column The column that the item is located on
+     * @return The new flying item
+     */
     private AnimatedGUIItem getFlyItem(int column)
     {
         Random random = new Random();

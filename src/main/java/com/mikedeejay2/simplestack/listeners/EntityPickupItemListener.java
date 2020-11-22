@@ -11,6 +11,11 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Listens for Entity Pickup Item events
+ *
+ * @author Mikedeejay2
+ */
 public class EntityPickupItemListener implements Listener
 {
     private final Simplestack plugin;
