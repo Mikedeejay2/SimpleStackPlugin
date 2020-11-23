@@ -52,7 +52,7 @@ simply by moving items around the inventory and combining them into a stack.
 The config for Simple Stack can be modified through it's config file or through `/simplestack config` which opens a
 GUI that can modify all values of the config.
 
-![gif 2 15fps](https://user-images.githubusercontent.com/58639173/99920848-626ec100-2cf4-11eb-991b-119070cc7e03.gif)
+![gif 2 15fps](https://user-images.githubusercontent.com/58639173/99921384-0c9c1800-2cf8-11eb-8b52-98445920e572.gif)
 
 List Mode: The mode that the item types list will operate in
   * `Blacklist` = Items added to the list will not be stackable
