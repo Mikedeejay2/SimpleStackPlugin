@@ -113,7 +113,7 @@
                             </relocations>
                             <minimizeJar>true</minimizeJar>
                             <!-- This is the location to my development server. You should change this. -->
-                            <outputFile>C:\Users\mdeej\IdeaProjects\MINECRAFT SPIGOT PLUGIN TOOLS\Dev Server Latest\plugins\${project.artifactId}-${project.version}.jar</outputFile>
+                            <outputFile>C:\Users\mdeej\IdeaProjects\MINECRAFT SPIGOT PLUGIN TOOLS\Dev Server Latest\plugins\${project.name}-${project.version}.jar</outputFile>
                         </configuration>
                     </execution>
                 </executions>
