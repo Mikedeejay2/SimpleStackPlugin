@@ -54,9 +54,9 @@ public class Config extends YamlFile
         if(!fileExists())
         {
             loadFromJar(true);
-            saveToDisk(true);
+            super.saveToDisk(true);
         }
-        loadFromDisk(true);
+        else loadFromDisk(true);
     }
 
     /**
@@ -251,7 +251,7 @@ public class Config extends YamlFile
     {
         boolean success = super.loadFromDisk(throwErrors);
         updateFromJar(throwErrors);
-        saveToDisk(throwErrors);
+        super.saveToDisk(throwErrors);
         loadData();
         return success;
     }
