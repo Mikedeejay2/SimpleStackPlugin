@@ -28,6 +28,8 @@ public final class Simplestack extends PluginBase
         super.onEnable();
 
         this.bStats.init(9379);
+        this.updateChecker.init("Mikedeejay2", "SimpleStackPlugin");
+        this.updateChecker.checkForUpdates(10);
 
         this.commandManager.setup("simplestack");
 
