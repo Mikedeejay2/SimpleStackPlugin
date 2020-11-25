@@ -134,6 +134,30 @@ public final class MoveUtils
     }
 
     /**
+     * Move an item to an inventory. The item has no original location.
+     *
+     * @param item The ItemStack being moved
+     * @param inv The inventory to move the item into
+     */
+    public static void moveItem(Simplestack plugin, ItemStack item, Inventory inv)
+    {
+        if(item.getType() == Material.AIR) return;
+        for(int i = 0; i < inv.getStorageContents().length; ++i)
+        {
+            if(combineItemInternal(plugin, item, inv, i)) break;
+        }
+        if(item.getAmount() != 0)
+        {
+            for(int i = 0; i < inv.getStorageContents().length; ++i)
+            {
+                if(inv.getItem(i) != null) continue;
+                inv.setItem(i, item);
+                break;
+            }
+        }
+    }
+
+    /**
      * Manually remove an item from an inventory if the current slot that the item
      * exists in is unknown.
      *
