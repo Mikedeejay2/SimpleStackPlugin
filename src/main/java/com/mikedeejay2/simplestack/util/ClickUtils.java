@@ -2,7 +2,10 @@ package com.mikedeejay2.simplestack.util;
 
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.Simplestack;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.*;
@@ -361,6 +364,18 @@ public final class ClickUtils
             clickedInventory.setItem(slot, oldItemSlot);
             toInv.setItem(0, itemInSlot);
             return;
+        }
+        else if(itemInSlot.getType().toString().endsWith("SHULKER_BOX") && toInv.getLocation() != null)
+        {
+            Location location = toInv.getLocation();
+            World world = location.getWorld();
+            Block block = world.getBlockAt(location);
+            Material blockMat = block.getType();
+            if(blockMat.toString().endsWith("SHULKER_BOX"))
+            {
+                ClickUtils.shiftClickSameInv(plugin, itemInSlot, event, bottomInv);
+                return;
+            }
         }
 
 

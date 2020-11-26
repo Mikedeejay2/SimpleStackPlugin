@@ -3,7 +3,10 @@ package com.mikedeejay2.simplestack.util;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 
@@ -116,11 +119,19 @@ public final class CancelUtils
      * @param inv Inventory to check
      * @return If inventory should be cancelled
      */
-    public static boolean cancelGUICheck(Simplestack plugin, Inventory inv)
+    public static boolean cancelGUICheck(Simplestack plugin, Inventory inv, ItemStack cursorItem)
     {
         if(inv == null) return true;
         if(plugin.getMCVersion()[1] >= 16 && inv instanceof SmithingInventory) return false;
         if(inv.getLocation() == null) return true;
+        if(cursorItem.getType().toString().endsWith("SHULKER_BOX"))
+        {
+            Location location = inv.getLocation();
+            World world = location.getWorld();
+            Block block = world.getBlockAt(location);
+            Material blockType = block.getType();
+            if(blockType.toString().endsWith("SHULKER_BOX")) return true;
+        }
         return false;
     }
 }
