@@ -21,10 +21,12 @@ import com.mikedeejay2.mikedeejay2lib.util.head.Base64Heads;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemCreator;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
+import com.mikedeejay2.simplestack.config.ListMode;
 import com.mikedeejay2.simplestack.gui.GUICreator;
 import com.mikedeejay2.simplestack.gui.events.GUIGroundStackingEvent;
 import com.mikedeejay2.simplestack.gui.events.GUIHopperMovementEvent;
 import com.mikedeejay2.simplestack.gui.events.GUIMaxStackEvent;
+import com.mikedeejay2.simplestack.gui.events.GUISwitchListModeEvent;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -69,6 +71,7 @@ public class GUIConfigModule extends GUIModule
         GUIItem defaultMaxAmount = getGUIItemDefaultMaxAmount(config, player);
         GUIItem hopperMovement = getGUIItemHopperMovement(config, player);
         GUIItem groundStacking = getGUIItemGroundStacking(config, player);
+        GUIItem switchListMode = getGUIItemSwitchListMode(player);
 
         layer.setItem(2, 3, itemTypeList);
         layer.setItem(2, 4, itemTypeAmountList);
@@ -77,12 +80,44 @@ public class GUIConfigModule extends GUIModule
         layer.setItem(2, 7, defaultMaxAmount);
         layer.setItem(3, 3, hopperMovement);
         layer.setItem(3, 4, groundStacking);
+        layer.setItem(3, 5, switchListMode);
 
         GUIItem closeItem = getGUIItemCloseItem(player);
         layer.setItem(5, 5, closeItem);
 
         GUIItem aboutItem = getGUIItemAboutItem(player);
         layer.setItem(1, 5, aboutItem);
+    }
+
+    /**
+     * Get the <tt>GUIItem</tt> for the "Switch List Mode" button
+     *
+     * @param player The player (For localization)
+     * @return The switch list mode item
+     */
+    private GUIItem getGUIItemSwitchListMode(Player player)
+    {
+        GUIItem switchListMode = new GUIItem(null);
+        if(plugin.config().getListMode() == ListMode.BLACKLIST)
+        {
+            switchListMode.setItem(ItemCreator.createHeadItem(Base64Heads.X_BLACK, 1,
+                    "&b&l" + plugin.langManager().getText(player, "simplestack.list_type.blacklist"),
+                    "&7" + plugin.langManager().getText(player, "simplestack.gui.item_types.change_mode_whitelist"),
+                    "",
+                    "&a&l⊳ " + plugin.langManager().getText(player, "simplestack.list_type.blacklist"),
+                    "&7  " + plugin.langManager().getText(player, "simplestack.list_type.whitelist")));
+        }
+        else
+        {
+            switchListMode.setItem(ItemCreator.createHeadItem(Base64Heads.CHECKMARK_WHITE, 1,
+                    "&b&l" + plugin.langManager().getText(player, "simplestack.list_type.whitelist"),
+                    "&7" + plugin.langManager().getText(player, "simplestack.gui.item_types.change_mode_blacklist"),
+                    "",
+                    "&7  " + plugin.langManager().getText(player, "simplestack.list_type.blacklist"),
+                    "&a&l⊳ " + plugin.langManager().getText(player, "simplestack.list_type.whitelist")));
+        }
+        switchListMode.addEvent(new GUISwitchListModeEvent(plugin));
+        return switchListMode;
     }
 
     /**

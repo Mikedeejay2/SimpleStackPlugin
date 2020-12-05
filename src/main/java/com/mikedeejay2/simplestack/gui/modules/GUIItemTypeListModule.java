@@ -35,40 +35,6 @@ public class GUIItemTypeListModule extends GUIModule
     }
 
     /**
-     * Overridden <tt>onOpenHead</tt> method for adding the
-     * blacklist / whitelist button.
-     *
-     * @param player The player that opened the GUI
-     * @param gui The <tt>GUIContainer</tt> of the GUI
-     */
-    @Override
-    public void onOpenHead(Player player, GUIContainer gui)
-    {
-        GUIItem switchListMode = new GUIItem(null);
-        if(plugin.config().getListMode() == ListMode.BLACKLIST)
-        {
-            switchListMode.setItem(ItemCreator.createHeadItem(Base64Heads.X_BLACK, 1,
-                    "&b&l" + plugin.langManager().getText(player, "simplestack.list_type.blacklist"),
-                    "&7" + plugin.langManager().getText(player, "simplestack.gui.item_types.change_mode_whitelist"),
-                    "",
-                    "&a&l⊳ " + plugin.langManager().getText(player, "simplestack.list_type.blacklist"),
-                    "&7  " + plugin.langManager().getText(player, "simplestack.list_type.whitelist")));
-        }
-        else
-        {
-            switchListMode.setItem(ItemCreator.createHeadItem(Base64Heads.CHECKMARK_WHITE, 1,
-                    "&b&l" + plugin.langManager().getText(player, "simplestack.list_type.whitelist"),
-                    "&7" + plugin.langManager().getText(player, "simplestack.gui.item_types.change_mode_blacklist"),
-                    "",
-                    "&7  " + plugin.langManager().getText(player, "simplestack.list_type.blacklist"),
-                    "&a&l⊳ " + plugin.langManager().getText(player, "simplestack.list_type.whitelist")));
-        }
-        switchListMode.addEvent(new GUISwitchListModeEvent(plugin));
-        GUILayer layer = gui.getLayer(0);
-        layer.setItem(1, 8, switchListMode);
-    }
-
-    /**
      * Overridden <tt>onClose</tt> method that saves the modified list to the
      * config.
      *
