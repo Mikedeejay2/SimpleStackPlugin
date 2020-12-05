@@ -8,7 +8,6 @@ Item Types:
   - Example Item
 
 # Item Amounts: Set the amount of items that an item of that type can hold.
-# Note: Items in item amounts must also be in the items list if in whitelist mode
 Item Amounts:
   Example Item: 64
 

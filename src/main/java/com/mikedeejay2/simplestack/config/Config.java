@@ -468,6 +468,17 @@ public class Config extends YamlFile
     }
 
     /**
+     * Return whether the item amounts list contains a custom amount for a material or not
+     *
+     * @param material The material to search for
+     * @return Whether a custom amount for the material was found or not
+     */
+    public boolean containsItemAmount(Material material)
+    {
+        return itemAmounts.containsKey(material);
+    }
+
+    /**
      * Get the default max amount for items
      *
      * @return The default max amount for items

@@ -35,11 +35,11 @@ public final class CancelUtils
         boolean cancel = false;
         if(plugin.config().getListMode() == ListMode.BLACKLIST)
         {
-            if(config.getMaterialList().contains(material)) cancel = true;
+            if(config.containsMaterial(material)) cancel = true;
         }
         else
         {
-            if(!config.getMaterialList().contains(material)) cancel = true;
+            if(!config.containsMaterial(material) && !config.containsItemAmount(material)) cancel = true;
         }
         if(stackAmount == material.getMaxStackSize()) cancel = true;
         if(config.containsUniqueItem(item)) cancel = false;
