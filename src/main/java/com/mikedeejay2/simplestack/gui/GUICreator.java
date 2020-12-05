@@ -122,6 +122,10 @@ public class GUICreator
                 "&bEspañol (Venezuelan Spanish)", clickMessage, Chat.chat("&7es_ve")));
         venezuela.addEvent(new GUISwitchLangEvent(plugin, "es_ve"));
 
+        GUIItem german = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_GERMANY, 1,
+                "&bDeutsch (German)", clickMessage, Chat.chat("&7de_de")));
+        german.addEvent(new GUISwitchLangEvent(plugin, "de_de"));
+
         items.add(english);
         items.add(simplifiedChinese);
         items.add(korean);
@@ -130,6 +134,7 @@ public class GUICreator
         items.add(mexican);
         items.add(uruguay);
         items.add(venezuela);
+        items.add(german);
 
         String currentLocale = plugin.config().getLangLocale();
         int index = 0;
