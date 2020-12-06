@@ -6,6 +6,7 @@ import com.mikedeejay2.simplestack.util.MoveUtils;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.DragType;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -35,7 +36,7 @@ public class InventoryDragListener implements Listener
      *
      * @param event The event being activated
      */
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void inventoryDragEvent(InventoryDragEvent event)
     {
         if(event.getType() != DragType.EVEN) return;
