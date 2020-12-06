@@ -100,8 +100,7 @@ public class GUIConfigModule extends GUIModule
         if(plugin.config().shouldCreativeDrag())
         {
             creativeDrag.setItem(ItemCreator.createHeadItem(Base64Heads.GREEN, 1,
-                    "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
-                    "&7" + plugin.langManager().getText(player, "simplestack.gui.item_types.change_mode_blacklist"),
+                    "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.creative_drag_select"),
                     "",
                     "&a&l⊳ " + plugin.langManager().getTextLib(player, "simplestack.gui.config.creative_drag_duplicate"),
                     "&7  " + plugin.langManager().getTextLib(player, "simplestack.gui.config.creative_drag_normal")));
@@ -109,7 +108,7 @@ public class GUIConfigModule extends GUIModule
         else
         {
             creativeDrag.setItem(ItemCreator.createHeadItem(Base64Heads.RED, 1,
-                    "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
+                    "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.creative_drag_select"),
                     "",
                     "&7  " + plugin.langManager().getTextLib(player, "simplestack.gui.config.creative_drag_duplicate"),
                     "&c&l⊳ " + plugin.langManager().getTextLib(player, "simplestack.gui.config.creative_drag_normal")));
