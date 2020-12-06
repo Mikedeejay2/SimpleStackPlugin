@@ -37,6 +37,8 @@ public class Config extends YamlFile
     private boolean hopperMovement;
     // Whether custom ground stacking occurs or not
     private boolean groundStacks;
+    // Whether the creative middle click dragging should always create a full stack
+    private boolean creativeDrag;
 
     // Internal config data
     // The unique items json file
@@ -74,8 +76,17 @@ public class Config extends YamlFile
         loadItemAmounts();
         loadHopperMovement();
         loadGroundStacks();
+        loadCreativeDrag();
 
         loaded = true;
+    }
+
+    /**
+     * Load creative item dragging into <tt>creativeDrag</tt> variable of this config
+     */
+    private void loadCreativeDrag()
+    {
+        creativeDrag = accessor.getBoolean("Creative Item Dragging");
     }
 
     /**
@@ -309,6 +320,7 @@ public class Config extends YamlFile
             uniqueItemsAccessor.setItemStackList("items", uniqueItemList);
             accessor.setBoolean("Hopper Movement Checks", hopperMovement);
             accessor.setBoolean("Ground Stacking Checks", groundStacks);
+            accessor.setBoolean("Creative Item Dragging", creativeDrag);
         }
         setModified(false);
 
@@ -735,5 +747,25 @@ public class Config extends YamlFile
     {
         this.groundStacks = groundStacks;
         setModified(true);
+    }
+
+    /**
+     * Get whether a creative inventory drag event should always create full stacks or not
+     *
+     * @return Creative drag state
+     */
+    public boolean shouldCreativeDrag()
+    {
+        return creativeDrag;
+    }
+
+    /**
+     * Set whether a creative inventory drag event should always create full stacks or not
+     *
+     * @param creativeDrag The new creative drag state
+     */
+    public void setCreativeDrag(boolean creativeDrag)
+    {
+        this.creativeDrag = creativeDrag;
     }
 }

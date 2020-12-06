@@ -39,3 +39,8 @@ Hopper Movement Checks: true
 # Setting this to false will stop unstackables stacking when on the ground and could
 # increase performance at the cost of unstackables not stacking when on the ground.
 Ground Stacking Checks: true
+
+# Creative Item Dragging: When this is set to true, items that are dragged in a creative
+# inventory will always become a full stack. This is a substitute for middle click dragging
+# since middle click dragging can't be detected through the Spigot API.
+Creative Item Dragging: false

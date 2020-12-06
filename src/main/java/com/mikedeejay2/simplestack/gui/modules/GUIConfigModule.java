@@ -23,10 +23,7 @@ import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
 import com.mikedeejay2.simplestack.gui.GUICreator;
-import com.mikedeejay2.simplestack.gui.events.GUIGroundStackingEvent;
-import com.mikedeejay2.simplestack.gui.events.GUIHopperMovementEvent;
-import com.mikedeejay2.simplestack.gui.events.GUIMaxStackEvent;
-import com.mikedeejay2.simplestack.gui.events.GUISwitchListModeEvent;
+import com.mikedeejay2.simplestack.gui.events.*;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -72,6 +69,7 @@ public class GUIConfigModule extends GUIModule
         GUIItem hopperMovement = getGUIItemHopperMovement(config, player);
         GUIItem groundStacking = getGUIItemGroundStacking(config, player);
         GUIItem switchListMode = getGUIItemSwitchListMode(player);
+        GUIItem creativeDrag = getGUIItemCreativeDrag(player);
 
         layer.setItem(2, 3, itemTypeList);
         layer.setItem(2, 4, itemTypeAmountList);
@@ -81,12 +79,43 @@ public class GUIConfigModule extends GUIModule
         layer.setItem(3, 3, hopperMovement);
         layer.setItem(3, 4, groundStacking);
         layer.setItem(3, 5, switchListMode);
+        layer.setItem(3, 6, creativeDrag);
 
         GUIItem closeItem = getGUIItemCloseItem(player);
         layer.setItem(5, 5, closeItem);
 
         GUIItem aboutItem = getGUIItemAboutItem(player);
         layer.setItem(1, 5, aboutItem);
+    }
+
+    /**
+     * Get the <tt>GUIItem</tt> for the "Creative Item Dragging Mode" button
+     *
+     * @param player The player (For localization)
+     * @return The creative drag mode item
+     */
+    private GUIItem getGUIItemCreativeDrag(Player player)
+    {
+        GUIItem creativeDrag = new GUIItem(null);
+        if(plugin.config().shouldCreativeDrag())
+        {
+            creativeDrag.setItem(ItemCreator.createHeadItem(Base64Heads.GREEN, 1,
+                    "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
+                    "&7" + plugin.langManager().getText(player, "simplestack.gui.item_types.change_mode_blacklist"),
+                    "",
+                    "&a&l⊳ " + plugin.langManager().getTextLib(player, "simplestack.gui.config.creative_drag_duplicate"),
+                    "&7  " + plugin.langManager().getTextLib(player, "simplestack.gui.config.creative_drag_normal")));
+        }
+        else
+        {
+            creativeDrag.setItem(ItemCreator.createHeadItem(Base64Heads.RED, 1,
+                    "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.hopper_move_select"),
+                    "",
+                    "&7  " + plugin.langManager().getTextLib(player, "simplestack.gui.config.creative_drag_duplicate"),
+                    "&c&l⊳ " + plugin.langManager().getTextLib(player, "simplestack.gui.config.creative_drag_normal")));
+        }
+        creativeDrag.addEvent(new GUICreativeDragEvent(plugin));
+        return creativeDrag;
     }
 
     /**

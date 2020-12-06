@@ -55,7 +55,14 @@ public class InventoryDragListener implements Listener
         }
         else
         {
-            MoveUtils.dragItemsCreative(plugin, event, inventoryView, player, cursor);
+            if(plugin.config().shouldCreativeDrag())
+            {
+                MoveUtils.dragItemsCreative(plugin, event, inventoryView, player, cursor);
+            }
+            else
+            {
+                MoveUtils.dragItemsSurvival(plugin, event, inventoryView, player, cursor);
+            }
         }
 
         player.updateInventory();
