@@ -18,6 +18,8 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Arrays;
+
 /**
  * Utilities for moving items from one location to another
  *
@@ -418,15 +420,15 @@ public final class MoveUtils
     {
         Integer[] slots = event.getNewItems().keySet().toArray(new Integer[0]);
         ItemStack[] newItems = event.getNewItems().values().toArray(new ItemStack[0]);
-        ItemStack[] oldItems = new ItemStack[slots.length];
-        for(int i = 0; i < oldItems.length; i++)
+        for(int i = 0; i < slots.length; i++)
         {
             ItemStack oldItem = inventoryView.getItem(slots[i]);
-            oldItems[i] = oldItem;
-            if(oldItem == null) continue;
-            if(ItemComparison.equalsEachOther(cursor, oldItem))
+            int amount;
+            if(oldItem == null) amount = 0;
+            else amount = oldItem.getAmount();
+            if(oldItem != null && ItemComparison.equalsEachOther(cursor, oldItem))
             {
-                newItems[i].setAmount(oldItem.getAmount());
+                newItems[i].setAmount(amount);
             }
             else
             {

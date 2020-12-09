@@ -123,7 +123,7 @@ public final class CancelUtils
     {
         if(inv == null) return true;
         if(plugin.getMCVersion()[1] >= 16 && inv instanceof SmithingInventory) return false;
-        if(cursorItem.getType().toString().endsWith("SHULKER_BOX"))
+        if(cursorItem.getType().toString().endsWith("SHULKER_BOX") && inv.getLocation() != null)
         {
             Location location = inv.getLocation();
             World world = location.getWorld();
