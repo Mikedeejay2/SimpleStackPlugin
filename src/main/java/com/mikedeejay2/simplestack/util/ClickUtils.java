@@ -365,13 +365,13 @@ public final class ClickUtils
             toInv.setItem(0, itemInSlot);
             return;
         }
-        else if(itemInSlot.getType().toString().endsWith("SHULKER_BOX") && toInv.getLocation() != null)
+        else if(ShulkerBoxes.isShulkerBox(itemInSlot.getType()) && toInv.getLocation() != null)
         {
             Location location = toInv.getLocation();
             World world = location.getWorld();
             Block block = world.getBlockAt(location);
             Material blockMat = block.getType();
-            if(blockMat.toString().endsWith("SHULKER_BOX"))
+            if(ShulkerBoxes.isShulkerBox(blockMat))
             {
                 ClickUtils.shiftClickSameInv(plugin, itemInSlot, event, bottomInv);
                 return;

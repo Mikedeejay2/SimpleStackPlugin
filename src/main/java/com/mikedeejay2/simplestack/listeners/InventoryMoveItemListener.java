@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.listeners;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.MoveUtils;
+import com.mikedeejay2.simplestack.util.ShulkerBoxes;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -40,13 +41,13 @@ public class InventoryMoveItemListener implements Listener
         Inventory toInv = event.getDestination();
         InventoryType invType = toInv.getType();
         if(invType == InventoryType.BREWING) return;
-        if(toInv.getLocation() != null && item.getType().toString().endsWith("SHULKER_BOX"))
+        if(toInv.getLocation() != null && ShulkerBoxes.isShulkerBox(item.getType()))
         {
             Location location = toInv.getLocation();
             World world = location.getWorld();
             Block block = world.getBlockAt(location);
             Material blockType = block.getType();
-            if(blockType.toString().endsWith("SHULKER_BOX")) return;
+            if(ShulkerBoxes.isShulkerBox(blockType)) return;
         }
 
         boolean cancel = CancelUtils.cancelStackCheck(plugin, item);
