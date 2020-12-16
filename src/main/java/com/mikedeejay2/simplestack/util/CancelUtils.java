@@ -30,20 +30,26 @@ public final class CancelUtils
         Material material = item.getType();
         if(material == Material.AIR) return true;
         int stackAmount = StackUtils.getMaxAmount(plugin, item);
-        if(material.getMaxStackSize() == plugin.config().getMaxAmount() && stackAmount == plugin.config().getMaxAmount())
+        if(material.getMaxStackSize() == plugin.config().getMaxAmount() &&
+                stackAmount == plugin.config().getMaxAmount())
+        {
             return true;
-        boolean cancel = false;
+        }
         if(plugin.config().getListMode() == ListMode.BLACKLIST)
         {
-            if(config.containsMaterial(material)) cancel = true;
+            if(config.containsMaterial(material)) return true;
         }
-        else
+        else if(!config.containsMaterial(material) &&
+                !config.containsItemAmount(material) &&
+                !config.containsUniqueItem(item))
         {
-            if(!config.containsMaterial(material) && !config.containsItemAmount(material)) cancel = true;
+            return true;
         }
-        if(stackAmount == material.getMaxStackSize()) cancel = true;
-        if(config.containsUniqueItem(item)) cancel = false;
-        return cancel;
+        if(stackAmount == material.getMaxStackSize())
+        {
+            return true;
+        }
+        return false;
     }
 
     /**

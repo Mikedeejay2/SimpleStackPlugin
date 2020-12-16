@@ -40,9 +40,6 @@ public class BlockBreakListener implements Listener
         if(!ShulkerBoxes.isShulkerBox(block.getType())) return;
         if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
 
-        boolean cancel = CancelUtils.cancelStackCheck(plugin, block.getDrops().toArray(new ItemStack[0])[0]);
-        if(cancel) return;
-
         MoveUtils.preserveShulkerBox(event, block);
     }
 }
