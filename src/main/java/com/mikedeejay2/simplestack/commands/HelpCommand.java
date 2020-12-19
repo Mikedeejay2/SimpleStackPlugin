@@ -2,7 +2,7 @@ package com.mikedeejay2.simplestack.commands;
 
 import com.mikedeejay2.mikedeejay2lib.commands.AbstractSubCommand;
 import com.mikedeejay2.mikedeejay2lib.commands.CommandManager;
-import com.mikedeejay2.mikedeejay2lib.language.LangManager;
+import com.mikedeejay2.mikedeejay2lib.text.language.LangManager;
 import com.mikedeejay2.simplestack.Simplestack;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;

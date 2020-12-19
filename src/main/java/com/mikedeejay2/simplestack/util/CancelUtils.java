@@ -109,7 +109,7 @@ public final class CancelUtils
             if(slot == 2 && !typeString.endsWith("PATTERN")) return true;
         }
         if(inv instanceof AnvilInventory && slot == 2) return true;
-        if(plugin.getMCVersion()[1] >= 16 && inv instanceof SmithingInventory && slot == 2) return true;
+        if(plugin.getMCVersion().getVersionShort() >= 16 && inv instanceof SmithingInventory && slot == 2) return true;
         if(inv instanceof GrindstoneInventory && slot == 2) return true;
         if(inv instanceof BrewerInventory)
         {
@@ -128,7 +128,7 @@ public final class CancelUtils
     public static boolean cancelGUICheck(Simplestack plugin, Inventory inv, ItemStack cursorItem)
     {
         if(inv == null) return true;
-        if(plugin.getMCVersion()[1] >= 16 && inv instanceof SmithingInventory) return false;
+        if(plugin.getMCVersion().getVersionShort() >= 16 && inv instanceof SmithingInventory) return false;
         if(ShulkerBoxes.isShulkerBox(cursorItem.getType()) && inv.getLocation() != null)
         {
             Location location = inv.getLocation();
