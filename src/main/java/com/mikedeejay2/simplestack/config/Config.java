@@ -227,15 +227,27 @@ public class Config extends YamlFile
      */
     public int getAmount(ItemStack item)
     {
-        if(containsUniqueItem(item))
+        boolean containsUnique = containsUniqueItem(item);
+        boolean containsMaterial = containsMaterial(item.getType());
+        boolean hasCustomAmount = hasCustomAmount(item.getType());
+        if(containsUnique)
         {
             return getUniqueItem(item).getAmount();
         }
-        else if(hasCustomAmount(item.getType()))
+        else if(hasCustomAmount)
         {
             return itemAmounts.get(item.getType());
         }
-        return getMaxAmount();
+        else if(
+            (getListMode() == ListMode.WHITELIST && containsMaterial) ||
+            (getListMode() == ListMode.BLACKLIST && !containsMaterial))
+        {
+            return getMaxAmount();
+        }
+        else
+        {
+            return item.getMaxStackSize();
+        }
     }
 
     /**
