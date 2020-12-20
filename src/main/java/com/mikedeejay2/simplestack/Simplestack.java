@@ -50,7 +50,6 @@ public final class Simplestack extends PluginBase
         fileManager.addDataFile(config);
 
         listenerManager.addListener(new InventoryClickListener(this));
-        listenerManager.addListener(new InventoryClickListener(this));
         listenerManager.addListener(new EntityPickupItemListener(this));
         listenerManager.addListener(new BlockBreakListener(this));
         listenerManager.addListener(new InventoryMoveItemListener(this));
