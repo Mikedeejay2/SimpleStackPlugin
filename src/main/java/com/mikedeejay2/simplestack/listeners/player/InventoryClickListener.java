@@ -1,6 +1,8 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.handlers.ItemClickHandler;
+import com.mikedeejay2.simplestack.handlers.executors.ItemClickExecutor;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.CheckUtils;
 import com.mikedeejay2.simplestack.util.ClickUtils;
@@ -21,10 +23,13 @@ import org.bukkit.inventory.*;
 public class InventoryClickListener implements Listener
 {
     private final Simplestack plugin;
+    protected ItemClickHandler handler;
 
     public InventoryClickListener(Simplestack plugin)
     {
         this.plugin = plugin;
+        this.handler = new ItemClickHandler(plugin);
+        handler.addExecutor(new ItemClickExecutor(plugin));
     }
 
     /**
@@ -48,40 +53,49 @@ public class InventoryClickListener implements Listener
         Inventory bottomInv = view.getBottomInventory();
         int slot = event.getSlot();
         Inventory clickedInv = event.getClickedInventory();
-        if(itemPickUp == null || action.toString().contains("DROP") || clickType == ClickType.CREATIVE) return;
-
-        boolean cancel1 = CancelUtils.cancelStackCheck(plugin, itemPickUp);
-        boolean cancel2 = CancelUtils.cancelStackCheck(plugin, itemPutDown);
-        boolean cancel3 = CancelUtils.cancelGUICheck(plugin, topInv, itemPutDown);
-        if((cancel1 && cancel2) || event.isCancelled() || cancel3)
-        {
-            return;
-        }
+        player.sendMessage("\n\n" +
+                "Action: " + action + "\n" +
+                "ClickType: " + clickType + "\n" +
+                "Slot: " + slot + "\n" +
+                "Hotbar Slot: " + event.getHotbarButton() + "\n" +
+                "Selected Item: " + itemPickUp + "\n" +
+                "Cursor Item: " + itemPutDown + "\n");
         event.setCancelled(true);
-
-        CheckUtils.useGUICheck(plugin, player, topInv, slot, clickedInv, clickType);
-
-        if(action == InventoryAction.CLONE_STACK)
-        {
-            ClickUtils.cloneStack(plugin, player, itemPickUp);
-        }
-        else if(action == InventoryAction.HOTBAR_SWAP || action == InventoryAction.HOTBAR_MOVE_AND_READD)
-        {
-            event.setCancelled(false);
-            return;
-        }
-        switch(clickType)
-        {
-            case LEFT:
-                ClickUtils.leftClick(plugin, itemPickUp, itemPutDown, player, event);
-                break;
-            case SHIFT_LEFT:
-            case SHIFT_RIGHT:
-                ClickUtils.shiftClick(plugin, itemPickUp, player, event);
-                break;
-            case RIGHT:
-                ClickUtils.rightClick(plugin, itemPickUp, itemPutDown, player, event);
-                break;
-        }
+        handler.handle(event);
+//        if(itemPickUp == null || action.toString().contains("DROP") || clickType == ClickType.CREATIVE) return;
+//
+//        boolean cancel1 = CancelUtils.cancelStackCheck(plugin, itemPickUp);
+//        boolean cancel2 = CancelUtils.cancelStackCheck(plugin, itemPutDown);
+//        boolean cancel3 = CancelUtils.cancelGUICheck(plugin, topInv, itemPutDown);
+//        if((cancel1 && cancel2) || event.isCancelled() || cancel3)
+//        {
+//            return;
+//        }
+//        event.setCancelled(true);
+//
+//        CheckUtils.useGUICheck(plugin, player, topInv, slot, clickedInv, clickType);
+//
+//        if(action == InventoryAction.CLONE_STACK)
+//        {
+//            ClickUtils.cloneStack(plugin, player, itemPickUp);
+//        }
+//        else if(action == InventoryAction.HOTBAR_SWAP || action == InventoryAction.HOTBAR_MOVE_AND_READD)
+//        {
+//            event.setCancelled(false);
+//            return;
+//        }
+//        switch(clickType)
+//        {
+//            case LEFT:
+//                ClickUtils.leftClick(plugin, itemPickUp, itemPutDown, player, event);
+//                break;
+//            case SHIFT_LEFT:
+//            case SHIFT_RIGHT:
+//                ClickUtils.shiftClick(plugin, itemPickUp, player, event);
+//                break;
+//            case RIGHT:
+//                ClickUtils.rightClick(plugin, itemPickUp, itemPutDown, player, event);
+//                break;
+//        }
     }
 }
