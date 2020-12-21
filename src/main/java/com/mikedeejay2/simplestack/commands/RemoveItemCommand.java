@@ -28,12 +28,12 @@ public class RemoveItemCommand extends AbstractSubCommand
      * Removes the item of the player's held item from the unique items list of the config.
      *
      * @param sender The CommandSender that sent the command
-     * @param args The arguments for the command (subcommands)
+     * @param args   The arguments for the command (subcommands)
      */
     @Override
     public void onCommand(CommandSender sender, String[] args)
     {
-        Player player = (Player) sender;
+        Player    player   = (Player) sender;
         ItemStack heldItem = player.getInventory().getItemInMainHand();
         if(heldItem.getType() == Material.AIR)
         {
@@ -44,8 +44,8 @@ public class RemoveItemCommand extends AbstractSubCommand
         config.removeUniqueItem(player, heldItem);
         config.saveToDisk(true);
         plugin.chat().sendMessage(sender,
-                "&e&l" + plugin.langManager().getTextLib(player, "generic.success") +
-                        "&r &9" + plugin.langManager().getText(player, "simplestack.commands.removeitem.success"));
+                                  "&e&l" + plugin.langManager().getTextLib(player, "generic.success") +
+                                          "&r &9" + plugin.langManager().getText(player, "simplestack.commands.removeitem.success"));
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
     }
 

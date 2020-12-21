@@ -31,14 +31,14 @@ public class GUIUniqueItemListModule extends GUIModule
      * to the config after it's been modified
      *
      * @param player The player that closed the GUI
-     * @param gui The GUIContainer
+     * @param gui    The GUIContainer
      */
     @Override
     public void onClose(Player player, GUIContainer gui)
     {
-        GUIListModule list = gui.getModule(GUIListModule.class);
-        List<GUIItem> listItems = list.getList();
-        List<ItemStack> newItems = new ArrayList<>();
+        GUIListModule   list      = gui.getModule(GUIListModule.class);
+        List<GUIItem>   listItems = list.getList();
+        List<ItemStack> newItems  = new ArrayList<>();
         for(GUIItem guiItem : listItems)
         {
             newItems.add(guiItem.getItemBase());

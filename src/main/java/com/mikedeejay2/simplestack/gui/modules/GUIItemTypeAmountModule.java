@@ -9,7 +9,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,20 +33,20 @@ public class GUIItemTypeAmountModule extends GUIModule
      * to the config
      *
      * @param player The player closing the GUI
-     * @param gui The <tt>GUIContainer</tt> of the GUI
+     * @param gui    The <tt>GUIContainer</tt> of the GUI
      */
     @Override
     public void onClose(Player player, GUIContainer gui)
     {
-        GUIListModule list = gui.getModule(GUIListModule.class);
-        List<GUIItem> listItems = list.getList();
-        Map<Material, Integer> newItems = new HashMap<>();
+        GUIListModule          list      = gui.getModule(GUIListModule.class);
+        List<GUIItem>          listItems = list.getList();
+        Map<Material, Integer> newItems  = new HashMap<>();
         for(GUIItem guiItem : listItems)
         {
             if(guiItem == null || guiItem.getItemBase() == null) continue;
-            ItemStack item = guiItem.getItemBase();
-            Material material = item.getType();
-            int amount = item.getAmount();
+            ItemStack item     = guiItem.getItemBase();
+            Material  material = item.getType();
+            int       amount   = item.getAmount();
             newItems.put(material, amount);
         }
         plugin.config().setItemAmounts(newItems);

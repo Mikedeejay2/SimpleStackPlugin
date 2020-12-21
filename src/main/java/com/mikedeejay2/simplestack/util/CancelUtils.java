@@ -26,7 +26,7 @@ public final class CancelUtils
      */
     public static boolean cancelStackCheck(Simplestack plugin, ItemStack item)
     {
-        Config config = plugin.config();
+        Config   config   = plugin.config();
         Material material = item.getType();
         if(material == Material.AIR) return true;
         int stackAmount = StackUtils.getMaxAmount(plugin, item);
@@ -70,15 +70,15 @@ public final class CancelUtils
      * of the clicked type.
      *
      * @param item Item in player's cursor
-     * @param inv Inventory being clicked on
+     * @param inv  Inventory being clicked on
      * @param slot Slot that was clicked
      * @return If move should cancel
      */
     public static boolean cancelMoveCheck(Simplestack plugin, ItemStack item, Inventory inv, int slot)
     {
         if(item == null || item.getType() == Material.AIR) return false;
-        Material type = item.getType();
-        String typeString = type.toString();
+        Material type       = item.getType();
+        String   typeString = type.toString();
         if((inv instanceof PlayerInventory && slot >= 36 && slot <= 39))
         {
             switch(slot)
@@ -113,8 +113,8 @@ public final class CancelUtils
         if(inv instanceof GrindstoneInventory && slot == 2) return true;
         if(inv instanceof BrewerInventory)
         {
-             if(slot <= 2 && !(typeString.endsWith("BOTTLE") || typeString.endsWith("POTION"))) return true;
-             if(slot == 4 && type != Material.BLAZE_POWDER) return true;
+            if(slot <= 2 && !(typeString.endsWith("BOTTLE") || typeString.endsWith("POTION"))) return true;
+            if(slot == 4 && type != Material.BLAZE_POWDER) return true;
         }
         return false;
     }
@@ -131,9 +131,9 @@ public final class CancelUtils
         if(plugin.getMCVersion().getVersionShort() >= 16 && inv instanceof SmithingInventory) return false;
         if(ShulkerBoxes.isShulkerBox(cursorItem.getType()) && inv.getLocation() != null)
         {
-            Location location = inv.getLocation();
-            World world = location.getWorld();
-            Block block = world.getBlockAt(location);
+            Location location  = inv.getLocation();
+            World    world     = location.getWorld();
+            Block    block     = world.getBlockAt(location);
             Material blockType = block.getType();
             if(ShulkerBoxes.isShulkerBox(blockType)) return true;
         }

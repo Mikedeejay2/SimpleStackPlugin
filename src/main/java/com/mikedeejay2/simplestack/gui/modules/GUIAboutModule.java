@@ -38,19 +38,19 @@ public class GUIAboutModule extends GUIModule
      * do.
      *
      * @param event The original <tt>InventoryClickEvent</tt>
-     * @param gui The <tt>GUIContainer</tt> that was clicked
+     * @param gui   The <tt>GUIContainer</tt> that was clicked
      */
     @Override
     public void onClickedHead(InventoryClickEvent event, GUIContainer gui)
     {
         GUILayer clickLayer = gui.getLayer("click");
-        int slot = event.getSlot();
-        int rows = gui.getRows();
-        int cols = gui.getCols();
-        int row = gui.getRowFromSlot(slot);
-        int col = gui.getColFromSlot(slot);
-        int newRow = row;
-        int newCol = col;
+        int      slot       = event.getSlot();
+        int      rows       = gui.getRows();
+        int      cols       = gui.getCols();
+        int      row        = gui.getRowFromSlot(slot);
+        int      col        = gui.getColFromSlot(slot);
+        int      newRow     = row;
+        int      newCol     = col;
 
         AnimatedGUIItem item = null;
 
@@ -88,29 +88,34 @@ public class GUIAboutModule extends GUIModule
         item.addFrame(ItemCreator.createItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE, 1, GUIContainer.EMPTY_NAME), 1);
         item.addFrame(ItemCreator.createItem(Material.MAGENTA_STAINED_GLASS_PANE, 1, GUIContainer.EMPTY_NAME), 1);
         item.addFrame(null, 1);
-        newRow = row; newCol = col - 2;
+        newRow = row;
+        newCol = col - 2;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
         newRow = row - 1;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
-        newCol = col - 1; newRow = row - 2;
+        newCol = col - 1;
+        newRow = row - 2;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
         newCol = col;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
         newCol = col + 1;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
-        newCol = col + 2; newRow = row - 1;
+        newCol = col + 2;
+        newRow = row - 1;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
         newRow = row;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
         newRow = row + 1;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
-        newRow = row + 2; newCol = col + 1;
+        newRow = row + 2;
+        newCol = col + 1;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
         newCol = col;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
         newCol = col - 1;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
-        newCol = col - 2; newRow = row + 1;
+        newCol = col - 2;
+        newRow = row + 1;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
 
         item = new AnimatedGUIItem(null, false, 6);
@@ -162,8 +167,8 @@ public class GUIAboutModule extends GUIModule
     /**
      * Helper method for making sure that an item is actually in the GUI
      *
-     * @param rows The maximum rows of the GUI
-     * @param cols The maximum columns of the GUI
+     * @param rows   The maximum rows of the GUI
+     * @param cols   The maximum columns of the GUI
      * @param curRow The current row of the item
      * @param curCol The current column of the item
      * @return Whether the item placement is valid or not
@@ -177,15 +182,15 @@ public class GUIAboutModule extends GUIModule
      * Overridden method <tt>onOpenHead</tt> that generates the about screen
      *
      * @param player The player the opened the GUI
-     * @param gui The <tt>GUIContainer</tt> that the about screen is located in
+     * @param gui    The <tt>GUIContainer</tt> that the about screen is located in
      */
     @Override
     public void onOpenHead(Player player, GUIContainer gui)
     {
-        GUILayer base = gui.getLayer(0);
+        GUILayer base     = gui.getLayer(0);
         GUILayer flyLayer = gui.getLayer("fly");
         gui.addLayer(2, "click", false);
-        GUILayer textLayer = gui.getLayer("text");
+        GUILayer textLayer  = gui.getLayer("text");
         GUILayer aboutLayer = gui.getLayer("about");
         genBackground(base);
         genFly(flyLayer);
@@ -197,7 +202,7 @@ public class GUIAboutModule extends GUIModule
     /**
      * Generate the back button for the about screen
      *
-     * @param player The player that opened the GUI (For the player's locale)
+     * @param player    The player that opened the GUI (For the player's locale)
      * @param textLayer The text <tt>GUILayer</tt> that will be used
      */
     private void genBackButton(Player player, GUILayer textLayer)
@@ -211,37 +216,39 @@ public class GUIAboutModule extends GUIModule
     /**
      * Generate the about section with the about text and intro animation
      *
-     * @param textLayer The text <tt>GUILayer</tt> that will be used
+     * @param textLayer  The text <tt>GUILayer</tt> that will be used
      * @param aboutLayer The about <tt>GUILayer</tt> that will be used
-     * @param player The player that opened the GUI (For the player's locale)
+     * @param player     The player that opened the GUI (For the player's locale)
      */
     private void genAbout(GUILayer textLayer, GUILayer aboutLayer, Player player)
     {
-        int start = 40;
+        int             start = 40;
         AnimatedGUIItem item1 = new AnimatedGUIItem(null, false, start);
-        item1.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 0, 1 ,MovementType.OVERRIDE_ITEM, true, 2);
-        item1.addFrame(0, 1 ,MovementType.OVERRIDE_ITEM, true, 2);
-        item1.addFrame(0, 1 ,MovementType.OVERRIDE_ITEM, true, 2);
-        item1.addFrame(0, 1 ,MovementType.OVERRIDE_ITEM, true, 2);
+        item1.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 0, 1, MovementType.OVERRIDE_ITEM, true, 2);
+        item1.addFrame(0, 1, MovementType.OVERRIDE_ITEM, true, 2);
+        item1.addFrame(0, 1, MovementType.OVERRIDE_ITEM, true, 2);
+        item1.addFrame(0, 1, MovementType.OVERRIDE_ITEM, true, 2);
         AnimatedGUIItem item2 = new AnimatedGUIItem(null, false, start);
-        item2.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 0, -1 ,MovementType.OVERRIDE_ITEM, true, 2);
-        item2.addFrame(0, -1 ,MovementType.OVERRIDE_ITEM, true, 2);
-        item2.addFrame(0, -1 ,MovementType.OVERRIDE_ITEM, true, 2);
-        item2.addFrame(0, -1 ,MovementType.OVERRIDE_ITEM, true, 2);
+        item2.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 0, -1, MovementType.OVERRIDE_ITEM, true, 2);
+        item2.addFrame(0, -1, MovementType.OVERRIDE_ITEM, true, 2);
+        item2.addFrame(0, -1, MovementType.OVERRIDE_ITEM, true, 2);
+        item2.addFrame(0, -1, MovementType.OVERRIDE_ITEM, true, 2);
         textLayer.setItem(5, 1, item1);
         textLayer.setItem(5, 9, item2);
         AnimatedGUIItem aboutItem = new AnimatedGUIItem(null, false, start + 10);
-        aboutItem.addFrame(ItemCreator.createItem(Material.DRAGON_EGG, 1,
-                "&b&lSimple Stack v" + plugin.getDescription().getVersion(),
-                "&5" + plugin.langManager().getText(player, "simplestack.gui.about.desc_l1"),
-                "&5" + plugin.langManager().getText(player, "simplestack.gui.about.desc_l2"),
-                "",
-                "&9" + plugin.langManager().getText(player, "simplestack.gui.about.desc_l3"),
-                "&5• " + plugin.langManager().getText(player, "simplestack.gui.about.desc_l4"),
-                "&5• " + plugin.langManager().getText(player, "simplestack.gui.about.desc_l5"),
-                "&5  " + plugin.langManager().getText(player, "simplestack.gui.about.desc_l6"),
-                "&5• " + plugin.langManager().getText(player, "simplestack.gui.about.desc_l7"),
-                "&5  " + plugin.langManager().getText(player, "simplestack.gui.about.desc_l8")), 1);
+        aboutItem.addFrame(
+                ItemCreator.createItem(
+                        Material.DRAGON_EGG, 1,
+                        "&b&lSimple Stack v" + plugin.getDescription().getVersion(),
+                        "&5" + plugin.langManager().getText(player, "simplestack.gui.about.desc_l1"),
+                        "&5" + plugin.langManager().getText(player, "simplestack.gui.about.desc_l2"),
+                        "",
+                        "&9" + plugin.langManager().getText(player, "simplestack.gui.about.desc_l3"),
+                        "&5• " + plugin.langManager().getText(player, "simplestack.gui.about.desc_l4"),
+                        "&5• " + plugin.langManager().getText(player, "simplestack.gui.about.desc_l5"),
+                        "&5  " + plugin.langManager().getText(player, "simplestack.gui.about.desc_l6"),
+                        "&5• " + plugin.langManager().getText(player, "simplestack.gui.about.desc_l7"),
+                        "&5  " + plugin.langManager().getText(player, "simplestack.gui.about.desc_l8")), 1);
         aboutLayer.setItem(5, 5, aboutItem);
     }
 
@@ -437,10 +444,10 @@ public class GUIAboutModule extends GUIModule
      */
     private AnimatedGUIItem getFlyItem(int column)
     {
-        Random random = new Random();
-        AnimatedGUIItem item = new AnimatedGUIItem(null, true, random.nextInt(50) + 50);
-        String str = null;
-        int randNum = random.nextInt(4);
+        Random          random  = new Random();
+        AnimatedGUIItem item    = new AnimatedGUIItem(null, true, random.nextInt(50) + 50);
+        String          str     = null;
+        int             randNum = random.nextInt(4);
         switch(randNum)
         {
             case 0:

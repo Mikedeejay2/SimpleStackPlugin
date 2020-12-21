@@ -41,7 +41,7 @@ public class EntityPickupItemListener implements Listener
         if(!(entity instanceof InventoryHolder)) return;
         if(entity instanceof Player)
         {
-            Player player = (Player)event.getEntity();
+            Player player = (Player) event.getEntity();
             if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
         }
         ItemStack item = event.getItem().getItemStack();

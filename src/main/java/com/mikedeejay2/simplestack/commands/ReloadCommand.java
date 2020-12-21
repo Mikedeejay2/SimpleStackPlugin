@@ -23,7 +23,7 @@ public class ReloadCommand extends AbstractSubCommand
      * plugin function with the modified config.
      *
      * @param sender The <tt>CommandSender</tt> that sent the command
-     * @param args The arguments for the command (subcommands)
+     * @param args   The arguments for the command (subcommands)
      */
     @Override
     public void onCommand(CommandSender sender, String[] args)

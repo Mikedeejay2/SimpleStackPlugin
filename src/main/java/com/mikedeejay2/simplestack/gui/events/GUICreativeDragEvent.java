@@ -30,18 +30,19 @@ public class GUICreativeDragEvent implements GUIEvent
     @Override
     public void execute(InventoryClickEvent event, GUIContainer gui)
     {
-        Player player = (Player) event.getWhoClicked();
-        GUILayer layer = gui.getLayer(0);
-        Config config = plugin.config();
+        Player   player = (Player) event.getWhoClicked();
+        GUILayer layer  = gui.getLayer(0);
+        Config   config = plugin.config();
         if(event.getClick() != ClickType.LEFT) return;
-        int slot = event.getSlot();
-        int row = layer.getRowFromSlot(slot);
-        int col = layer.getColFromSlot(slot);
-        GUIItem item = layer.getItem(row, col);
+        int     slot    = event.getSlot();
+        int     row     = layer.getRowFromSlot(slot);
+        int     col     = layer.getColFromSlot(slot);
+        GUIItem item    = layer.getItem(row, col);
         boolean newDrag = !config.shouldCreativeDrag();
         if(newDrag)
         {
-            item.setItem(ItemCreator.createHeadItem(Base64Heads.GREEN, 1,
+            item.setItem(ItemCreator.createHeadItem(
+                    Base64Heads.GREEN, 1,
                     "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.creative_drag_select"),
                     "",
                     "&a&l⊳ " + plugin.langManager().getTextLib(player, "simplestack.gui.config.creative_drag_duplicate"),
@@ -49,7 +50,8 @@ public class GUICreativeDragEvent implements GUIEvent
         }
         else
         {
-            item.setItem(ItemCreator.createHeadItem(Base64Heads.RED, 1,
+            item.setItem(ItemCreator.createHeadItem(
+                    Base64Heads.RED, 1,
                     "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.creative_drag_select"),
                     "",
                     "&7  " + plugin.langManager().getTextLib(player, "simplestack.gui.config.creative_drag_duplicate"),

@@ -24,11 +24,11 @@ public final class CheckUtils
      * items can't be duped for odd combinations and that output items after the result item has
      * been taken out is also accurate.
      *
-     * @param player The player that might be attempting to use the anvil
-     * @param topInv The top inventory that the player is viewing
-     * @param slot The slot that the player has clicked
+     * @param player           The player that might be attempting to use the anvil
+     * @param topInv           The top inventory that the player is viewing
+     * @param slot             The slot that the player has clicked
      * @param clickedInventory The inventory that the player has clicked
-     * @param rightClick Mark if the click was a right click or not to account for resulting in half of the output
+     * @param rightClick       Mark if the click was a right click or not to account for resulting in half of the output
      */
     public static void useAnvilCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean rightClick)
     {
@@ -41,11 +41,11 @@ public final class CheckUtils
      * This is required because if the item being clicked on is a simplestack item the output has
      * to be calculated manually.
      *
-     * @param player The player that might be attempting to use the stonecutter
-     * @param topInv The top inventory that the player is viewing
-     * @param slot The slot that the player has clicked
+     * @param player           The player that might be attempting to use the stonecutter
+     * @param topInv           The top inventory that the player is viewing
+     * @param slot             The slot that the player has clicked
      * @param clickedInventory The inventory that the player has clicked
-     * @param shiftClick Mark if the click was a shift click or not
+     * @param shiftClick       Mark if the click was a shift click or not
      */
     public static void useStonecutterCheck(Simplestack plugin, Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean shiftClick)
     {
@@ -58,11 +58,11 @@ public final class CheckUtils
      * This is required because if the item being clicked on is a simplestack item the output has
      * to be calculated manually otherwise duping will happen.
      *
-     * @param player The player that might be attempting to use the stonecutter
-     * @param topInv The top inventory that the player is viewing
-     * @param slot The slot that the player has clicked
+     * @param player           The player that might be attempting to use the stonecutter
+     * @param topInv           The top inventory that the player is viewing
+     * @param slot             The slot that the player has clicked
      * @param clickedInventory The inventory that the player has clicked
-     * @param shiftClick Mark if the click was a shift click or not
+     * @param shiftClick       Mark if the click was a shift click or not
      */
     public static void useCraftingTableCheck(Simplestack plugin, Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean shiftClick)
     {
@@ -75,11 +75,11 @@ public final class CheckUtils
      * This is required because if the item being clicked on is a simplestack item the output has
      * to be calculated manually otherwise duping will happen.
      *
-     * @param player The player that might be attempting to use the villager
-     * @param topInv The top inventory that the player is viewing
-     * @param slot The slot that the player has clicked
+     * @param player           The player that might be attempting to use the villager
+     * @param topInv           The top inventory that the player is viewing
+     * @param slot             The slot that the player has clicked
      * @param clickedInventory The inventory that the player has clicked
-     * @param shiftClick Mark if the click was a shift click or not
+     * @param shiftClick       Mark if the click was a shift click or not
      */
     public static void useVillagerCheck(Simplestack plugin, Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean shiftClick)
     {
@@ -92,22 +92,22 @@ public final class CheckUtils
      * that emulates vanilla's villager trading algorithm because by default all
      * events are cancelled. This fixes villagers duping items.
      *
-     * @param player Player triggering villager use
-     * @param topInv The top inventory (The merchant inventory)
+     * @param player     Player triggering villager use
+     * @param topInv     The top inventory (The merchant inventory)
      * @param shiftClick If this click is a shift click
      */
     private static void triggerVillagerUse(Simplestack plugin, Player player, Inventory topInv, boolean shiftClick)
     {
-        MerchantInventory inventory = (MerchantInventory) topInv;
-        MerchantRecipe recipe = inventory.getSelectedRecipe();
-        List<ItemStack> ingredients = recipe.getIngredients();
-        int maxUses = recipe.getMaxUses();
-        int curUses = recipe.getUses();
-        ItemStack inItem1 = topInv.getItem(0);
-        ItemStack ingredient1 = ingredients.size() >= 1 ? ingredients.get(0) : null;
-        ItemStack inItem2 = topInv.getItem(1);
-        ItemStack ingredient2 = ingredients.size() >= 2 ? ingredients.get(1) : null;
-        ItemStack result = topInv.getItem(2);
+        MerchantInventory inventory   = (MerchantInventory) topInv;
+        MerchantRecipe    recipe      = inventory.getSelectedRecipe();
+        List<ItemStack>   ingredients = recipe.getIngredients();
+        int               maxUses     = recipe.getMaxUses();
+        int               curUses     = recipe.getUses();
+        ItemStack         inItem1     = topInv.getItem(0);
+        ItemStack         ingredient1 = ingredients.size() >= 1 ? ingredients.get(0) : null;
+        ItemStack         inItem2     = topInv.getItem(1);
+        ItemStack         ingredient2 = ingredients.size() >= 2 ? ingredients.get(1) : null;
+        ItemStack         result      = topInv.getItem(2);
 
         if(!shiftClick)
         {
@@ -147,22 +147,22 @@ public final class CheckUtils
      * algorithm because by default all events are cancelled. This fixes crafting
      * tables duping items.
      *
-     * @param player Player triggering crafting table use
-     * @param topInv The top inventory (The crafting table inventory)
+     * @param player     Player triggering crafting table use
+     * @param topInv     The top inventory (The crafting table inventory)
      * @param shiftClick If this click is a shift click
      */
     private static void triggerCraftingTableUse(Simplestack plugin, Player player, Inventory topInv, boolean shiftClick)
     {
-        int GUISize = topInv.getSize();
-        ItemStack resultItem = topInv.getItem(0);
+        int       GUISize      = topInv.getSize();
+        ItemStack resultItem   = topInv.getItem(0);
         ItemStack itemInCursor = player.getItemOnCursor();
         if(resultItem == null) return;
         resultItem = resultItem.clone();
         int amountToRemove = 0;
         if(shiftClick)
         {
-            int smallestAmount = Integer.MAX_VALUE;
-            boolean flag = false;
+            int     smallestAmount = Integer.MAX_VALUE;
+            boolean flag           = false;
             for(int i = 1; i < GUISize; i++)
             {
                 ItemStack stack = topInv.getItem(i);
@@ -176,7 +176,7 @@ public final class CheckUtils
             if(flag)
             {
                 ItemStack moveItem = resultItem.clone();
-                moveItem.setAmount(smallestAmount-1);
+                moveItem.setAmount(smallestAmount - 1);
                 MoveUtils.moveItem(plugin, moveItem, topInv, 0, player.getInventory(), 0, 36, false);
             }
             amountToRemove = smallestAmount;
@@ -203,10 +203,10 @@ public final class CheckUtils
 
         if(ItemComparison.equalsEachOther(itemInCursor, resultItem))
         {
-            ItemStack newItem = itemInCursor.clone();
-            int newAmount = itemInCursor.getAmount() + resultItem.getAmount();
-            int extraAmount = 0;
-            int maxAmountInStack = StackUtils.getMaxAmount(plugin, newItem);
+            ItemStack newItem          = itemInCursor.clone();
+            int       newAmount        = itemInCursor.getAmount() + resultItem.getAmount();
+            int       extraAmount      = 0;
+            int       maxAmountInStack = StackUtils.getMaxAmount(plugin, newItem);
             if(newAmount > maxAmountInStack)
             {
                 extraAmount = newAmount % maxAmountInStack;
@@ -239,8 +239,8 @@ public final class CheckUtils
      * Trigger the use of a stonecutter. This method appropriately calculates
      * the input and output items
      *
-     * @param player The player that might be attempting to use the stonecutter
-     * @param topInv The top inventory that the player is viewing
+     * @param player     The player that might be attempting to use the stonecutter
+     * @param topInv     The top inventory that the player is viewing
      * @param shiftClick Mark if the click was a shift click or not
      */
     private static void triggerStonecutterUse(Simplestack plugin, Player player, Inventory topInv, boolean shiftClick)
@@ -250,7 +250,7 @@ public final class CheckUtils
             @Override
             public void run()
             {
-                ItemStack itemInput = topInv.getItem(0);
+                ItemStack itemInput  = topInv.getItem(0);
                 ItemStack itemCursor = player.getItemOnCursor();
                 ItemStack itemOutput = topInv.getItem(1);
                 if(itemInput == null) return;
@@ -263,14 +263,14 @@ public final class CheckUtils
                 else if(itemOutput == null)
                 {
                     itemOutput = itemCursor.clone();
-                    itemInput.setAmount(itemInput.getAmount()-1);
+                    itemInput.setAmount(itemInput.getAmount() - 1);
                     itemOutput.setAmount(1);
                     itemCursor.setAmount(1);
                 }
                 else
                 {
-                    itemInput.setAmount(itemInput.getAmount()-1);
-                    itemCursor.setAmount(itemCursor.getAmount()+1);
+                    itemInput.setAmount(itemInput.getAmount() - 1);
+                    itemCursor.setAmount(itemCursor.getAmount() + 1);
                     itemOutput.setAmount(1);
                 }
                 player.setItemOnCursor(itemCursor);
@@ -293,11 +293,11 @@ public final class CheckUtils
      * items can't be duped for odd combinations and that output items after the result item has
      * been taken out is also accurate.
      *
-     * @param player The player that might be attempting to use the smithing table
-     * @param topInv The top inventory that the player is viewing
-     * @param slot The slot that the player has clicked
+     * @param player           The player that might be attempting to use the smithing table
+     * @param topInv           The top inventory that the player is viewing
+     * @param slot             The slot that the player has clicked
      * @param clickedInventory The inventory that the player has clicked
-     * @param rightClick Mark if the click was a right click or not to account for resulting in half of the output
+     * @param rightClick       Mark if the click was a right click or not to account for resulting in half of the output
      */
     public static void useSmithingCheck(Simplestack plugin, Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean rightClick)
     {
@@ -313,17 +313,17 @@ public final class CheckUtils
      * Trigger the use of an anvil or a smithing table. This method appropriately calculates
      * the item output amounts of each of the 3 items
      *
-     * @param player The player that used the anvil
-     * @param topInv The inventory of the anvil
+     * @param player     The player that used the anvil
+     * @param topInv     The inventory of the anvil
      * @param rightClick Mark if the click was a right click or not to account for resulting in half of the output
-     * @param sound The sound that will be played on use
+     * @param sound      The sound that will be played on use
      */
     public static void triggerAnvilSmithingUse(Player player, Inventory topInv, boolean rightClick, Sound sound)
     {
-        ItemStack item1 = topInv.getItem(0);
-        ItemStack item2 = topInv.getItem(1);
-        ItemStack result = topInv.getItem(2);
-        double divider = rightClick ? 2 : 1;
+        ItemStack item1   = topInv.getItem(0);
+        ItemStack item2   = topInv.getItem(1);
+        ItemStack result  = topInv.getItem(2);
+        double    divider = rightClick ? 2 : 1;
         if(result != null)
         {
             if(item2 != null)
@@ -391,11 +391,11 @@ public final class CheckUtils
      * Check if a GUI has been used. This has to be done manually so that the items from
      * the GUI output are calculated properly.
      *
-     * @param player The player activating the GUI
-     * @param topInv The player's top inventory
-     * @param slot The clicked slot
+     * @param player           The player activating the GUI
+     * @param topInv           The player's top inventory
+     * @param slot             The clicked slot
      * @param clickedInventory The clicked Inventory
-     * @param clickType The clicktype for calculations
+     * @param clickType        The clicktype for calculations
      */
     public static void useGUICheck(Simplestack plugin, Player player, Inventory topInv, int slot, Inventory clickedInventory, ClickType clickType)
     {
@@ -414,9 +414,9 @@ public final class CheckUtils
      * Check to see if a result in the grindstone has been taken. If so, remove
      * the items in the input slots.
      *
-     * @param player Player activating the grindstone
-     * @param topInv The top inventory (Grindstone inventory)
-     * @param slot The slot that has been clicked
+     * @param player           Player activating the grindstone
+     * @param topInv           The top inventory (Grindstone inventory)
+     * @param slot             The slot that has been clicked
      * @param clickedInventory The clicked inventory
      */
     public static void useGrindstoneCheck(Player player, Inventory topInv, int slot, Inventory clickedInventory)
@@ -434,11 +434,11 @@ public final class CheckUtils
             @Override
             public void run()
             {
-                ItemStack itemInSlot = clickedInventory.getItem(slot);
+                ItemStack itemInSlot   = clickedInventory.getItem(slot);
                 ItemStack itemInCursor = player.getItemOnCursor();
                 if(itemInSlot == null) return;
 
-                int newAmount = itemInSlot.getAmount()-1 + itemInCursor.getAmount();
+                int newAmount = itemInSlot.getAmount() - 1 + itemInCursor.getAmount();
 
                 if(itemInCursor.getType() == Material.AIR)
                 {
@@ -455,7 +455,7 @@ public final class CheckUtils
     /**
      * Prepare (calculate) the output item for an anvil or a smithing table
      *
-     * @param result The current result item of the table
+     * @param result  The current result item of the table
      * @param inItem1 The input item of the table
      * @param inItem2 The second input item of the table (possibly null)
      */

@@ -124,8 +124,8 @@ public class Config extends YamlFile
     private void loadItemAmounts()
     {
         itemAmounts = new HashMap<>();
-        SectionAccessor<YamlFile, Object> section = accessor.getSection("Item Amounts");
-        Set<String> materialList = section.getKeys(false);
+        SectionAccessor<YamlFile, Object> section      = accessor.getSection("Item Amounts");
+        Set<String>                       materialList = section.getKeys(false);
         for(String mat : materialList)
         {
             Material material = Material.matchMaterial(mat);
@@ -158,7 +158,7 @@ public class Config extends YamlFile
         {
             plugin.getLogger().warning(
                     plugin.langManager().getText("simplestack.warnings.invalid_list_mode", new String[]{"MODE"}, new String[]{listMode})
-            );
+                                      );
             this.listMode = ListMode.BLACKLIST;
         }
     }
@@ -227,9 +227,9 @@ public class Config extends YamlFile
      */
     public int getAmount(ItemStack item)
     {
-        boolean containsUnique = containsUniqueItem(item);
+        boolean containsUnique   = containsUniqueItem(item);
         boolean containsMaterial = containsMaterial(item.getType());
-        boolean hasCustomAmount = hasCustomAmount(item.getType());
+        boolean hasCustomAmount  = hasCustomAmount(item.getType());
         if(containsUnique)
         {
             return getUniqueItem(item).getAmount();
@@ -239,8 +239,8 @@ public class Config extends YamlFile
             return itemAmounts.get(item.getType());
         }
         else if(
-            (getListMode() == ListMode.WHITELIST && containsMaterial) ||
-            (getListMode() == ListMode.BLACKLIST && !containsMaterial))
+                (getListMode() == ListMode.WHITELIST && containsMaterial) ||
+                        (getListMode() == ListMode.BLACKLIST && !containsMaterial))
         {
             return getMaxAmount();
         }
@@ -323,7 +323,7 @@ public class Config extends YamlFile
             {
                 Material material = entry.getKey();
                 if(material == null || material == Material.AIR) continue;
-                int amount = entry.getValue();
+                int    amount      = entry.getValue();
                 String materialStr = material.toString();
                 itemAmtAccessor.setInt(materialStr, amount);
             }
@@ -419,6 +419,18 @@ public class Config extends YamlFile
     }
 
     /**
+     * Set the <tt>ListMode</tt> of the config. <p>
+     * This method does not save the config, only modifies it.
+     *
+     * @param newMode The new <tt>ListMode</tt> to use in the config
+     */
+    public void setListMode(ListMode newMode)
+    {
+        this.listMode = newMode;
+        setModified(true);
+    }
+
+    /**
      * Get a list of the materials from the config
      *
      * @return The list of materials
@@ -426,6 +438,22 @@ public class Config extends YamlFile
     public List<Material> getMaterialList()
     {
         return materialList;
+    }
+
+    /**
+     * Set a new material list for the config
+     *
+     * @param materialList The new list of materials to use
+     */
+    public void setMaterialList(List<Material> materialList)
+    {
+        this.materialList.clear();
+        for(Material material : materialList)
+        {
+            if(material == null) continue;
+            this.materialList.add(material);
+        }
+        setModified(true);
     }
 
     /**
@@ -439,6 +467,20 @@ public class Config extends YamlFile
     }
 
     /**
+     * Set the lang locale of the config. This automatically updates the <tt>LangManager</tt>
+     * as well. <p>
+     * This method does not save the config, only modifies it.
+     *
+     * @param newLocale
+     */
+    public void setLangLocale(String newLocale)
+    {
+        this.langLocale = newLocale;
+        plugin.langManager().setDefaultLang(newLocale);
+        setModified(true);
+    }
+
+    /**
      * Get a map of material to item amount
      *
      * @return A map of material to item amount
@@ -446,6 +488,17 @@ public class Config extends YamlFile
     public Map<Material, Integer> getItemAmounts()
     {
         return itemAmounts;
+    }
+
+    /**
+     * Set a new item amounts list for the config
+     *
+     * @param itemAmounts The new item amounts list
+     */
+    public void setItemAmounts(Map<Material, Integer> itemAmounts)
+    {
+        this.itemAmounts = itemAmounts;
+        setModified(true);
     }
 
     /**
@@ -513,11 +566,22 @@ public class Config extends YamlFile
     }
 
     /**
+     * Set a new max stack amount for items
+     *
+     * @param maxAmount The new max stack amount
+     */
+    public void setMaxAmount(int maxAmount)
+    {
+        this.maxAmount = maxAmount;
+        setModified(true);
+    }
+
+    /**
      * Add a unique item to the config at the player's request. <p>
      * This method does not save the config, only modifies it.
      *
      * @param player The player that requested the action
-     * @param item The item to add to the config
+     * @param item   The item to add to the config
      */
     public void addUniqueItem(Player player, ItemStack item)
     {
@@ -530,7 +594,7 @@ public class Config extends YamlFile
      * Add a material to the config at the player's request. <p>
      * This method does not save the config, only modifies it.
      *
-     * @param player The player that requested the action
+     * @param player   The player that requested the action
      * @param material The material to add to the config
      * @return Whether the action was successful or not
      */
@@ -551,7 +615,7 @@ public class Config extends YamlFile
      * This method does not save the config, only modifies it.
      *
      * @param player The player that requested the action
-     * @param item The item to from from the config
+     * @param item   The item to from from the config
      * @return Whether the action was successful or not
      */
     public boolean removeUniqueItem(Player player, ItemStack item)
@@ -570,7 +634,7 @@ public class Config extends YamlFile
      * Removes a material from the config at the player's request. <p>
      * This method does not save the config, only modifies it.
      *
-     * @param player The player that requested the action
+     * @param player   The player that requested the action
      * @param material The material to remove from the config
      * @return Whether the action was successful or not
      */
@@ -582,38 +646,12 @@ public class Config extends YamlFile
     }
 
     /**
-     * Set the <tt>ListMode</tt> of the config. <p>
-     * This method does not save the config, only modifies it.
-     *
-     * @param newMode The new <tt>ListMode</tt> to use in the config
-     */
-    public void setListMode(ListMode newMode)
-    {
-        this.listMode = newMode;
-        setModified(true);
-    }
-
-    /**
-     * Set the lang locale of the config. This automatically updates the <tt>LangManager</tt>
-     * as well. <p>
-     * This method does not save the config, only modifies it.
-     *
-     * @param newLocale
-     */
-    public void setLangLocale(String newLocale)
-    {
-        this.langLocale = newLocale;
-        plugin.langManager().setDefaultLang(newLocale);
-        setModified(true);
-    }
-
-    /**
      * Add a material and custom amount to the config at the player's request. <p>
      * This method does not save the config, only modifies it.
      *
-     * @param player The player that requested the action
+     * @param player   The player that requested the action
      * @param material The material to add to the config
-     * @param amount The new max amount of the item
+     * @param amount   The new max amount of the item
      */
     public void addCustomAmount(Player player, Material material, int amount)
     {
@@ -626,7 +664,7 @@ public class Config extends YamlFile
      * Removes a material from the custom amount list at the player's request. <p>
      * This method does not save the config, only modifies it.
      *
-     * @param player The player that requested the action
+     * @param player   The player that requested the action
      * @param material The material to remove from the config
      */
     public void removeCustomAmount(Player player, Material material)
@@ -661,17 +699,6 @@ public class Config extends YamlFile
     }
 
     /**
-     * Set a new max stack amount for items
-     *
-     * @param maxAmount The new max stack amount
-     */
-    public void setMaxAmount(int maxAmount)
-    {
-        this.maxAmount = maxAmount;
-        setModified(true);
-    }
-
-    /**
      * Returns whether hoppers should process custom stacking or not
      *
      * @return Should process hoppers
@@ -703,22 +730,6 @@ public class Config extends YamlFile
     }
 
     /**
-     * Set a new material list for the config
-     *
-     * @param materialList The new list of materials to use
-     */
-    public void setMaterialList(List<Material> materialList)
-    {
-        this.materialList.clear();
-        for(Material material : materialList)
-        {
-            if(material == null) continue;
-            this.materialList.add(material);
-        }
-        setModified(true);
-    }
-
-    /**
      * Set the unique items list of the config to a new list
      *
      * @param uniqueItemList The new items list to use
@@ -726,17 +737,6 @@ public class Config extends YamlFile
     public void setUniqueItemList(List<ItemStack> uniqueItemList)
     {
         this.uniqueItemList = uniqueItemList;
-        setModified(true);
-    }
-
-    /**
-     * Set a new item amounts list for the config
-     *
-     * @param itemAmounts The new item amounts list
-     */
-    public void setItemAmounts(Map<Material, Integer> itemAmounts)
-    {
-        this.itemAmounts = itemAmounts;
         setModified(true);
     }
 

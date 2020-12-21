@@ -38,7 +38,7 @@ public class PlayerBucketEmptyListener implements Listener
         Player player = event.getPlayer();
         if(player.getGameMode() == GameMode.CREATIVE) return;
         if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
-        int slot = player.getInventory().getHeldItemSlot();
+        int       slot  = player.getInventory().getHeldItemSlot();
         ItemStack stack = player.getInventory().getItemInMainHand();
         if(!stack.getType().toString().endsWith("BUCKET"))
         {
@@ -48,10 +48,10 @@ public class PlayerBucketEmptyListener implements Listener
         if(CancelUtils.cancelStackCheck(plugin, stack)) return;
         PlayerInventory inv = player.getInventory();
         if(stack.getAmount() <= 1) return;
-        stack.setAmount(stack.getAmount()-1);
+        stack.setAmount(stack.getAmount() - 1);
         MoveUtils.moveItem(plugin, new ItemStack(Material.BUCKET, 1), inv);
 
-        int finalSlot = slot;
+        int       finalSlot  = slot;
         ItemStack finalStack = stack;
         new BukkitRunnable()
         {

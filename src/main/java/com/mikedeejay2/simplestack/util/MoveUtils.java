@@ -18,8 +18,6 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Arrays;
-
 /**
  * Utilities for moving items from one location to another
  *
@@ -31,15 +29,15 @@ public final class MoveUtils
      * Emulates picking up an item that is regularly unstackable from the ground
      * and attempting to stack it with other items in the player's inventory.
      *
-     * @param event The cancellable event that this method has been called in
+     * @param event      The cancellable event that this method has been called in
      * @param groundItem The item on the ground that this method is attempting to move to a player's inventory
-     * @param entity The entity attempting to pick up the item
-     * @param item The ItemStack contained inside of the groundItem
+     * @param entity     The entity attempting to pick up the item
+     * @param item       The ItemStack contained inside of the groundItem
      * @return Whether the move was successful or not
      */
     public static boolean moveItemToInventory(Simplestack plugin, Cancellable event, Item groundItem, LivingEntity entity, ItemStack item)
     {
-        Inventory inv = ((InventoryHolder)entity).getInventory();
+        Inventory inv = ((InventoryHolder) entity).getInventory();
         for(int i = 0; i < inv.getStorageContents().length; i++)
         {
             if(!combineItemInternal(plugin, item, inv, i)) continue;
@@ -65,10 +63,10 @@ public final class MoveUtils
      * Emulates picking up an item that is regularly unstackable from the ground
      * and attempting to stack it with other items in an inventory.
      *
-     * @param event The cancellable event that this method has been called in
+     * @param event      The cancellable event that this method has been called in
      * @param groundItem The item on the ground that this method is attempting to move to an inventory
-     * @param inventory The inventory that the item is being added to
-     * @param item The ItemStack contained inside of the groundItem
+     * @param inventory  The inventory that the item is being added to
+     * @param item       The ItemStack contained inside of the groundItem
      */
     public static void moveItemToInventory(Simplestack plugin, Cancellable event, Item groundItem, Inventory inventory, ItemStack item)
     {
@@ -94,9 +92,9 @@ public final class MoveUtils
      * Moving an item from one inventory to another inventory while manually finding
      * the item in the original inventory and removing it (Mostly for hoppers)
      *
-     * @param item The ItemStack being moved
-     * @param fromInv The inventory that the items are coming from (source)
-     * @param toInv The inventory that the items are moving to (destination)
+     * @param item             The ItemStack being moved
+     * @param fromInv          The inventory that the items are coming from (source)
+     * @param toInv            The inventory that the items are moving to (destination)
      * @param amountBeingMoved The amount of items being moves to the toInv
      */
     public static void moveItemToInventory(Simplestack plugin, ItemStack item, Inventory fromInv, Inventory toInv, int amountBeingMoved)
@@ -106,7 +104,7 @@ public final class MoveUtils
         item = item.clone();
         item.setAmount(amountBeingMoved);
         ItemStack origItem = item.clone();
-        boolean valid = false;
+        boolean   valid    = false;
         for(int i = 0; i < fromInv.getSize(); ++i)
         {
             ItemStack curItem = fromInv.getItem(i);
@@ -139,7 +137,7 @@ public final class MoveUtils
      * Move an item to an inventory. The item has no original location.
      *
      * @param item The ItemStack being moved
-     * @param inv The inventory to move the item into
+     * @param inv  The inventory to move the item into
      */
     public static void moveItem(Simplestack plugin, ItemStack item, Inventory inv)
     {
@@ -163,8 +161,8 @@ public final class MoveUtils
      * Manually remove an item from an inventory if the current slot that the item
      * exists in is unknown.
      *
-     * @param item The item to be deleted in the inventory
-     * @param inv The inventory that the item is going to be deleted in
+     * @param item   The item to be deleted in the inventory
+     * @param inv    The inventory that the item is going to be deleted in
      * @param amount The amount of item to be deleted (If unsure, item.getAmount())
      */
     public static void removeItemFromInventory(ItemStack item, Inventory inv, int amount)
@@ -194,13 +192,13 @@ public final class MoveUtils
      * Moves an item from one inventory to another (shift-click) while attempting
      * to combine unstackable items.
      *
-     * @param itemInSlot Item to be moved (Clicked item)
+     * @param itemInSlot       Item to be moved (Clicked item)
      * @param clickedInventory The inventory that was clicked
-     * @param slot The slot that was clicked
-     * @param invToMoveTo The inventory that the item should be moved to
-     * @param startingSlot The slot that the algorithm will begin attempting a move at
-     * @param endingSlot The slot that the algorithm will stop attempting to move at
-     * @param reverse Should the algorithm attempt to move in reverse
+     * @param slot             The slot that was clicked
+     * @param invToMoveTo      The inventory that the item should be moved to
+     * @param startingSlot     The slot that the algorithm will begin attempting a move at
+     * @param endingSlot       The slot that the algorithm will stop attempting to move at
+     * @param reverse          Should the algorithm attempt to move in reverse
      * @return If move was successful
      */
     public static boolean moveItem(Simplestack plugin, ItemStack itemInSlot, Inventory clickedInventory, int slot, Inventory invToMoveTo, int startingSlot, int endingSlot, boolean reverse)
@@ -221,15 +219,15 @@ public final class MoveUtils
      * Moves an item from one inventory to the player inventory (shift-click) while attempting
      * to combine unstackable items and reversing the order of the hotbar.
      *
-     * @param itemInSlot Item to be moved (Clicked item)
+     * @param itemInSlot       Item to be moved (Clicked item)
      * @param clickedInventory The inventory that was clicked
-     * @param slot The slot that was clicked
-     * @param invToMoveTo The inventory that the item should be moved to
+     * @param slot             The slot that was clicked
+     * @param invToMoveTo      The inventory that the item should be moved to
      * @return If move was successful
      */
     public static boolean moveItemReverseHotbar(Simplestack plugin, ItemStack itemInSlot, Inventory clickedInventory, int slot, Inventory invToMoveTo)
     {
-            if(moveItemToExistingStack(plugin, itemInSlot, invToMoveTo, 0, 9, true)) return true;
+        if(moveItemToExistingStack(plugin, itemInSlot, invToMoveTo, 0, 9, true)) return true;
         if(moveItemToExistingStack(plugin, itemInSlot, invToMoveTo, 9, 36, false)) return true;
         if(moveItemIgnoreStacks(itemInSlot, clickedInventory, slot, invToMoveTo, 0, 9, true)) return true;
         return moveItemIgnoreStacks(itemInSlot, clickedInventory, slot, invToMoveTo, 9, 36, false);
@@ -239,13 +237,13 @@ public final class MoveUtils
      * Attempt to move an item to a new slot in an inventory while disregarding whether it can stack with
      * other ItemStacks or not.
      *
-     * @param itemInSlot The item being moved (Clicked item)
+     * @param itemInSlot       The item being moved (Clicked item)
      * @param clickedInventory The inventory that was clicked
-     * @param slot The slot that was clicked
-     * @param invToMoveTo The inventory that the item should be moved to
-     * @param startingSlot The slot that the algorithm will begin attempting a move at
-     * @param endingSlot The slot that the algorithm will stop attempting to move at
-     * @param reverse Should the algorithm attempt to move in reverse
+     * @param slot             The slot that was clicked
+     * @param invToMoveTo      The inventory that the item should be moved to
+     * @param startingSlot     The slot that the algorithm will begin attempting a move at
+     * @param endingSlot       The slot that the algorithm will stop attempting to move at
+     * @param reverse          Should the algorithm attempt to move in reverse
      * @return If move was successful
      */
     public static boolean moveItemIgnoreStacks(ItemStack itemInSlot, Inventory clickedInventory, int slot, Inventory invToMoveTo, int startingSlot, int endingSlot, boolean reverse)
@@ -262,7 +260,7 @@ public final class MoveUtils
         }
         else
         {
-            for(int i = endingSlot-1; i >= startingSlot; i--)
+            for(int i = endingSlot - 1; i >= startingSlot; i--)
             {
                 if(invToMoveTo.getItem(i) != null) continue;
                 invToMoveTo.setItem(i, itemInSlot);
@@ -278,11 +276,11 @@ public final class MoveUtils
      * blank space with no items occupying them. This method will only attempt to combine
      * the itemInSlot with any other non-null items in the invToMoveTo.
      *
-     * @param itemInSlot The item being moved (Clicked item)
-     * @param invToMoveTo The inventory that the item should be moved to
+     * @param itemInSlot   The item being moved (Clicked item)
+     * @param invToMoveTo  The inventory that the item should be moved to
      * @param startingSlot The slot that the algorithm will begin attempting a move at
-     * @param endingSlot The slot that the algorithm will stop attempting to move at
-     * @param reverse Should the algorithm attempt to move in reverse
+     * @param endingSlot   The slot that the algorithm will stop attempting to move at
+     * @param reverse      Should the algorithm attempt to move in reverse
      * @return If move was successful
      */
     public static boolean moveItemToExistingStack(Simplestack plugin, ItemStack itemInSlot, Inventory invToMoveTo, int startingSlot, int endingSlot, boolean reverse)
@@ -308,10 +306,10 @@ public final class MoveUtils
      * Move an item into the player's inventory in the priority that slots 9 to 36 (not the hotbar)
      * are attempted to be moved into first and then the hotbar afterwards.
      *
-     * @param itemInSlot The item being moved (Clicked item)
+     * @param itemInSlot       The item being moved (Clicked item)
      * @param clickedInventory The inventory that was clicked
-     * @param slot The slot that was clicked
-     * @param invToMoveTo The inventory that the item should be moved to
+     * @param slot             The slot that was clicked
+     * @param invToMoveTo      The inventory that the item should be moved to
      */
     public static void moveItemPlayerOrder(Simplestack plugin, ItemStack itemInSlot, Inventory clickedInventory, int slot, Inventory invToMoveTo)
     {
@@ -329,16 +327,16 @@ public final class MoveUtils
      * and both the itemInSlot and the item in the inventory slot equal each other (using equalsEachOther())
      *
      * @param itemInSlot The item being moved (Clicked item)
-     * @param inv Inventory that will be used to get inventory item
-     * @param slot Slot that the method should compare with
+     * @param inv        Inventory that will be used to get inventory item
+     * @param slot       Slot that the method should compare with
      * @return If method was successful
      */
     public static boolean combineItemInternal(Simplestack plugin, ItemStack itemInSlot, Inventory inv, int slot)
     {
         ItemStack itemStack = inv.getItem(slot);
         if(itemStack == null || !ItemComparison.equalsEachOther(itemInSlot, itemStack)) return false;
-        int newAmount = itemStack.getAmount() + itemInSlot.getAmount();
-        int extraAmount = 0;
+        int newAmount        = itemStack.getAmount() + itemInSlot.getAmount();
+        int extraAmount      = 0;
         int maxAmountInStack = StackUtils.getMaxAmount(plugin, itemStack);
         if(newAmount > maxAmountInStack)
         {
@@ -360,11 +358,11 @@ public final class MoveUtils
      */
     public static void preserveShulkerBox(BlockBreakEvent event, Block block)
     {
-        Location location = block.getLocation();
-        World world = location.getWorld();
-        ShulkerBox shulkerBox = (ShulkerBox) block.getState();
-        ItemStack item = new ItemStack(block.getType());
-        BlockStateMeta meta = (BlockStateMeta) item.getItemMeta();
+        Location       location   = block.getLocation();
+        World          world      = location.getWorld();
+        ShulkerBox     shulkerBox = (ShulkerBox) block.getState();
+        ItemStack      item       = new ItemStack(block.getType());
+        BlockStateMeta meta       = (BlockStateMeta) item.getItemMeta();
 
         meta.setDisplayName(shulkerBox.getCustomName());
         for(ItemStack curItem : shulkerBox.getInventory().getStorageContents())
@@ -387,7 +385,7 @@ public final class MoveUtils
      * inventory is closed.
      *
      * @param invToMove Inventory that will be moved into the player's inventory
-     * @param player The player that will receive the items of the invToMove
+     * @param player    The player that will receive the items of the invToMove
      * @param playerInv The inventory of the player
      */
     public static void moveAllItemsToPlayerInv(Simplestack plugin, Inventory invToMove, Player player, Inventory playerInv)
@@ -411,19 +409,19 @@ public final class MoveUtils
      * Emulates dragging items in an inventory in survival mode. Uses a different algorithm because of the
      * way that items have to combine together, still looks like the vanilla algorithm though.
      *
-     * @param event The InventoryDragEvent that this method is being run from
+     * @param event         The InventoryDragEvent that this method is being run from
      * @param inventoryView The inventoryView of the player
-     * @param player The player dragging the items
-     * @param cursor The cursor ItemStack for modification
+     * @param player        The player dragging the items
+     * @param cursor        The cursor ItemStack for modification
      */
     public static void dragItemsSurvival(Simplestack plugin, InventoryDragEvent event, InventoryView inventoryView, Player player, ItemStack cursor)
     {
-        Integer[] slots = event.getNewItems().keySet().toArray(new Integer[0]);
+        Integer[]   slots    = event.getNewItems().keySet().toArray(new Integer[0]);
         ItemStack[] newItems = event.getNewItems().values().toArray(new ItemStack[0]);
         for(int i = 0; i < slots.length; i++)
         {
             ItemStack oldItem = inventoryView.getItem(slots[i]);
-            int amount;
+            int       amount;
             if(oldItem == null) amount = 0;
             else amount = oldItem.getAmount();
             if(oldItem != null && ItemComparison.equalsEachOther(cursor, oldItem))
@@ -436,21 +434,21 @@ public final class MoveUtils
             }
         }
 
-        int amountOfItems = newItems.length;
-        int cursorSize = cursor.getAmount();
-        double amountPerItemRaw = (double)cursorSize / (double)amountOfItems;
-        int amountPerItem = (int) Math.floor(amountPerItemRaw);
-        int totalAmount = amountPerItem*amountOfItems;
-        int amountLeft = cursorSize-totalAmount;
+        int    amountOfItems    = newItems.length;
+        int    cursorSize       = cursor.getAmount();
+        double amountPerItemRaw = (double) cursorSize / (double) amountOfItems;
+        int    amountPerItem    = (int) Math.floor(amountPerItemRaw);
+        int    totalAmount      = amountPerItem * amountOfItems;
+        int    amountLeft       = cursorSize - totalAmount;
 
         int newExtraAmount = 0;
 
         for(int i = 0; i < newItems.length; i++)
         {
-            ItemStack item = newItems[i];
-            int newAmount = amountPerItem + item.getAmount();
-            int extraAmount = 0;
-            int maxAmountInStack = StackUtils.getMaxAmount(plugin, item);
+            ItemStack item             = newItems[i];
+            int       newAmount        = amountPerItem + item.getAmount();
+            int       extraAmount      = 0;
+            int       maxAmountInStack = StackUtils.getMaxAmount(plugin, item);
             if(newAmount > maxAmountInStack)
             {
                 extraAmount = newAmount % maxAmountInStack;
@@ -478,14 +476,14 @@ public final class MoveUtils
      * Emulates dragging items in an inventory in creative mode. Uses a different algorithm because of the
      * way that items have to combine together, still looks like the vanilla algorithm though.
      *
-     * @param event The InventoryDragEvent that this method is being run from
+     * @param event         The InventoryDragEvent that this method is being run from
      * @param inventoryView The inventoryView of the player
-     * @param player The player dragging the items
-     * @param cursor The cursor ItemStack for modification
+     * @param player        The player dragging the items
+     * @param cursor        The cursor ItemStack for modification
      */
     public static void dragItemsCreative(Simplestack plugin, InventoryDragEvent event, InventoryView inventoryView, Player player, ItemStack cursor)
     {
-        Integer[] slots = event.getNewItems().keySet().toArray(new Integer[0]);
+        Integer[]   slots    = event.getNewItems().keySet().toArray(new Integer[0]);
         ItemStack[] newItems = event.getNewItems().values().toArray(new ItemStack[0]);
         for(ItemStack item : newItems)
         {
@@ -495,7 +493,7 @@ public final class MoveUtils
         }
         for(int i = 0; i < slots.length; i++)
         {
-            int slot = slots[i];
+            int       slot = slots[i];
             ItemStack item = newItems[i];
             inventoryView.setItem(slot, item);
         }
@@ -504,14 +502,14 @@ public final class MoveUtils
     /**
      * A method that attempts to combine an inputStack into the targetStack
      *
-     * @param inputStack The input stack
+     * @param inputStack  The input stack
      * @param targetStack The target stack (result stack)
      */
     public static void mergeItems(Simplestack plugin, ItemStack inputStack, ItemStack targetStack)
     {
         int maxAmountInStack = StackUtils.getMaxAmount(plugin, inputStack);
-        int newAmount = inputStack.getAmount() + targetStack.getAmount();
-        int extraAmount = 0;
+        int newAmount        = inputStack.getAmount() + targetStack.getAmount();
+        int extraAmount      = 0;
         if(newAmount > maxAmountInStack)
         {
             extraAmount = (newAmount - maxAmountInStack);

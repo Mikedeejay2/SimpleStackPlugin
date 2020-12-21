@@ -1,15 +1,11 @@
 package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.mikedeejay2lib.PluginBase;
-import com.mikedeejay2.mikedeejay2lib.runnable.EnhancedRunnable;
 import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.listeners.*;
 import com.mikedeejay2.simplestack.listeners.player.*;
 import com.mikedeejay2.simplestack.runnables.GroundItemStacker;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.FallingBlock;
 
 /**
  * Simple Stack plugin for Minecraft 1.14 - 1.16.4
