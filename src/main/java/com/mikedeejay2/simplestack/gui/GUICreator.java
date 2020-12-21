@@ -42,11 +42,11 @@ public class GUICreator
      */
     public static GUIContainer createMainGUI(Simplestack plugin, Player player)
     {
-        GUIContainer       gui           = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.config.title"), 5);
-        GUIAnimationModule animation     = new GUIAnimationModule(plugin, 1);
-        GUIAnimStrips      outlineModule = new GUIAnimStrips(getAnimItem());
-        GUINavigatorModule naviModule    = new GUINavigatorModule(plugin, "config");
-        GUIConfigModule    configModule  = new GUIConfigModule(plugin);
+        GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.config.title"), 5);
+        GUIAnimationModule animation = new GUIAnimationModule(plugin, 1);
+        GUIAnimStrips outlineModule = new GUIAnimStrips(getAnimItem());
+        GUINavigatorModule naviModule = new GUINavigatorModule(plugin, "config");
+        GUIConfigModule configModule = new GUIConfigModule(plugin);
         gui.addModule(animation);
         gui.addModule(outlineModule);
         gui.addModule(naviModule);
@@ -88,42 +88,42 @@ public class GUICreator
      */
     public static List<GUIItem> getLanguageList(Simplestack plugin, Player player)
     {
-        List<GUIItem> items        = new ArrayList<>();
-        String        clickMessage = Chat.chat("&f" + plugin.langManager().getText(player, "simplestack.gui.language.language_select"));
+        List<GUIItem> items = new ArrayList<>();
+        String clickMessage = Chat.chat("&f" + plugin.langManager().getText(player, "simplestack.gui.language.language_select"));
         GUIItem english = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_UNITED_STATES, 1,
-                                                                 "&bEnglish", clickMessage, Chat.chat("&7en_us")));
+                "&bEnglish", clickMessage, Chat.chat("&7en_us")));
         english.addEvent(new GUISwitchLangEvent(plugin, "en_us"));
 
         GUIItem simplifiedChinese = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_CHINA, 1,
-                                                                           "&b简体中文 (Simplified Chinese)", clickMessage, Chat.chat("&7zh_cn")));
+                "&b简体中文 (Simplified Chinese)", clickMessage, Chat.chat("&7zh_cn")));
         simplifiedChinese.addEvent(new GUISwitchLangEvent(plugin, "zh_cn"));
 
         GUIItem korean = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_SOUTH_KOREA, 1,
-                                                                "&b한국어 (Korean)", clickMessage, Chat.chat("&7ko_kr")));
+                "&b한국어 (Korean)", clickMessage, Chat.chat("&7ko_kr")));
         korean.addEvent(new GUISwitchLangEvent(plugin, "ko_kr"));
 
         GUIItem argentina = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_ARGENTINA, 1,
-                                                                   "&bEspañol (Argentinian Spanish)", clickMessage, Chat.chat("&7es_ar")));
+                "&bEspañol (Argentinian Spanish)", clickMessage, Chat.chat("&7es_ar")));
         argentina.addEvent(new GUISwitchLangEvent(plugin, "es_ar"));
 
         GUIItem chilean = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_CHILE, 1,
-                                                                 "&bEspañol (Chilean Spanish)", clickMessage, Chat.chat("&7es_cl")));
+                "&bEspañol (Chilean Spanish)", clickMessage, Chat.chat("&7es_cl")));
         chilean.addEvent(new GUISwitchLangEvent(plugin, "es_cl"));
 
         GUIItem mexican = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_MEXICO, 1,
-                                                                 "&bEspañol (Mexican Spanish)", clickMessage, Chat.chat("&7es_mx")));
+                "&bEspañol (Mexican Spanish)", clickMessage, Chat.chat("&7es_mx")));
         mexican.addEvent(new GUISwitchLangEvent(plugin, "es_mx"));
 
         GUIItem uruguay = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_URUGUAY, 1,
-                                                                 "&bEspañol (Uruguayan Spanish)", clickMessage, Chat.chat("&7es_uy")));
+                "&bEspañol (Uruguayan Spanish)", clickMessage, Chat.chat("&7es_uy")));
         uruguay.addEvent(new GUISwitchLangEvent(plugin, "es_uy"));
 
         GUIItem venezuela = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_VENEZUELA, 1,
-                                                                   "&bEspañol (Venezuelan Spanish)", clickMessage, Chat.chat("&7es_ve")));
+                "&bEspañol (Venezuelan Spanish)", clickMessage, Chat.chat("&7es_ve")));
         venezuela.addEvent(new GUISwitchLangEvent(plugin, "es_ve"));
 
         GUIItem german = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_GERMANY, 1,
-                                                                "&bDeutsch (German)", clickMessage, Chat.chat("&7de_de")));
+                "&bDeutsch (German)", clickMessage, Chat.chat("&7de_de")));
         german.addEvent(new GUISwitchLangEvent(plugin, "de_de"));
 
         items.add(english);
@@ -136,14 +136,14 @@ public class GUICreator
         items.add(venezuela);
         items.add(german);
 
-        String  currentLocale = plugin.config().getLangLocale();
-        int     index         = 0;
-        GUIItem curLangItem   = null;
-        String  curLocale     = null;
+        String currentLocale = plugin.config().getLangLocale();
+        int index = 0;
+        GUIItem curLangItem = null;
+        String curLocale = null;
         for(int i = 0; i < items.size(); ++i)
         {
             GUIItem curItem = items.get(i);
-            String  locale  = curItem.getEvent(GUISwitchLangEvent.class).getLocale();
+            String locale = curItem.getEvent(GUISwitchLangEvent.class).getLocale();
             if(!locale.equals(currentLocale)) continue;
             index = i;
             curLangItem = curItem;
@@ -156,9 +156,9 @@ public class GUICreator
         }
         AnimatedGUIItem newLangItem = new AnimatedGUIItem(curLangItem.getItemBase(), true);
 
-        ItemStack    curItem     = curLangItem.getItemBase();
-        ItemMeta     curItemMeta = curItem.getItemMeta();
-        List<String> newLore     = new ArrayList<>();
+        ItemStack curItem = curLangItem.getItemBase();
+        ItemMeta curItemMeta = curItem.getItemMeta();
+        List<String> newLore = new ArrayList<>();
         newLore.add(Chat.chat("&a" + plugin.langManager().getTextLib(player, "generic.enabled")));
         newLore.add(Chat.chat("&7" + curLocale));
         curItemMeta.setLore(newLore);

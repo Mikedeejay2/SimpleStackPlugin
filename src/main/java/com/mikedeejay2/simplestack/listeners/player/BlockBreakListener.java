@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Listens for block breaking events
@@ -35,8 +36,9 @@ public class BlockBreakListener implements Listener
     public void blockBreakEvent(BlockBreakEvent event)
     {
         Player player = event.getPlayer();
-        Block  block  = event.getBlock();
+        Block block = event.getBlock();
         if(!ShulkerBoxes.isShulkerBox(block.getType())) return;
+        if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
 
         MoveUtils.preserveShulkerBox(event, block);
     }

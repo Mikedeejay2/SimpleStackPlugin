@@ -32,26 +32,26 @@ public class HelpCommand extends AbstractSubCommand
      * about them. The commands can be clicked on to run.
      *
      * @param sender The CommandSender that sent the command
-     * @param args   The arguments for the command (subcommands)
+     * @param args The arguments for the command (subcommands)
      */
     @Override
     public void onCommand(CommandSender sender, String[] args)
     {
-        LangManager                lang          = plugin.langManager();
-        String                     ver           = plugin.getDescription().getVersion();
-        String[]                   ssArr         = {"Simple", "Stack"};
-        String                     version       = lang.getText(sender, "simplestack.version", new String[]{"VERSION"}, new String[]{ver});
-        CommandManager             manager       = plugin.commandManager();
-        String[]                   commands      = manager.getAllCommandStrings(false);
-        ArrayList<BaseComponent[]> lines         = new ArrayList<>();
-        String                     lineString    = "&b &m                                                                              ";
-        String                     emptyString   = "                                                                               \n";
-        String                     titleString   = "\n                              &9&l" + ssArr[0] + " &d&l" + ssArr[1] + "&r                               \n";
-        String                     versionString = "                               &7" + version + "\n";
+        LangManager lang = plugin.langManager();
+        String ver = plugin.getDescription().getVersion();
+        String[] ssArr = {"Simple", "Stack"};
+        String version = lang.getText(sender, "simplestack.version", new String[]{"VERSION"}, new String[]{ver});
+        CommandManager manager = plugin.commandManager();
+        String[] commands = manager.getAllCommandStrings(false);
+        ArrayList<BaseComponent[]> lines = new ArrayList<>();
+        String lineString = "&b &m                                                                              ";
+        String emptyString = "                                                                               \n";
+        String titleString = "\n                              &9&l" + ssArr[0] + " &d&l" + ssArr[1] + "&r                               \n";
+        String versionString = "                               &7" + version + "\n";
 
-        BaseComponent[] lineComponents    = plugin.chat().getBaseComponentArray(lineString);
-        BaseComponent[] emptyComponents   = plugin.chat().getBaseComponentArray(emptyString);
-        BaseComponent[] titleComponents   = plugin.chat().getBaseComponentArray(titleString);
+        BaseComponent[] lineComponents = plugin.chat().getBaseComponentArray(lineString);
+        BaseComponent[] emptyComponents = plugin.chat().getBaseComponentArray(emptyString);
+        BaseComponent[] titleComponents = plugin.chat().getBaseComponentArray(titleString);
         BaseComponent[] versionComponents = plugin.chat().getBaseComponentArray(versionString);
 
         lines.add(lineComponents);
@@ -60,9 +60,9 @@ public class HelpCommand extends AbstractSubCommand
 
         for(int i = 1; i < commands.length; i++)
         {
-            String command     = commands[i];
+            String command = commands[i];
             String commandInfo = manager.getSubcommand(command).info(sender);
-            String hoverText   = "&d" + lang.getText(sender, "simplestack.commands.click_to_run", new String[]{"COMMAND"}, new String[]{"/simplestack " + command});
+            String hoverText = "&d" + lang.getText(sender, "simplestack.commands.click_to_run", new String[]{"COMMAND"}, new String[]{"/simplestack " + command});
 
             BaseComponent[] line = plugin.chat().getBaseComponentArray("  &b/simplestack " + command + " &d- &f" + commandInfo + "\n");
 

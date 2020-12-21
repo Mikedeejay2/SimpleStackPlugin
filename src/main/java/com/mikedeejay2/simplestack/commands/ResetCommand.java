@@ -26,7 +26,7 @@ public class ResetCommand extends AbstractSubCommand
      * the config.yml file.
      *
      * @param sender The CommandSender that sent the command
-     * @param args   The arguments for the command (subcommands)
+     * @param args The arguments for the command (subcommands)
      */
     @Override
     public void onCommand(CommandSender sender, String[] args)

@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.commands;
 
 import com.mikedeejay2.mikedeejay2lib.commands.AbstractSubCommand;
+import com.mikedeejay2.mikedeejay2lib.util.chat.Chat;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Material;
@@ -29,7 +30,7 @@ public class SetAmountCommand extends AbstractSubCommand
      * amount specified in args[1].
      *
      * @param sender The CommandSender that sent the command
-     * @param args   The arguments for the command (subcommands)
+     * @param args The arguments for the command (subcommands)
      */
     @Override
     public void onCommand(CommandSender sender, String[] args)
@@ -51,8 +52,8 @@ public class SetAmountCommand extends AbstractSubCommand
             plugin.chat().sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.number_less_than_zero"));
             return;
         }
-        Player    player = (Player) sender;
-        ItemStack item   = player.getInventory().getItemInMainHand();
+        Player player = (Player) sender;
+        ItemStack item = player.getInventory().getItemInMainHand();
         if(item.getType() == Material.AIR)
         {
             plugin.chat().sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.invalid_item_held"));

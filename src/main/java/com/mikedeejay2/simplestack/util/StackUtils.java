@@ -1,9 +1,7 @@
 package com.mikedeejay2.simplestack.util;
 
 import com.mikedeejay2.simplestack.Simplestack;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.StonecutterInventory;
+import org.bukkit.inventory.*;
 
 /**
  * Miscellaneous utilities for methods that don't fit in any other category.
@@ -18,7 +16,7 @@ public final class StackUtils
      * where an item should not switch (i.e an output slot)
      *
      * @param inventory Inventory that was clicked
-     * @param slot      Slot that was clicked
+     * @param slot Slot that was clicked
      * @return If items should switch or not
      */
     public static boolean shouldSwitch(Inventory inventory, int slot)

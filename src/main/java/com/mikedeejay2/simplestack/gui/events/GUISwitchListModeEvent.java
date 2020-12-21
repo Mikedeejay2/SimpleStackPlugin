@@ -31,20 +31,19 @@ public class GUISwitchListModeEvent implements GUIEvent
     @Override
     public void execute(InventoryClickEvent event, GUIContainer gui)
     {
-        Player    player = (Player) event.getWhoClicked();
-        ClickType type   = event.getClick();
+        Player player = (Player) event.getWhoClicked();
+        ClickType type = event.getClick();
         if(type != ClickType.LEFT) return;
-        GUILayer layer          = gui.getLayer(0);
-        Config   config         = plugin.config();
-        int      slot           = event.getSlot();
-        int      row            = layer.getRowFromSlot(slot);
-        int      col            = layer.getColFromSlot(slot);
-        GUIItem  switchListMode = layer.getItem(row, col);
+        GUILayer layer = gui.getLayer(0);
+        Config config = plugin.config();
+        int slot = event.getSlot();
+        int row = layer.getRowFromSlot(slot);
+        int col = layer.getColFromSlot(slot);
+        GUIItem switchListMode = layer.getItem(row, col);
         config.setListMode(config.getListMode() == ListMode.BLACKLIST ? ListMode.WHITELIST : ListMode.BLACKLIST);
         if(plugin.config().getListMode() == ListMode.BLACKLIST)
         {
-            switchListMode.setItem(ItemCreator.createHeadItem(
-                    Base64Heads.X_BLACK, 1,
+            switchListMode.setItem(ItemCreator.createHeadItem(Base64Heads.X_BLACK, 1,
                     "&b&l" + plugin.langManager().getText(player, "simplestack.list_type.blacklist"),
                     "&7" + plugin.langManager().getText(player, "simplestack.gui.item_types.change_mode_whitelist"),
                     "",
@@ -53,8 +52,7 @@ public class GUISwitchListModeEvent implements GUIEvent
         }
         else
         {
-            switchListMode.setItem(ItemCreator.createHeadItem(
-                    Base64Heads.CHECKMARK_WHITE, 1,
+            switchListMode.setItem(ItemCreator.createHeadItem(Base64Heads.CHECKMARK_WHITE, 1,
                     "&b&l" + plugin.langManager().getText(player, "simplestack.list_type.whitelist"),
                     "&7" + plugin.langManager().getText(player, "simplestack.gui.item_types.change_mode_blacklist"),
                     "",

@@ -29,7 +29,7 @@ public class InventoryPickupItemListener implements Listener
     public void inventoryPickupItemEvent(InventoryPickupItemEvent event)
     {
         if(!plugin.config().shouldProcessHoppers()) return;
-        Item      item  = event.getItem();
+        Item item = event.getItem();
         ItemStack stack = item.getItemStack();
 
         boolean cancel = CancelUtils.cancelStackCheck(plugin, stack);

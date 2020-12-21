@@ -37,7 +37,7 @@ public class InventoryCloseListener implements Listener
     {
         Player player = (Player) event.getPlayer();
         if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
-        Inventory     inv  = event.getInventory();
+        Inventory inv = event.getInventory();
         InventoryType type = inv.getType();
         if(!(type == InventoryType.WORKBENCH ||
                 type == InventoryType.ENCHANTING ||
@@ -45,7 +45,7 @@ public class InventoryCloseListener implements Listener
                 type == InventoryType.LOOM ||
                 type == InventoryType.GRINDSTONE ||
                 (plugin.getMCVersion().getVersionShort() >= 16 && type == InventoryType.SMITHING)
-        )) return;
+          ) ) return;
         Inventory playerInv = player.getInventory();
         MoveUtils.moveAllItemsToPlayerInv(plugin, inv, player, playerInv);
 

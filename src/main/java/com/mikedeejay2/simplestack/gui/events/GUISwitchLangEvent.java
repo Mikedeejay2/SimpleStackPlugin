@@ -36,7 +36,7 @@ public class GUISwitchLangEvent implements GUIEvent
         Config config = plugin.config();
         config.setLangLocale(locale);
         GUIListModule listModule = gui.getModule(GUIListModule.class);
-        List<GUIItem> langItems  = GUICreator.getLanguageList(plugin, player);
+        List<GUIItem> langItems = GUICreator.getLanguageList(plugin, player);
         listModule.setGUIItems(langItems);
     }
 

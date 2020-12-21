@@ -29,15 +29,15 @@ public class GUIMaxStackEvent implements GUIEvent
     {
         ClickType type = event.getClick();
         if(type == ClickType.DOUBLE_CLICK) return;
-        GUILayer layer      = gui.getLayer(0);
-        Config   config     = plugin.config();
-        int      slot       = event.getSlot();
-        int      row        = layer.getRowFromSlot(slot);
-        int      col        = layer.getColFromSlot(slot);
-        GUIItem  item       = layer.getItem(row, col);
-        boolean  leftClick  = type.isLeftClick();
-        boolean  rightClick = type.isRightClick();
-        boolean  shiftClick = type.isShiftClick();
+        GUILayer layer = gui.getLayer(0);
+        Config config = plugin.config();
+        int slot = event.getSlot();
+        int row = layer.getRowFromSlot(slot);
+        int col = layer.getColFromSlot(slot);
+        GUIItem item = layer.getItem(row, col);
+        boolean leftClick = type.isLeftClick();
+        boolean rightClick = type.isRightClick();
+        boolean shiftClick = type.isShiftClick();
 
         if(shiftClick)
         {
