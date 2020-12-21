@@ -517,7 +517,7 @@ public class Config extends YamlFile
      * This method does not save the config, only modifies it.
      *
      * @param player The player that requested the action
-     * @param item The item to add to the config
+     * @param item   The item to add to the config
      */
     public void addUniqueItem(Player player, ItemStack item)
     {
@@ -530,7 +530,7 @@ public class Config extends YamlFile
      * Add a material to the config at the player's request. <p>
      * This method does not save the config, only modifies it.
      *
-     * @param player The player that requested the action
+     * @param player   The player that requested the action
      * @param material The material to add to the config
      * @return Whether the action was successful or not
      */
@@ -551,7 +551,7 @@ public class Config extends YamlFile
      * This method does not save the config, only modifies it.
      *
      * @param player The player that requested the action
-     * @param item The item to from from the config
+     * @param item   The item to from from the config
      * @return Whether the action was successful or not
      */
     public boolean removeUniqueItem(Player player, ItemStack item)
@@ -570,7 +570,7 @@ public class Config extends YamlFile
      * Removes a material from the config at the player's request. <p>
      * This method does not save the config, only modifies it.
      *
-     * @param player The player that requested the action
+     * @param player   The player that requested the action
      * @param material The material to remove from the config
      * @return Whether the action was successful or not
      */
@@ -595,7 +595,8 @@ public class Config extends YamlFile
 
     /**
      * Set the lang locale of the config. This automatically updates the <tt>LangManager</tt>
-     * as well. <p>
+     * as well.
+     * <p>
      * This method does not save the config, only modifies it.
      *
      * @param newLocale
@@ -611,9 +612,9 @@ public class Config extends YamlFile
      * Add a material and custom amount to the config at the player's request. <p>
      * This method does not save the config, only modifies it.
      *
-     * @param player The player that requested the action
+     * @param player   The player that requested the action
      * @param material The material to add to the config
-     * @param amount The new max amount of the item
+     * @param amount   The new max amount of the item
      */
     public void addCustomAmount(Player player, Material material, int amount)
     {
@@ -626,7 +627,7 @@ public class Config extends YamlFile
      * Removes a material from the custom amount list at the player's request. <p>
      * This method does not save the config, only modifies it.
      *
-     * @param player The player that requested the action
+     * @param player   The player that requested the action
      * @param material The material to remove from the config
      */
     public void removeCustomAmount(Player player, Material material)

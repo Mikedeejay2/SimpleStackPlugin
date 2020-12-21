@@ -9,7 +9,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +33,7 @@ public class GUIItemTypeAmountModule extends GUIModule
      * to the config
      *
      * @param player The player closing the GUI
-     * @param gui The <tt>GUIContainer</tt> of the GUI
+     * @param gui    The <tt>GUIContainer</tt> of the GUI
      */
     @Override
     public void onClose(Player player, GUIContainer gui)

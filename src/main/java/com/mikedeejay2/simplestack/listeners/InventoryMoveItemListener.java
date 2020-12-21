@@ -35,17 +35,16 @@ public class InventoryMoveItemListener implements Listener
     public void inventoryMoveItemEvent(InventoryMoveItemEvent event)
     {
         if(!plugin.config().shouldProcessHoppers()) return;
-        ItemStack item = event.getItem();
-
-        Inventory fromInv = event.getSource();
-        Inventory toInv = event.getDestination();
+        ItemStack     item    = event.getItem();
+        Inventory     fromInv = event.getSource();
+        Inventory     toInv   = event.getDestination();
         InventoryType invType = toInv.getType();
         if(invType == InventoryType.BREWING) return;
         if(toInv.getLocation() != null && ShulkerBoxes.isShulkerBox(item.getType()))
         {
-            Location location = toInv.getLocation();
-            World world = location.getWorld();
-            Block block = world.getBlockAt(location);
+            Location location  = toInv.getLocation();
+            World    world     = location.getWorld();
+            Block    block     = world.getBlockAt(location);
             Material blockType = block.getType();
             if(ShulkerBoxes.isShulkerBox(blockType)) return;
         }

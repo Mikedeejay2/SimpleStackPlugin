@@ -30,14 +30,14 @@ public class GUICreativeDragEvent implements GUIEvent
     @Override
     public void execute(InventoryClickEvent event, GUIContainer gui)
     {
-        Player player = (Player) event.getWhoClicked();
-        GUILayer layer = gui.getLayer(0);
-        Config config = plugin.config();
+        Player   player = (Player) event.getWhoClicked();
+        GUILayer layer  = gui.getLayer(0);
+        Config   config = plugin.config();
         if(event.getClick() != ClickType.LEFT) return;
-        int slot = event.getSlot();
-        int row = layer.getRowFromSlot(slot);
-        int col = layer.getColFromSlot(slot);
-        GUIItem item = layer.getItem(row, col);
+        int     slot    = event.getSlot();
+        int     row     = layer.getRowFromSlot(slot);
+        int     col     = layer.getColFromSlot(slot);
+        GUIItem item    = layer.getItem(row, col);
         boolean newDrag = !config.shouldCreativeDrag();
         if(newDrag)
         {

@@ -11,7 +11,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Listens for Inventory Click events
@@ -36,18 +38,18 @@ public class InventoryClickListener implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void stackEvent(InventoryClickEvent event)
     {
-        Player player = (Player) event.getWhoClicked();
-        InventoryAction action = event.getAction();
+        Player          player    = (Player) event.getWhoClicked();
+        InventoryAction action    = event.getAction();
         CheckUtils.updateGUIManual(plugin, player.getOpenInventory().getTopInventory());
         if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
-        ItemStack itemPickUp = event.getCurrentItem();
-        ItemStack itemPutDown = event.getCursor();
-        ClickType clickType = event.getClick();
-        InventoryView view = player.getOpenInventory();
-        Inventory topInv = view.getTopInventory();
-        Inventory bottomInv = view.getBottomInventory();
-        int slot = event.getSlot();
-        Inventory clickedInv = event.getClickedInventory();
+        ItemStack     itemPickUp  = event.getCurrentItem();
+        ItemStack     itemPutDown = event.getCursor();
+        ClickType     clickType   = event.getClick();
+        InventoryView view        = player.getOpenInventory();
+        Inventory     topInv      = view.getTopInventory();
+        Inventory     bottomInv   = view.getBottomInventory();
+        int           slot        = event.getSlot();
+        Inventory     clickedInv  = event.getClickedInventory();
         if(itemPickUp == null || action.toString().contains("DROP") || clickType == ClickType.CREATIVE) return;
 
         boolean cancel1 = CancelUtils.cancelStackCheck(plugin, itemPickUp);

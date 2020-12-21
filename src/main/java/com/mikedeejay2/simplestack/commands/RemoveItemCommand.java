@@ -28,7 +28,7 @@ public class RemoveItemCommand extends AbstractSubCommand
      * Removes the item of the player's held item from the unique items list of the config.
      *
      * @param sender The CommandSender that sent the command
-     * @param args The arguments for the command (subcommands)
+     * @param args   The arguments for the command (subcommands)
      */
     @Override
     public void onCommand(CommandSender sender, String[] args)

@@ -38,7 +38,7 @@ public class GUIAboutModule extends GUIModule
      * do.
      *
      * @param event The original <tt>InventoryClickEvent</tt>
-     * @param gui The <tt>GUIContainer</tt> that was clicked
+     * @param gui   The <tt>GUIContainer</tt> that was clicked
      */
     @Override
     public void onClickedHead(InventoryClickEvent event, GUIContainer gui)
@@ -162,8 +162,8 @@ public class GUIAboutModule extends GUIModule
     /**
      * Helper method for making sure that an item is actually in the GUI
      *
-     * @param rows The maximum rows of the GUI
-     * @param cols The maximum columns of the GUI
+     * @param rows   The maximum rows of the GUI
+     * @param cols   The maximum columns of the GUI
      * @param curRow The current row of the item
      * @param curCol The current column of the item
      * @return Whether the item placement is valid or not
@@ -197,7 +197,7 @@ public class GUIAboutModule extends GUIModule
     /**
      * Generate the back button for the about screen
      *
-     * @param player The player that opened the GUI (For the player's locale)
+     * @param player    The player that opened the GUI (For the player's locale)
      * @param textLayer The text <tt>GUILayer</tt> that will be used
      */
     private void genBackButton(Player player, GUILayer textLayer)
@@ -211,9 +211,9 @@ public class GUIAboutModule extends GUIModule
     /**
      * Generate the about section with the about text and intro animation
      *
-     * @param textLayer The text <tt>GUILayer</tt> that will be used
+     * @param textLayer  The text <tt>GUILayer</tt> that will be used
      * @param aboutLayer The about <tt>GUILayer</tt> that will be used
-     * @param player The player that opened the GUI (For the player's locale)
+     * @param player     The player that opened the GUI (For the player's locale)
      */
     private void genAbout(GUILayer textLayer, GUILayer aboutLayer, Player player)
     {

@@ -21,10 +21,10 @@ public final class ClickUtils
      * Emulates a left click event that includes stacking items together that
      * regularly wouldn't be stacked.
      *
-     * @param itemInSlot The item clicked on by the cursor
+     * @param itemInSlot   The item clicked on by the cursor
      * @param itemInCursor The item currently in the cursor (if any)
-     * @param player The player that has clicked
-     * @param event The InventoryClickEvent that this method was called from
+     * @param player       The player that has clicked
+     * @param event        The InventoryClickEvent that this method was called from
      */
     public static void leftClick(Simplestack plugin, ItemStack itemInSlot, ItemStack itemInCursor, Player player, InventoryClickEvent event)
     {
@@ -68,10 +68,10 @@ public final class ClickUtils
      * Emulates a right click event that includes combining and stacking items together that
      * regularly wouldn't be stacked.
      *
-     * @param itemInSlot The item clicked on by the cursor
+     * @param itemInSlot   The item clicked on by the cursor
      * @param itemInCursor The item currently in the cursor (if any)
-     * @param player The player that has clicked
-     * @param event The InventoryClickEvent that this method was called from
+     * @param player       The player that has clicked
+     * @param event        The InventoryClickEvent that this method was called from
      */
     public static void rightClick(Simplestack plugin, ItemStack itemInSlot, ItemStack itemInCursor, Player player, InventoryClickEvent event)
     {
@@ -123,8 +123,8 @@ public final class ClickUtils
      * unstackable items.
      *
      * @param itemInSlot The item clicked on by the cursor
-     * @param player The player that has clicked
-     * @param event The InventoryClickEvent that this method was called from
+     * @param player     The player that has clicked
+     * @param event      The InventoryClickEvent that this method was called from
      */
     public static void shiftClick(Simplestack plugin, ItemStack itemInSlot, Player player, InventoryClickEvent event)
     {
@@ -150,11 +150,11 @@ public final class ClickUtils
      * behaviors of different GUIs
      *
      * @param itemInSlot The item clicked on by the cursor
-     * @param event The InventoryClickEvent that this method was called from
-     * @param toInv The Inventory that was clicked on (method reassigns this to the inventory that the items moves to)
-     * @param topInv The top inventory that the player is viewing
-     * @param bottomInv The bottom inventory that the player is viewing
-     * @param slot The slot that the player has clicked on
+     * @param event      The InventoryClickEvent that this method was called from
+     * @param toInv      The Inventory that was clicked on (method reassigns this to the inventory that the items moves to)
+     * @param topInv     The top inventory that the player is viewing
+     * @param bottomInv  The bottom inventory that the player is viewing
+     * @param slot       The slot that the player has clicked on
      */
     private static void shiftClickSeperateInv(Simplestack plugin, ItemStack itemInSlot, InventoryClickEvent event, Inventory toInv, Inventory topInv, Inventory bottomInv, int slot, Player player)
     {
@@ -399,8 +399,8 @@ public final class ClickUtils
      * like a furnace that will not accept the item being shift clicked in any GUI slot.
      *
      * @param itemInSlot The item clicked on by the cursor
-     * @param event The InventoryClickEvent that this method was called from
-     * @param bottomInv The inventory that will be used (This method only uses the player's inventory)
+     * @param event      The InventoryClickEvent that this method was called from
+     * @param bottomInv  The inventory that will be used (This method only uses the player's inventory)
      */
     private static void shiftClickSameInv(Simplestack plugin, ItemStack itemInSlot, InventoryClickEvent event, Inventory bottomInv)
     {
@@ -490,10 +490,10 @@ public final class ClickUtils
      * Emulates specifically picking up all of an item.
      * Probably not used, backup method if something major breaks and I don't have time to fix it.
      *
-     * @param player The player that has clicked
-     * @param itemInSlot The item clicked on by the cursor
+     * @param player        The player that has clicked
+     * @param itemInSlot    The item clicked on by the cursor
      * @param inventoryView The player's inventory view
-     * @param rawSlot The raw inventory slot that has been clicked on
+     * @param rawSlot       The raw inventory slot that has been clicked on
      */
     public static void pickupAll(Player player, ItemStack itemInSlot, InventoryView inventoryView, int rawSlot)
     {
@@ -504,11 +504,11 @@ public final class ClickUtils
     /**
      * Emulates specifically placing everything in the cursor into the slot below.
      *
-     * @param player The player that has clicked
-     * @param itemInSlot The item clicked on by the cursor
-     * @param itemInCursor The item currently in the cursor (if any)
+     * @param player        The player that has clicked
+     * @param itemInSlot    The item clicked on by the cursor
+     * @param itemInCursor  The item currently in the cursor (if any)
      * @param inventoryView The player's inventory view
-     * @param rawSlot The raw inventory slot that has been clicked on
+     * @param rawSlot       The raw inventory slot that has been clicked on
      */
     public static void placeAll(Simplestack plugin, Player player, ItemStack itemInSlot, ItemStack itemInCursor, InventoryView inventoryView, int rawSlot)
     {
@@ -530,10 +530,10 @@ public final class ClickUtils
      * Emulates specifically picking up half of an ItemStack into the cursor.
      * Probably not used, backup method if something major breaks and I don't have time to fix it.
      *
-     * @param player The player that has clicked
-     * @param itemInSlot The item clicked on by the cursor
+     * @param player        The player that has clicked
+     * @param itemInSlot    The item clicked on by the cursor
      * @param inventoryView The player's inventory view
-     * @param rawSlot The raw inventory slot that has been clicked on
+     * @param rawSlot       The raw inventory slot that has been clicked on
      */
     public static void pickupHalf(Player player, ItemStack itemInSlot, InventoryView inventoryView, int rawSlot)
     {
@@ -550,7 +550,7 @@ public final class ClickUtils
      * Emulates cloning a stack of items (creative mode)
      * This method will force a cloned stack's new size to be 64.
      *
-     * @param player The player that has clicked
+     * @param player     The player that has clicked
      * @param itemInSlot The item clicked on by the cursor
      */
     public static void cloneStack(Simplestack plugin, Player player, ItemStack itemInSlot)

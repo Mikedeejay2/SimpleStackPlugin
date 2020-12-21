@@ -42,11 +42,11 @@ public class GUICreator
      */
     public static GUIContainer createMainGUI(Simplestack plugin, Player player)
     {
-        GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.config.title"), 5);
-        GUIAnimationModule animation = new GUIAnimationModule(plugin, 1);
-        GUIAnimStrips outlineModule = new GUIAnimStrips(getAnimItem());
-        GUINavigatorModule naviModule = new GUINavigatorModule(plugin, "config");
-        GUIConfigModule configModule = new GUIConfigModule(plugin);
+        GUIContainer       gui           = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.config.title"), 5);
+        GUIAnimationModule animation     = new GUIAnimationModule(plugin, 1);
+        GUIAnimStrips      outlineModule = new GUIAnimStrips(getAnimItem());
+        GUINavigatorModule naviModule    = new GUINavigatorModule(plugin, "config");
+        GUIConfigModule    configModule  = new GUIConfigModule(plugin);
         gui.addModule(animation);
         gui.addModule(outlineModule);
         gui.addModule(naviModule);

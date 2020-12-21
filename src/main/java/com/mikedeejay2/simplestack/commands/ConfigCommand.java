@@ -27,7 +27,7 @@ public class ConfigCommand extends AbstractSubCommand
      * Opens a configuration GUI for the player that ran the command.
      *
      * @param sender The CommandSender that sent the command
-     * @param args The arguments for the command (subcommands)
+     * @param args   The arguments for the command (subcommands)
      */
     @Override
     public void onCommand(CommandSender sender, String[] args)

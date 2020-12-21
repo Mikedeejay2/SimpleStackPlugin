@@ -28,7 +28,7 @@ public class AddItemCommand extends AbstractSubCommand
      * Adds the item of the player's held item to the unique items list of the config.
      *
      * @param sender The CommandSender that sent the command
-     * @param args The arguments for the command (subcommands)
+     * @param args   The arguments for the command (subcommands)
      */
     @Override
     public void onCommand(CommandSender sender, String[] args)

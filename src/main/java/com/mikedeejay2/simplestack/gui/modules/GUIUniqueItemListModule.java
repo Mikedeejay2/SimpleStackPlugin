@@ -31,7 +31,7 @@ public class GUIUniqueItemListModule extends GUIModule
      * to the config after it's been modified
      *
      * @param player The player that closed the GUI
-     * @param gui The GUIContainer
+     * @param gui    The GUIContainer
      */
     @Override
     public void onClose(Player player, GUIContainer gui)

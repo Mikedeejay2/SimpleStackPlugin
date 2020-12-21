@@ -70,7 +70,7 @@ public final class CancelUtils
      * of the clicked type.
      *
      * @param item Item in player's cursor
-     * @param inv Inventory being clicked on
+     * @param inv  Inventory being clicked on
      * @param slot Slot that was clicked
      * @return If move should cancel
      */
