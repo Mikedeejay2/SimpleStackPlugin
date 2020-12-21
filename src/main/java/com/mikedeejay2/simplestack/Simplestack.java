@@ -32,6 +32,7 @@ public final class Simplestack extends PluginBase
     public void onEnable()
     {
         super.onEnable();
+        chat.setTitleString("&b[&9" + this.getDescription().getName() + "&b] &r");
 
         this.bStats.init(9379);
         this.updateChecker.init("Mikedeejay2", "SimpleStackPlugin");
