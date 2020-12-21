@@ -47,8 +47,6 @@ public class ItemClickExecutor implements IItemClickExecutor
         Inventory clickedInv    = event.getClickedInventory();
         boolean clickedBottom   = clickedInv == bottomInv;
         boolean clickedTop      = clickedInv == topInv;
-        boolean clickedBorder   = slot == -1;
-        boolean clickedOutside  = slot == -999;
 
         int newAmount = cursorMax + selectedMax;
         int extraAmount = 0;
@@ -87,8 +85,6 @@ public class ItemClickExecutor implements IItemClickExecutor
         Inventory clickedInv    = event.getClickedInventory();
         boolean clickedBottom   = clickedInv == bottomInv;
         boolean clickedTop      = clickedInv == topInv;
-        boolean clickedBorder   = slot == -1;
-        boolean clickedOutside  = slot == -999;
 
         int newAmount = cursorMax + selectedMax;
         int extraAmount = 0;
