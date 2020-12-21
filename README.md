@@ -73,6 +73,7 @@ Supported Languages:
   * `es_mx` - Español (Mexican Spanish)
   * `es_uy` - Español (Uruguayan Spanish)
   * `es_ve` - Español (Venezuelan Spanish)
+
 Note: Language is also based off of per-player, the language specified in this config only applies
 to the console or unknown languages.
 
