@@ -8,9 +8,14 @@ import com.mikedeejay2.simplestack.listeners.player.*;
 import com.mikedeejay2.simplestack.runnables.GroundItemStacker;
 
 /**
- * Simple Stack plugin for Minecraft 1.14 - 1.16.4
+ * Simple Stack plugin for Minecraft 1.14 - 1.16
  * If you find a bug, please report it to the Github:
- * https://github.com/Mikedeejay2/SimpleStackPlugin
+ * <a href="https://github.com/Mikedeejay2/SimpleStackPlugin">https://github.com/Mikedeejay2/SimpleStackPlugin</a>
+ * <p>
+ * Simple Stack is powered by Mikedeejay2Lib. If you're interested in trying out
+ * a new library plugin or just want to use the fancy animated GUIs that you see,
+ * the source code for Mikedeejay2Lib can be found here:
+ * <a href="https://github.com/Mikedeejay2/Mikedeejay2Lib">https://github.com/Mikedeejay2/Mikedeejay2Lib</a>
  *
  * @author Mikedeejay2
  */
