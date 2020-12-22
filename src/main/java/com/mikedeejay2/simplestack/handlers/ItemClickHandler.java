@@ -293,25 +293,25 @@ public class ItemClickHandler implements SimpleStackHandler<InventoryClickEvent>
     {
         switch(action)
         {
-            case NOTHING:                   executors.forEach(e -> e.execNothing(action, event));
-            case PICKUP_ALL:                executors.forEach(e -> e.execPickupAll(action, event));
-            case PICKUP_SOME:               executors.forEach(e -> e.execPickupSome(action, event));
-            case PICKUP_HALF:               executors.forEach(e -> e.execPickupHalf(action, event));
-            case PICKUP_ONE:                executors.forEach(e -> e.execPickupOne(action, event));
-            case PLACE_ALL:                 executors.forEach(e -> e.execPlaceAll(action, event));
-            case PLACE_SOME:                executors.forEach(e -> e.execPlaceSome(action, event));
-            case PLACE_ONE:                 executors.forEach(e -> e.execPlaceOne(action, event));
-            case SWAP_WITH_CURSOR:          executors.forEach(e -> e.execSwapWithCursor(action, event));
-            case DROP_ALL_CURSOR:           executors.forEach(e -> e.execDropAllCursor(action, event));
-            case DROP_ONE_CURSOR:           executors.forEach(e -> e.execDropOneCursor(action, event));
-            case DROP_ALL_SLOT:             executors.forEach(e -> e.execDropAllSlot(action, event));
-            case DROP_ONE_SLOT:             executors.forEach(e -> e.execDropOneSlot(action, event));
-            case MOVE_TO_OTHER_INVENTORY:   executors.forEach(e -> e.execMoveToOtherInventory(action, event));
-            case HOTBAR_MOVE_AND_READD:     executors.forEach(e -> e.execHotbarMoveAndReadd(action, event));
-            case HOTBAR_SWAP:               executors.forEach(e -> e.execHotbarSwap(action, event));
-            case CLONE_STACK:               executors.forEach(e -> e.execCloneStack(action, event));
-            case COLLECT_TO_CURSOR:         executors.forEach(e -> e.execCollectToCursor(action, event));
-            case UNKNOWN:                   executors.forEach(e -> e.execUnknown(action, event));
+            case NOTHING:                   executors.forEach(e -> e.execNothing(action, event)); break;
+            case PICKUP_ALL:                executors.forEach(e -> e.execPickupAll(action, event)); break;
+            case PICKUP_SOME:               executors.forEach(e -> e.execPickupSome(action, event)); break;
+            case PICKUP_HALF:               executors.forEach(e -> e.execPickupHalf(action, event)); break;
+            case PICKUP_ONE:                executors.forEach(e -> e.execPickupOne(action, event)); break;
+            case PLACE_ALL:                 executors.forEach(e -> e.execPlaceAll(action, event)); break;
+            case PLACE_SOME:                executors.forEach(e -> e.execPlaceSome(action, event)); break;
+            case PLACE_ONE:                 executors.forEach(e -> e.execPlaceOne(action, event)); break;
+            case SWAP_WITH_CURSOR:          executors.forEach(e -> e.execSwapWithCursor(action, event)); break;
+            case DROP_ALL_CURSOR:           executors.forEach(e -> e.execDropAllCursor(action, event)); break;
+            case DROP_ONE_CURSOR:           executors.forEach(e -> e.execDropOneCursor(action, event)); break;
+            case DROP_ALL_SLOT:             executors.forEach(e -> e.execDropAllSlot(action, event)); break;
+            case DROP_ONE_SLOT:             executors.forEach(e -> e.execDropOneSlot(action, event)); break;
+            case MOVE_TO_OTHER_INVENTORY:   executors.forEach(e -> e.execMoveToOtherInventory(action, event)); break;
+            case HOTBAR_MOVE_AND_READD:     executors.forEach(e -> e.execHotbarMoveAndReadd(action, event)); break;
+            case HOTBAR_SWAP:               executors.forEach(e -> e.execHotbarSwap(action, event)); break;
+            case CLONE_STACK:               executors.forEach(e -> e.execCloneStack(action, event)); break;
+            case COLLECT_TO_CURSOR:         executors.forEach(e -> e.execCollectToCursor(action, event)); break;
+            case UNKNOWN:                   executors.forEach(e -> e.execUnknown(action, event)); break;
         }
     }
 
