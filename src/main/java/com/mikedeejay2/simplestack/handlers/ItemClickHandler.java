@@ -71,7 +71,7 @@ public class ItemClickHandler implements SimpleStackHandler<InventoryClickEvent>
                         else
                         {
                             int totalAmt = cursorAmt + selectedAmt;
-                            if(totalAmt == selectedAmt + 1)
+                            if(totalAmt == selectedAmt + 1 && cursorAmt != 1)
                             {
                                 action = InventoryAction.PLACE_ONE;
                             }
