@@ -2,7 +2,10 @@ package com.mikedeejay2.simplestack.handlers.executors;
 
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.StackUtils;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
@@ -10,6 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 public class ItemClickExecutor implements IItemClickExecutor
 {
@@ -48,17 +52,17 @@ public class ItemClickExecutor implements IItemClickExecutor
         boolean clickedBottom   = clickedInv == bottomInv;
         boolean clickedTop      = clickedInv == topInv;
 
-        int newAmount = cursorMax + selectedMax;
+        int newAmount = cursorAmt + selectedAmt;
         int extraAmount = 0;
         if(newAmount > selectedMax)
         {
             extraAmount = newAmount - selectedMax;
             newAmount = selectedMax;
         }
-        ItemStack newCursorItem = selected.clone();
-        newCursorItem.setAmount(newAmount);
+        if(cursorNull) cursor = selected.clone();
+        cursor.setAmount(newAmount);
         selected.setAmount(extraAmount);
-        player.setItemOnCursor(newCursorItem);
+        player.setItemOnCursor(cursor);
     }
 
     @Override
@@ -86,7 +90,7 @@ public class ItemClickExecutor implements IItemClickExecutor
         boolean clickedBottom   = clickedInv == bottomInv;
         boolean clickedTop      = clickedInv == topInv;
 
-        int newAmount = cursorMax + selectedMax;
+        int newAmount = cursorAmt + selectedAmt;
         int extraAmount = 0;
         if(newAmount > selectedMax)
         {
@@ -127,12 +131,16 @@ public class ItemClickExecutor implements IItemClickExecutor
         boolean clickedOutside  = slot == -999;
 
         int halfSelected = (int) Math.floor(selectedAmt / 2.0);
-        int halfCursor = (int) Math.ceil(cursorAmt / 2.0);
+        int halfCursor = (int) Math.ceil(selectedAmt / 2.0);
         if(halfCursor > selectedMax)
         {
-            int extra = halfCursor - selectedAmt;
-            halfSelected += extra;
+            halfSelected += halfCursor - selectedMax;
+            halfCursor = selectedMax;
         }
+        if(cursorNull) cursor = selected.clone();
+        cursor.setAmount(halfCursor);
+        selected.setAmount(halfSelected);
+        player.setItemOnCursor(cursor);
     }
 
     @Override
@@ -161,6 +169,17 @@ public class ItemClickExecutor implements IItemClickExecutor
         boolean clickedTop      = clickedInv == topInv;
         boolean clickedBorder   = slot == -1;
         boolean clickedOutside  = slot == -999;
+
+        int newAmount = cursorAmt + 1;
+        int extraAmount = selectedAmt - 1;
+        if(newAmount > selectedMax || extraAmount < 0)
+        {
+            return;
+        }
+        if(cursorNull) cursor = selected.clone();
+        cursor.setAmount(newAmount);
+        selected.setAmount(extraAmount);
+        player.setItemOnCursor(cursor);
     }
 
     @Override
@@ -189,6 +208,19 @@ public class ItemClickExecutor implements IItemClickExecutor
         boolean clickedTop      = clickedInv == topInv;
         boolean clickedBorder   = slot == -1;
         boolean clickedOutside  = slot == -999;
+
+        int newAmount = selectedAmt + cursorAmt;
+        int extraAmount = 0;
+        if(newAmount > cursorMax)
+        {
+            extraAmount = newAmount - cursorMax;
+            newAmount = cursorMax;
+        }
+        if(selectedNull) selected = cursor.clone();
+        selected.setAmount(newAmount);
+        cursor.setAmount(extraAmount);
+        clickedInv.setItem(slot, selected);
+        player.setItemOnCursor(cursor);
     }
 
     @Override
@@ -217,6 +249,19 @@ public class ItemClickExecutor implements IItemClickExecutor
         boolean clickedTop      = clickedInv == topInv;
         boolean clickedBorder   = slot == -1;
         boolean clickedOutside  = slot == -999;
+
+        int newAmount = selectedAmt + cursorAmt;
+        int extraAmount = 0;
+        if(newAmount > cursorMax)
+        {
+            extraAmount = newAmount - cursorMax;
+            newAmount = cursorMax;
+        }
+        if(selectedNull) selected = cursor.clone();
+        selected.setAmount(newAmount);
+        cursor.setAmount(extraAmount);
+        clickedInv.setItem(slot, selected);
+        player.setItemOnCursor(cursor);
     }
 
     @Override
@@ -245,6 +290,18 @@ public class ItemClickExecutor implements IItemClickExecutor
         boolean clickedTop      = clickedInv == topInv;
         boolean clickedBorder   = slot == -1;
         boolean clickedOutside  = slot == -999;
+
+        int newAmount = selectedAmt + 1;
+        int extraAmount = cursorAmt - 1;
+        if(newAmount > cursorMax || extraAmount < 0)
+        {
+            return;
+        }
+        if(selectedNull) selected = cursor.clone();
+        selected.setAmount(newAmount);
+        cursor.setAmount(extraAmount);
+        clickedInv.setItem(slot, selected);
+        player.setItemOnCursor(cursor);
     }
 
     @Override
@@ -273,6 +330,13 @@ public class ItemClickExecutor implements IItemClickExecutor
         boolean clickedTop      = clickedInv == topInv;
         boolean clickedBorder   = slot == -1;
         boolean clickedOutside  = slot == -999;
+
+        if(selectedAmt > selectedMax || cursorAmt > cursorMax)
+        {
+            return;
+        }
+        clickedInv.setItem(slot, cursor);
+        player.setItemOnCursor(selected);
     }
 
     @Override
@@ -301,6 +365,12 @@ public class ItemClickExecutor implements IItemClickExecutor
         boolean clickedTop      = clickedInv == topInv;
         boolean clickedBorder   = slot == -1;
         boolean clickedOutside  = slot == -999;
+
+        Location dropLoc = player.getEyeLocation();
+        Vector   lookVec = dropLoc.getDirection().multiply(1.0 / 3.0);
+        World    world   = dropLoc.getWorld();
+        Item     item    = world.dropItem(dropLoc, cursor);
+        item.setVelocity(lookVec);
     }
 
     @Override
@@ -329,6 +399,19 @@ public class ItemClickExecutor implements IItemClickExecutor
         boolean clickedTop      = clickedInv == topInv;
         boolean clickedBorder   = slot == -1;
         boolean clickedOutside  = slot == -999;
+
+        int dropAmt = 1;
+        int extraAmt = cursorAmt - 1;
+        if(extraAmt < 0) return;
+        ItemStack dropItem = cursor.clone();
+        dropItem.setAmount(dropAmt);
+        cursor.setAmount(extraAmt);
+        player.setItemOnCursor(cursor);
+        Location dropLoc = player.getEyeLocation();
+        Vector   lookVec = dropLoc.getDirection().multiply(1.0 / 3.0);
+        World    world   = dropLoc.getWorld();
+        Item     item    = world.dropItem(dropLoc, dropItem);
+        item.setVelocity(lookVec);
     }
 
     @Override
