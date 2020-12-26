@@ -13,6 +13,17 @@ public class ProcessPlaceAll extends ItemClickProcess
     @Override
     public void execute()
     {
-
+        int newAmount = selectedAmt + cursorAmt;
+        int extraAmount = 0;
+        if(newAmount > cursorMax)
+        {
+            extraAmount = newAmount - cursorMax;
+            newAmount = cursorMax;
+        }
+        if(selectedNull) selected = cursor.clone();
+        selected.setAmount(newAmount);
+        cursor.setAmount(extraAmount);
+        clickedInv.setItem(slot, selected);
+        player.setItemOnCursor(cursor);
     }
 }

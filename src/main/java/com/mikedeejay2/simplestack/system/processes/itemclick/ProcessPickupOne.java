@@ -13,6 +13,15 @@ public class ProcessPickupOne extends ItemClickProcess
     @Override
     public void execute()
     {
-
+        int newAmount = cursorAmt + 1;
+        int extraAmount = selectedAmt - 1;
+        if(newAmount > selectedMax || extraAmount < 0)
+        {
+            return;
+        }
+        if(cursorNull) cursor = selected.clone();
+        cursor.setAmount(newAmount);
+        selected.setAmount(extraAmount);
+        player.setItemOnCursor(cursor);
     }
 }

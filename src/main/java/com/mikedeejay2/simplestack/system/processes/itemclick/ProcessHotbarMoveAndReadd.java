@@ -1,7 +1,9 @@
 package com.mikedeejay2.simplestack.system.processes.itemclick;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.util.StackUtils;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class ProcessHotbarMoveAndReadd extends ItemClickProcess
 {
@@ -13,6 +15,11 @@ public class ProcessHotbarMoveAndReadd extends ItemClickProcess
     @Override
     public void execute()
     {
-
+        ItemStack hotbarItem = bottomInv.getItem(hotbar);
+        int       hotbarAmt  = hotbarItem.getAmount();
+        int       hotbarMax  = StackUtils.getMaxAmount(plugin, hotbarItem);
+        if(hotbarAmt > hotbarMax || selectedAmt > selectedMax) return;
+        clickedInv.setItem(slot, hotbarItem);
+        bottomInv.setItem(hotbar, selected);
     }
 }

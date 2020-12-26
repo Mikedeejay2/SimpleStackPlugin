@@ -13,6 +13,8 @@ public class ProcessCloneStack extends ItemClickProcess
     @Override
     public void execute()
     {
-
+        cursor = selected.clone();
+        cursor.setAmount(selectedMax);
+        player.setItemOnCursor(cursor);
     }
 }

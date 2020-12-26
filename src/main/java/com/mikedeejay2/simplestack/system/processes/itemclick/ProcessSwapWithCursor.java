@@ -13,6 +13,11 @@ public class ProcessSwapWithCursor extends ItemClickProcess
     @Override
     public void execute()
     {
-
+        if(selectedAmt > selectedMax || cursorAmt > cursorMax)
+        {
+            return;
+        }
+        clickedInv.setItem(slot, cursor);
+        player.setItemOnCursor(selected);
     }
 }
