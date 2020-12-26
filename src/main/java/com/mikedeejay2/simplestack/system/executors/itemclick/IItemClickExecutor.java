@@ -1,9 +1,10 @@
-package com.mikedeejay2.simplestack.handlers.executors;
+package com.mikedeejay2.simplestack.system.executors.itemclick;
 
+import com.mikedeejay2.simplestack.system.executors.SimpleStackExecutor;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public interface IItemClickExecutor
+public interface IItemClickExecutor extends SimpleStackExecutor
 {
     void execNothing(InventoryAction action, InventoryClickEvent event);
     void execPickupAll(InventoryAction action, InventoryClickEvent event);
