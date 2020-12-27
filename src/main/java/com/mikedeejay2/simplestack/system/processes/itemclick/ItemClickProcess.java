@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.system.processes.itemclick;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.system.processes.SimpleStackProcess;
 import com.mikedeejay2.simplestack.util.StackUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,7 +12,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
-public abstract class ItemClickProcess
+public abstract class ItemClickProcess implements SimpleStackProcess
 {
     protected final Simplestack plugin;
     protected Player player;
