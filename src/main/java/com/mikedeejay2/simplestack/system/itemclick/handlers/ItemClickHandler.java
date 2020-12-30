@@ -1,18 +1,14 @@
 package com.mikedeejay2.simplestack.system.itemclick.handlers;
 
-import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
+import com.mikedeejay2.mikedeejay2lib.util.debug.DebugTimer;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.system.SimpleStackHandler;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.executors.ItemClickExecutor;
+import com.mikedeejay2.simplestack.system.itemclick.preprocessor.ItemClickPreprocessor;
 import com.mikedeejay2.simplestack.util.InvActionStruct;
-import com.mikedeejay2.simplestack.system.itemclick.preprocesses.ItemClickPreprocess;
-import com.mikedeejay2.simplestack.util.StackUtils;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +17,18 @@ public class ItemClickHandler implements SimpleStackHandler<InventoryClickEvent>
 {
     protected final Simplestack plugin;
     protected List<ItemClickExecutor> executors;
-    protected List<ItemClickPreprocess> preprocesses;
+    protected ItemClickPreprocessor preprocessor;
 
     public ItemClickHandler(Simplestack plugin)
     {
         this.plugin = plugin;
         this.executors = new ArrayList<>();
+        this.preprocessor = new ItemClickPreprocessor();
+    }
+
+    public void initPreprocessor()
+    {
+        preprocessor.initDefault();
     }
 
     @Override
@@ -34,7 +36,7 @@ public class ItemClickHandler implements SimpleStackHandler<InventoryClickEvent>
     {
         InvActionStruct invAction = new InvActionStruct(InventoryAction.NOTHING);
         ItemClickInfo info = new ItemClickInfo(event, plugin);
-        preprocesses.forEach(preprocess -> preprocess.invoke(info, invAction));
+        preprocessor.preprocess(info, invAction);
 
         info.player.sendMessage("Action NEW: " + invAction.getAction());
         executeAction(info, invAction.getAction());

@@ -11,6 +11,7 @@ public class ProcessCollectToCursor implements ItemClickProcess
     {
         ItemStack[] topItems = info.topInv.getStorageContents();
         ItemStack[] bottomItems = info.bottomInv.getStorageContents();
+        if(info.cursor == null) return;
         Material cursorMat = info.cursor.getType();
         int cursorAmt = info.cursorAmt;
         for(int i = 0; i < topItems.length; ++i)

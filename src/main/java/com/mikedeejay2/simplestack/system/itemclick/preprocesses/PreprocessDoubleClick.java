@@ -10,9 +10,8 @@ import org.bukkit.inventory.ItemStack;
 public class PreprocessDoubleClick extends ItemClickPreprocess
 {
     @Override
-    protected void invoke(ItemClickInfo info, InvActionStruct action)
+    public void invoke(ItemClickInfo info, InvActionStruct action)
     {
-        if(info.clickType != ClickType.DOUBLE_CLICK) return;
         action.setAction(InventoryAction.COLLECT_TO_CURSOR);
     }
 }

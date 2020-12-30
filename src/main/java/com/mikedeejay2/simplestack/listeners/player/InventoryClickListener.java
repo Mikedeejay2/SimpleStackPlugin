@@ -1,8 +1,8 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.system.itemclick.executors.ItemClickExecutorMovement;
 import com.mikedeejay2.simplestack.system.itemclick.handlers.ItemClickHandler;
-import com.mikedeejay2.simplestack.system.executors.itemclick.ItemClickExecutor;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.CheckUtils;
 import org.bukkit.entity.Player;
@@ -30,7 +30,8 @@ public class InventoryClickListener implements Listener
     {
         this.plugin = plugin;
         this.handler = new ItemClickHandler(plugin);
-        handler.addExecutor(new ItemClickExecutor(plugin));
+        handler.addExecutor(new ItemClickExecutorMovement(plugin));
+        handler.initPreprocessor();
     }
 
     /**

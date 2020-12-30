@@ -9,9 +9,8 @@ import org.bukkit.event.inventory.InventoryAction;
 public class PreprocessMiddle extends ItemClickPreprocess
 {
     @Override
-    protected void invoke(ItemClickInfo info, InvActionStruct action)
+    public void invoke(ItemClickInfo info, InvActionStruct action)
     {
-        if(info.clickType != ClickType.MIDDLE) return;
         GameMode gamemode = info.player.getGameMode();
         if(gamemode == GameMode.CREATIVE && !info.selectedNull)
         {

@@ -8,9 +8,8 @@ import org.bukkit.event.inventory.InventoryAction;
 public class PreprocessControlDrop extends ItemClickPreprocess
 {
     @Override
-    protected void invoke(ItemClickInfo info, InvActionStruct action)
+    public void invoke(ItemClickInfo info, InvActionStruct action)
     {
-        if(info.clickType != ClickType.CONTROL_DROP) return;
         action.setAction(InventoryAction.DROP_ALL_SLOT);
     }
 }

@@ -3,15 +3,13 @@ package com.mikedeejay2.simplestack.system.itemclick.preprocesses;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.util.InvActionStruct;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 
 public class PreprocessLeft extends ItemClickPreprocess
 {
     @Override
-    protected void invoke(ItemClickInfo info, InvActionStruct action)
+    public void invoke(ItemClickInfo info, InvActionStruct action)
     {
-        if(info.clickType != ClickType.LEFT) return;
         if(!info.cursorNull && !info.selectedNull)
         {
             if(ItemComparison.equalsEachOther(info.cursor, info.selected))

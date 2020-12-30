@@ -6,5 +6,5 @@ import com.mikedeejay2.simplestack.util.InvActionStruct;
 
 public abstract class ItemClickPreprocess implements SimpleStackPreprocess
 {
-    protected abstract void invoke(ItemClickInfo info, InvActionStruct action);
+    public abstract void invoke(ItemClickInfo info, InvActionStruct action);
 }

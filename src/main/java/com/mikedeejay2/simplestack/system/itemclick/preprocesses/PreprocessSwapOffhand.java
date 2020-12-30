@@ -11,9 +11,8 @@ import org.bukkit.inventory.ItemStack;
 public class PreprocessSwapOffhand extends ItemClickPreprocess
 {
     @Override
-    protected void invoke(ItemClickInfo info, InvActionStruct action)
+    public void invoke(ItemClickInfo info, InvActionStruct action)
     {
-        if(info.clickType != ClickType.SWAP_OFFHAND) return;
         ItemStack offhand = info.bottomInv.getItem(40);
         if(offhand != null && offhand.getType() == Material.AIR) offhand = null;
         int offhandMax = offhand == null ? 0 : StackUtils.getMaxAmount(info.plugin, offhand);

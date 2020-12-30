@@ -9,9 +9,8 @@ import org.bukkit.event.inventory.InventoryAction;
 public class PreprocessRight extends ItemClickPreprocess
 {
     @Override
-    protected void invoke(ItemClickInfo info, InvActionStruct action)
+    public void invoke(ItemClickInfo info, InvActionStruct action)
     {
-        if(info.clickType != ClickType.RIGHT) return;
         if(!info.cursorNull && !info.selectedNull)
         {
             if(ItemComparison.equalsEachOther(info.cursor, info.selected))

@@ -10,9 +10,8 @@ import org.bukkit.inventory.ItemStack;
 public class PreprocessNumber extends ItemClickPreprocess
 {
     @Override
-    protected void invoke(ItemClickInfo info, InvActionStruct action)
+    public void invoke(ItemClickInfo info, InvActionStruct action)
     {
-        if(info.clickType != ClickType.NUMBER_KEY) return;
         ItemStack hotbarItem = info.bottomInv.getItem(info.hotbar);
         if(hotbarItem != null && hotbarItem.getType() == Material.AIR) hotbarItem = null;
         boolean   hotbarNull = hotbarItem == null;

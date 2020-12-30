@@ -46,7 +46,7 @@ public final class ItemClickInfo
         ItemStack tempCursor = event.getCursor();
         if(tempCursor != null && tempCursor.getType() == Material.AIR) tempCursor = null;
         this.cursor         = tempCursor;
-        ItemStack tempSelected = event.getCursor();
+        ItemStack tempSelected = event.getCurrentItem();
         if(tempSelected != null && tempSelected.getType() == Material.AIR) tempSelected = null;
         this.selected       = tempSelected;
         this.slot           = event.getSlot();
