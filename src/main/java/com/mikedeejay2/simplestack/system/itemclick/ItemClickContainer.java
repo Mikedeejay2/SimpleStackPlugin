@@ -1,7 +1,7 @@
-package com.mikedeejay2.simplestack.system.processes.itemclick;
+package com.mikedeejay2.simplestack.system.itemclick;
 
 import com.mikedeejay2.simplestack.Simplestack;
-import com.mikedeejay2.simplestack.system.processes.SimpleStackProcess;
+import com.mikedeejay2.simplestack.system.SimpleStackProcess;
 import com.mikedeejay2.simplestack.util.StackUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,7 +12,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
-public abstract class ItemClickProcess implements SimpleStackProcess
+public abstract class ItemClickContainer
 {
     protected final Simplestack plugin;
     protected Player player;
@@ -39,7 +39,7 @@ public abstract class ItemClickProcess implements SimpleStackProcess
     protected boolean clickedBorder;
     protected boolean clickedOutside;
 
-    public ItemClickProcess(InventoryClickEvent event, Simplestack plugin)
+    public ItemClickContainer(InventoryClickEvent event, Simplestack plugin)
     {
         this.plugin = plugin;
         this.player         = (Player) event.getWhoClicked();
@@ -68,6 +68,4 @@ public abstract class ItemClickProcess implements SimpleStackProcess
         this.clickedBorder  = slot == -1;
         this.clickedOutside = slot == -999;
     }
-
-    public abstract void execute();
 }

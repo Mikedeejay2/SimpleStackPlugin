@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.system.processes.itemclick;
+package com.mikedeejay2.simplestack.system.itemclick.processes;
 
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.StackUtils;

@@ -1,6 +1,6 @@
-package com.mikedeejay2.simplestack.system.executors.itemclick;
+package com.mikedeejay2.simplestack.system.itemclick.executors;
 
-import com.mikedeejay2.simplestack.system.executors.SimpleStackExecutor;
+import com.mikedeejay2.simplestack.system.SimpleStackExecutor;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 

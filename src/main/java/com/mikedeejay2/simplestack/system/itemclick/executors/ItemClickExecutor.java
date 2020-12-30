@@ -1,21 +1,9 @@
-package com.mikedeejay2.simplestack.system.executors.itemclick;
+package com.mikedeejay2.simplestack.system.itemclick.executors;
 
 import com.mikedeejay2.simplestack.Simplestack;
-import com.mikedeejay2.simplestack.system.processes.itemclick.*;
-import com.mikedeejay2.simplestack.util.StackUtils;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
+import com.mikedeejay2.simplestack.system.itemclick.processes.*;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 
 public class ItemClickExecutor implements IItemClickExecutor
 {

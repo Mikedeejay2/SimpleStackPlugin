@@ -1,11 +1,11 @@
-package com.mikedeejay2.simplestack.system.processes.itemclick;
+package com.mikedeejay2.simplestack.system.itemclick.processes;
 
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class ProcessPlaceOne extends ItemClickProcess
+public class ProcessPlaceAll extends ItemClickProcess
 {
-    public ProcessPlaceOne(InventoryClickEvent event, Simplestack plugin)
+    public ProcessPlaceAll(InventoryClickEvent event, Simplestack plugin)
     {
         super(event, plugin);
     }
@@ -13,11 +13,12 @@ public class ProcessPlaceOne extends ItemClickProcess
     @Override
     public void execute()
     {
-        int newAmount = selectedAmt + 1;
-        int extraAmount = cursorAmt - 1;
-        if(newAmount > cursorMax || extraAmount < 0)
+        int newAmount = selectedAmt + cursorAmt;
+        int extraAmount = 0;
+        if(newAmount > cursorMax)
         {
-            return;
+            extraAmount = newAmount - cursorMax;
+            newAmount = cursorMax;
         }
         if(selectedNull) selected = cursor.clone();
         selected.setAmount(newAmount);
