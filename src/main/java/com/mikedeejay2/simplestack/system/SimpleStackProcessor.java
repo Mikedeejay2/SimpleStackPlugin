@@ -1,5 +1,5 @@
 package com.mikedeejay2.simplestack.system;
 
-public interface SimpleStackExecutor
+public interface SimpleStackProcessor
 {
 }

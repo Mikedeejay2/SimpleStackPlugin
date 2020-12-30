@@ -5,6 +5,7 @@ import com.mikedeejay2.simplestack.util.StackUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -38,6 +39,8 @@ public final class ItemClickInfo
     public final boolean clickedBorder;
     public final boolean clickedOutside;
 
+    private InventoryAction action;
+
     public ItemClickInfo(InventoryClickEvent event, Simplestack plugin)
     {
         this.plugin         = plugin;
@@ -68,6 +71,7 @@ public final class ItemClickInfo
         this.slotType       = invView.getSlotType(rawSlot);
         this.clickedBorder  = slot == -1;
         this.clickedOutside = slot == -999;
+        this.action = InventoryAction.NOTHING;
     }
 
     public ItemClickInfo(ItemClickInfo other)
@@ -96,5 +100,15 @@ public final class ItemClickInfo
         this.slotType       = other.slotType;
         this.clickedBorder  = other.clickedBorder;
         this.clickedOutside = other.clickedOutside;
+    }
+
+    public InventoryAction getAction()
+    {
+        return action;
+    }
+
+    public void setAction(InventoryAction action)
+    {
+        this.action = action;
     }
 }

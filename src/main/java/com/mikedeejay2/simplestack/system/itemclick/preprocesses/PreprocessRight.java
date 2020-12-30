@@ -2,14 +2,12 @@ package com.mikedeejay2.simplestack.system.itemclick.preprocesses;
 
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
-import com.mikedeejay2.simplestack.util.InvActionStruct;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 
 public class PreprocessRight implements ItemClickPreprocess
 {
     @Override
-    public void invoke(ItemClickInfo info, InvActionStruct action)
+    public void invoke(ItemClickInfo info)
     {
         if(!info.cursorNull && !info.selectedNull)
         {
@@ -17,28 +15,28 @@ public class PreprocessRight implements ItemClickPreprocess
             {
                 if(info.selectedAmt < info.selectedMax)
                 {
-                    action.setAction(InventoryAction.PLACE_ONE);
+                    info.setAction(InventoryAction.PLACE_ONE);
                 }
             }
             else if(info.selectedAmt <= info.selectedMax)
             {
-                action.setAction(InventoryAction.SWAP_WITH_CURSOR);
+                info.setAction(InventoryAction.SWAP_WITH_CURSOR);
             }
         }
         else if(!info.cursorNull)
         {
             if(info.validSlot)
             {
-                action.setAction(InventoryAction.PLACE_ONE);
+                info.setAction(InventoryAction.PLACE_ONE);
             }
             else if(info.clickedOutside)
             {
-                action.setAction(InventoryAction.DROP_ONE_CURSOR);
+                info.setAction(InventoryAction.DROP_ONE_CURSOR);
             }
         }
         else if(!info.selectedNull)
         {
-            action.setAction(InventoryAction.PICKUP_HALF);
+            info.setAction(InventoryAction.PICKUP_HALF);
         }
     }
 }

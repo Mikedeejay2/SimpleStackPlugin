@@ -3,7 +3,6 @@ package com.mikedeejay2.simplestack.system.itemclick.preprocessor;
 import com.mikedeejay2.simplestack.system.SimpleStackPreprocessor;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.preprocesses.*;
-import com.mikedeejay2.simplestack.util.InvActionStruct;
 import org.bukkit.event.inventory.ClickType;
 
 import java.util.*;
@@ -59,20 +58,9 @@ public class ItemClickPreprocessor implements SimpleStackPreprocessor
         addPreprocess(dropPredicate, dropProcesses);
         addPreprocess(controlDropPredicate, controlDropProcesses);
         addPreprocess(swapOffhandPredicate, swapOffhandProcesses);
-
-//        LEFT,
-//        SHIFT_LEFT,
-//        RIGHT,
-//        MIDDLE,
-//        NUMBER_KEY,
-//        DOUBLE_CLICK,
-//        DROP,
-//        CONTROL_DROP,
-//        SWAP_OFFHAND,
-//        ;
     }
 
-    public void preprocess(ItemClickInfo info, InvActionStruct action)
+    public void preprocess(ItemClickInfo info)
     {
         for(Map.Entry<Predicate<ItemClickInfo>, List<ItemClickPreprocess>> entry : processes)
         {
@@ -81,7 +69,7 @@ public class ItemClickPreprocessor implements SimpleStackPreprocessor
             if(!condition.test(info)) continue;
             for(ItemClickPreprocess process : list)
             {
-                process.invoke(info, action);
+                process.invoke(info);
             }
         }
     }
@@ -96,5 +84,59 @@ public class ItemClickPreprocessor implements SimpleStackPreprocessor
     {
         this.addPreprocess(condition, Arrays.asList(processList));
         return this;
+    }
+
+    public ItemClickPreprocessor removePreprocess(int index)
+    {
+        processes.remove(index);
+        return this;
+    }
+
+    public ItemClickPreprocessor removePreprocess(List<ItemClickPreprocess> list)
+    {
+        for(int i = 0; i < processes.size(); ++i)
+        {
+            Map.Entry<Predicate<ItemClickInfo>, List<ItemClickPreprocess>> entry = processes.get(i);
+            List<ItemClickPreprocess> curList = entry.getValue();
+            if(!list.equals(curList)) continue;
+            processes.remove(i);
+            break;
+        }
+        return this;
+    }
+
+    public ItemClickPreprocessor removePreprocess(Predicate<ItemClickInfo> condition)
+    {
+        for(int i = 0; i < processes.size(); ++i)
+        {
+            Map.Entry<Predicate<ItemClickInfo>, List<ItemClickPreprocess>> entry = processes.get(i);
+            Predicate<ItemClickInfo> curCondition = entry.getKey();
+            if(!condition.equals(curCondition)) continue;
+            processes.remove(i);
+            break;
+        }
+        return this;
+    }
+
+    public boolean containsPreprocess(List<ItemClickPreprocess> list)
+    {
+        for(int i = 0; i < processes.size(); ++i)
+        {
+            Map.Entry<Predicate<ItemClickInfo>, List<ItemClickPreprocess>> entry = processes.get(i);
+            List<ItemClickPreprocess> curList = entry.getValue();
+            if(list.equals(curList)) return true;
+        }
+        return false;
+    }
+
+    public boolean containsPreprocess(Predicate<ItemClickInfo> condition)
+    {
+        for(int i = 0; i < processes.size(); ++i)
+        {
+            Map.Entry<Predicate<ItemClickInfo>, List<ItemClickPreprocess>> entry = processes.get(i);
+            Predicate<ItemClickInfo> curCondition = entry.getKey();
+            if(!condition.equals(curCondition)) return true;
+        }
+        return false;
     }
 }
