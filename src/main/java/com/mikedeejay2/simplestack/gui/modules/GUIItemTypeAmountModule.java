@@ -19,7 +19,7 @@ import java.util.Map;
  *
  * @author Mikedeejay2
  */
-public class GUIItemTypeAmountModule extends GUIModule
+public class GUIItemTypeAmountModule implements GUIModule
 {
     private final Simplestack plugin;
 

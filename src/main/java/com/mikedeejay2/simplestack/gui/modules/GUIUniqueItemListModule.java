@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Mikedeejay2
  */
-public class GUIUniqueItemListModule extends GUIModule
+public class GUIUniqueItemListModule implements GUIModule
 {
     private final Simplestack plugin;
 

@@ -14,11 +14,11 @@ import java.util.List;
 /**
  * The <tt>GUIModule</tt> for the item type list.
  * This module is simply for saving the list upon close and
- * adding the blacklist / whitelis button.
+ * adding the blacklist / whitelist button.
  *
  * @author Mikedeejay2
  */
-public class GUIItemTypeListModule extends GUIModule
+public class GUIItemTypeListModule implements GUIModule
 {
     private final Simplestack plugin;
 

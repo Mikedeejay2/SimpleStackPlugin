@@ -23,7 +23,7 @@ import java.util.Random;
  *
  * @author Mikedeejay2
  */
-public class GUIAboutModule extends GUIModule
+public class GUIAboutModule implements GUIModule
 {
     private final Simplestack plugin;
 

@@ -40,7 +40,7 @@ import java.util.Map;
  *
  * @author Mikedeejay2
  */
-public class GUIConfigModule extends GUIModule
+public class GUIConfigModule implements GUIModule
 {
     private final Simplestack plugin;
     protected final int LIST_ANIM_AMOUNT = 8;
