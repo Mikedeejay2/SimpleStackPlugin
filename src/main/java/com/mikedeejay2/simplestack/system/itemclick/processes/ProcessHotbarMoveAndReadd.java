@@ -1,25 +1,19 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes;
 
-import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.util.StackUtils;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class ProcessHotbarMoveAndReadd extends ItemClickProcess
+public class ProcessHotbarMoveAndReadd implements ItemClickProcess
 {
-    public ProcessHotbarMoveAndReadd(InventoryClickEvent event, Simplestack plugin)
-    {
-        super(event, plugin);
-    }
-
     @Override
-    public void invoke()
+    public void invoke(ItemClickInfo info)
     {
-        ItemStack hotbarItem = bottomInv.getItem(hotbar);
+        ItemStack hotbarItem = info.bottomInv.getItem(info.hotbar);
         int       hotbarAmt  = hotbarItem.getAmount();
-        int       hotbarMax  = StackUtils.getMaxAmount(plugin, hotbarItem);
-        if(hotbarAmt > hotbarMax || selectedAmt > selectedMax) return;
-        clickedInv.setItem(slot, hotbarItem);
-        bottomInv.setItem(hotbar, selected);
+        int       hotbarMax  = StackUtils.getMaxAmount(info.plugin, hotbarItem);
+        if(hotbarAmt > hotbarMax || info.selectedAmt > info.selectedMax) return;
+        info.clickedInv.setItem(info.slot, hotbarItem);
+        info.bottomInv.setItem(info.hotbar, info.selected);
     }
 }

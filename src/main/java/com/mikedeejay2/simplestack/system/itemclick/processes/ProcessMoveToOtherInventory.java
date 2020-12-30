@@ -1,36 +1,31 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes;
 
-import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class ProcessMoveToOtherInventory extends ItemClickProcess
+public class ProcessMoveToOtherInventory implements ItemClickProcess
 {
-    public ProcessMoveToOtherInventory(InventoryClickEvent event, Simplestack plugin)
-    {
-        super(event, plugin);
-    }
-
     @Override
-    public void invoke()
+    public void invoke(ItemClickInfo info)
     {
-        Inventory   otherInv    = clickedBottom ? topInv : bottomInv;
+        Inventory   otherInv    = info.clickedBottom ? info.topInv : info.bottomInv;
         ItemStack[] topItems    = otherInv.getStorageContents();
-        Material    selectedMat = selected.getType();
+        Material    selectedMat = info.selected.getType();
+        int selectedAmt = info.selectedAmt;
         for(int i = 0; i < topItems.length; ++i)
         {
             ItemStack item = topItems[i];
             if(item == null) continue;
             if(item.getType() != selectedMat) continue;
             int itemAmt = item.getAmount();
-            if(itemAmt == selectedMax) continue;
-            int newAmt = itemAmt + selectedAmt;
-            if(newAmt > selectedMax)
+            if(itemAmt == info.selectedMax) continue;
+            int newAmt = itemAmt + info.selectedAmt;
+            if(newAmt > info.selectedMax)
             {
-                selectedAmt = newAmt - selectedMax;
-                newAmt = selectedMax;
+                selectedAmt = newAmt - info.selectedMax;
+                newAmt = info.selectedMax;
             }
             else
             {
@@ -39,7 +34,7 @@ public class ProcessMoveToOtherInventory extends ItemClickProcess
             item.setAmount(newAmt);
             if(selectedAmt <= 0)
             {
-                selected.setAmount(0);
+                info.selected.setAmount(0);
                 return;
             }
         }
@@ -47,12 +42,12 @@ public class ProcessMoveToOtherInventory extends ItemClickProcess
         {
             ItemStack item = topItems[i];
             if(item != null) continue;
-            item = selected.clone();
+            item = info.selected.clone();
             int newAmt = selectedAmt;
-            if(newAmt > selectedMax)
+            if(newAmt > info.selectedMax)
             {
-                selectedAmt = newAmt - selectedMax;
-                newAmt = selectedMax;
+                selectedAmt = newAmt - info.selectedMax;
+                newAmt = info.selectedMax;
             }
             else
             {
@@ -60,13 +55,13 @@ public class ProcessMoveToOtherInventory extends ItemClickProcess
             }
             item.setAmount(newAmt);
             otherInv.setItem(i, item);
-            player.sendMessage("selectedAmt: " + selectedAmt);
+            info.player.sendMessage("selectedAmt: " + selectedAmt);
             if(selectedAmt <= 0)
             {
-                selected.setAmount(0);
+                info.selected.setAmount(0);
                 return;
             }
         }
-        selected.setAmount(selectedAmt);
+        info.selected.setAmount(selectedAmt);
     }
 }

@@ -1,23 +1,17 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes;
 
-import com.mikedeejay2.simplestack.Simplestack;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 
-public class ProcessSwapWithCursor extends ItemClickProcess
+public class ProcessSwapWithCursor implements ItemClickProcess
 {
-    public ProcessSwapWithCursor(InventoryClickEvent event, Simplestack plugin)
-    {
-        super(event, plugin);
-    }
-
     @Override
-    public void invoke()
+    public void invoke(ItemClickInfo info)
     {
-        if(selectedAmt > selectedMax || cursorAmt > cursorMax)
+        if(info.selectedAmt > info.selectedMax || info.cursorAmt > info.cursorMax)
         {
             return;
         }
-        clickedInv.setItem(slot, cursor);
-        player.setItemOnCursor(selected);
+        info.clickedInv.setItem(info.slot, info.cursor);
+        info.player.setItemOnCursor(info.selected);
     }
 }

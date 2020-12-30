@@ -1,31 +1,25 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes;
 
-import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Item;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-public class ProcessDropOneCursor extends ItemClickProcess
+public class ProcessDropOneCursor implements ItemClickProcess
 {
-    public ProcessDropOneCursor(InventoryClickEvent event, Simplestack plugin)
-    {
-        super(event, plugin);
-    }
-
     @Override
-    public void invoke()
+    public void invoke(ItemClickInfo info)
     {
         int dropAmt = 1;
-        int extraAmt = cursorAmt - 1;
+        int extraAmt = info.cursorAmt - 1;
         if(extraAmt < 0) return;
-        ItemStack dropItem = cursor.clone();
+        ItemStack dropItem = info.cursor.clone();
         dropItem.setAmount(dropAmt);
-        cursor.setAmount(extraAmt);
-        player.setItemOnCursor(cursor);
-        Location dropLoc = player.getEyeLocation();
+        info.cursor.setAmount(extraAmt);
+        info.player.setItemOnCursor(info.cursor);
+        Location dropLoc = info.player.getEyeLocation();
         Vector   lookVec = dropLoc.getDirection().multiply(1.0 / 3.0);
         World    world   = dropLoc.getWorld();
         Item     item    = world.dropItem(dropLoc, dropItem);

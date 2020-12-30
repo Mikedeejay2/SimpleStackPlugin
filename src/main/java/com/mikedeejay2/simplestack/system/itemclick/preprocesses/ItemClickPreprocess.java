@@ -1,14 +1,10 @@
 package com.mikedeejay2.simplestack.system.itemclick.preprocesses;
 
-import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.system.SimpleStackPreprocess;
-import com.mikedeejay2.simplestack.system.itemclick.ItemClickContainer;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
+import com.mikedeejay2.simplestack.util.InvActionStruct;
 
-public class ItemClickPreprocess extends ItemClickContainer implements SimpleStackPreprocess
+public abstract class ItemClickPreprocess implements SimpleStackPreprocess
 {
-    public ItemClickPreprocess(InventoryClickEvent event, Simplestack plugin)
-    {
-        super(event, plugin);
-    }
+    protected abstract void invoke(ItemClickInfo info, InvActionStruct action);
 }

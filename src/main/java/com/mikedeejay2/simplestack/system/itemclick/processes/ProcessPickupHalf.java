@@ -1,28 +1,24 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes;
 
-import com.mikedeejay2.simplestack.Simplestack;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
+import org.bukkit.inventory.ItemStack;
 
-public class ProcessPickupHalf extends ItemClickProcess
+public class ProcessPickupHalf implements ItemClickProcess
 {
-    public ProcessPickupHalf(InventoryClickEvent event, Simplestack plugin)
-    {
-        super(event, plugin);
-    }
-
     @Override
-    public void invoke()
+    public void invoke(ItemClickInfo info)
     {
-        int halfSelected = (int) Math.floor(selectedAmt / 2.0);
-        int halfCursor = (int) Math.ceil(selectedAmt / 2.0);
-        if(halfCursor > selectedMax)
+        int halfSelected = (int) Math.floor(info.selectedAmt / 2.0);
+        int halfCursor = (int) Math.ceil(info.selectedAmt / 2.0);
+        if(halfCursor > info.selectedMax)
         {
-            halfSelected += halfCursor - selectedMax;
-            halfCursor = selectedMax;
+            halfSelected += halfCursor - info.selectedMax;
+            halfCursor = info.selectedMax;
         }
-        if(cursorNull) cursor = selected.clone();
-        cursor.setAmount(halfCursor);
-        selected.setAmount(halfSelected);
-        player.setItemOnCursor(cursor);
+        ItemStack newCursor = info.cursor;
+        if(info.cursorNull) newCursor = info.selected.clone();
+        newCursor.setAmount(halfCursor);
+        info.selected.setAmount(halfSelected);
+        info.player.setItemOnCursor(newCursor);
     }
 }

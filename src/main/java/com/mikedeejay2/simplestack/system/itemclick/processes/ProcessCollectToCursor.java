@@ -1,23 +1,18 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes;
 
-import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class ProcessCollectToCursor extends ItemClickProcess
+public class ProcessCollectToCursor implements ItemClickProcess
 {
-    public ProcessCollectToCursor(InventoryClickEvent event, Simplestack plugin)
-    {
-        super(event, plugin);
-    }
-
     @Override
-    public void invoke()
+    public void invoke(ItemClickInfo info)
     {
-        ItemStack[] topItems = topInv.getStorageContents();
-        ItemStack[] bottomItems = bottomInv.getStorageContents();
-        Material cursorMat = cursor.getType();
+        ItemStack[] topItems = info.topInv.getStorageContents();
+        ItemStack[] bottomItems = info.bottomInv.getStorageContents();
+        Material cursorMat = info.cursor.getType();
+        int cursorAmt = info.cursorAmt;
         for(int i = 0; i < topItems.length; ++i)
         {
             ItemStack item = topItems[i];
@@ -25,17 +20,17 @@ public class ProcessCollectToCursor extends ItemClickProcess
             if(item.getType() != cursorMat) continue;
             int newAmount = item.getAmount() + cursorAmt;
             int extraAmount = 0;
-            if(newAmount > cursorMax)
+            if(newAmount > info.cursorMax)
             {
-                extraAmount =  newAmount - cursorMax;
-                newAmount = cursorMax;
+                extraAmount =  newAmount - info.cursorMax;
+                newAmount = info.cursorMax;
             }
             item.setAmount(extraAmount);
-            topInv.setItem(i, item);
+            info.topInv.setItem(i, item);
             cursorAmt = newAmount;
-            if(cursorAmt == cursorMax)
+            if(cursorAmt == info.cursorMax)
             {
-                cursor.setAmount(cursorAmt);
+                info.cursor.setAmount(cursorAmt);
                 return;
             }
         }
@@ -46,17 +41,17 @@ public class ProcessCollectToCursor extends ItemClickProcess
             if(item.getType() != cursorMat) continue;
             int newAmount = item.getAmount() + cursorAmt;
             int extraAmount = 0;
-            if(newAmount > cursorMax)
+            if(newAmount > info.cursorMax)
             {
-                extraAmount =  newAmount - cursorMax;
-                newAmount = cursorMax;
+                extraAmount =  newAmount - info.cursorMax;
+                newAmount = info.cursorMax;
             }
             item.setAmount(extraAmount);
-            bottomInv.setItem(i, item);
+            info.bottomInv.setItem(i, item);
             cursorAmt = newAmount;
-            if(cursorAmt == cursorMax)
+            if(cursorAmt == info.cursorMax)
             {
-                cursor.setAmount(cursorAmt);
+                info.cursor.setAmount(cursorAmt);
                 return;
             }
         }

@@ -1,29 +1,25 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes;
 
-import com.mikedeejay2.simplestack.Simplestack;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
+import org.bukkit.inventory.ItemStack;
 
-public class ProcessPlaceAll extends ItemClickProcess
+public class ProcessPlaceAll implements ItemClickProcess
 {
-    public ProcessPlaceAll(InventoryClickEvent event, Simplestack plugin)
-    {
-        super(event, plugin);
-    }
-
     @Override
-    public void invoke()
+    public void invoke(ItemClickInfo info)
     {
-        int newAmount = selectedAmt + cursorAmt;
+        int newAmount = info.selectedAmt + info.cursorAmt;
         int extraAmount = 0;
-        if(newAmount > cursorMax)
+        if(newAmount > info.cursorMax)
         {
-            extraAmount = newAmount - cursorMax;
-            newAmount = cursorMax;
+            extraAmount = newAmount - info.cursorMax;
+            newAmount = info.cursorMax;
         }
-        if(selectedNull) selected = cursor.clone();
-        selected.setAmount(newAmount);
-        cursor.setAmount(extraAmount);
-        clickedInv.setItem(slot, selected);
-        player.setItemOnCursor(cursor);
+        ItemStack newSelected = info.selected;
+        if(info.selectedNull) newSelected = info.cursor.clone();
+        newSelected.setAmount(newAmount);
+        info.cursor.setAmount(extraAmount);
+        info.clickedInv.setItem(info.slot, newSelected);
+        info.player.setItemOnCursor(info.cursor);
     }
 }
