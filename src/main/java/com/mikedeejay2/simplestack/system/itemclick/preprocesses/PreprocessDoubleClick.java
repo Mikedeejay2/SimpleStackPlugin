@@ -7,7 +7,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
 
-public class PreprocessDoubleClick extends ItemClickPreprocess
+public class PreprocessDoubleClick implements ItemClickPreprocess
 {
     @Override
     public void invoke(ItemClickInfo info, InvActionStruct action)

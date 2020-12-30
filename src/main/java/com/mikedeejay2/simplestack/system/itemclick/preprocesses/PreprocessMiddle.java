@@ -6,7 +6,7 @@ import org.bukkit.GameMode;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 
-public class PreprocessMiddle extends ItemClickPreprocess
+public class PreprocessMiddle implements ItemClickPreprocess
 {
     @Override
     public void invoke(ItemClickInfo info, InvActionStruct action)

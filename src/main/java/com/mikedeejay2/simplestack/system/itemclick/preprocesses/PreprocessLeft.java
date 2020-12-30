@@ -5,7 +5,7 @@ import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.util.InvActionStruct;
 import org.bukkit.event.inventory.InventoryAction;
 
-public class PreprocessLeft extends ItemClickPreprocess
+public class PreprocessLeft implements ItemClickPreprocess
 {
     @Override
     public void invoke(ItemClickInfo info, InvActionStruct action)
