@@ -15,7 +15,7 @@ public class ProcessDropAllSlot extends ItemClickProcess
     }
 
     @Override
-    public void execute()
+    public void invoke()
     {
         Location dropLoc = player.getEyeLocation();
         Vector   lookVec = dropLoc.getDirection().multiply(1.0 / 3.0);

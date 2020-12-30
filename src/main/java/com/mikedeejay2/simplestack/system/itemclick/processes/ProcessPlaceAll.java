@@ -11,7 +11,7 @@ public class ProcessPlaceAll extends ItemClickProcess
     }
 
     @Override
-    public void execute()
+    public void invoke()
     {
         int newAmount = selectedAmt + cursorAmt;
         int extraAmount = 0;

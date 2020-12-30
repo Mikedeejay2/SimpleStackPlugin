@@ -11,7 +11,7 @@ public class ProcessPickupHalf extends ItemClickProcess
     }
 
     @Override
-    public void execute()
+    public void invoke()
     {
         int halfSelected = (int) Math.floor(selectedAmt / 2.0);
         int halfCursor = (int) Math.ceil(selectedAmt / 2.0);

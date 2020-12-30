@@ -11,7 +11,7 @@ public class ProcessPickupSome extends ItemClickProcess
     }
 
     @Override
-    public void execute()
+    public void invoke()
     {
         int newAmount = cursorAmt + selectedAmt;
         int extraAmount = 0;

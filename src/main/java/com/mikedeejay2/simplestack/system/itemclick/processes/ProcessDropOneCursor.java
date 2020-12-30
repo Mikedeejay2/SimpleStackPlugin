@@ -16,7 +16,7 @@ public class ProcessDropOneCursor extends ItemClickProcess
     }
 
     @Override
-    public void execute()
+    public void invoke()
     {
         int dropAmt = 1;
         int extraAmt = cursorAmt - 1;

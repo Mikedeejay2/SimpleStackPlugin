@@ -14,7 +14,7 @@ public class ProcessMoveToOtherInventory extends ItemClickProcess
     }
 
     @Override
-    public void execute()
+    public void invoke()
     {
         Inventory   otherInv    = clickedBottom ? topInv : bottomInv;
         ItemStack[] topItems    = otherInv.getStorageContents();

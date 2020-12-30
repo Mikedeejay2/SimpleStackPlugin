@@ -14,7 +14,7 @@ public class ProcessHotbarSwap extends ItemClickProcess
     }
 
     @Override
-    public void execute()
+    public void invoke()
     {
         ItemStack hotbarItem = bottomInv.getItem(hotbar);
         if(hotbarItem != null && hotbarItem.getType() == Material.AIR) hotbarItem = null;

@@ -16,7 +16,7 @@ public class ProcessDropOneSlot extends ItemClickProcess
     }
 
     @Override
-    public void execute()
+    public void invoke()
     {
         int dropAmt = 1;
         int extraAmt = selectedAmt - 1;

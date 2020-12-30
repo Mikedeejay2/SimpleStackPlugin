@@ -11,7 +11,7 @@ public class ProcessSwapWithCursor extends ItemClickProcess
     }
 
     @Override
-    public void execute()
+    public void invoke()
     {
         if(selectedAmt > selectedMax || cursorAmt > cursorMax)
         {

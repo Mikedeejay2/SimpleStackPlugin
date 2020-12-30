@@ -2,8 +2,8 @@ package com.mikedeejay2.simplestack.system.itemclick.handlers;
 
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.Simplestack;
-import com.mikedeejay2.simplestack.system.executors.itemclick.IItemClickExecutor;
 import com.mikedeejay2.simplestack.system.SimpleStackHandler;
+import com.mikedeejay2.simplestack.system.itemclick.executors.IItemClickExecutor;
 import com.mikedeejay2.simplestack.util.StackUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Material;

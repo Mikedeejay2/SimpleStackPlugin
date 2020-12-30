@@ -13,11 +13,11 @@ public class ProcessCollectToCursor extends ItemClickProcess
     }
 
     @Override
-    public void execute()
+    public void invoke()
     {
-        ItemStack[]         topItems    = topInv.getStorageContents();
+        ItemStack[] topItems = topInv.getStorageContents();
         ItemStack[] bottomItems = bottomInv.getStorageContents();
-        Material    cursorMat   = cursor.getType();
+        Material cursorMat = cursor.getType();
         for(int i = 0; i < topItems.length; ++i)
         {
             ItemStack item = topItems[i];

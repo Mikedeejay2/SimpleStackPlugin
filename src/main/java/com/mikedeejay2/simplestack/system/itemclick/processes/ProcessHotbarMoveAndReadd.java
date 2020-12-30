@@ -13,7 +13,7 @@ public class ProcessHotbarMoveAndReadd extends ItemClickProcess
     }
 
     @Override
-    public void execute()
+    public void invoke()
     {
         ItemStack hotbarItem = bottomInv.getItem(hotbar);
         int       hotbarAmt  = hotbarItem.getAmount();

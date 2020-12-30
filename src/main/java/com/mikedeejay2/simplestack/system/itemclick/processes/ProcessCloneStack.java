@@ -11,7 +11,7 @@ public class ProcessCloneStack extends ItemClickProcess
     }
 
     @Override
-    public void execute()
+    public void invoke()
     {
         cursor = selected.clone();
         cursor.setAmount(selectedMax);

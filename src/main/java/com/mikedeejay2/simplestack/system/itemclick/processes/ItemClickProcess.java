@@ -12,5 +12,5 @@ public abstract class ItemClickProcess extends ItemClickContainer implements Sim
         super(event, plugin);
     }
 
-    public abstract void execute();
+    public abstract void invoke();
 }
