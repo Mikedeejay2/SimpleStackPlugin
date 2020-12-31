@@ -3,14 +3,12 @@ package com.mikedeejay2.simplestack.system.itemclick.preprocessor;
 import com.mikedeejay2.simplestack.system.SimpleStackPreprocessor;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.preprocesses.*;
-import org.bukkit.event.inventory.ClickType;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 public class ItemClickPreprocessor implements SimpleStackPreprocessor
 {
-    protected List<Map.Entry<Predicate<ItemClickInfo>, List<ItemClickPreprocess>>> processes;
+    protected List<ItemClickPreprocess> processes;
 
     public ItemClickPreprocessor()
     {
@@ -19,70 +17,22 @@ public class ItemClickPreprocessor implements SimpleStackPreprocessor
 
     public void initDefault()
     {
-        Predicate<ItemClickInfo> leftPredicate = info -> info.clickType == ClickType.LEFT;
-        Predicate<ItemClickInfo> shiftPredicate = info -> info.clickType == ClickType.SHIFT_LEFT || info.clickType == ClickType.SHIFT_RIGHT;
-        Predicate<ItemClickInfo> rightPredicate = info -> info.clickType == ClickType.RIGHT;
-        Predicate<ItemClickInfo> middlePredicate = info -> info.clickType == ClickType.MIDDLE;
-        Predicate<ItemClickInfo> numberKeyPredicate = info -> info.clickType == ClickType.NUMBER_KEY;
-        Predicate<ItemClickInfo> doubleClickPredicate = info -> info.clickType == ClickType.DOUBLE_CLICK;
-        Predicate<ItemClickInfo> dropPredicate = info -> info.clickType == ClickType.DROP;
-        Predicate<ItemClickInfo> controlDropPredicate = info -> info.clickType == ClickType.CONTROL_DROP;
-        Predicate<ItemClickInfo> swapOffhandPredicate = info -> info.clickType == ClickType.SWAP_OFFHAND;
-
-        List<ItemClickPreprocess> leftProcesses = new ArrayList<>();
-        List<ItemClickPreprocess> shiftProcesses = new ArrayList<>();
-        List<ItemClickPreprocess> rightProcesses = new ArrayList<>();
-        List<ItemClickPreprocess> middleProcesses = new ArrayList<>();
-        List<ItemClickPreprocess> numberKeyProcesses = new ArrayList<>();
-        List<ItemClickPreprocess> doubleClickProcesses = new ArrayList<>();
-        List<ItemClickPreprocess> dropProcesses = new ArrayList<>();
-        List<ItemClickPreprocess> controlDropProcesses = new ArrayList<>();
-        List<ItemClickPreprocess> swapOffhandProcesses = new ArrayList<>();
-
-        leftProcesses.add(new PreprocessLeft());
-        shiftProcesses.add(new PreprocessShift());
-        rightProcesses.add(new PreprocessRight());
-        middleProcesses.add(new PreprocessMiddle());
-        numberKeyProcesses.add(new PreprocessNumber());
-        doubleClickProcesses.add(new PreprocessDoubleClick());
-        dropProcesses.add(new PreprocessDrop());
-        controlDropProcesses.add(new PreprocessControlDrop());
-        swapOffhandProcesses.add(new PreprocessSwapOffhand());
-
-        addPreprocess(leftPredicate, leftProcesses);
-        addPreprocess(shiftPredicate, shiftProcesses);
-        addPreprocess(rightPredicate, rightProcesses);
-        addPreprocess(middlePredicate, middleProcesses);
-        addPreprocess(numberKeyPredicate, numberKeyProcesses);
-        addPreprocess(doubleClickPredicate, doubleClickProcesses);
-        addPreprocess(dropPredicate, dropProcesses);
-        addPreprocess(controlDropPredicate, controlDropProcesses);
-        addPreprocess(swapOffhandPredicate, swapOffhandProcesses);
+        PreprocessItemClick itemClick = new PreprocessItemClick();
+        itemClick.initDefault();
+        addPreprocess(itemClick);
     }
 
     public void preprocess(ItemClickInfo info)
     {
-        for(Map.Entry<Predicate<ItemClickInfo>, List<ItemClickPreprocess>> entry : processes)
+        for(ItemClickPreprocess process : processes)
         {
-            Predicate<ItemClickInfo> condition = entry.getKey();
-            List<ItemClickPreprocess> list = entry.getValue();
-            if(!condition.test(info)) continue;
-            for(ItemClickPreprocess process : list)
-            {
-                process.invoke(info);
-            }
+            process.invoke(info);
         }
     }
 
-    public ItemClickPreprocessor addPreprocess(Predicate<ItemClickInfo> condition, List<ItemClickPreprocess> processList)
+    public ItemClickPreprocessor addPreprocess(ItemClickPreprocess processList)
     {
-        processes.add(new AbstractMap.SimpleEntry<>(condition, processList));
-        return this;
-    }
-
-    public ItemClickPreprocessor addPreprocess(Predicate<ItemClickInfo> condition, ItemClickPreprocess... processList)
-    {
-        this.addPreprocess(condition, Arrays.asList(processList));
+        processes.add(processList);
         return this;
     }
 
@@ -92,51 +42,61 @@ public class ItemClickPreprocessor implements SimpleStackPreprocessor
         return this;
     }
 
-    public ItemClickPreprocessor removePreprocess(List<ItemClickPreprocess> list)
+    public ItemClickPreprocessor removePreprocess(ItemClickPreprocess preprocess)
     {
         for(int i = 0; i < processes.size(); ++i)
         {
-            Map.Entry<Predicate<ItemClickInfo>, List<ItemClickPreprocess>> entry = processes.get(i);
-            List<ItemClickPreprocess> curList = entry.getValue();
-            if(!list.equals(curList)) continue;
+            ItemClickPreprocess curProcess = processes.get(i);
+            if(!preprocess.equals(curProcess)) continue;
             processes.remove(i);
             break;
         }
         return this;
     }
 
-    public ItemClickPreprocessor removePreprocess(Predicate<ItemClickInfo> condition)
+    public ItemClickPreprocessor removePreprocess(Class<? extends ItemClickPreprocess> preprocessClass)
     {
         for(int i = 0; i < processes.size(); ++i)
         {
-            Map.Entry<Predicate<ItemClickInfo>, List<ItemClickPreprocess>> entry = processes.get(i);
-            Predicate<ItemClickInfo> curCondition = entry.getKey();
-            if(!condition.equals(curCondition)) continue;
+            ItemClickPreprocess preprocess = processes.get(i);
+            if(preprocessClass != preprocess.getClass()) continue;
             processes.remove(i);
             break;
         }
         return this;
     }
 
-    public boolean containsPreprocess(List<ItemClickPreprocess> list)
+    public boolean containsPreprocess(ItemClickPreprocess preprocess)
     {
-        for(int i = 0; i < processes.size(); ++i)
+        for(ItemClickPreprocess curProcess : processes)
         {
-            Map.Entry<Predicate<ItemClickInfo>, List<ItemClickPreprocess>> entry = processes.get(i);
-            List<ItemClickPreprocess> curList = entry.getValue();
-            if(list.equals(curList)) return true;
+            if(!preprocess.equals(curProcess)) return true;
         }
         return false;
     }
 
-    public boolean containsPreprocess(Predicate<ItemClickInfo> condition)
+    public boolean containsPreprocess(Class<? extends ItemClickPreprocess> preprocessClass)
     {
         for(int i = 0; i < processes.size(); ++i)
         {
-            Map.Entry<Predicate<ItemClickInfo>, List<ItemClickPreprocess>> entry = processes.get(i);
-            Predicate<ItemClickInfo> curCondition = entry.getKey();
-            if(!condition.equals(curCondition)) return true;
+            ItemClickPreprocess preprocess = processes.get(i);
+            if(preprocessClass == preprocess.getClass()) return true;
         }
         return false;
+    }
+
+    public ItemClickPreprocess getPreprocess(int index)
+    {
+        return processes.get(index);
+    }
+
+    public <T extends ItemClickPreprocess> T getPreprocess(Class<T> preprocessClass)
+    {
+        for(int i = 0; i < processes.size(); ++i)
+        {
+            ItemClickPreprocess preprocess = processes.get(i);
+            if(preprocessClass == preprocess.getClass()) return (T) preprocess;
+        }
+        return null;
     }
 }
