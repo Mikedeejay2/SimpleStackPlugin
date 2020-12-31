@@ -2,6 +2,7 @@ package com.mikedeejay2.simplestack.system.itemclick.processor;
 
 import com.mikedeejay2.simplestack.system.SimpleStackProcessor;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
+import com.mikedeejay2.simplestack.system.itemclick.preprocessor.ItemClickPreprocessor;
 import com.mikedeejay2.simplestack.system.itemclick.processes.*;
 
 import java.util.*;
@@ -98,5 +99,11 @@ public class ItemClickProcessor implements SimpleStackProcessor
             if(ProcessClass == Process.getClass()) return (T) Process;
         }
         return null;
+    }
+
+    public ItemClickProcessor resetProcesses()
+    {
+        processes.clear();
+        return this;
     }
 }

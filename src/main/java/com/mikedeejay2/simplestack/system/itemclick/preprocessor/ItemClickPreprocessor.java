@@ -77,9 +77,8 @@ public class ItemClickPreprocessor implements SimpleStackPreprocessor
 
     public boolean containsPreprocess(Class<? extends ItemClickPreprocess> preprocessClass)
     {
-        for(int i = 0; i < processes.size(); ++i)
+        for(ItemClickPreprocess preprocess : processes)
         {
-            ItemClickPreprocess preprocess = processes.get(i);
             if(preprocessClass == preprocess.getClass()) return true;
         }
         return false;
@@ -92,11 +91,16 @@ public class ItemClickPreprocessor implements SimpleStackPreprocessor
 
     public <T extends ItemClickPreprocess> T getPreprocess(Class<T> preprocessClass)
     {
-        for(int i = 0; i < processes.size(); ++i)
+        for(ItemClickPreprocess preprocess : processes)
         {
-            ItemClickPreprocess preprocess = processes.get(i);
             if(preprocessClass == preprocess.getClass()) return (T) preprocess;
         }
         return null;
+    }
+
+    public ItemClickPreprocessor resetPreprocesses()
+    {
+        processes.clear();
+        return this;
     }
 }

@@ -38,4 +38,14 @@ public class ItemClickHandler implements SimpleStackHandler<InventoryClickEvent>
         processor.process(info);
         timer.printReport();
     }
+
+    public ItemClickProcessor getProcessor()
+    {
+        return processor;
+    }
+
+    public ItemClickPreprocessor getPreprocessor()
+    {
+        return preprocessor;
+    }
 }
