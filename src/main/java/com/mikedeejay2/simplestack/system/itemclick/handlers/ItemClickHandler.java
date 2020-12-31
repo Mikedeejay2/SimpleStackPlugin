@@ -32,11 +32,14 @@ public class ItemClickHandler implements SimpleStackHandler<InventoryClickEvent>
     {
         DebugTimer timer = new DebugTimer("Handle Inventory Click Event");
         ItemClickInfo info = new ItemClickInfo(event, plugin);
+        timer.addPrintPoint("Initialize info");
         preprocessor.preprocess(info);
+        timer.addPrintPoint("Preprocess");
 
-        info.player.sendMessage("Action NEW: " + info.getAction());
         processor.process(info);
-        timer.printReport();
+        timer.addPrintPoint("Process");
+        timer.printReport(10);
+        info.player.sendMessage("Action NEW: " + info.getAction());
     }
 
     public ItemClickProcessor getProcessor()
