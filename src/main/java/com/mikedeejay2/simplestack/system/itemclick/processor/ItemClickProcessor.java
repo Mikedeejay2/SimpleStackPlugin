@@ -2,7 +2,6 @@ package com.mikedeejay2.simplestack.system.itemclick.processor;
 
 import com.mikedeejay2.simplestack.system.SimpleStackProcessor;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
-import com.mikedeejay2.simplestack.system.itemclick.preprocessor.ItemClickPreprocessor;
 import com.mikedeejay2.simplestack.system.itemclick.processes.*;
 
 import java.util.*;
@@ -59,8 +58,8 @@ public class ItemClickProcessor implements SimpleStackProcessor
     {
         for(int i = 0; i < processes.size(); ++i)
         {
-            ItemClickProcess Process = processes.get(i);
-            if(ProcessClass != Process.getClass()) continue;
+            ItemClickProcess process = processes.get(i);
+            if(ProcessClass != process.getClass()) continue;
             processes.remove(i);
             break;
         }
@@ -80,8 +79,8 @@ public class ItemClickProcessor implements SimpleStackProcessor
     {
         for(int i = 0; i < processes.size(); ++i)
         {
-            ItemClickProcess Process = processes.get(i);
-            if(ProcessClass == Process.getClass()) return true;
+            ItemClickProcess process = processes.get(i);
+            if(ProcessClass == process.getClass()) return true;
         }
         return false;
     }
@@ -95,8 +94,8 @@ public class ItemClickProcessor implements SimpleStackProcessor
     {
         for(int i = 0; i < processes.size(); ++i)
         {
-            ItemClickProcess Process = processes.get(i);
-            if(ProcessClass == Process.getClass()) return (T) Process;
+            ItemClickProcess process = processes.get(i);
+            if(ProcessClass == process.getClass()) return (T) process;
         }
         return null;
     }

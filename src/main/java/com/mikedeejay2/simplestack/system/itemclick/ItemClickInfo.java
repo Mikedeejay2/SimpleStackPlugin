@@ -68,7 +68,7 @@ public final class ItemClickInfo
         this.clickedInv     = event.getClickedInventory();
         this.clickedBottom  = clickedInv == bottomInv;
         this.clickedTop     = clickedInv == topInv;
-        this.slotType       = invView.getSlotType(rawSlot);
+        this.slotType       = event.getSlotType();
         this.clickedBorder  = slot == -1;
         this.clickedOutside = slot == -999;
         this.action = InventoryAction.NOTHING;

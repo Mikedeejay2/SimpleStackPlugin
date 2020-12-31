@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
@@ -52,8 +53,9 @@ public class InventoryClickListener implements Listener
         InventoryView view        = player.getOpenInventory();
         Inventory     topInv      = view.getTopInventory();
         Inventory     bottomInv   = view.getBottomInventory();
-        int           slot        = event.getSlot();
-        Inventory     clickedInv  = event.getClickedInventory();
+        int                    slot       = event.getSlot();
+        InventoryType.SlotType slotType   = event.getSlotType();
+        Inventory              clickedInv = event.getClickedInventory();
         if(clickType == ClickType.CREATIVE) return;
         event.setCancelled(true);
         player.sendMessage("\n\n" +
@@ -62,7 +64,8 @@ public class InventoryClickListener implements Listener
                                    "Slot: " + slot + "\n" +
                                    "HotBar Slot: " + event.getHotbarButton() + "\n" +
                                    "Selected Item: " + itemPickUp + "\n" +
-                                   "Cursor Item: " + itemPutDown + "\n");
+                                   "Cursor Item: " + itemPutDown + "\n" +
+                                   "Slot Type: " + slotType + "\n");
         handler.handle(event);
 //        if(itemPickUp == null || action.toString().contains("DROP") || clickType == ClickType.CREATIVE) return;
 //
