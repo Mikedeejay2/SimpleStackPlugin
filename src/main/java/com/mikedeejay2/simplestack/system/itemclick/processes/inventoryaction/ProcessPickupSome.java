@@ -1,9 +1,10 @@
-package com.mikedeejay2.simplestack.system.itemclick.processes;
+package com.mikedeejay2.simplestack.system.itemclick.processes.inventoryaction;
 
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
+import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
 import org.bukkit.inventory.ItemStack;
 
-public class ProcessPickupAll implements ItemClickProcess
+public class ProcessPickupSome implements ItemClickProcess
 {
     @Override
     public void invoke(ItemClickInfo info)

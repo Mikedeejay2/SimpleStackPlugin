@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.system.itemclick.preprocesses;
 
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
+import com.mikedeejay2.simplestack.system.itemclick.preprocesses.clicktype.*;
 import org.bukkit.event.inventory.ClickType;
 
 import java.util.ArrayList;
