@@ -29,23 +29,23 @@ public class ProcessAction implements ItemClickProcess
 
     public ProcessAction()
     {
-        pickupAllProcesses = new ArrayList();
-        pickupSomeProcesses = new ArrayList();
-        pickupHalfProcesses = new ArrayList();
-        pickupOneProcesses = new ArrayList();
-        placeAllProcesses = new ArrayList();
-        placeSomeProcesses = new ArrayList();
-        placeOneProcesses = new ArrayList();
-        swapWithCursorProcesses = new ArrayList();
-        dropAllCursorProcesses = new ArrayList();
-        dropOneCursorProcesses = new ArrayList();
-        dropAllSlotProcesses = new ArrayList();
-        dropOneSlotProcesses = new ArrayList();
-        moveToOtherInventoryProcesses = new ArrayList();
-        hotbarMoveAndReaddProcesses = new ArrayList();
-        hotbarSwapProcesses = new ArrayList();
-        cloneStackProcesses = new ArrayList();
-        collectToCursorProcesses = new ArrayList();
+        pickupAllProcesses = new ArrayList<>();
+        pickupSomeProcesses = new ArrayList<>();
+        pickupHalfProcesses = new ArrayList<>();
+        pickupOneProcesses = new ArrayList<>();
+        placeAllProcesses = new ArrayList<>();
+        placeSomeProcesses = new ArrayList<>();
+        placeOneProcesses = new ArrayList<>();
+        swapWithCursorProcesses = new ArrayList<>();
+        dropAllCursorProcesses = new ArrayList<>();
+        dropOneCursorProcesses = new ArrayList<>();
+        dropAllSlotProcesses = new ArrayList<>();
+        dropOneSlotProcesses = new ArrayList<>();
+        moveToOtherInventoryProcesses = new ArrayList<>();
+        hotbarMoveAndReaddProcesses = new ArrayList<>();
+        hotbarSwapProcesses = new ArrayList<>();
+        cloneStackProcesses = new ArrayList<>();
+        collectToCursorProcesses = new ArrayList<>();
     }
 
     public void initDefault()
