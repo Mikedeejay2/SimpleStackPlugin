@@ -21,15 +21,15 @@ public class PreprocessItemClick implements ItemClickPreprocess
 
     public PreprocessItemClick()
     {
-        leftClickProcesses = new ArrayList<>();
-        shiftClickProcesses = new ArrayList<>();
-        rightClickProcesses = new ArrayList<>();
-        middleClickProcesses = new ArrayList<>();
-        numberKeyProcesses = new ArrayList<>();
-        doubleClickProcesses = new ArrayList<>();
-        dropProcesses = new ArrayList<>();
-        controlDropProcesses = new ArrayList<>();
-        swapOffhandProcesses = new ArrayList<>();
+        leftClickProcesses = new ArrayList<>(1);
+        shiftClickProcesses = new ArrayList<>(1);
+        rightClickProcesses = new ArrayList<>(1);
+        middleClickProcesses = new ArrayList<>(1);
+        numberKeyProcesses = new ArrayList<>(1);
+        doubleClickProcesses = new ArrayList<>(1);
+        dropProcesses = new ArrayList<>(1);
+        controlDropProcesses = new ArrayList<>(1);
+        swapOffhandProcesses = new ArrayList<>(1);
     }
 
     public void initDefault()
