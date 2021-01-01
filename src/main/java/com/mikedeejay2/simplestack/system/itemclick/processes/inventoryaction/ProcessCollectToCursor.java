@@ -57,5 +57,6 @@ public class ProcessCollectToCursor implements ItemClickProcess
                 return;
             }
         }
+        info.cursor.setAmount(cursorAmt);
     }
 }
