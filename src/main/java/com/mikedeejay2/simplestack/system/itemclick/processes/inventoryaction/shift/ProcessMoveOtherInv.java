@@ -24,7 +24,6 @@ public class ProcessMoveOtherInv implements ItemClickProcess
         {
             int convertedSlot = info.invView.convertSlot(rawStart + i);
             InventoryType.SlotType slotType = info.invView.getSlotType(convertedSlot);
-            System.out.println("Slot: " + convertedSlot + ", slot type: " + slotType);
             if(slotType == InventoryType.SlotType.RESULT) continue;
             ItemStack item = toItems[i];
             if(item == null) continue;
@@ -54,7 +53,6 @@ public class ProcessMoveOtherInv implements ItemClickProcess
         {
             int convertedSlot = info.invView.convertSlot(rawStart + i);
             InventoryType.SlotType slotType = info.invView.getSlotType(convertedSlot);
-            System.out.println("Slot: " + convertedSlot + ", slot type: " + slotType);
             if(slotType == InventoryType.SlotType.RESULT) continue;
             ItemStack item = toItems[i];
             if(item != null && item.getType() != Material.AIR) continue;
