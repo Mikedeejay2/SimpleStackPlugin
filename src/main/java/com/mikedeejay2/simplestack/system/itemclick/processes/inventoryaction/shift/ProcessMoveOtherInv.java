@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.system.itemclick.processes.inventoryaction.s
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
 import org.bukkit.Material;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,6 +21,7 @@ public class ProcessMoveOtherInv implements ItemClickProcess
         {
             ItemStack item = toItems[i];
             if(item == null) continue;
+            if(item.getType() == Material.AIR) continue;
             if(item.getType() != selectedMat) continue;
             int itemAmt = item.getAmount();
             if(itemAmt == info.selectedMax) continue;
@@ -43,7 +45,7 @@ public class ProcessMoveOtherInv implements ItemClickProcess
         for(int i = 0; i < toItems.length; ++i)
         {
             ItemStack item = toItems[i];
-            if(item != null) continue;
+            if(item != null && item.getType() != Material.AIR) continue;
             item = info.selected.clone();
             int newAmt = selectedAmt;
             if(newAmt > info.selectedMax)

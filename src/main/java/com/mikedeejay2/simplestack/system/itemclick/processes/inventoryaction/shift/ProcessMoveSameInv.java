@@ -17,10 +17,23 @@ public class ProcessMoveSameInv implements ItemClickProcess
         ItemStack[] toItems    = toInv.getStorageContents();
         Material    selectedMat = info.selected.getType();
         int selectedAmt = info.selectedAmt;
-        for(int i = 0; i < toItems.length; ++i)
+
+        int start = 0;
+        int end = toItems.length;
+        if(info.slotType == InventoryType.SlotType.QUICKBAR)
+        {
+            start = 9;
+        }
+        else
+        {
+            end = 8;
+        }
+
+        for(int i = start; i < end; ++i)
         {
             ItemStack item = toItems[i];
             if(item == null) continue;
+            if(item.getType() == Material.AIR) continue;
             if(item.getType() != selectedMat) continue;
             int itemAmt = item.getAmount();
             if(itemAmt == info.selectedMax) continue;
@@ -41,39 +54,29 @@ public class ProcessMoveSameInv implements ItemClickProcess
                 return;
             }
         }
-        int start = 0;
-        int end = toItems.length;
-        if(info.slotType == InventoryType.SlotType.QUICKBAR)
+        for(int i = start; i < end; ++i)
         {
-            start = 9;
-        }
-        else
-        {
-            end = 8;
-        }
-            for(int i = start; i < end; ++i)
+            ItemStack item = toItems[i];
+            if(item != null && item.getType() != Material.AIR) continue;
+            item = info.selected.clone();
+            int newAmt = selectedAmt;
+            if(newAmt > info.selectedMax)
             {
-                ItemStack item = toItems[i];
-                if(item != null) continue;
-                item = info.selected.clone();
-                int newAmt = selectedAmt;
-                if(newAmt > info.selectedMax)
-                {
-                    selectedAmt = newAmt - info.selectedMax;
-                    newAmt = info.selectedMax;
-                }
-                else
-                {
-                    selectedAmt -= newAmt;
-                }
-                item.setAmount(newAmt);
-                toInv.setItem(i, item);
-                if(selectedAmt <= 0)
-                {
-                    info.selected.setAmount(0);
-                    return;
-                }
+                selectedAmt = newAmt - info.selectedMax;
+                newAmt = info.selectedMax;
             }
+            else
+            {
+                selectedAmt -= newAmt;
+            }
+            item.setAmount(newAmt);
+            toInv.setItem(i, item);
+            if(selectedAmt <= 0)
+            {
+                info.selected.setAmount(0);
+                return;
+            }
+        }
         info.selected.setAmount(selectedAmt);
     }
 }
