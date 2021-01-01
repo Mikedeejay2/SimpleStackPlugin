@@ -13,9 +13,9 @@ public class ProcessMoveSameInv implements ItemClickProcess
     public void invoke(ItemClickInfo info)
     {
         info.player.sendMessage("Move to Same Inv");
-        Inventory   toInv    = info.clickedBottom ? info.bottomInv : info.topInv;
-        ItemStack[] toItems    = toInv.getContents();
-        Material    selectedMat = info.selected.getType();
+        Inventory toInv = info.clickedBottom ? info.bottomInv : info.topInv;
+        ItemStack[] toItems = toInv.getContents();
+        Material selectedMat = info.selected.getType();
         int selectedAmt = info.selectedAmt;
 
         int start = 0;
@@ -26,7 +26,7 @@ public class ProcessMoveSameInv implements ItemClickProcess
         }
         else
         {
-            end = 8;
+            end = 9;
         }
         for(int i = start; i < end; ++i)
         {

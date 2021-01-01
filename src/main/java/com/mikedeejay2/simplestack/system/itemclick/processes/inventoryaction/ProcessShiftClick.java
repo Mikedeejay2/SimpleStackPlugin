@@ -87,6 +87,9 @@ public class ProcessShiftClick implements ItemClickProcess
             case RESULT:
                 type = ShiftType.HOTBAR_REVERSE;
                 break;
+            case ARMOR:
+                type = ShiftType.ARMOR;
+                break;
             default:
                 type = ShiftType.OTHER;
                 break;

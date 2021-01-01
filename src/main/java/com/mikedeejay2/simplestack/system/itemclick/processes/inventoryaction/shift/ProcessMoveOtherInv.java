@@ -62,7 +62,7 @@ public class ProcessMoveOtherInv implements ItemClickProcess
                 }
                 else
                 {
-                    end = 8;
+                    end = 9;
                 }
             }
             for(int i = start; i < end; ++i)
