@@ -57,26 +57,26 @@ public class ProcessShiftClick implements ItemClickProcess
             case CONTAINER:
                 if(info.clickedBottom)
                 {
-                    if(InventoryIdentifiers.isOffhand(info.selected.getType()))
+                    if(info.topInv instanceof CraftingInventory && info.topInv.getSize() == 5)
                     {
-                        type = ShiftType.OFFHAND;
-                    }
-                    else if(info.slot == InventoryIdentifiers.OFFHAND_SLOT)
-                    {
-                        type = ShiftType.OFFHAND;
-                    }
-                    else if(InventoryIdentifiers.isArmor(info.selected.getType()))
-                    {
-                        type = ShiftType.ARMOR;
+                        type = ShiftType.SAME;
+
+                        if(InventoryIdentifiers.isOffhand(info.selected.getType()))
+                        {
+                            type = ShiftType.OFFHAND;
+                        }
+                        else if(info.slot == InventoryIdentifiers.OFFHAND_SLOT)
+                        {
+                            type = ShiftType.OFFHAND;
+                        }
+                        else if(InventoryIdentifiers.isArmor(info.selected.getType()))
+                        {
+                            type = ShiftType.ARMOR;
+                        }
                     }
                     else
                     {
                         type = ShiftType.OTHER;
-
-                        if(info.topInv instanceof CraftingInventory && info.topInv.getSize() == 5)
-                        {
-                            type = ShiftType.SAME;
-                        }
                     }
                 }
                 else
