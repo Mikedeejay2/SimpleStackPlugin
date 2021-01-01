@@ -1,15 +1,14 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.MoveUtils;
-import com.mikedeejay2.simplestack.util.ShulkerBoxes;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * Listens for block breaking events
@@ -37,7 +36,7 @@ public class BlockBreakListener implements Listener
     {
         Player player = event.getPlayer();
         Block block = event.getBlock();
-        if(!ShulkerBoxes.isShulkerBox(block.getType())) return;
+        if(!InventoryIdentifiers.isShulkerBox(block.getType())) return;
         if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
 
         MoveUtils.preserveShulkerBox(event, block);

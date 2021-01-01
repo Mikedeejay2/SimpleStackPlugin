@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.util;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
@@ -129,13 +130,13 @@ public final class CancelUtils
     {
         if(inv == null) return true;
         if(plugin.getMCVersion().getVersionShort() >= 16 && inv instanceof SmithingInventory) return false;
-        if(ShulkerBoxes.isShulkerBox(cursorItem.getType()) && inv.getLocation() != null)
+        if(InventoryIdentifiers.isShulkerBox(cursorItem.getType()) && inv.getLocation() != null)
         {
             Location location = inv.getLocation();
             World world = location.getWorld();
             Block block = world.getBlockAt(location);
             Material blockType = block.getType();
-            if(ShulkerBoxes.isShulkerBox(blockType)) return true;
+            if(InventoryIdentifiers.isShulkerBox(blockType)) return true;
         }
         return false;
     }

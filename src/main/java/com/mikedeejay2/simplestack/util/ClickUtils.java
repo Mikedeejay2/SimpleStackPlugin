@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.util;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Location;
@@ -365,13 +366,13 @@ public final class ClickUtils
             toInv.setItem(0, itemInSlot);
             return;
         }
-        else if(ShulkerBoxes.isShulkerBox(itemInSlot.getType()) && toInv.getLocation() != null)
+        else if(InventoryIdentifiers.isShulkerBox(itemInSlot.getType()) && toInv.getLocation() != null)
         {
             Location location = toInv.getLocation();
             World world = location.getWorld();
             Block block = world.getBlockAt(location);
             Material blockMat = block.getType();
-            if(ShulkerBoxes.isShulkerBox(blockMat))
+            if(InventoryIdentifiers.isShulkerBox(blockMat))
             {
                 ClickUtils.shiftClickSameInv(plugin, itemInSlot, event, bottomInv);
                 return;
