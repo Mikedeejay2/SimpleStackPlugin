@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class ProcessMoveToOtherInv implements ItemClickProcess
+public class ProcessMoveOtherInv implements ItemClickProcess
 {
     @Override
     public void invoke(ItemClickInfo info)

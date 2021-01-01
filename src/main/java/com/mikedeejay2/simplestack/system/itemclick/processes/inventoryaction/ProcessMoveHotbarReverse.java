@@ -3,7 +3,7 @@ package com.mikedeejay2.simplestack.system.itemclick.processes.inventoryaction;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
 
-public class ProcessMoveToHotbarReverse implements ItemClickProcess
+public class ProcessMoveHotbarReverse implements ItemClickProcess
 {
     @Override
     public void invoke(ItemClickInfo info)
