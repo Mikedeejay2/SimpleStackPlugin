@@ -62,7 +62,7 @@ public class ProcessAction implements ItemClickProcess
         addProcess(InventoryAction.DROP_ONE_CURSOR, new ProcessDropOneCursor());
         addProcess(InventoryAction.DROP_ALL_SLOT, new ProcessDropAllSlot());
         addProcess(InventoryAction.DROP_ONE_SLOT, new ProcessDropOneSlot());
-        addProcess(InventoryAction.MOVE_TO_OTHER_INVENTORY, new ProcessMoveToOtherInventory());
+        addProcess(InventoryAction.MOVE_TO_OTHER_INVENTORY, new ProcessShiftClick());
         addProcess(InventoryAction.HOTBAR_MOVE_AND_READD, new ProcessHotbarMoveAndReadd());
         addProcess(InventoryAction.HOTBAR_SWAP, new ProcessHotbarSwap());
         addProcess(InventoryAction.CLONE_STACK, new ProcessCloneStack());
