@@ -15,46 +15,55 @@ public class ProcessCollectToCursor implements ItemClickProcess
         if(info.cursor == null) return;
         Material cursorMat = info.cursor.getType();
         int cursorAmt = info.cursorAmt;
-        for(int i = 0; i < topItems.length; ++i)
+        for(int amount = 1; amount <= info.cursorMax; ++amount)
         {
-            ItemStack item = topItems[i];
-            if(item == null) continue;
-            if(item.getType() != cursorMat) continue;
-            int newAmount = item.getAmount() + cursorAmt;
-            int extraAmount = 0;
-            if(newAmount > info.cursorMax)
+            for(int i = 0; i < topItems.length; ++i)
             {
-                extraAmount =  newAmount - info.cursorMax;
-                newAmount = info.cursorMax;
-            }
-            item.setAmount(extraAmount);
-            info.topInv.setItem(i, item);
-            cursorAmt = newAmount;
-            if(cursorAmt == info.cursorMax)
-            {
-                info.cursor.setAmount(cursorAmt);
-                return;
+                ItemStack item = topItems[i];
+                if(item == null) continue;
+                if(item.getType() != cursorMat) continue;
+                if(item.getAmount() > amount) continue;
+                int newAmount   = item.getAmount() + cursorAmt;
+                int extraAmount = 0;
+                if(newAmount > info.cursorMax)
+                {
+                    extraAmount = newAmount - info.cursorMax;
+                    newAmount = info.cursorMax;
+                }
+                item.setAmount(extraAmount);
+                info.topInv.setItem(i, item);
+                cursorAmt = newAmount;
+                if(cursorAmt == info.cursorMax)
+                {
+                    info.cursor.setAmount(cursorAmt);
+                    return;
+                }
             }
         }
-        for(int i = bottomItems.length - 1; i >= 0; --i)
+
+        for(int amount = 1; amount <= info.cursorMax; ++amount)
         {
-            ItemStack item = bottomItems[i];
-            if(item == null) continue;
-            if(item.getType() != cursorMat) continue;
-            int newAmount = item.getAmount() + cursorAmt;
-            int extraAmount = 0;
-            if(newAmount > info.cursorMax)
+            for(int i = bottomItems.length - 1; i >= 0; --i)
             {
-                extraAmount =  newAmount - info.cursorMax;
-                newAmount = info.cursorMax;
-            }
-            item.setAmount(extraAmount);
-            info.bottomInv.setItem(i, item);
-            cursorAmt = newAmount;
-            if(cursorAmt == info.cursorMax)
-            {
-                info.cursor.setAmount(cursorAmt);
-                return;
+                ItemStack item = bottomItems[i];
+                if(item == null) continue;
+                if(item.getType() != cursorMat) continue;
+                if(item.getAmount() > amount) continue;
+                int newAmount   = item.getAmount() + cursorAmt;
+                int extraAmount = 0;
+                if(newAmount > info.cursorMax)
+                {
+                    extraAmount = newAmount - info.cursorMax;
+                    newAmount = info.cursorMax;
+                }
+                item.setAmount(extraAmount);
+                info.bottomInv.setItem(i, item);
+                cursorAmt = newAmount;
+                if(cursorAmt == info.cursorMax)
+                {
+                    info.cursor.setAmount(cursorAmt);
+                    return;
+                }
             }
         }
         info.cursor.setAmount(cursorAmt);
