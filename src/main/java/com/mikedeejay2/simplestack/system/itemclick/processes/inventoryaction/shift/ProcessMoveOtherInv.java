@@ -19,10 +19,10 @@ public class ProcessMoveOtherInv implements ItemClickProcess
         ItemStack[] toItems    = toInv.getContents();
         Material    selectedMat = info.selected.getType();
         int selectedAmt = info.selectedAmt;
-        int rawStart = info.clickedBottom ? InventoryIdentifiers.FIRST_TOP_RAW_SLOT : 0;
+        int rawStart = info.clickedBottom ? 0 : info.topInv.getSize();
         for(int i = 0; i < toInv.getSize(); ++i)
         {
-            int convertedSlot = info.invView.convertSlot(rawStart + i);
+            int convertedSlot = rawStart + i;
             InventoryType.SlotType slotType = info.invView.getSlotType(convertedSlot);
             if(slotType == InventoryType.SlotType.RESULT) continue;
             ItemStack item = toItems[i];
@@ -31,7 +31,7 @@ public class ProcessMoveOtherInv implements ItemClickProcess
             if(item.getType() != selectedMat) continue;
             int itemAmt = item.getAmount();
             if(itemAmt == info.selectedMax) continue;
-            int newAmt = itemAmt + info.selectedAmt;
+            int newAmt = itemAmt + selectedAmt;
             if(newAmt > info.selectedMax)
             {
                 selectedAmt = newAmt - info.selectedMax;
@@ -44,35 +44,52 @@ public class ProcessMoveOtherInv implements ItemClickProcess
             item.setAmount(newAmt);
             if(selectedAmt <= 0)
             {
-                info.selected.setAmount(0);
+                info.selected.setAmount(selectedAmt);
                 return;
             }
         }
 
-        for(int i = 0; i < toInv.getSize(); ++i)
+        boolean hotbarFix = info.clickedTop;
+        for(int section = 0; section < (hotbarFix ? 2 : 1); ++section)
         {
-            int convertedSlot = info.invView.convertSlot(rawStart + i);
-            InventoryType.SlotType slotType = info.invView.getSlotType(convertedSlot);
-            if(slotType == InventoryType.SlotType.RESULT) continue;
-            ItemStack item = toItems[i];
-            if(item != null && item.getType() != Material.AIR) continue;
-            item = info.selected.clone();
-            int newAmt = selectedAmt;
-            if(newAmt > info.selectedMax)
+            int start = 0;
+            int end   = toInv.getSize();
+            if(hotbarFix)
             {
-                selectedAmt = newAmt - info.selectedMax;
-                newAmt = info.selectedMax;
+                if(section == 0)
+                {
+                    start = 9;
+                }
+                else
+                {
+                    end = 8;
+                }
             }
-            else
+            for(int i = start; i < end; ++i)
             {
-                selectedAmt -= newAmt;
-            }
-            item.setAmount(newAmt);
-            toInv.setItem(i, item);
-            if(selectedAmt <= 0)
-            {
-                info.selected.setAmount(0);
-                return;
+                int convertedSlot = rawStart + i;
+                InventoryType.SlotType slotType = info.invView.getSlotType(convertedSlot);
+                if(slotType == InventoryType.SlotType.RESULT) continue;
+                ItemStack item = toItems[i];
+                if(item != null && item.getType() != Material.AIR) continue;
+                item = info.selected.clone();
+                int newAmt = selectedAmt;
+                if(newAmt > info.selectedMax)
+                {
+                    selectedAmt = newAmt - info.selectedMax;
+                    newAmt = info.selectedMax;
+                }
+                else
+                {
+                    selectedAmt -= newAmt;
+                }
+                item.setAmount(newAmt);
+                toInv.setItem(i, item);
+                if(selectedAmt <= 0)
+                {
+                    info.selected.setAmount(0);
+                    return;
+                }
             }
         }
         info.selected.setAmount(selectedAmt);
