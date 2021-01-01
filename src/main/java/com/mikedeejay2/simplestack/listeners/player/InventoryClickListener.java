@@ -62,6 +62,7 @@ public class InventoryClickListener implements Listener
                                    "Action: " + action + "\n" +
                                    "ClickType: " + clickType + "\n" +
                                    "Slot: " + slot + "\n" +
+                                   "RawSlot: " + event.getRawSlot() + "\n" +
                                    "HotBar Slot: " + event.getHotbarButton() + "\n" +
                                    "Selected Item: " + itemPickUp + "\n" +
                                    "Cursor Item: " + itemPutDown + "\n" +
