@@ -17,7 +17,6 @@ public class PreprocessItemClick implements ItemClickPreprocess
     protected List<ItemClickPreprocess> doubleClickProcesses;
     protected List<ItemClickPreprocess> dropProcesses;
     protected List<ItemClickPreprocess> controlDropProcesses;
-    protected List<ItemClickPreprocess> swapOffhandProcesses;
 
     public PreprocessItemClick()
     {
@@ -29,7 +28,6 @@ public class PreprocessItemClick implements ItemClickPreprocess
         doubleClickProcesses = new ArrayList<>(1);
         dropProcesses = new ArrayList<>(1);
         controlDropProcesses = new ArrayList<>(1);
-        swapOffhandProcesses = new ArrayList<>(1);
     }
 
     public void initDefault()
@@ -42,7 +40,6 @@ public class PreprocessItemClick implements ItemClickPreprocess
         addPreprocess(ClickType.DOUBLE_CLICK, new PreprocessDoubleClick());
         addPreprocess(ClickType.DROP, new PreprocessDrop());
         addPreprocess(ClickType.CONTROL_DROP, new PreprocessControlDrop());
-        addPreprocess(ClickType.SWAP_OFFHAND, new PreprocessSwapOffhand());
         addPreprocess(ClickType.LEFT, new PreprocessLeft());
     }
 
@@ -74,9 +71,6 @@ public class PreprocessItemClick implements ItemClickPreprocess
                 break;
             case CONTROL_DROP:
                 controlDropProcesses.add(process);
-                break;
-            case SWAP_OFFHAND:
-                swapOffhandProcesses.add(process);
                 break;
         }
         return this;
@@ -111,9 +105,6 @@ public class PreprocessItemClick implements ItemClickPreprocess
                 break;
             case CONTROL_DROP:
                 controlDropProcesses.forEach(process -> process.invoke(info));
-                break;
-            case SWAP_OFFHAND:
-                swapOffhandProcesses.forEach(process -> process.invoke(info));
                 break;
         }
     }

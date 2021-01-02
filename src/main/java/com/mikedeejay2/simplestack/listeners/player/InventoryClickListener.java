@@ -56,7 +56,7 @@ public class InventoryClickListener implements Listener
         int                    slot       = event.getSlot();
         InventoryType.SlotType slotType   = event.getSlotType();
         Inventory              clickedInv = event.getClickedInventory();
-        if(clickType == ClickType.CREATIVE) return;
+        if(clickType == ClickType.CREATIVE || (plugin.getMCVersion().getVersionShort() >= 16 && clickType == ClickType.SWAP_OFFHAND)) return;
         event.setCancelled(true);
         player.sendMessage("\n\n" +
                                    "Action: " + action + "\n" +
