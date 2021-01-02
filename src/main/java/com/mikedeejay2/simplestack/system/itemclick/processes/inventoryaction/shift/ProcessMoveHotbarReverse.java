@@ -9,6 +9,13 @@ import org.bukkit.inventory.ItemStack;
 
 public class ProcessMoveHotbarReverse implements ItemClickProcess
 {
+    protected ItemClickProcess backupProcess;
+
+    public ProcessMoveHotbarReverse(ItemClickProcess backupProcess)
+    {
+        this.backupProcess = backupProcess;
+    }
+
     @Override
     public void invoke(ItemClickInfo info)
     {
@@ -99,6 +106,11 @@ public class ProcessMoveHotbarReverse implements ItemClickProcess
                 info.selected.setAmount(0);
                 return;
             }
+        }
+        info.selected.setAmount(selectedAmt);
+        if(selectedAmt == info.selectedAmt)
+        {
+            backupProcess.invoke(info);
         }
     }
 }

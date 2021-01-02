@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.mikedeejay2lib.PluginBase;
+import com.mikedeejay2.mikedeejay2lib.util.recipe.RecipeUtil;
 import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.listeners.*;
@@ -71,6 +72,8 @@ public final class Simplestack extends PluginBase
 
         GroundItemStacker stacker = new GroundItemStacker(this);
         stacker.runTaskTimer(this, 0, 20);
+
+        RecipeUtil.preload(this, 0);
     }
 
     @Override

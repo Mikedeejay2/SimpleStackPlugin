@@ -28,12 +28,12 @@ public class ProcessShiftClick implements ItemClickProcess
 
     public ProcessShiftClick()
     {
-        this.otherProcess = new ProcessMoveOtherInv();
         this.sameProcess = new ProcessMoveSameInv();
-        this.hotbarProcess = new ProcessMoveHotbar();
-        this.hotbarReverseProcess = new ProcessMoveHotbarReverse();
-        this.offhandProcess = new ProcessMoveOffhand();
-        this.armorProcess = new ProcessMoveArmor();
+        this.otherProcess = new ProcessMoveOtherInv(sameProcess);
+        this.hotbarProcess = new ProcessMoveHotbar(sameProcess);
+        this.hotbarReverseProcess = new ProcessMoveHotbarReverse(sameProcess);
+        this.offhandProcess = new ProcessMoveOffhand(sameProcess);
+        this.armorProcess = new ProcessMoveArmor(sameProcess);
     }
 
     @Override
@@ -116,5 +116,65 @@ public class ProcessShiftClick implements ItemClickProcess
                 offhandProcess.invoke(info);
                 break;
         }
+    }
+
+    public ItemClickProcess getOtherProcess()
+    {
+        return otherProcess;
+    }
+
+    public void setOtherProcess(ItemClickProcess otherProcess)
+    {
+        this.otherProcess = otherProcess;
+    }
+
+    public ItemClickProcess getSameProcess()
+    {
+        return sameProcess;
+    }
+
+    public void setSameProcess(ItemClickProcess sameProcess)
+    {
+        this.sameProcess = sameProcess;
+    }
+
+    public ItemClickProcess getHotbarProcess()
+    {
+        return hotbarProcess;
+    }
+
+    public void setHotbarProcess(ItemClickProcess hotbarProcess)
+    {
+        this.hotbarProcess = hotbarProcess;
+    }
+
+    public ItemClickProcess getHotbarReverseProcess()
+    {
+        return hotbarReverseProcess;
+    }
+
+    public void setHotbarReverseProcess(ItemClickProcess hotbarReverseProcess)
+    {
+        this.hotbarReverseProcess = hotbarReverseProcess;
+    }
+
+    public ItemClickProcess getOffhandProcess()
+    {
+        return offhandProcess;
+    }
+
+    public void setOffhandProcess(ItemClickProcess offhandProcess)
+    {
+        this.offhandProcess = offhandProcess;
+    }
+
+    public ItemClickProcess getArmorProcess()
+    {
+        return armorProcess;
+    }
+
+    public void setArmorProcess(ItemClickProcess armorProcess)
+    {
+        this.armorProcess = armorProcess;
     }
 }

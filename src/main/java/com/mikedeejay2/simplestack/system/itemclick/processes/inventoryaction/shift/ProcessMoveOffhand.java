@@ -10,6 +10,13 @@ import org.bukkit.inventory.ItemStack;
 
 public class ProcessMoveOffhand implements ItemClickProcess
 {
+    protected ItemClickProcess backupProcess;
+
+    public ProcessMoveOffhand(ItemClickProcess backupProcess)
+    {
+        this.backupProcess = backupProcess;
+    }
+
     @Override
     public void invoke(ItemClickInfo info)
     {
@@ -81,5 +88,9 @@ public class ProcessMoveOffhand implements ItemClickProcess
             }
         }
         info.selected.setAmount(selectedAmt);
+        if(selectedAmt == info.selectedAmt)
+        {
+            backupProcess.invoke(info);
+        }
     }
 }

@@ -9,8 +9,17 @@ import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Map;
+
 public class ProcessMoveOtherInv implements ItemClickProcess
 {
+    protected ItemClickProcess backupProcess;
+
+    public ProcessMoveOtherInv(ItemClickProcess backupProcess)
+    {
+        this.backupProcess = backupProcess;
+    }
+
     @Override
     public void invoke(ItemClickInfo info)
     {
@@ -22,6 +31,8 @@ public class ProcessMoveOtherInv implements ItemClickProcess
         int rawStart = info.clickedBottom ? 0 : info.topInv.getSize();
         for(int i = 0; i < toInv.getSize(); ++i)
         {
+            Map.Entry<Boolean, Boolean> allowed = InventoryIdentifiers.applicableForSlot(i, info.invView, selectedMat);
+            if(info.clickedBottom && !allowed.getKey()) continue;
             int convertedSlot = rawStart + i;
             InventoryType.SlotType slotType = info.invView.getSlotType(convertedSlot);
             if(slotType == InventoryType.SlotType.RESULT) continue;
@@ -67,6 +78,8 @@ public class ProcessMoveOtherInv implements ItemClickProcess
             }
             for(int i = start; i < end; ++i)
             {
+                Map.Entry<Boolean, Boolean> allowed = InventoryIdentifiers.applicableForSlot(i, info.invView, selectedMat);
+                if(info.clickedBottom && !allowed.getKey()) continue;
                 int convertedSlot = rawStart + i;
                 InventoryType.SlotType slotType = info.invView.getSlotType(convertedSlot);
                 if(slotType == InventoryType.SlotType.RESULT) continue;
@@ -93,5 +106,9 @@ public class ProcessMoveOtherInv implements ItemClickProcess
             }
         }
         info.selected.setAmount(selectedAmt);
+        if(selectedAmt == info.selectedAmt)
+        {
+            backupProcess.invoke(info);
+        }
     }
 }
