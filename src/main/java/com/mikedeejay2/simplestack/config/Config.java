@@ -1,9 +1,9 @@
 package com.mikedeejay2.simplestack.config;
 
 import com.google.gson.JsonElement;
-import com.mikedeejay2.mikedeejay2lib.file.json.JsonFile;
-import com.mikedeejay2.mikedeejay2lib.file.section.SectionAccessor;
-import com.mikedeejay2.mikedeejay2lib.file.yaml.YamlFile;
+import com.mikedeejay2.mikedeejay2lib.data.json.JsonFile;
+import com.mikedeejay2.mikedeejay2lib.data.section.SectionAccessor;
+import com.mikedeejay2.mikedeejay2lib.data.yaml.YamlFile;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Material;
