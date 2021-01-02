@@ -51,7 +51,7 @@ public final class Simplestack extends PluginBase
 //        this.commandManager.addSubcommand(new RemoveItemCommand(this));
 
         this.config = new Config(this);
-        fileManager.addDataFile(config);
+        dataManager.addFile(config);
 
         listenerManager.addListener(new InventoryClickListener(this));
         listenerManager.addListener(new EntityPickupItemListener(this));
