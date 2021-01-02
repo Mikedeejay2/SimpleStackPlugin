@@ -17,8 +17,11 @@ public class PreprocessNumber implements ItemClickPreprocess
         ItemStack hotbarItem = info.bottomInv.getItem(info.hotbar);
         if(hotbarItem != null && hotbarItem.getType() == Material.AIR) hotbarItem = null;
         boolean   hotbarNull = hotbarItem == null;
-        Map.Entry<Boolean, Boolean> allowed = InventoryIdentifiers.applicableForSlot(info.rawSlot, info.invView, hotbarItem.getType());
-        if(!allowed.getKey() && !allowed.getValue()) return;
+        if(!hotbarNull)
+        {
+            Map.Entry<Boolean, Boolean> allowed = InventoryIdentifiers.applicableForSlot(info.rawSlot, info.invView, hotbarItem.getType());
+            if(!allowed.getKey() && !allowed.getValue()) return;
+        }
         if(info.clickedTop)
         {
             if(!hotbarNull && !info.selectedNull)

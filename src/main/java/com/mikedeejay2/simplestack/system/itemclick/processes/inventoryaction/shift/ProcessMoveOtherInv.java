@@ -31,9 +31,10 @@ public class ProcessMoveOtherInv implements ItemClickProcess
         int rawStart = info.clickedBottom ? 0 : info.topInv.getSize();
         for(int i = 0; i < toInv.getSize(); ++i)
         {
-            Map.Entry<Boolean, Boolean> allowed = InventoryIdentifiers.applicableForSlot(i, info.invView, selectedMat);
-            if(info.clickedBottom && !allowed.getKey()) continue;
             int convertedSlot = rawStart + i;
+            Map.Entry<Boolean, Boolean> allowed = InventoryIdentifiers.applicableForSlot(convertedSlot, info.invView, selectedMat);
+            if(info.clickedBottom && !allowed.getKey()) continue;
+            if(InventoryIdentifiers.singletonSlot(convertedSlot, info.invView)) continue;
             InventoryType.SlotType slotType = info.invView.getSlotType(convertedSlot);
             if(slotType == InventoryType.SlotType.RESULT) continue;
             ItemStack item = toItems[i];
@@ -78,15 +79,16 @@ public class ProcessMoveOtherInv implements ItemClickProcess
             }
             for(int i = start; i < end; ++i)
             {
-                Map.Entry<Boolean, Boolean> allowed = InventoryIdentifiers.applicableForSlot(i, info.invView, selectedMat);
-                if(info.clickedBottom && !allowed.getKey()) continue;
                 int convertedSlot = rawStart + i;
+                Map.Entry<Boolean, Boolean> allowed = InventoryIdentifiers.applicableForSlot(convertedSlot, info.invView, selectedMat);
+                if(info.clickedBottom && !allowed.getKey()) continue;
+                boolean singleton = InventoryIdentifiers.singletonSlot(convertedSlot, info.invView);
                 InventoryType.SlotType slotType = info.invView.getSlotType(convertedSlot);
                 if(slotType == InventoryType.SlotType.RESULT) continue;
                 ItemStack item = toItems[i];
                 if(item != null && item.getType() != Material.AIR) continue;
                 item = info.selected.clone();
-                int newAmt = selectedAmt;
+                int newAmt = singleton ? 1 : selectedAmt;
                 if(newAmt > info.selectedMax)
                 {
                     selectedAmt = newAmt - info.selectedMax;

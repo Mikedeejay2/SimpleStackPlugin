@@ -19,6 +19,7 @@ public class PreprocessRight implements ItemClickPreprocess
             {
                 if(info.selectedAmt < info.selectedMax)
                 {
+                    if(InventoryIdentifiers.singletonSlot(info.rawSlot, info.invView)) return;
                     info.setAction(InventoryAction.PLACE_ONE);
                 }
             }
@@ -26,6 +27,7 @@ public class PreprocessRight implements ItemClickPreprocess
             {
                 Map.Entry<Boolean, Boolean> allowed = InventoryIdentifiers.applicableForSlot(info.rawSlot, info.invView, info.cursor.getType());
                 if(!allowed.getKey() && !allowed.getValue()) return;
+                if(InventoryIdentifiers.singletonSlot(info.rawSlot, info.invView) && info.selectedAmt > 1) return;
                 info.setAction(InventoryAction.SWAP_WITH_CURSOR);
             }
         }
@@ -35,6 +37,7 @@ public class PreprocessRight implements ItemClickPreprocess
             {
                 Map.Entry<Boolean, Boolean> allowed = InventoryIdentifiers.applicableForSlot(info.rawSlot, info.invView, info.cursor.getType());
                 if(!allowed.getKey() && !allowed.getValue()) return;
+                if(InventoryIdentifiers.singletonSlot(info.rawSlot, info.invView) && info.selectedAmt > 1) return;
                 info.setAction(InventoryAction.PLACE_ONE);
             }
             else if(info.clickedOutside)

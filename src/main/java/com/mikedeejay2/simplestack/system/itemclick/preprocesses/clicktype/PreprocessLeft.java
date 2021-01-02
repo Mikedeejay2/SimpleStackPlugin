@@ -20,6 +20,7 @@ public class PreprocessLeft implements ItemClickPreprocess
                 if(info.selectedAmt < info.selectedMax)
                 {
                     int totalAmt = info.cursorAmt + info.selectedAmt;
+                    if(InventoryIdentifiers.singletonSlot(info.rawSlot, info.invView) && totalAmt > 1) return;
                     if(totalAmt == info.selectedAmt + 1 && info.cursorAmt != 1)
                     {
                         info.setAction(InventoryAction.PLACE_ONE);
@@ -36,6 +37,7 @@ public class PreprocessLeft implements ItemClickPreprocess
             }
             else if(info.selectedAmt <= info.selectedMax)
             {
+                if(InventoryIdentifiers.singletonSlot(info.rawSlot, info.invView) && info.cursorAmt > 1) return;
                 info.setAction(InventoryAction.SWAP_WITH_CURSOR);
             }
         }
@@ -45,6 +47,11 @@ public class PreprocessLeft implements ItemClickPreprocess
             {
                 Map.Entry<Boolean, Boolean> allowed = InventoryIdentifiers.applicableForSlot(info.rawSlot, info.invView, info.cursor.getType());
                 if(!allowed.getKey() && !allowed.getValue()) return;
+                if(InventoryIdentifiers.singletonSlot(info.rawSlot, info.invView) && info.cursorAmt > 1)
+                {
+                    info.setAction(InventoryAction.PLACE_ONE);
+                    return;
+                }
                 if(info.cursorAmt <= info.cursorMax)
                 {
                     info.setAction(InventoryAction.PLACE_ALL);
