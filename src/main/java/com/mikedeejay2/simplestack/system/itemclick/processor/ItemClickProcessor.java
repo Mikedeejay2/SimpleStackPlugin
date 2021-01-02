@@ -20,6 +20,10 @@ public class ItemClickProcessor implements SimpleStackProcessor
         ProcessAction action = new ProcessAction();
         action.initDefault();
         addProcess(action);
+
+        ProcessInvType invType = new ProcessInvType();
+        invType.initDefault();
+        addProcess(invType);
     }
 
     public void process(ItemClickInfo info)

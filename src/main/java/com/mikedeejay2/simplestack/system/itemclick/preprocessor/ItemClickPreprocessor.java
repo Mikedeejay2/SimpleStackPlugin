@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.system.itemclick.preprocessor;
 import com.mikedeejay2.simplestack.system.SimpleStackPreprocessor;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.preprocesses.*;
+import com.mikedeejay2.simplestack.system.itemclick.processes.ProcessInvType;
 
 import java.util.*;
 
