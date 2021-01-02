@@ -1,9 +1,12 @@
 package com.mikedeejay2.simplestack.system.itemclick.preprocesses.clicktype;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.preprocesses.ItemClickPreprocess;
 import org.bukkit.event.inventory.InventoryAction;
+
+import java.util.Map;
 
 public class PreprocessLeft implements ItemClickPreprocess
 {
@@ -40,6 +43,8 @@ public class PreprocessLeft implements ItemClickPreprocess
         {
             if(info.validSlot)
             {
+                Map.Entry<Boolean, Boolean> allowed = InventoryIdentifiers.applicableForSlot(info.rawSlot, info.invView, info.cursor.getType());
+                if(!allowed.getKey() && !allowed.getValue()) return;
                 if(info.cursorAmt <= info.cursorMax)
                 {
                     info.setAction(InventoryAction.PLACE_ALL);

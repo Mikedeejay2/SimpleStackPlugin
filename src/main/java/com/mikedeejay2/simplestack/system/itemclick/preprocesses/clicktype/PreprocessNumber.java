@@ -1,10 +1,13 @@
 package com.mikedeejay2.simplestack.system.itemclick.preprocesses.clicktype;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.preprocesses.ItemClickPreprocess;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Map;
 
 public class PreprocessNumber implements ItemClickPreprocess
 {
@@ -14,6 +17,8 @@ public class PreprocessNumber implements ItemClickPreprocess
         ItemStack hotbarItem = info.bottomInv.getItem(info.hotbar);
         if(hotbarItem != null && hotbarItem.getType() == Material.AIR) hotbarItem = null;
         boolean   hotbarNull = hotbarItem == null;
+        Map.Entry<Boolean, Boolean> allowed = InventoryIdentifiers.applicableForSlot(info.rawSlot, info.invView, hotbarItem.getType());
+        if(!allowed.getKey() && !allowed.getValue()) return;
         if(info.clickedTop)
         {
             if(!hotbarNull && !info.selectedNull)
