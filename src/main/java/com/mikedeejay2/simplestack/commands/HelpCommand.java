@@ -1,6 +1,6 @@
 package com.mikedeejay2.simplestack.commands;
 
-import com.mikedeejay2.mikedeejay2lib.commands.AbstractSubCommand;
+import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
 import com.mikedeejay2.mikedeejay2lib.commands.CommandManager;
 import com.mikedeejay2.mikedeejay2lib.text.language.LangManager;
 import com.mikedeejay2.simplestack.Simplestack;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
  *
  * @author Mikedeejay2
  */
-public class HelpCommand extends AbstractSubCommand
+public class HelpCommand implements SubCommand
 {
     private final Simplestack plugin;
 

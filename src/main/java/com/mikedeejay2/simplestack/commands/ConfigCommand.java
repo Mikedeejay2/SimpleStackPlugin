@@ -1,6 +1,6 @@
 package com.mikedeejay2.simplestack.commands;
 
-import com.mikedeejay2.mikedeejay2lib.commands.AbstractSubCommand;
+import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
 import com.mikedeejay2.mikedeejay2lib.gui.manager.PlayerGUI;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.simplestack.Simplestack;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  *
  * @author Mikedeejay2
  */
-public class ConfigCommand extends AbstractSubCommand
+public class ConfigCommand implements SubCommand
 {
     private final Simplestack plugin;
 

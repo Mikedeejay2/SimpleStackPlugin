@@ -1,6 +1,6 @@
 package com.mikedeejay2.simplestack.commands;
 
-import com.mikedeejay2.mikedeejay2lib.commands.AbstractSubCommand;
+import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Material;
@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author Mikedeejay2
  */
-public class SetAmountCommand extends AbstractSubCommand
+public class SetAmountCommand implements SubCommand
 {
     private final Simplestack plugin;
 
