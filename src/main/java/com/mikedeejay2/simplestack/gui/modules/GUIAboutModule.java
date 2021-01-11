@@ -7,7 +7,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUIOpenNewEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
-import com.mikedeejay2.mikedeejay2lib.util.head.Base64Heads;
+import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemCreator;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.gui.GUICreator;
@@ -203,7 +203,7 @@ public class GUIAboutModule implements GUIModule
     private void genBackButton(Player player, GUILayer textLayer)
     {
         AnimatedGUIItem backItem = new AnimatedGUIItem(null, false, 60);
-        backItem.addFrame(ItemCreator.createHeadItem(Base64Heads.ARROW_BACKWARD_WHITE, 1, "&f" + plugin.langManager().getTextLib(player, "gui.modules.navigator.backward")), 1);
+        backItem.addFrame(ItemCreator.createHeadItem(Base64Head.ARROW_BACKWARD_WHITE.get(), 1, "&f" + plugin.langManager().getTextLib(player, "gui.modules.navigator.backward")), 1);
         backItem.addEvent(new GUIOpenNewEvent(plugin, () -> GUICreator.createMainGUI(plugin, player)));
         textLayer.setItem(6, 5, backItem);
     }
@@ -219,12 +219,12 @@ public class GUIAboutModule implements GUIModule
     {
         int start = 40;
         AnimatedGUIItem item1 = new AnimatedGUIItem(null, false, start);
-        item1.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 0, 1 ,MovementType.OVERRIDE_ITEM, true, 2);
+        item1.addFrame(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME), 0, 1 ,MovementType.OVERRIDE_ITEM, true, 2);
         item1.addFrame(0, 1 ,MovementType.OVERRIDE_ITEM, true, 2);
         item1.addFrame(0, 1 ,MovementType.OVERRIDE_ITEM, true, 2);
         item1.addFrame(0, 1 ,MovementType.OVERRIDE_ITEM, true, 2);
         AnimatedGUIItem item2 = new AnimatedGUIItem(null, false, start);
-        item2.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 0, -1 ,MovementType.OVERRIDE_ITEM, true, 2);
+        item2.addFrame(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME), 0, -1 ,MovementType.OVERRIDE_ITEM, true, 2);
         item2.addFrame(0, -1 ,MovementType.OVERRIDE_ITEM, true, 2);
         item2.addFrame(0, -1 ,MovementType.OVERRIDE_ITEM, true, 2);
         item2.addFrame(0, -1 ,MovementType.OVERRIDE_ITEM, true, 2);
@@ -253,93 +253,93 @@ public class GUIAboutModule implements GUIModule
     private void genText(GUILayer textLayer)
     {
         AnimatedGUIItem item1 = new AnimatedGUIItem(null, false, 10);
-        item1.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 5);
+        item1.addFrame(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
         item1.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
-        item1.addFrame(ItemCreator.createHeadItem(Base64Heads.S_WHITE, 1, GUIContainer.EMPTY_NAME), 5);
-        item1.addFrame(ItemCreator.createHeadItem(Base64Heads.S_RED, 1, GUIContainer.EMPTY_NAME), 1);
-        item1.addFrame(ItemCreator.createHeadItem(Base64Heads.S_ORANGE, 1, GUIContainer.EMPTY_NAME), 1);
-        item1.addFrame(ItemCreator.createHeadItem(Base64Heads.S_YELLOW, 1, GUIContainer.EMPTY_NAME), 1);
+        item1.addFrame(ItemCreator.createHeadItem(Base64Head.S_WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
+        item1.addFrame(ItemCreator.createHeadItem(Base64Head.S_RED.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item1.addFrame(ItemCreator.createHeadItem(Base64Head.S_ORANGE.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item1.addFrame(ItemCreator.createHeadItem(Base64Head.S_YELLOW.get(), 1, GUIContainer.EMPTY_NAME), 1);
 
         AnimatedGUIItem item2 = new AnimatedGUIItem(null, false, 11);
-        item2.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 5);
+        item2.addFrame(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
         item2.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
-        item2.addFrame(ItemCreator.createHeadItem(Base64Heads.I_WHITE, 1, GUIContainer.EMPTY_NAME), 5);
-        item2.addFrame(ItemCreator.createHeadItem(Base64Heads.I_RED, 1, GUIContainer.EMPTY_NAME), 1);
-        item2.addFrame(ItemCreator.createHeadItem(Base64Heads.I_ORANGE, 1, GUIContainer.EMPTY_NAME), 1);
-        item2.addFrame(ItemCreator.createHeadItem(Base64Heads.I_YELLOW, 1, GUIContainer.EMPTY_NAME), 1);
+        item2.addFrame(ItemCreator.createHeadItem(Base64Head.I_WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
+        item2.addFrame(ItemCreator.createHeadItem(Base64Head.I_RED.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item2.addFrame(ItemCreator.createHeadItem(Base64Head.I_ORANGE.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item2.addFrame(ItemCreator.createHeadItem(Base64Head.I_YELLOW.get(), 1, GUIContainer.EMPTY_NAME), 1);
 
         AnimatedGUIItem item3 = new AnimatedGUIItem(null, false, 12);
-        item3.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 5);
+        item3.addFrame(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
         item3.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
-        item3.addFrame(ItemCreator.createHeadItem(Base64Heads.M_WHITE, 1, GUIContainer.EMPTY_NAME), 5);
-        item3.addFrame(ItemCreator.createHeadItem(Base64Heads.M_RED, 1, GUIContainer.EMPTY_NAME), 1);
-        item3.addFrame(ItemCreator.createHeadItem(Base64Heads.M_ORANGE, 1, GUIContainer.EMPTY_NAME), 1);
-        item3.addFrame(ItemCreator.createHeadItem(Base64Heads.M_YELLOW, 1, GUIContainer.EMPTY_NAME), 1);
+        item3.addFrame(ItemCreator.createHeadItem(Base64Head.M_WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
+        item3.addFrame(ItemCreator.createHeadItem(Base64Head.M_RED.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item3.addFrame(ItemCreator.createHeadItem(Base64Head.M_ORANGE.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item3.addFrame(ItemCreator.createHeadItem(Base64Head.M_YELLOW.get(), 1, GUIContainer.EMPTY_NAME), 1);
 
         AnimatedGUIItem item4 = new AnimatedGUIItem(null, false, 13);
-        item4.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 5);
+        item4.addFrame(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
         item4.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
-        item4.addFrame(ItemCreator.createHeadItem(Base64Heads.P_WHITE, 1, GUIContainer.EMPTY_NAME), 5);
-        item4.addFrame(ItemCreator.createHeadItem(Base64Heads.P_RED, 1, GUIContainer.EMPTY_NAME), 1);
-        item4.addFrame(ItemCreator.createHeadItem(Base64Heads.P_ORANGE, 1, GUIContainer.EMPTY_NAME), 1);
-        item4.addFrame(ItemCreator.createHeadItem(Base64Heads.P_YELLOW, 1, GUIContainer.EMPTY_NAME), 1);
+        item4.addFrame(ItemCreator.createHeadItem(Base64Head.P_WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
+        item4.addFrame(ItemCreator.createHeadItem(Base64Head.P_RED.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item4.addFrame(ItemCreator.createHeadItem(Base64Head.P_ORANGE.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item4.addFrame(ItemCreator.createHeadItem(Base64Head.P_YELLOW.get(), 1, GUIContainer.EMPTY_NAME), 1);
 
         AnimatedGUIItem item5 = new AnimatedGUIItem(null, false, 14);
-        item5.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 5);
+        item5.addFrame(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
         item5.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
-        item5.addFrame(ItemCreator.createHeadItem(Base64Heads.L_WHITE, 1, GUIContainer.EMPTY_NAME), 5);
-        item5.addFrame(ItemCreator.createHeadItem(Base64Heads.L_RED, 1, GUIContainer.EMPTY_NAME), 1);
-        item5.addFrame(ItemCreator.createHeadItem(Base64Heads.L_ORANGE, 1, GUIContainer.EMPTY_NAME), 1);
-        item5.addFrame(ItemCreator.createHeadItem(Base64Heads.L_YELLOW, 1, GUIContainer.EMPTY_NAME), 1);
+        item5.addFrame(ItemCreator.createHeadItem(Base64Head.L_WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
+        item5.addFrame(ItemCreator.createHeadItem(Base64Head.L_RED.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item5.addFrame(ItemCreator.createHeadItem(Base64Head.L_ORANGE.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item5.addFrame(ItemCreator.createHeadItem(Base64Head.L_YELLOW.get(), 1, GUIContainer.EMPTY_NAME), 1);
 
         AnimatedGUIItem item6 = new AnimatedGUIItem(null, false, 15);
-        item6.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 5);
+        item6.addFrame(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
         item6.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
-        item6.addFrame(ItemCreator.createHeadItem(Base64Heads.E_WHITE, 1, GUIContainer.EMPTY_NAME), 5);
-        item6.addFrame(ItemCreator.createHeadItem(Base64Heads.E_RED, 1, GUIContainer.EMPTY_NAME), 1);
-        item6.addFrame(ItemCreator.createHeadItem(Base64Heads.E_ORANGE, 1, GUIContainer.EMPTY_NAME), 1);
-        item6.addFrame(ItemCreator.createHeadItem(Base64Heads.E_YELLOW, 1, GUIContainer.EMPTY_NAME), 1);
+        item6.addFrame(ItemCreator.createHeadItem(Base64Head.E_WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
+        item6.addFrame(ItemCreator.createHeadItem(Base64Head.E_RED.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item6.addFrame(ItemCreator.createHeadItem(Base64Head.E_ORANGE.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item6.addFrame(ItemCreator.createHeadItem(Base64Head.E_YELLOW.get(), 1, GUIContainer.EMPTY_NAME), 1);
 
 
         AnimatedGUIItem item7 = new AnimatedGUIItem(null, false, 20);
-        item7.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 5);
+        item7.addFrame(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
         item7.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
-        item7.addFrame(ItemCreator.createHeadItem(Base64Heads.S_WHITE, 1, GUIContainer.EMPTY_NAME), 5);
-        item7.addFrame(ItemCreator.createHeadItem(Base64Heads.S_BLACK, 1, GUIContainer.EMPTY_NAME), 1);
-        item7.addFrame(ItemCreator.createHeadItem(Base64Heads.S_RED, 1, GUIContainer.EMPTY_NAME), 1);
-        item7.addFrame(ItemCreator.createHeadItem(Base64Heads.S_ORANGE, 1, GUIContainer.EMPTY_NAME), 1);
+        item7.addFrame(ItemCreator.createHeadItem(Base64Head.S_WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
+        item7.addFrame(ItemCreator.createHeadItem(Base64Head.S_BLACK.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item7.addFrame(ItemCreator.createHeadItem(Base64Head.S_RED.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item7.addFrame(ItemCreator.createHeadItem(Base64Head.S_ORANGE.get(), 1, GUIContainer.EMPTY_NAME), 1);
 
         AnimatedGUIItem item8 = new AnimatedGUIItem(null, false, 19);
-        item8.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 5);
+        item8.addFrame(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
         item8.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
-        item8.addFrame(ItemCreator.createHeadItem(Base64Heads.T_WHITE, 1, GUIContainer.EMPTY_NAME), 5);
-        item8.addFrame(ItemCreator.createHeadItem(Base64Heads.T_BLACK, 1, GUIContainer.EMPTY_NAME), 1);
-        item8.addFrame(ItemCreator.createHeadItem(Base64Heads.T_RED, 1, GUIContainer.EMPTY_NAME), 1);
-        item8.addFrame(ItemCreator.createHeadItem(Base64Heads.T_ORANGE, 1, GUIContainer.EMPTY_NAME), 1);
+        item8.addFrame(ItemCreator.createHeadItem(Base64Head.T_WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
+        item8.addFrame(ItemCreator.createHeadItem(Base64Head.T_BLACK.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item8.addFrame(ItemCreator.createHeadItem(Base64Head.T_RED.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item8.addFrame(ItemCreator.createHeadItem(Base64Head.T_ORANGE.get(), 1, GUIContainer.EMPTY_NAME), 1);
 
         AnimatedGUIItem item9 = new AnimatedGUIItem(null, false, 18);
-        item9.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 5);
+        item9.addFrame(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
         item9.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
-        item9.addFrame(ItemCreator.createHeadItem(Base64Heads.A_WHITE, 1, GUIContainer.EMPTY_NAME), 5);
-        item9.addFrame(ItemCreator.createHeadItem(Base64Heads.A_BLACK, 1, GUIContainer.EMPTY_NAME), 1);
-        item9.addFrame(ItemCreator.createHeadItem(Base64Heads.A_RED, 1, GUIContainer.EMPTY_NAME), 1);
-        item9.addFrame(ItemCreator.createHeadItem(Base64Heads.A_ORANGE, 1, GUIContainer.EMPTY_NAME), 1);
+        item9.addFrame(ItemCreator.createHeadItem(Base64Head.A_WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
+        item9.addFrame(ItemCreator.createHeadItem(Base64Head.A_BLACK.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item9.addFrame(ItemCreator.createHeadItem(Base64Head.A_RED.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item9.addFrame(ItemCreator.createHeadItem(Base64Head.A_ORANGE.get(), 1, GUIContainer.EMPTY_NAME), 1);
 
         AnimatedGUIItem item10 = new AnimatedGUIItem(null, false, 17);
-        item10.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 5);
+        item10.addFrame(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
         item10.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
-        item10.addFrame(ItemCreator.createHeadItem(Base64Heads.C_WHITE, 1, GUIContainer.EMPTY_NAME), 5);
-        item10.addFrame(ItemCreator.createHeadItem(Base64Heads.C_BLACK, 1, GUIContainer.EMPTY_NAME), 1);
-        item10.addFrame(ItemCreator.createHeadItem(Base64Heads.C_RED, 1, GUIContainer.EMPTY_NAME), 1);
-        item10.addFrame(ItemCreator.createHeadItem(Base64Heads.C_ORANGE, 1, GUIContainer.EMPTY_NAME), 1);
+        item10.addFrame(ItemCreator.createHeadItem(Base64Head.C_WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
+        item10.addFrame(ItemCreator.createHeadItem(Base64Head.C_BLACK.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item10.addFrame(ItemCreator.createHeadItem(Base64Head.C_RED.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item10.addFrame(ItemCreator.createHeadItem(Base64Head.C_ORANGE.get(), 1, GUIContainer.EMPTY_NAME), 1);
 
         AnimatedGUIItem item11 = new AnimatedGUIItem(null, false, 16);
-        item11.addFrame(ItemCreator.createHeadItem(Base64Heads.WHITE, 1, GUIContainer.EMPTY_NAME), 5);
+        item11.addFrame(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
         item11.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
-        item11.addFrame(ItemCreator.createHeadItem(Base64Heads.K_WHITE, 1, GUIContainer.EMPTY_NAME), 5);
-        item11.addFrame(ItemCreator.createHeadItem(Base64Heads.K_BLACK, 1, GUIContainer.EMPTY_NAME), 1);
-        item11.addFrame(ItemCreator.createHeadItem(Base64Heads.K_RED, 1, GUIContainer.EMPTY_NAME), 1);
-        item11.addFrame(ItemCreator.createHeadItem(Base64Heads.K_ORANGE, 1, GUIContainer.EMPTY_NAME), 1);
+        item11.addFrame(ItemCreator.createHeadItem(Base64Head.K_WHITE.get(), 1, GUIContainer.EMPTY_NAME), 5);
+        item11.addFrame(ItemCreator.createHeadItem(Base64Head.K_BLACK.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item11.addFrame(ItemCreator.createHeadItem(Base64Head.K_RED.get(), 1, GUIContainer.EMPTY_NAME), 1);
+        item11.addFrame(ItemCreator.createHeadItem(Base64Head.K_ORANGE.get(), 1, GUIContainer.EMPTY_NAME), 1);
 
         textLayer.setItem(3, 2, item1);
         textLayer.setItem(3, 3, item2);
@@ -444,19 +444,19 @@ public class GUIAboutModule implements GUIModule
         switch(randNum)
         {
             case 0:
-                str = Base64Heads.BLUE;
+                str = Base64Head.BLUE.get();
                 break;
             case 1:
-                str = Base64Heads.PURPLE;
+                str = Base64Head.PURPLE.get();
                 break;
             case 2:
-                str = Base64Heads.PINK;
+                str = Base64Head.PINK.get();
                 break;
             case 3:
-                str = Base64Heads.MAGENTA;
+                str = Base64Head.MAGENTA.get();
                 break;
             case 4:
-                str = Base64Heads.LIGHT_BLUE;
+                str = Base64Head.LIGHT_BLUE.get();
                 break;
         }
         ItemStack stack = ItemCreator.createHeadItem(str, 1, GUIContainer.EMPTY_NAME);

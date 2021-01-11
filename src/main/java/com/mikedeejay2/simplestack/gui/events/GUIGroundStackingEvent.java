@@ -4,7 +4,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
 import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
-import com.mikedeejay2.mikedeejay2lib.util.head.Base64Heads;
+import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemCreator;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
@@ -41,15 +41,15 @@ public class GUIGroundStackingEvent implements GUIEvent
         boolean newHopper = !config.processGroundItems();
         if(newHopper)
         {
-            item.setItem(ItemCreator.createHeadItem(Base64Heads.GREEN, 1,
-                    "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.ground_stacking_select"),
-                    "",
-                    "&a&l⊳ " + plugin.langManager().getTextLib(player, "generic.enabled"),
-                    "&7  " + plugin.langManager().getTextLib(player, "generic.disabled")));
+            item.setItem(ItemCreator.createHeadItem(Base64Head.GREEN.get(), 1,
+                                                    "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.ground_stacking_select"),
+                                                    "",
+                                                    "&a&l⊳ " + plugin.langManager().getTextLib(player, "generic.enabled"),
+                                                    "&7  " + plugin.langManager().getTextLib(player, "generic.disabled")));
         }
         else
         {
-            item.setItem(ItemCreator.createHeadItem(Base64Heads.RED, 1,
+            item.setItem(ItemCreator.createHeadItem(Base64Head.RED.get(), 1,
                     "&b&l" + plugin.langManager().getText(player, "simplestack.gui.config.ground_stacking_select"),
                     "",
                     "&7  " + plugin.langManager().getTextLib(player, "generic.enabled"),

@@ -4,7 +4,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
 import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
-import com.mikedeejay2.mikedeejay2lib.util.head.Base64Heads;
+import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemCreator;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
@@ -43,7 +43,8 @@ public class GUISwitchListModeEvent implements GUIEvent
         config.setListMode(config.getListMode() == ListMode.BLACKLIST ? ListMode.WHITELIST : ListMode.BLACKLIST);
         if(plugin.config().getListMode() == ListMode.BLACKLIST)
         {
-            switchListMode.setItem(ItemCreator.createHeadItem(Base64Heads.X_BLACK, 1,
+            switchListMode.setItem(ItemCreator.createHeadItem(
+                    Base64Head.X_BLACK.get(), 1,
                     "&b&l" + plugin.langManager().getText(player, "simplestack.list_type.blacklist"),
                     "&7" + plugin.langManager().getText(player, "simplestack.gui.item_types.change_mode_whitelist"),
                     "",
@@ -52,7 +53,8 @@ public class GUISwitchListModeEvent implements GUIEvent
         }
         else
         {
-            switchListMode.setItem(ItemCreator.createHeadItem(Base64Heads.CHECKMARK_WHITE, 1,
+            switchListMode.setItem(ItemCreator.createHeadItem(
+                    Base64Head.CHECKMARK_WHITE.get(), 1,
                     "&b&l" + plugin.langManager().getText(player, "simplestack.list_type.whitelist"),
                     "&7" + plugin.langManager().getText(player, "simplestack.gui.item_types.change_mode_blacklist"),
                     "",

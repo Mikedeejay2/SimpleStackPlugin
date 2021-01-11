@@ -9,7 +9,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.modules.animation.GUIAnimationModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIAnimStrips;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.mikedeejay2lib.util.chat.Chat;
-import com.mikedeejay2.mikedeejay2lib.util.head.Base64Heads;
+import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemCreator;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.gui.events.GUISwitchLangEvent;
@@ -90,39 +90,39 @@ public class GUICreator
     {
         List<GUIItem> items = new ArrayList<>();
         String clickMessage = Chat.chat("&f" + plugin.langManager().getText(player, "simplestack.gui.language.language_select"));
-        GUIItem english = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_UNITED_STATES, 1,
-                "&bEnglish", clickMessage, Chat.chat("&7en_us")));
+        GUIItem english = new GUIItem(ItemCreator.createHeadItem(Base64Head.FLAG_UNITED_STATES.get(), 1,
+                 "&bEnglish", clickMessage, Chat.chat("&7en_us")));
         english.addEvent(new GUISwitchLangEvent(plugin, "en_us"));
 
-        GUIItem simplifiedChinese = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_CHINA, 1,
+        GUIItem simplifiedChinese = new GUIItem(ItemCreator.createHeadItem(Base64Head.FLAG_CHINA.get(), 1,
                 "&b简体中文 (Simplified Chinese)", clickMessage, Chat.chat("&7zh_cn")));
         simplifiedChinese.addEvent(new GUISwitchLangEvent(plugin, "zh_cn"));
 
-        GUIItem korean = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_SOUTH_KOREA, 1,
+        GUIItem korean = new GUIItem(ItemCreator.createHeadItem(Base64Head.FLAG_SOUTH_KOREA.get(), 1,
                 "&b한국어 (Korean)", clickMessage, Chat.chat("&7ko_kr")));
         korean.addEvent(new GUISwitchLangEvent(plugin, "ko_kr"));
 
-        GUIItem argentina = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_ARGENTINA, 1,
+        GUIItem argentina = new GUIItem(ItemCreator.createHeadItem(Base64Head.FLAG_ARGENTINA.get(), 1,
                 "&bEspañol (Argentinian Spanish)", clickMessage, Chat.chat("&7es_ar")));
         argentina.addEvent(new GUISwitchLangEvent(plugin, "es_ar"));
 
-        GUIItem chilean = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_CHILE, 1,
+        GUIItem chilean = new GUIItem(ItemCreator.createHeadItem(Base64Head.FLAG_CHILE.get(), 1,
                 "&bEspañol (Chilean Spanish)", clickMessage, Chat.chat("&7es_cl")));
         chilean.addEvent(new GUISwitchLangEvent(plugin, "es_cl"));
 
-        GUIItem mexican = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_MEXICO, 1,
+        GUIItem mexican = new GUIItem(ItemCreator.createHeadItem(Base64Head.FLAG_MEXICO.get(), 1,
                 "&bEspañol (Mexican Spanish)", clickMessage, Chat.chat("&7es_mx")));
         mexican.addEvent(new GUISwitchLangEvent(plugin, "es_mx"));
 
-        GUIItem uruguay = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_URUGUAY, 1,
+        GUIItem uruguay = new GUIItem(ItemCreator.createHeadItem(Base64Head.FLAG_URUGUAY.get(), 1,
                 "&bEspañol (Uruguayan Spanish)", clickMessage, Chat.chat("&7es_uy")));
         uruguay.addEvent(new GUISwitchLangEvent(plugin, "es_uy"));
 
-        GUIItem venezuela = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_VENEZUELA, 1,
+        GUIItem venezuela = new GUIItem(ItemCreator.createHeadItem(Base64Head.FLAG_VENEZUELA.get(), 1,
                 "&bEspañol (Venezuelan Spanish)", clickMessage, Chat.chat("&7es_ve")));
         venezuela.addEvent(new GUISwitchLangEvent(plugin, "es_ve"));
 
-        GUIItem german = new GUIItem(ItemCreator.createHeadItem(Base64Heads.FLAG_GERMANY, 1,
+        GUIItem german = new GUIItem(ItemCreator.createHeadItem(Base64Head.FLAG_GERMANY.get(), 1,
                 "&bDeutsch (German)", clickMessage, Chat.chat("&7de_de")));
         german.addEvent(new GUISwitchLangEvent(plugin, "de_de"));
 
@@ -166,7 +166,7 @@ public class GUICreator
 
         newLangItem.addFrame(curItem, 10);
         String[] lore = curItemMeta.getLore().toArray(new String[0]);
-        newLangItem.addFrame(ItemCreator.createHeadItem(Base64Heads.CONCRETE_LIME, 1, curItemMeta.getDisplayName(), lore), 10);
+        newLangItem.addFrame(ItemCreator.createHeadItem(Base64Head.CONCRETE_LIME.get(), 1, curItemMeta.getDisplayName(), lore), 10);
         items.remove(index);
         items.add(index, newLangItem);
         return items;
