@@ -22,12 +22,6 @@ public class PreprocessShift implements ItemClickPreprocess
     public void invoke(ItemClickInfo info)
     {
         if(info.selectedNull) return;
-        ItemStack selectedItem = info.selected;
-        Inventory inv = info.clickedInv;
-        if(inv == null) return;
-        if(CheckUtils.canStoreItem(plugin, inv, selectedItem))
-        {
-            info.setAction(InventoryAction.MOVE_TO_OTHER_INVENTORY);
-        }
+        info.setAction(InventoryAction.MOVE_TO_OTHER_INVENTORY);
     }
 }
