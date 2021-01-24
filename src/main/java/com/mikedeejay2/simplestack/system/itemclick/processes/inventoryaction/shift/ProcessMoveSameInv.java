@@ -20,13 +20,16 @@ public class ProcessMoveSameInv implements ItemClickProcess
 
         int start = 0;
         int end   = toItems.length;
-        if(info.slotType == InventoryType.SlotType.QUICKBAR)
+        if(info.clickedInv.getType() == InventoryType.PLAYER)
         {
-            start = 9;
-        }
-        else
-        {
-            end = 9;
+            if(info.slotType == InventoryType.SlotType.QUICKBAR)
+            {
+                start = 9;
+            }
+            else
+            {
+                end = 9;
+            }
         }
         for(int i = start; i < end; ++i)
         {
