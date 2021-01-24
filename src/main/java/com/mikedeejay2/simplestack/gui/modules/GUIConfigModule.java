@@ -201,46 +201,10 @@ public class GUIConfigModule implements GUIModule
      */
     private GUIItem getGUIItemItemTypeAmountList(Player player)
     {
-        AnimatedGUIItem itemTypeAmountList = new AnimatedGUIItem(ItemCreator.createItem(Material.WATER_BUCKET, 23,
+        AnimatedGUIItem itemTypeAmountList = new AnimatedGUIItem(ItemCreator.createItem(Material.BARRIER, 1,
                 "&b&l" + plugin.langManager().getText(player, "simplestack.gui.item_type_amts.title"),
                 "&f" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_description")), true);
         final Map<Material, Integer> itemAmounts = plugin.config().getItemAmounts();
-        if(itemAmounts.size() > 0 && player.getLocale().startsWith("en_"))
-        {
-            Iterator<Map.Entry<Material, Integer>> iter1 = itemAmounts.entrySet().iterator();
-            List<String> lore = itemTypeAmountList.getLore() == null ? new ArrayList<>() : itemTypeAmountList.getLore();
-            lore.add("");
-            for(int i = 0; i < Math.min(LIST_PREVIEW_AMOUNT, itemAmounts.size()); ++i)
-            {
-                Map.Entry<Material, Integer> entry = iter1.next();
-                Material material = entry.getKey();
-                if(material == null) continue;
-                int amount = entry.getValue();
-                String name = WordUtils.capitalize(material.toString().replace("_", " ").toLowerCase());
-                lore.add(Chat.chat("&7" + name + " x" + amount));
-            }
-            if(itemAmounts.size() > LIST_PREVIEW_AMOUNT)
-            {
-                lore.add(Chat.chat("&7" + plugin.langManager().getText(player, "simplestack.gui.config.preview_list_more",
-                        new String[]{"AMT"},
-                        new String[]{String.valueOf((itemAmounts.size() - LIST_PREVIEW_AMOUNT))})));
-            }
-            itemTypeAmountList.setLore(lore);
-            Iterator<Map.Entry<Material, Integer>> iter2 = itemAmounts.entrySet().iterator();
-            for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, itemAmounts.size()); ++i)
-            {
-                Map.Entry<Material, Integer> entry = iter2.next();
-                Material material = entry.getKey();
-                if(material == null) continue;
-                int amount = entry.getValue();
-                ItemStack item = new ItemStack(material, amount);
-                ItemMeta itemMeta = item.getItemMeta();
-                itemMeta.setDisplayName(itemTypeAmountList.getName());
-                itemMeta.setLore(itemTypeAmountList.getLore());
-                item.setItemMeta(itemMeta);
-                itemTypeAmountList.addFrame(item, 20);
-            }
-        }
         itemTypeAmountList.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.item_type_amts.title"), 6);
             GUIBorderModule border = new GUIBorderModule();
@@ -401,40 +365,12 @@ public class GUIConfigModule implements GUIModule
      */
     private GUIItem getGUIItemUniqueItemList(Player player)
     {
-        AnimatedGUIItem uniqueItemList = new AnimatedGUIItem(ItemCreator.createItem(Material.CYAN_CONCRETE_POWDER, 1,
+        AnimatedGUIItem uniqueItemList = new AnimatedGUIItem(ItemCreator.createItem(Material.BARRIER, 1,
                 "&b&l" + plugin.langManager().getText(player, "simplestack.gui.unique_items.title"),
                 "&f" + plugin.langManager().getText(player, "simplestack.gui.config.unique_item_desc_l1"),
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.unique_item_desc_l2"),
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.unique_item_desc_l3")), true);
         final List<ItemStack> uniqueItems = plugin.config().getUniqueItemList();
-        if(uniqueItems.size() > 0 && player.getLocale().startsWith("en_"))
-        {
-            List<String> lore = uniqueItemList.getLore() == null ? new ArrayList<>() : uniqueItemList.getLore();
-            lore.add("");
-            for(int i = 0; i < Math.min(LIST_PREVIEW_AMOUNT, uniqueItems.size()); ++i)
-            {
-                ItemStack item = uniqueItems.get(i);
-                String name = WordUtils.capitalize(item.getType().toString().replace("_", " ").toLowerCase());
-                lore.add(Chat.chat("&7" + name));
-            }
-            if(uniqueItems.size() > LIST_PREVIEW_AMOUNT)
-            {
-                lore.add(Chat.chat("&7" + plugin.langManager().getText(player, "simplestack.gui.config.preview_list_more",
-                        new String[]{"AMT"},
-                        new String[]{String.valueOf((uniqueItems.size() - LIST_PREVIEW_AMOUNT))})));
-            }
-            uniqueItemList.setLore(lore);
-            for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, uniqueItems.size()); ++i)
-            {
-                ItemStack item = uniqueItems.get(i);
-                ItemStack newItem = item.clone();
-                ItemMeta itemMeta = newItem.getItemMeta();
-                itemMeta.setDisplayName(uniqueItemList.getName());
-                itemMeta.setLore(uniqueItemList.getLore());
-                newItem.setItemMeta(itemMeta);
-                uniqueItemList.addFrame(newItem, 20);
-            }
-        }
         uniqueItemList.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.unique_items.title"), 6);
             GUIBorderModule border = new GUIBorderModule();
@@ -473,38 +409,12 @@ public class GUIConfigModule implements GUIModule
      */
     private GUIItem getGUIItemItemTypeList(Player player)
     {
-        AnimatedGUIItem itemTypeList = new AnimatedGUIItem(ItemCreator.createItem(Material.ENDER_PEARL, 1,
+        AnimatedGUIItem itemTypeList = new AnimatedGUIItem(ItemCreator.createItem(Material.BARRIER, 1,
                 "&b&l" + plugin.langManager().getText(player, "simplestack.gui.item_types.title"),
                 "&f" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_desc_l1"),
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_desc_l2"),
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_desc_l3")), true);
         final List<Material> materialItems = plugin.config().getMaterialList();
-        if(materialItems.size() > 0 && player.getLocale().startsWith("en_"))
-        {
-            List<String> lore = itemTypeList.getLore() == null ? new ArrayList<>() : itemTypeList.getLore();
-            lore.add("");
-            for(int i = 0; i < Math.min(LIST_PREVIEW_AMOUNT, materialItems.size()); ++i)
-            {
-                Material material = materialItems.get(i);
-                String name = WordUtils.capitalize(material.toString().replace("_", " ").toLowerCase());
-                lore.add(Chat.chat("&7" + name));
-            }
-            if(materialItems.size() > LIST_PREVIEW_AMOUNT)
-            {
-                lore.add(Chat.chat("&7and " + (materialItems.size() - LIST_PREVIEW_AMOUNT) + " more..."));
-            }
-            itemTypeList.setLore(lore);
-            for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, materialItems.size()); ++i)
-            {
-                Material material = materialItems.get(i);
-                ItemStack item = new ItemStack(material);
-                ItemMeta itemMeta = item.getItemMeta();
-                itemMeta.setDisplayName(itemTypeList.getName());
-                itemMeta.setLore(itemTypeList.getLore());
-                item.setItemMeta(itemMeta);
-                itemTypeList.addFrame(item, 20);
-            }
-        }
         itemTypeList.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.item_types.title"), 6);
             GUIBorderModule border = new GUIBorderModule();
