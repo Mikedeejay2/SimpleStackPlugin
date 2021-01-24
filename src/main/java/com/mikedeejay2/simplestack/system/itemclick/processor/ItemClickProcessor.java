@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.system.itemclick.processor;
 
+import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.system.SimpleStackProcessor;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.*;
@@ -8,20 +9,23 @@ import java.util.*;
 
 public class ItemClickProcessor implements SimpleStackProcessor
 {
+    protected final Simplestack plugin;
+
     protected List<ItemClickProcess> processes;
 
-    public ItemClickProcessor()
+    public ItemClickProcessor(Simplestack plugin)
     {
+        this.plugin = plugin;
         this.processes = new ArrayList<>();
     }
 
     public void initDefault()
     {
-        ProcessAction action = new ProcessAction();
+        ProcessAction action = new ProcessAction(plugin);
         action.initDefault();
         addProcess(action);
 
-        ProcessInvType invType = new ProcessInvType();
+        ProcessInvType invType = new ProcessInvType(plugin);
         invType.initDefault();
         addProcess(invType);
     }

@@ -476,4 +476,61 @@ public final class CheckUtils
 
         }
     }
+
+    /**
+     * See whether an inventory can hold an item anywhere in its storage contents.
+     * This method accounts for item combination, proper stacking sizes, etc.
+     *
+     * @param plugin the <tt>SimpleStack</tt> main class reference (used to access config)
+     * @param inventory The <tt>Inventory</tt> to search through for an available slot
+     * @param item The item to search with
+     * @return Whether enough storage space was found for the item or not.
+     */
+    public static boolean canStoreItem(Simplestack plugin, Inventory inventory, ItemStack item)
+    {
+        ItemStack[] items = inventory.getStorageContents();
+        Material itemMaterial = item.getType();
+        int maxAmt = StackUtils.getMaxAmount(plugin, item);
+        int curAmt = item.getAmount();
+        for(int i = 0; i < items.length; ++i)
+        {
+            ItemStack curItem = items[i];
+            if(curItem == null) continue;
+            if(curItem.getType() == Material.AIR) continue;
+            if(curItem.getType() != itemMaterial) continue;
+            int itemAmt = curItem.getAmount();
+            if(itemAmt == maxAmt) continue;
+            int newAmt = itemAmt + curAmt;
+            if(newAmt > maxAmt)
+            {
+                curAmt = newAmt - maxAmt;
+            }
+            else
+            {
+                curAmt = 0;
+            }
+            if(curAmt <= 0)
+            {
+                return true;
+            }
+        }
+        for(int i = 0; i < items.length; ++i)
+        {
+            ItemStack curItem = items[i];
+            if(curItem != null && curItem.getType() != Material.AIR) continue;
+            if(curAmt > maxAmt)
+            {
+                curAmt -= maxAmt;
+            }
+            else
+            {
+                curAmt = 0;
+            }
+            if(curAmt <= 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

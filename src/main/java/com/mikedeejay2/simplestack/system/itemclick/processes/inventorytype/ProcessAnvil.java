@@ -25,25 +25,20 @@ public class ProcessAnvil implements ItemClickProcess
                 return;
         }
         System.out.println("Process Anvil");
-        ItemStack item1  = info.topInv.getItem(0);
-        ItemStack         item2  = info.topInv.getItem(1);
-        ItemStack         result = info.topInv.getItem(2);
-        if(result != null)
+        ItemStack result = info.topInv.getItem(2);
+        if(result == null) return;
+
+        ItemStack item1 = info.topInv.getItem(0);
+        ItemStack item2 = info.topInv.getItem(1);
+        boolean item1Null = item1 == null;
+        boolean item2Null = item2 == null;
+        int item1Amount = item1Null ? 0 : item1.getAmount();
+        int item2Amount = item2Null ? 0 : item2.getAmount();
+
+        if(!item1Null)
         {
-            if(item2 != null)
-            {
-                if(item2.getAmount() > item1.getAmount())
-                {
-                    result.setAmount(item1.getAmount());
-                }
-                else
-                {
-                    result.setAmount(item2.getAmount());
-                }
-                item2.setAmount(item2.getAmount() - (int) Math.ceil(result.getAmount()));
-            }
-            if(item1 != null) item1.setAmount(item1.getAmount() - (int) Math.ceil(result.getAmount()));
-            info.player.getWorld().playSound(info.player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
+
         }
+        info.player.getWorld().playSound(info.player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
     }
 }

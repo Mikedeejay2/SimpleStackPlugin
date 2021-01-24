@@ -14,12 +14,12 @@ public class ProcessMoveSameInv implements ItemClickProcess
     {
         info.player.sendMessage("Move to Same Inv");
         Inventory toInv = info.clickedBottom ? info.bottomInv : info.topInv;
-        ItemStack[] toItems = toInv.getContents();
+        ItemStack[] toItems = toInv.getStorageContents();
         Material selectedMat = info.selected.getType();
         int selectedAmt = info.selectedAmt;
 
         int start = 0;
-        int end   = toInv.getSize();
+        int end   = toItems.length;
         if(info.slotType == InventoryType.SlotType.QUICKBAR)
         {
             start = 9;

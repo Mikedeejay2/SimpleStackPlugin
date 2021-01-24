@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes;
 
+import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.inventoryaction.*;
 import org.bukkit.event.inventory.InventoryAction;
@@ -9,6 +10,8 @@ import java.util.List;
 
 public class ProcessAction implements ItemClickProcess
 {
+    protected final Simplestack plugin;
+
     protected List<ItemClickProcess> pickupAllProcesses;
     protected List<ItemClickProcess> pickupSomeProcesses;
     protected List<ItemClickProcess> pickupHalfProcesses;
@@ -27,8 +30,9 @@ public class ProcessAction implements ItemClickProcess
     protected List<ItemClickProcess> cloneStackProcesses;
     protected List<ItemClickProcess> collectToCursorProcesses;
 
-    public ProcessAction()
+    public ProcessAction(Simplestack plugin)
     {
+        this.plugin = plugin;
         pickupAllProcesses = new ArrayList<>(1);
         pickupSomeProcesses = new ArrayList<>(1);
         pickupHalfProcesses = new ArrayList<>(1);

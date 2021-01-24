@@ -17,8 +17,8 @@ public class ItemClickHandler implements SimpleStackHandler<InventoryClickEvent>
     public ItemClickHandler(Simplestack plugin)
     {
         this.plugin = plugin;
-        this.processor = new ItemClickProcessor();
-        this.preprocessor = new ItemClickPreprocessor();
+        this.processor = new ItemClickProcessor(plugin);
+        this.preprocessor = new ItemClickPreprocessor(plugin);
     }
 
     public void initDefault()

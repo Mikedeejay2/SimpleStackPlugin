@@ -1,8 +1,8 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes;
 
+import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.inventorytype.*;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryType;
 
 import java.util.ArrayList;
@@ -10,6 +10,8 @@ import java.util.List;
 
 public class ProcessInvType implements ItemClickProcess
 {
+    protected final Simplestack plugin;
+
     protected List<ItemClickProcess> chestProcesses;
     protected List<ItemClickProcess> dispenserProcesses;
     protected List<ItemClickProcess> furnaceProcesses;
@@ -25,8 +27,9 @@ public class ProcessInvType implements ItemClickProcess
     protected List<ItemClickProcess> grindstoneProcesses;
     protected List<ItemClickProcess> stonecutterProcesses;
 
-    public ProcessInvType()
+    public ProcessInvType(Simplestack plugin)
     {
+        this.plugin = plugin;
         chestProcesses = new ArrayList<>(1);
         dispenserProcesses = new ArrayList<>(1);
         furnaceProcesses = new ArrayList<>(1);

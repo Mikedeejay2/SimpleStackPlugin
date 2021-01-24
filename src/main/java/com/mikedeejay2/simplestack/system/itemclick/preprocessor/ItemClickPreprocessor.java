@@ -1,26 +1,32 @@
 package com.mikedeejay2.simplestack.system.itemclick.preprocessor;
 
+import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.system.SimpleStackPreprocessor;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.preprocesses.*;
-import com.mikedeejay2.simplestack.system.itemclick.processes.ProcessInvType;
+import com.mikedeejay2.simplestack.system.itemclick.preprocesses.global.PreprocessResultSlot;
 
 import java.util.*;
 
 public class ItemClickPreprocessor implements SimpleStackPreprocessor
 {
+    protected final Simplestack plugin;
+
     protected List<ItemClickPreprocess> processes;
 
-    public ItemClickPreprocessor()
+    public ItemClickPreprocessor(Simplestack plugin)
     {
+        this.plugin = plugin;
         this.processes = new ArrayList<>();
     }
 
     public void initDefault()
     {
-        PreprocessItemClick itemClick = new PreprocessItemClick();
+        PreprocessItemClick itemClick = new PreprocessItemClick(plugin);
         itemClick.initDefault();
         addPreprocess(itemClick);
+        PreprocessResultSlot resultSlot = new PreprocessResultSlot();
+        addPreprocess(resultSlot);
     }
 
     public void preprocess(ItemClickInfo info)

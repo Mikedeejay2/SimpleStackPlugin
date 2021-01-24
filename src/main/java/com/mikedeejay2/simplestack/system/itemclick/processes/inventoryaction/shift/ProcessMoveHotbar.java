@@ -21,11 +21,11 @@ public class ProcessMoveHotbar implements ItemClickProcess
     {
         info.player.sendMessage("Move to Hotbar");
         Inventory toInv = info.clickedBottom ? info.topInv : info.bottomInv;
-        ItemStack[] toItems = toInv.getContents();
+        ItemStack[] toItems = toInv.getStorageContents();
         Material selectedMat = info.selected.getType();
         int selectedAmt = info.selectedAmt;
         int rawStart = info.clickedBottom ? 0 : info.topInv.getSize();
-        for(int i = 0; i < toInv.getSize(); ++i)
+        for(int i = 0; i < toItems.length; ++i)
         {
             int convertedSlot = rawStart + i;
             InventoryType.SlotType slotType = info.invView.getSlotType(convertedSlot);
@@ -58,7 +58,7 @@ public class ProcessMoveHotbar implements ItemClickProcess
         for(int section = 0; section < (hotbarFix ? 2 : 1); ++section)
         {
             int start = 0;
-            int end   = toInv.getSize();
+            int end   = toItems.length;
             if(hotbarFix)
             {
                 if(section == 0)

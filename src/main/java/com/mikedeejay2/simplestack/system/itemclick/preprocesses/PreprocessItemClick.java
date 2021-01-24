@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.system.itemclick.preprocesses;
 
+import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.preprocesses.clicktype.*;
 import org.bukkit.event.inventory.ClickType;
@@ -9,6 +10,8 @@ import java.util.List;
 
 public class PreprocessItemClick implements ItemClickPreprocess
 {
+    protected final Simplestack plugin;
+
     protected List<ItemClickPreprocess> leftClickProcesses;
     protected List<ItemClickPreprocess> shiftClickProcesses;
     protected List<ItemClickPreprocess> rightClickProcesses;
@@ -18,8 +21,9 @@ public class PreprocessItemClick implements ItemClickPreprocess
     protected List<ItemClickPreprocess> dropProcesses;
     protected List<ItemClickPreprocess> controlDropProcesses;
 
-    public PreprocessItemClick()
+    public PreprocessItemClick(Simplestack plugin)
     {
+        this.plugin = plugin;
         leftClickProcesses = new ArrayList<>(1);
         shiftClickProcesses = new ArrayList<>(1);
         rightClickProcesses = new ArrayList<>(1);
@@ -33,7 +37,7 @@ public class PreprocessItemClick implements ItemClickPreprocess
     public void initDefault()
     {
         addPreprocess(ClickType.LEFT, new PreprocessLeft());
-        addPreprocess(ClickType.SHIFT_LEFT, new PreprocessShift());
+        addPreprocess(ClickType.SHIFT_LEFT, new PreprocessShift(plugin));
         addPreprocess(ClickType.RIGHT, new PreprocessRight());
         addPreprocess(ClickType.MIDDLE, new PreprocessMiddle());
         addPreprocess(ClickType.NUMBER_KEY, new PreprocessNumber());
