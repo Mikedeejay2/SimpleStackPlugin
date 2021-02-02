@@ -9,6 +9,6 @@ public class ProcessCartography implements ItemClickProcess
     public void invoke(ItemClickInfo info)
     {
         if(info.rawSlot != 2) return;
-        System.out.println("Process Cartography");
+        /* DEBUG */ System.out.println("Process Cartography");
     }
 }

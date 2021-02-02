@@ -22,7 +22,7 @@ public class ProcessSmithing implements ItemClickProcess
             default:
                 return;
         }
-        System.out.println("Process Smithing");
+        /* DEBUG */ System.out.println("Process Smithing");
         ItemStack item1  = info.topInv.getItem(0);
         ItemStack         item2  = info.topInv.getItem(1);
         ItemStack         result = info.topInv.getItem(2);

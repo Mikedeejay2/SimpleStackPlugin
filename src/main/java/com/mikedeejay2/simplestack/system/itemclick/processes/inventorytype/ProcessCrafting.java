@@ -9,6 +9,6 @@ public class ProcessCrafting implements ItemClickProcess
     public void invoke(ItemClickInfo info)
     {
         if(info.rawSlot != 0) return;
-        System.out.println("Process Crafting");
+        /* DEBUG */ System.out.println("Process Crafting");
     }
 }

@@ -58,15 +58,15 @@ public class InventoryClickListener implements Listener
         Inventory              clickedInv = event.getClickedInventory();
         if(clickType == ClickType.CREATIVE || (plugin.getMCVersion().getVersionShort() >= 16 && clickType == ClickType.SWAP_OFFHAND)) return;
         event.setCancelled(true);
-        player.sendMessage("\n\n" +
-                                   "Action: " + action + "\n" +
-                                   "ClickType: " + clickType + "\n" +
-                                   "Slot: " + slot + "\n" +
-                                   "RawSlot: " + event.getRawSlot() + "\n" +
-                                   "HotBar Slot: " + event.getHotbarButton() + "\n" +
-                                   "Selected Item: " + itemPickUp + "\n" +
-                                   "Cursor Item: " + itemPutDown + "\n" +
-                                   "Slot Type: " + slotType + "\n");
+        /* DEBUG */ player.sendMessage("\n\n" +
+           "Action: " + action + "\n" +
+           "ClickType: " + clickType + "\n" +
+           "Slot: " + slot + "\n" +
+           "RawSlot: " + event.getRawSlot() + "\n" +
+           "HotBar Slot: " + event.getHotbarButton() + "\n" +
+           "Selected Item: " + itemPickUp + "\n" +
+           "Cursor Item: " + itemPutDown + "\n" +
+           "Slot Type: " + slotType + "\n");
         handler.handle(event);
 //        if(itemPickUp == null || action.toString().contains("DROP") || clickType == ClickType.CREATIVE) return;
 //

@@ -24,7 +24,7 @@ public class ProcessAnvil implements ItemClickProcess
             default:
                 return;
         }
-        System.out.println("Process Anvil");
+        /* DEBUG */ System.out.println("Process Anvil");
         ItemStack result = info.topInv.getItem(2);
         if(result == null) return;
 

@@ -9,6 +9,6 @@ public class ProcessGrindstone implements ItemClickProcess
     public void invoke(ItemClickInfo info)
     {
         if(info.rawSlot != 2) return;
-        System.out.println("Process Grindstone");
+        /* DEBUG */ System.out.println("Process Grindstone");
     }
 }

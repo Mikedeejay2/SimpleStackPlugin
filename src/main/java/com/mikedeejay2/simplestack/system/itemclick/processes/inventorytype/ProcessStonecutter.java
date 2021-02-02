@@ -9,6 +9,6 @@ public class ProcessStonecutter implements ItemClickProcess
     public void invoke(ItemClickInfo info)
     {
         if(info.rawSlot != 1) return;
-        System.out.println("Process Stonecutter");
+        /* DEBUG */ System.out.println("Process Stonecutter");
     }
 }

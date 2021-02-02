@@ -9,6 +9,6 @@ public class ProcessMerchant implements ItemClickProcess
     public void invoke(ItemClickInfo info)
     {
         if(info.rawSlot != 2) return;
-        System.out.println("Process Merchant");
+        /* DEBUG */ System.out.println("Process Merchant");
     }
 }
