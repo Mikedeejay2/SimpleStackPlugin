@@ -2,6 +2,7 @@ package com.mikedeejay2.simplestack.system.itemclick.processes.inventorytype;
 
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
+import com.mikedeejay2.simplestack.util.CheckUtils;
 import org.bukkit.Sound;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -13,17 +14,7 @@ public class ProcessAnvil implements ItemClickProcess
     {
         Inventory inventory = info.topInv;
         if(info.rawSlot != 2) return;
-        switch(info.getAction())
-        {
-            case PICKUP_ALL:
-            case PICKUP_HALF:
-            case PICKUP_ONE:
-            case PICKUP_SOME:
-            case MOVE_TO_OTHER_INVENTORY:
-                break;
-            default:
-                return;
-        }
+        if(!CheckUtils.takeResult(info)) return;
         /* DEBUG */ System.out.println("Process Anvil");
         ItemStack result = inventory.getItem(2);
         if(result == null) return;
