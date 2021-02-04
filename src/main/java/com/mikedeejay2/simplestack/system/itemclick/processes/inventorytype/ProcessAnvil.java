@@ -5,6 +5,7 @@ import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
 import org.bukkit.Sound;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 
 public class ProcessAnvil implements ItemClickProcess
@@ -12,6 +13,8 @@ public class ProcessAnvil implements ItemClickProcess
     @Override
     public void invoke(ItemClickInfo info)
     {
+        System.out.println("-1");
+        AnvilInventory inventory = (AnvilInventory) info.topInv;
         if(info.rawSlot != 2) return;
         switch(info.getAction())
         {
@@ -25,20 +28,35 @@ public class ProcessAnvil implements ItemClickProcess
                 return;
         }
         /* DEBUG */ System.out.println("Process Anvil");
-        ItemStack result = info.topInv.getItem(2);
+        ItemStack result = inventory.getItem(2);
+        System.out.println("Result: " + result);
         if(result == null) return;
 
-        ItemStack item1 = info.topInv.getItem(0);
-        ItemStack item2 = info.topInv.getItem(1);
+        ItemStack item1 = inventory.getItem(0);
+        ItemStack item2 = inventory.getItem(1);
         boolean item1Null = item1 == null;
         boolean item2Null = item2 == null;
         int item1Amount = item1Null ? 0 : item1.getAmount();
         int item2Amount = item2Null ? 0 : item2.getAmount();
+        int amount = 1;
+        if(!item1Null && !item2Null)
+        {
+            amount = Math.min(item1Amount, item2Amount);
+        }
+        else if(!item1Null)
+        {
+            amount = item1Amount;
+        }
 
         if(!item1Null)
         {
-
+            item1.setAmount(item1Amount - amount);
         }
+        if(!item2Null)
+        {
+            item2.setAmount(item2Amount - amount);
+        }
+
         info.player.getWorld().playSound(info.player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
     }
 }
