@@ -4,6 +4,7 @@ import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.system.SimpleStackProcessor;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.*;
+import com.mikedeejay2.simplestack.system.itemclick.processes.global.ProcessResultSlot;
 
 import java.util.*;
 
@@ -28,6 +29,9 @@ public class ItemClickProcessor implements SimpleStackProcessor
         ProcessAction action = new ProcessAction(plugin);
         action.initDefault();
         addProcess(action);
+
+        ProcessResultSlot result = new ProcessResultSlot(plugin);
+        addProcess(result);
     }
 
     public void process(ItemClickInfo info)
