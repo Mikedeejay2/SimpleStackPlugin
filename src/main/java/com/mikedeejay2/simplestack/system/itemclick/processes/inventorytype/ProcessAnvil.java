@@ -3,9 +3,7 @@ package com.mikedeejay2.simplestack.system.itemclick.processes.inventorytype;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
 import org.bukkit.Sound;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.inventory.AnvilInventory;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class ProcessAnvil implements ItemClickProcess
@@ -14,7 +12,7 @@ public class ProcessAnvil implements ItemClickProcess
     public void invoke(ItemClickInfo info)
     {
         System.out.println("-1");
-        AnvilInventory inventory = (AnvilInventory) info.topInv;
+        Inventory inventory = info.topInv;
         if(info.rawSlot != 2) return;
         switch(info.getAction())
         {
