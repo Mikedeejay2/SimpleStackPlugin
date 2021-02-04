@@ -11,7 +11,6 @@ public class ProcessAnvil implements ItemClickProcess
     @Override
     public void invoke(ItemClickInfo info)
     {
-        System.out.println("-1");
         Inventory inventory = info.topInv;
         if(info.rawSlot != 2) return;
         switch(info.getAction())
@@ -27,7 +26,6 @@ public class ProcessAnvil implements ItemClickProcess
         }
         /* DEBUG */ System.out.println("Process Anvil");
         ItemStack result = inventory.getItem(2);
-        System.out.println("Result: " + result);
         if(result == null) return;
 
         ItemStack item1 = inventory.getItem(0);
