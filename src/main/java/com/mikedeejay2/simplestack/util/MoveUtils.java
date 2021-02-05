@@ -17,6 +17,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 /**
  * Utilities for moving items from one location to another
@@ -517,5 +518,20 @@ public final class MoveUtils
         }
         inputStack.setAmount(extraAmount);
         targetStack.setAmount(newAmount);
+    }
+
+    /**
+     * Method that drops an item from a player's point of view using the correct velocity.
+     *
+     * @param player The player to drop the item from
+     * @param stack The <tt>ItemStack</tt> to drop
+     */
+    public static void dropItemPlayer(Player player, ItemStack stack)
+    {
+        Location dropLoc = player.getEyeLocation();
+        Vector   lookVec = dropLoc.getDirection().multiply(1.0 / 3.0);
+        World    world   = dropLoc.getWorld();
+        Item     item    = world.dropItem(dropLoc, stack);
+        item.setVelocity(lookVec);
     }
 }

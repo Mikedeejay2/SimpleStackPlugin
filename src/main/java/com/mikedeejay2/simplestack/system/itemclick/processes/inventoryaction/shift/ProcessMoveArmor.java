@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes.inventoryaction.shift;
 
 import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
+import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
 import org.bukkit.Material;
@@ -56,7 +57,7 @@ public class ProcessMoveArmor implements ItemClickProcess
             ItemStack item = toItems[i];
             if(item == null) continue;
             if(item.getType() == Material.AIR) continue;
-            if(item.getType() != selectedMat) continue;
+            if(!ItemComparison.equalsEachOther(item, info.selected)) continue;
             int itemAmt = item.getAmount();
             if(itemAmt == info.selectedMax) continue;
             int newAmt = itemAmt + selectedAmt;

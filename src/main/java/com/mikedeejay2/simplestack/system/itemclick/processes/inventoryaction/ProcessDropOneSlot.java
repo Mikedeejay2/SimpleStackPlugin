@@ -2,6 +2,7 @@ package com.mikedeejay2.simplestack.system.itemclick.processes.inventoryaction;
 
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
+import com.mikedeejay2.simplestack.util.MoveUtils;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Item;
@@ -19,10 +20,6 @@ public class ProcessDropOneSlot implements ItemClickProcess
         ItemStack dropItem = info.selected.clone();
         dropItem.setAmount(dropAmt);
         info.selected.setAmount(extraAmt);
-        Location dropLoc = info.player.getEyeLocation();
-        Vector   lookVec = dropLoc.getDirection().multiply(1.0 / 3.0);
-        World    world   = dropLoc.getWorld();
-        Item     item    = world.dropItem(dropLoc, dropItem);
-        item.setVelocity(lookVec);
+        MoveUtils.dropItemPlayer(info.player, dropItem);
     }
 }
