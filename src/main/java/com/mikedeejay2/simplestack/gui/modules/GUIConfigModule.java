@@ -205,6 +205,20 @@ public class GUIConfigModule implements GUIModule
                 "&b&l" + plugin.langManager().getText(player, "simplestack.gui.item_type_amts.title"),
                 "&f" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_description")), true);
         final Map<Material, Integer> itemAmounts = plugin.config().getItemAmounts();
+        Iterator<Map.Entry<Material, Integer>> iter2 = itemAmounts.entrySet().iterator();
+        for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, itemAmounts.size()); ++i)
+        {
+            Map.Entry<Material, Integer> entry = iter2.next();
+            Material material = entry.getKey();
+            if(material == null) continue;
+            int amount = entry.getValue();
+            ItemStack item = new ItemStack(material, amount);
+            ItemMeta itemMeta = item.getItemMeta();
+            itemMeta.setDisplayName(itemTypeAmountList.getName());
+            itemMeta.setLore(itemTypeAmountList.getLore());
+            item.setItemMeta(itemMeta);
+            itemTypeAmountList.addFrame(item, 20);
+        }
         itemTypeAmountList.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.item_type_amts.title"), 6);
             GUIBorderModule border = new GUIBorderModule();
@@ -371,6 +385,16 @@ public class GUIConfigModule implements GUIModule
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.unique_item_desc_l2"),
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.unique_item_desc_l3")), true);
         final List<ItemStack> uniqueItems = plugin.config().getUniqueItemList();
+        for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, uniqueItems.size()); ++i)
+        {
+            ItemStack item = uniqueItems.get(i);
+            ItemStack newItem = item.clone();
+            ItemMeta itemMeta = newItem.getItemMeta();
+            itemMeta.setDisplayName(uniqueItemList.getName());
+            itemMeta.setLore(uniqueItemList.getLore());
+            newItem.setItemMeta(itemMeta);
+            uniqueItemList.addFrame(newItem, 20);
+        }
         uniqueItemList.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.unique_items.title"), 6);
             GUIBorderModule border = new GUIBorderModule();
@@ -415,6 +439,16 @@ public class GUIConfigModule implements GUIModule
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_desc_l2"),
                 "&7" + plugin.langManager().getText(player, "simplestack.gui.config.item_type_desc_l3")), true);
         final List<Material> materialItems = plugin.config().getMaterialList();
+        for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, materialItems.size()); ++i)
+        {
+            Material material = materialItems.get(i);
+            ItemStack item = new ItemStack(material);
+            ItemMeta itemMeta = item.getItemMeta();
+            itemMeta.setDisplayName(itemTypeList.getName());
+            itemMeta.setLore(itemTypeList.getLore());
+            item.setItemMeta(itemMeta);
+            itemTypeList.addFrame(item, 20);
+        }
         itemTypeList.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.item_types.title"), 6);
             GUIBorderModule border = new GUIBorderModule();
