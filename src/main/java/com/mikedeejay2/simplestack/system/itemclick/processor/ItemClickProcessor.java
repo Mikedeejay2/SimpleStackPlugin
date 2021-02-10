@@ -1,9 +1,11 @@
 package com.mikedeejay2.simplestack.system.itemclick.processor;
 
+import com.mikedeejay2.mikedeejay2lib.util.debug.DebugTimer;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.system.SimpleStackProcessor;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.*;
+import com.mikedeejay2.simplestack.system.itemclick.processes.global.ProcessForceUpdate;
 import com.mikedeejay2.simplestack.system.itemclick.processes.global.ProcessResultSlot;
 
 import java.util.*;
@@ -32,13 +34,17 @@ public class ItemClickProcessor implements SimpleStackProcessor
 
         ProcessResultSlot result = new ProcessResultSlot(plugin);
         addProcess(result);
+
+        ProcessForceUpdate update = new ProcessForceUpdate(plugin);
+        addProcess(update);
     }
 
-    public void process(ItemClickInfo info)
+    public void process(ItemClickInfo info, DebugTimer timer)
     {
         for(ItemClickProcess process : processes)
         {
             process.invoke(info);
+            timer.addPrintPoint("Process `" + process.getClass().getSimpleName() + "`");
         }
     }
 
