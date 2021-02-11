@@ -19,8 +19,8 @@ public class ProcessForceUpdate implements ItemClickProcess
     {
         Inventory inventory = info.clickedInv;
         if(inventory == null) return;
-        System.out.println("Inventory: " + inventory.getType());
-        switch(inventory.getType())
+        System.out.println("Inventory: " + info.clickedInvType);
+        switch(info.clickedInvType)
         {
             case WORKBENCH:
             case CRAFTING:

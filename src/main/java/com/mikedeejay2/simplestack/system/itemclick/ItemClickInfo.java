@@ -38,6 +38,9 @@ public final class ItemClickInfo
     public final InventoryType.SlotType slotType;
     public final boolean clickedBorder;
     public final boolean clickedOutside;
+    public final InventoryType clickedInvType;
+    public final InventoryType topInvType;
+    public final InventoryType bottomInvType;
 
     private InventoryAction action;
 
@@ -72,6 +75,9 @@ public final class ItemClickInfo
         this.clickedBorder  = slot == -1;
         this.clickedOutside = slot == -999;
         this.action = InventoryAction.NOTHING;
+        this.topInvType = topInv.getType();
+        this.clickedInvType = clickedInv == null ? null : clickedInv.getType();
+        this.bottomInvType = bottomInv.getType();
     }
 
     public ItemClickInfo(ItemClickInfo other)
@@ -100,6 +106,9 @@ public final class ItemClickInfo
         this.slotType       = other.slotType;
         this.clickedBorder  = other.clickedBorder;
         this.clickedOutside = other.clickedOutside;
+        this.topInvType     = other.topInvType;
+        this.clickedInvType = other.clickedInvType;
+        this.bottomInvType  = other.bottomInvType;
     }
 
     public InventoryAction getAction()

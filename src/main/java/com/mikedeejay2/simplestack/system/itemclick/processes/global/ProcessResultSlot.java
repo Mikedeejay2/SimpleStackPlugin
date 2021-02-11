@@ -38,7 +38,7 @@ public class ProcessResultSlot implements ItemClickProcess
 
         int start = 0;
         int end   = toItems.length;
-        if(info.clickedInv.getType() == InventoryType.PLAYER)
+        if(info.clickedInvType == InventoryType.PLAYER)
         {
             if(info.slotType == InventoryType.SlotType.QUICKBAR)
             {
