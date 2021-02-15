@@ -6,7 +6,7 @@
 
     <groupId>com.mikedeejay2</groupId>
     <artifactId>simplestack</artifactId>
-    <version>1.4.0</version>
+    <version>1.4.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>SimpleStack</name>
