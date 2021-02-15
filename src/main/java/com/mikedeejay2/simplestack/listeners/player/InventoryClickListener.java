@@ -5,6 +5,7 @@ import com.mikedeejay2.simplestack.system.itemclick.processor.ItemClickProcessor
 import com.mikedeejay2.simplestack.system.itemclick.handlers.ItemClickHandler;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.CheckUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -67,7 +68,7 @@ public class InventoryClickListener implements Listener
            "Selected Item: " + itemPickUp + "\n" +
            "Cursor Item: " + itemPutDown + "\n" +
            "Slot Type: " + slotType + "\n");
-        handler.handle(event);
+            handler.handle(event);
 //        if(itemPickUp == null || action.toString().contains("DROP") || clickType == ClickType.CREATIVE) return;
 //
 //        boolean cancel1 = CancelUtils.cancelStackCheck(plugin, itemPickUp);

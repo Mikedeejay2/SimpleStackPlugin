@@ -64,6 +64,7 @@ public final class Simplestack extends PluginBase
         listenerManager.addListener(new ItemMergeListener(this));
         listenerManager.addListener(new InventoryPickupItemListener(this));
         listenerManager.addListener(new PlayerItemConsumeListener(this));
+        listenerManager.addListener(new PrepareItemCraftListener(this));
         if(getMCVersion().getVersionShort() >= 16)
         {
             listenerManager.addListener(new PrepareSmithingListener(this));

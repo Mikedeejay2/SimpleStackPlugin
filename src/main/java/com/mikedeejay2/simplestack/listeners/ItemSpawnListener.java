@@ -21,7 +21,7 @@ public class ItemSpawnListener implements Listener
     }
 
     /**
-     *
+     * Currently unused
      *
      * @param event The event being activated
      */

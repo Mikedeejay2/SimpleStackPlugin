@@ -17,17 +17,15 @@ public class ProcessForceUpdate implements ItemClickProcess
     @Override
     public void invoke(ItemClickInfo info)
     {
-        Inventory inventory = info.clickedInv;
-        if(inventory == null) return;
-        System.out.println("Inventory: " + info.clickedInvType);
         switch(info.clickedInvType)
         {
             case WORKBENCH:
             case CRAFTING:
-            {
-                info.player.updateInventory();
+                break;
+            default:
                 return;
-            }
         }
+        Inventory inventory = info.clickedInv;
+        inventory.setItem(1, inventory.getItem(1));
     }
 }
