@@ -17,6 +17,7 @@ public class ProcessForceUpdate implements ItemClickProcess
     @Override
     public void invoke(ItemClickInfo info)
     {
+        if(info.clickedInvType == null) return;
         switch(info.clickedInvType)
         {
             case WORKBENCH:
