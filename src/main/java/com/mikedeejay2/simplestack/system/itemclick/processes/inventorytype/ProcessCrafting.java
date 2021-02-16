@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes.inventorytype;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
@@ -16,7 +17,7 @@ public class ProcessCrafting implements ItemClickProcess
     {
         if(info.rawSlot != 0) return;
         /* DEBUG */ System.out.println("Process Crafting");
-        if(!CheckUtils.takeResult(info)) return;
+        if(!InventoryIdentifiers.takeResult(info.getAction())) return;
 
         Inventory inventory = info.topInv;
         ItemStack result = inventory.getItem(0);

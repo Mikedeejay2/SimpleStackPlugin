@@ -534,27 +534,4 @@ public final class CheckUtils
         }
         return false;
     }
-
-    /**
-     * Returns whether the player clicking a result slot is taking items out of the slot.
-     * <p>
-     * This is based off of the inventory action currently inside of <tt>ItemClickInfo</tt>.
-     *
-     * @param info The info to check
-     * @return Whether the result is being taken out
-     */
-    public static boolean takeResult(ItemClickInfo info)
-    {
-        switch(info.getAction())
-        {
-            case PICKUP_ALL:
-            case PICKUP_HALF:
-            case PICKUP_ONE:
-            case PICKUP_SOME:
-            case MOVE_TO_OTHER_INVENTORY:
-                return true;
-            default:
-                return false;
-        }
-    }
 }

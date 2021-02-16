@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes.global;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIterator;
 import com.mikedeejay2.mikedeejay2lib.util.item.InventoryOrder;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
@@ -29,7 +30,7 @@ public class ProcessResultSlot implements ItemClickProcess
     public void invoke(ItemClickInfo info)
     {
         if(info.slotType != InventoryType.SlotType.RESULT) return;
-        if(!CheckUtils.takeResult(info)) return;
+        if(!InventoryIdentifiers.takeResult(info.getAction())) return;
         int stackAmt = info.selected.getAmount();
         if(stackAmt <= 0) return;
         Inventory   toInv    = info.bottomInv;
