@@ -4,36 +4,33 @@ import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
 import com.mikedeejay2.simplestack.system.itemclick.processes.inventoryaction.shift.*;
+import com.mikedeejay2.simplestack.util.ShiftType;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.CraftingInventory;
 
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+
 public class ProcessShiftClick implements ItemClickProcess
 {
-    protected ItemClickProcess otherProcess;
-    protected ItemClickProcess sameProcess;
-    protected ItemClickProcess hotbarProcess;
-    protected ItemClickProcess hotbarReverseProcess;
-    protected ItemClickProcess offhandProcess;
-    protected ItemClickProcess armorProcess;
-
-    protected enum ShiftType
-    {
-        OTHER,
-        SAME,
-        HOTBAR,
-        HOTBAR_REVERSE,
-        OFFHAND,
-        ARMOR
-    }
+    protected Map<ShiftType, List<ItemClickProcess>> shiftProcesses;
 
     public ProcessShiftClick()
     {
-        this.sameProcess = new ProcessMoveSameInv();
-        this.otherProcess = new ProcessMoveOtherInv(sameProcess);
-        this.hotbarProcess = new ProcessMoveHotbar(sameProcess);
-        this.hotbarReverseProcess = new ProcessMoveHotbarReverse(sameProcess);
-        this.offhandProcess = new ProcessMoveOffhand(sameProcess);
-        this.armorProcess = new ProcessMoveArmor(sameProcess);
+        this.shiftProcesses = new EnumMap<>(ShiftType.class);
+        for(ShiftType type : ShiftType.values())
+        {
+            shiftProcesses.put(type, new ArrayList<>());
+        }
+        ItemClickProcess sameProcess = new ProcessMoveSameInv();
+        shiftProcesses.get(ShiftType.SAME).add(sameProcess);
+        shiftProcesses.get(ShiftType.OTHER).add(new ProcessMoveOtherInv(sameProcess));
+        shiftProcesses.get(ShiftType.HOTBAR).add(new ProcessMoveHotbar(sameProcess));
+        shiftProcesses.get(ShiftType.HOTBAR_REVERSE).add(new ProcessMoveHotbarReverse(sameProcess));
+        shiftProcesses.get(ShiftType.OFFHAND).add(new ProcessMoveOffhand(sameProcess));
+        shiftProcesses.get(ShiftType.ARMOR).add(new ProcessMoveArmor(sameProcess));
     }
 
     @Override
@@ -95,86 +92,22 @@ public class ProcessShiftClick implements ItemClickProcess
                 break;
         }
 
-        switch(type)
-        {
-            case OTHER:
-                otherProcess.invoke(info);
-                break;
-            case SAME:
-                sameProcess.invoke(info);
-                break;
-            case HOTBAR:
-                hotbarProcess.invoke(info);
-                break;
-            case HOTBAR_REVERSE:
-                hotbarReverseProcess.invoke(info);
-                break;
-            case ARMOR:
-                armorProcess.invoke(info);
-                break;
-            case OFFHAND:
-                offhandProcess.invoke(info);
-                break;
-        }
+        shiftProcesses.get(type).forEach(process -> process.invoke(info));
     }
 
-    public ItemClickProcess getOtherProcess()
+    public Map<ShiftType, List<ItemClickProcess>> getShiftProcesses()
     {
-        return otherProcess;
+        return shiftProcesses;
     }
 
-    public void setOtherProcess(ItemClickProcess otherProcess)
+    public List<ItemClickProcess> getShiftProcesses(ShiftType type)
     {
-        this.otherProcess = otherProcess;
+        return shiftProcesses.get(type);
     }
 
-    public ItemClickProcess getSameProcess()
+    public ProcessShiftClick addProcess(ShiftType type, ItemClickProcess process)
     {
-        return sameProcess;
-    }
-
-    public void setSameProcess(ItemClickProcess sameProcess)
-    {
-        this.sameProcess = sameProcess;
-    }
-
-    public ItemClickProcess getHotbarProcess()
-    {
-        return hotbarProcess;
-    }
-
-    public void setHotbarProcess(ItemClickProcess hotbarProcess)
-    {
-        this.hotbarProcess = hotbarProcess;
-    }
-
-    public ItemClickProcess getHotbarReverseProcess()
-    {
-        return hotbarReverseProcess;
-    }
-
-    public void setHotbarReverseProcess(ItemClickProcess hotbarReverseProcess)
-    {
-        this.hotbarReverseProcess = hotbarReverseProcess;
-    }
-
-    public ItemClickProcess getOffhandProcess()
-    {
-        return offhandProcess;
-    }
-
-    public void setOffhandProcess(ItemClickProcess offhandProcess)
-    {
-        this.offhandProcess = offhandProcess;
-    }
-
-    public ItemClickProcess getArmorProcess()
-    {
-        return armorProcess;
-    }
-
-    public void setArmorProcess(ItemClickProcess armorProcess)
-    {
-        this.armorProcess = armorProcess;
+        shiftProcesses.get(type).add(process);
+        return this;
     }
 }

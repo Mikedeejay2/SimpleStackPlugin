@@ -1,11 +1,9 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
 import com.mikedeejay2.simplestack.Simplestack;
-import com.mikedeejay2.simplestack.system.itemclick.processor.ItemClickProcessor;
 import com.mikedeejay2.simplestack.system.itemclick.handlers.ItemClickHandler;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.CheckUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -44,19 +42,19 @@ public class InventoryClickListener implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void stackEvent(InventoryClickEvent event)
     {
-        Player          player    = (Player) event.getWhoClicked();
-        InventoryAction action    = event.getAction();
+        Player                 player      = (Player) event.getWhoClicked();
+        InventoryAction        action      = event.getAction();
         CheckUtils.updateGUIManual(plugin, player.getOpenInventory().getTopInventory());
         if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
-        ItemStack     itemPickUp  = event.getCurrentItem();
-        ItemStack     itemPutDown = event.getCursor();
-        ClickType     clickType   = event.getClick();
-        InventoryView view        = player.getOpenInventory();
-        Inventory     topInv      = view.getTopInventory();
-        Inventory     bottomInv   = view.getBottomInventory();
-        int                    slot       = event.getSlot();
-        InventoryType.SlotType slotType   = event.getSlotType();
-        Inventory              clickedInv = event.getClickedInventory();
+        ItemStack              itemPickUp  = event.getCurrentItem();
+        ItemStack              itemPutDown = event.getCursor();
+        ClickType              clickType   = event.getClick();
+        InventoryView          view        = player.getOpenInventory();
+        Inventory              topInv      = view.getTopInventory();
+        Inventory              bottomInv   = view.getBottomInventory();
+        int                    slot        = event.getSlot();
+        InventoryType.SlotType slotType    = event.getSlotType();
+        Inventory              clickedInv  = event.getClickedInventory();
         if(clickType == ClickType.CREATIVE || (plugin.getMCVersion().getVersionShort() >= 16 && clickType == ClickType.SWAP_OFFHAND)) return;
         event.setCancelled(true);
         /* DEBUG */ player.sendMessage("\n\n" +

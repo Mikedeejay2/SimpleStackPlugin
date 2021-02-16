@@ -7,48 +7,28 @@ import org.bukkit.event.inventory.InventoryType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ProcessInvType implements ItemClickProcess
 {
     protected final Simplestack plugin;
 
-    protected List<ItemClickProcess> chestProcesses;
-    protected List<ItemClickProcess> dispenserProcesses;
-    protected List<ItemClickProcess> furnaceProcesses;
-    protected List<ItemClickProcess> craftingProcesses;
-    protected List<ItemClickProcess> enchantingProcesses;
-    protected List<ItemClickProcess> brewingProcesses;
-    protected List<ItemClickProcess> merchantProcesses;
-    protected List<ItemClickProcess> anvilProcesses;
-    protected List<ItemClickProcess> smithingProcesses;
-    protected List<ItemClickProcess> beaconProcesses;
-    protected List<ItemClickProcess> loomProcesses;
-    protected List<ItemClickProcess> cartographyProcesses;
-    protected List<ItemClickProcess> grindstoneProcesses;
-    protected List<ItemClickProcess> stonecutterProcesses;
+    protected Map<InventoryType, List<ItemClickProcess>> invTypeProcesses;
 
     public ProcessInvType(Simplestack plugin)
     {
         this.plugin = plugin;
-        chestProcesses = new ArrayList<>(1);
-        dispenserProcesses = new ArrayList<>(1);
-        furnaceProcesses = new ArrayList<>(1);
-        craftingProcesses = new ArrayList<>(1);
-        enchantingProcesses = new ArrayList<>(1);
-        brewingProcesses = new ArrayList<>(1);
-        merchantProcesses = new ArrayList<>(1);
-        anvilProcesses = new ArrayList<>(1);
-        smithingProcesses = new ArrayList<>(1);
-        beaconProcesses = new ArrayList<>(1);
-        loomProcesses = new ArrayList<>(1);
-        cartographyProcesses = new ArrayList<>(1);
-        grindstoneProcesses = new ArrayList<>(1);
-        stonecutterProcesses = new ArrayList<>(1);
+        for(InventoryType type : InventoryType.values())
+        {
+            invTypeProcesses.put(type, new ArrayList<>());
+        }
     }
 
     public void initDefault()
     {
-        addProcess(InventoryType.CRAFTING, new ProcessCrafting());
+        ItemClickProcess crafting = new ProcessCrafting();
+        addProcess(InventoryType.CRAFTING, crafting);
+        addProcess(InventoryType.WORKBENCH, crafting);
         addProcess(InventoryType.MERCHANT, new ProcessMerchant());
         addProcess(InventoryType.ANVIL, new ProcessAnvil());
         addProcess(InventoryType.SMITHING, new ProcessSmithing());
@@ -59,117 +39,13 @@ public class ProcessInvType implements ItemClickProcess
 
     public ProcessInvType addProcess(InventoryType type, ItemClickProcess process)
     {
-        switch(type)
-        {
-            case CHEST:
-            case ENDER_CHEST:
-            case BARREL:
-            case SHULKER_BOX:
-            case HOPPER:
-                chestProcesses.add(process);
-                break;
-            case DISPENSER:
-            case DROPPER:
-                dispenserProcesses.add(process);
-                break;
-            case FURNACE:
-            case BLAST_FURNACE:
-            case SMOKER:
-                furnaceProcesses.add(process);
-                break;
-            case WORKBENCH:
-            case CRAFTING:
-                craftingProcesses.add(process);
-                break;
-            case ENCHANTING:
-                enchantingProcesses.add(process);
-                break;
-            case BREWING:
-                brewingProcesses.add(process);
-                break;
-            case MERCHANT:
-                merchantProcesses.add(process);
-                break;
-            case ANVIL:
-                anvilProcesses.add(process);
-                break;
-            case SMITHING:
-                smithingProcesses.add(process);
-                break;
-            case BEACON:
-                beaconProcesses.add(process);
-                break;
-            case LOOM:
-                loomProcesses.add(process);
-                break;
-            case CARTOGRAPHY:
-                cartographyProcesses.add(process);
-                break;
-            case GRINDSTONE:
-                grindstoneProcesses.add(process);
-                break;
-            case STONECUTTER:
-                stonecutterProcesses.add(process);
-                break;
-        }
+        invTypeProcesses.get(type).add(process);
         return this;
     }
 
     @Override
     public void invoke(ItemClickInfo info)
     {
-        switch(info.invView.getType())
-        {
-            case CHEST:
-            case ENDER_CHEST:
-            case BARREL:
-            case SHULKER_BOX:
-            case HOPPER:
-                chestProcesses.forEach(process -> process.invoke(info));
-                break;
-            case DISPENSER:
-            case DROPPER:
-                dispenserProcesses.forEach(process -> process.invoke(info));
-                break;
-            case FURNACE:
-            case BLAST_FURNACE:
-            case SMOKER:
-                furnaceProcesses.forEach(process -> process.invoke(info));
-                break;
-            case WORKBENCH:
-            case CRAFTING:
-                craftingProcesses.forEach(process -> process.invoke(info));
-                break;
-            case ENCHANTING:
-                enchantingProcesses.forEach(process -> process.invoke(info));
-                break;
-            case BREWING:
-                brewingProcesses.forEach(process -> process.invoke(info));
-                break;
-            case MERCHANT:
-                merchantProcesses.forEach(process -> process.invoke(info));
-                break;
-            case ANVIL:
-                anvilProcesses.forEach(process -> process.invoke(info));
-                break;
-            case SMITHING:
-                smithingProcesses.forEach(process -> process.invoke(info));
-                break;
-            case BEACON:
-                beaconProcesses.forEach(process -> process.invoke(info));
-                break;
-            case LOOM:
-                loomProcesses.forEach(process -> process.invoke(info));
-                break;
-            case CARTOGRAPHY:
-                cartographyProcesses.forEach(process -> process.invoke(info));
-                break;
-            case GRINDSTONE:
-                grindstoneProcesses.forEach(process -> process.invoke(info));
-                break;
-            case STONECUTTER:
-                stonecutterProcesses.forEach(process -> process.invoke(info));
-                break;
-        }
+        invTypeProcesses.get(info.invView.getType()).forEach(process -> process.invoke(info));
     }
 }

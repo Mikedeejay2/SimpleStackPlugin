@@ -37,7 +37,6 @@ public class ItemClickHandler implements SimpleStackHandler<InventoryClickEvent>
         /* DEBUG */ timer.addPrintPoint("Preprocess");
 
         processor.process(info, timer);
-        /* DEBUG */ timer.addPrintPoint("Process");
         /* DEBUG */ timer.printReport(10);
         /* DEBUG */ info.player.sendMessage("Action NEW: " + info.getAction());
     }
