@@ -6,6 +6,7 @@ import com.mikedeejay2.simplestack.system.itemclick.processes.inventorytype.*;
 import org.bukkit.event.inventory.InventoryType;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ public class ProcessInvType implements ItemClickProcess
     public ProcessInvType(Simplestack plugin)
     {
         this.plugin = plugin;
+        this.invTypeProcesses = new EnumMap<>(InventoryType.class);
         for(InventoryType type : InventoryType.values())
         {
             invTypeProcesses.put(type, new ArrayList<>());
