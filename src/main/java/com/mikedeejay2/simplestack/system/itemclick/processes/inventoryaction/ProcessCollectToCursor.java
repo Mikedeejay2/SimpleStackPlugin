@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes.inventoryaction;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
 import org.bukkit.Material;
@@ -23,6 +24,7 @@ public class ProcessCollectToCursor implements ItemClickProcess
                 if(item == null) continue;
                 if(item.getType() != cursorMat) continue;
                 if(item.getAmount() > amount) continue;
+                if(!ItemComparison.equalsEachOther(item, info.cursor)) continue;
                 int newAmount   = item.getAmount() + cursorAmt;
                 int extraAmount = 0;
                 if(newAmount > info.cursorMax)
@@ -49,6 +51,7 @@ public class ProcessCollectToCursor implements ItemClickProcess
                 if(item == null) continue;
                 if(item.getType() != cursorMat) continue;
                 if(item.getAmount() > amount) continue;
+                if(!ItemComparison.equalsEachOther(item, info.cursor)) continue;
                 int newAmount   = item.getAmount() + cursorAmt;
                 int extraAmount = 0;
                 if(newAmount > info.cursorMax)
