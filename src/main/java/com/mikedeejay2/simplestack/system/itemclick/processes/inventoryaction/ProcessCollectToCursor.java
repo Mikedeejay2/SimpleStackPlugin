@@ -19,7 +19,7 @@ public class ProcessCollectToCursor implements ItemClickProcess
         int cursorAmt = info.cursorAmt;
         for(int amount = 1; amount <= info.cursorMax; ++amount)
         {
-            for(int i = 0; i < inventory.countSlots(); ++i)
+            for(int i = 0; i < info.bottomInv.getSize() + info.topInv.getSize(); ++i)
             {
                 ItemStack item = inventory.getItem(i);
                 if(item == null) continue;
@@ -35,7 +35,7 @@ public class ProcessCollectToCursor implements ItemClickProcess
                     newAmount = info.cursorMax;
                 }
                 item.setAmount(extraAmount);
-                info.topInv.setItem(i, item);
+                inventory.setItem(i, item);
                 cursorAmt = newAmount;
                 if(cursorAmt == info.cursorMax)
                 {
