@@ -4,7 +4,6 @@ import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
-import com.mikedeejay2.simplestack.util.CheckUtils;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.Inventory;
@@ -22,13 +21,13 @@ public class ProcessCrafting implements ItemClickProcess
         Inventory inventory = info.topInv;
         ItemStack result = inventory.getItem(0);
         if(result == null) return;
-        ItemStack[] inputs = inventory.getStorageContents();
+        ItemStack[] inputs = inventory.getContents();
         boolean useMax = info.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY;
         int takeValue = 1;
         if(useMax)
         {
             int maxTake = Integer.MAX_VALUE;
-            for(int i = 0; i < inputs.length; ++i)
+            for(int i = 1; i < inputs.length; ++i)
             {
                 ItemStack curStack = inputs[i];
                 if(curStack == null || curStack.getType() == Material.AIR) continue;
@@ -68,7 +67,7 @@ public class ProcessCrafting implements ItemClickProcess
                     if(selectedAmt <= 0)
                     {
                         curItem.setAmount(selectedAmt);
-                        return;
+                        break;
                     }
                 }
 
@@ -92,7 +91,7 @@ public class ProcessCrafting implements ItemClickProcess
                     if(selectedAmt <= 0)
                     {
                         curItem.setAmount(0);
-                        return;
+                        break;
                     }
                 }
 
@@ -116,14 +115,14 @@ public class ProcessCrafting implements ItemClickProcess
                     if(selectedAmt <= 0)
                     {
                         curItem.setAmount(0);
-                        return;
+                        break;
                     }
                 }
                 curItem.setAmount(selectedAmt);
             }
         }
 
-        for(int i = 0; i < inputs.length; ++i)
+        for(int i = 1; i < inputs.length; ++i)
         {
             ItemStack curItem = inputs[i];
             if(curItem == null || curItem.getType() == Material.AIR) continue;

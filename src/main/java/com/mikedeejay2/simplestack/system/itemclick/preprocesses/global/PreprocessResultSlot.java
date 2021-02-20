@@ -16,6 +16,9 @@ public class PreprocessResultSlot implements ItemClickPreprocess
         {
             case PICKUP_ONE:
             case PICKUP_HALF:
+            case PLACE_ALL:
+            case PLACE_ONE:
+            case PLACE_SOME:
                 info.setAction(InventoryAction.PICKUP_ALL);
                 break;
         }
