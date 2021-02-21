@@ -4,7 +4,6 @@ import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 public class ProcessForceUpdate implements ItemClickProcess
 {
@@ -23,6 +22,7 @@ public class ProcessForceUpdate implements ItemClickProcess
         {
             case WORKBENCH:
             case CRAFTING:
+            case LOOM:
             {
                 Inventory inventory = info.clickedInv;
                 inventory.setItem(1, inventory.getItem(1));

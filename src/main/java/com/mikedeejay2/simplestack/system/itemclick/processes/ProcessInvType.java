@@ -37,6 +37,7 @@ public class ProcessInvType implements ItemClickProcess
         addProcess(InventoryType.CARTOGRAPHY, new ProcessCartography());
         addProcess(InventoryType.GRINDSTONE, new ProcessGrindstone());
         addProcess(InventoryType.STONECUTTER, new ProcessStonecutter());
+        addProcess(InventoryType.LOOM, new ProcessLoom());
     }
 
     public ProcessInvType addProcess(InventoryType type, ItemClickProcess process)

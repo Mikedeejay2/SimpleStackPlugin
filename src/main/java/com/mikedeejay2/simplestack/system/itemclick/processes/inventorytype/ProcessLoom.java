@@ -9,17 +9,17 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class ProcessCrafting implements ItemClickProcess
+public class ProcessLoom implements ItemClickProcess
 {
     @Override
     public void invoke(ItemClickInfo info)
     {
-        if(info.rawSlot != 0) return;
-        /* DEBUG */ System.out.println("Process Crafting");
+        if(info.rawSlot != 3) return;
+        /* DEBUG */ System.out.println("Process Loom");
         if(!InventoryIdentifiers.takeResult(info.getAction())) return;
 
         Inventory inventory = info.topInv;
-        ItemStack result = inventory.getItem(0);
+        ItemStack result    = inventory.getItem(3);
         if(result == null) return;
         ItemStack[] inputs = inventory.getContents();
         boolean useMax = info.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY;
@@ -27,13 +27,12 @@ public class ProcessCrafting implements ItemClickProcess
         if(useMax)
         {
             int maxTake = Integer.MAX_VALUE;
-            for(int i = 1; i < inputs.length; ++i)
+            for(int i = 0; i < inputs.length - 1; ++i)
             {
-                ItemStack curStack = inputs[i];
-                if(curStack == null || curStack.getType() == Material.AIR) continue;
-                int curAmt = curStack.getAmount();
-                if(curAmt >= maxTake) continue;
-                maxTake = curAmt;
+                ItemStack curItem = inputs[i];
+                if(curItem == null) continue;
+                if(curItem.getAmount() == 0) continue;
+                maxTake = Math.min(maxTake, curItem.getAmount());
             }
             takeValue = maxTake;
             --maxTake;
@@ -43,8 +42,8 @@ public class ProcessCrafting implements ItemClickProcess
             for(int count = 0; count < maxTake; ++count)
             {
                 ItemStack[] toItems = playerInv.getStorageContents();
-                ItemStack curItem = takeItem.clone();
-                int selectedAmt = takeItem.getAmount();
+                ItemStack curItem     = takeItem.clone();
+                int       selectedAmt = takeItem.getAmount();
                 for(int i = 0; i < toItems.length; ++i)
                 {
                     ItemStack item = toItems[i];
@@ -122,13 +121,12 @@ public class ProcessCrafting implements ItemClickProcess
             }
         }
 
-        for(int i = 1; i < inputs.length; ++i)
+        for(int i = 0; i < inputs.length - 1; ++i)
         {
             ItemStack curItem = inputs[i];
-            if(curItem == null || curItem.getType() == Material.AIR) continue;
+            if(curItem == null) continue;
             if(curItem.getAmount() == 0) continue;
-            int newAmount = curItem.getAmount() - takeValue;
-            curItem.setAmount(newAmount);
+            curItem.setAmount(curItem.getAmount() - takeValue);
         }
     }
 }

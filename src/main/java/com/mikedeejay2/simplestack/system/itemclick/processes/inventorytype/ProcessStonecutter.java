@@ -36,9 +36,9 @@ public class ProcessStonecutter implements ItemClickProcess
 
             ItemStack takeItem = info.selected;
             Inventory playerInv = info.bottomInv;
-            ItemStack[] toItems = playerInv.getStorageContents();
             for(int count = 0; count < maxTake; ++count)
             {
+                ItemStack[] toItems = playerInv.getStorageContents();
                 ItemStack curItem = takeItem.clone();
                 int selectedAmt = takeItem.getAmount();
                 for(int i = 0; i < toItems.length; ++i)
