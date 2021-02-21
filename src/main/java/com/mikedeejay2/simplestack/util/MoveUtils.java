@@ -2,6 +2,7 @@ package com.mikedeejay2.simplestack.util;
 
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -533,5 +534,94 @@ public final class MoveUtils
         World    world   = dropLoc.getWorld();
         Item     item    = world.dropItem(dropLoc, stack);
         item.setVelocity(lookVec);
+    }
+
+    /**
+     * Custom shift method for properly shift clicking all items out of a result slot.
+     *
+     * @param info The <tt>ItemClickInfo</tt> of the movement
+     * @param maxTake The maximum take amount of the item
+     */
+    public static void resultSlotShift(ItemClickInfo info, int maxTake)
+    {
+        ItemStack takeItem = info.selected;
+        Inventory playerInv = info.bottomInv;
+        ItemStack[] toItems = playerInv.getStorageContents();
+        ItemStack curItem = takeItem.clone();
+        int selectedAmt = takeItem.getAmount() * maxTake;
+        for(int i = 0; i < toItems.length; ++i)
+        {
+            ItemStack item = toItems[i];
+            if(item == null) continue;
+            if(item.getType() == Material.AIR) continue;
+            if(!ItemComparison.equalsEachOther(item, curItem)) continue;
+            int itemAmt = item.getAmount();
+            if(itemAmt == info.selectedMax) continue;
+            int newAmt = itemAmt + selectedAmt;
+            if(newAmt > info.selectedMax)
+            {
+                selectedAmt = newAmt - info.selectedMax;
+                newAmt = info.selectedMax;
+            }
+            else
+            {
+                selectedAmt = 0;
+            }
+            item.setAmount(newAmt);
+            if(selectedAmt <= 0)
+            {
+                curItem.setAmount(selectedAmt);
+                break;
+            }
+        }
+
+        for(int i = 8; i >= 0; --i)
+        {
+            ItemStack item = toItems[i];
+            if(item != null && item.getType() != Material.AIR) continue;
+            item = info.selected.clone();
+            int newAmt = selectedAmt;
+            if(newAmt > info.selectedMax)
+            {
+                selectedAmt = newAmt - info.selectedMax;
+                newAmt = info.selectedMax;
+            }
+            else
+            {
+                selectedAmt -= newAmt;
+            }
+            item.setAmount(newAmt);
+            playerInv.setItem(i, item);
+            if(selectedAmt <= 0)
+            {
+                curItem.setAmount(0);
+                break;
+            }
+        }
+
+        for(int i = 9; i < toItems.length; ++i)
+        {
+            ItemStack item = toItems[i];
+            if(item != null && item.getType() != Material.AIR) continue;
+            item = curItem.clone();
+            int newAmt = selectedAmt;
+            if(newAmt > info.selectedMax)
+            {
+                selectedAmt = newAmt - info.selectedMax;
+                newAmt = info.selectedMax;
+            }
+            else
+            {
+                selectedAmt -= newAmt;
+            }
+            item.setAmount(newAmt);
+            playerInv.setItem(i, item);
+            if(selectedAmt <= 0)
+            {
+                curItem.setAmount(0);
+                break;
+            }
+        }
+        curItem.setAmount(selectedAmt);
     }
 }
