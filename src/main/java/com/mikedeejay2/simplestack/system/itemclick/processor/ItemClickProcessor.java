@@ -24,18 +24,18 @@ public class ItemClickProcessor implements SimpleStackProcessor
 
     public void initDefault()
     {
-        ProcessInvType invType = new ProcessInvType(plugin);
+        ProcessInvType invType = new ProcessInvType();
         invType.initDefault();
         addProcess(invType);
 
-        ProcessAction action = new ProcessAction(plugin);
+        ProcessAction action = new ProcessAction();
         action.initDefault();
         addProcess(action);
 
-        ProcessResultSlot result = new ProcessResultSlot(plugin);
+        ProcessResultSlot result = new ProcessResultSlot();
         addProcess(result);
 
-        ProcessForceUpdate update = new ProcessForceUpdate(plugin);
+        ProcessForceUpdate update = new ProcessForceUpdate();
         addProcess(update);
     }
 

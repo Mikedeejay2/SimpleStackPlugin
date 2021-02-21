@@ -19,13 +19,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class ProcessResultSlot implements ItemClickProcess
 {
-    protected final Simplestack plugin;
-
-    public ProcessResultSlot(Simplestack plugin)
-    {
-        this.plugin = plugin;
-    }
-
     @Override
     public void invoke(ItemClickInfo info)
     {

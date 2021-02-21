@@ -16,13 +16,10 @@ import java.util.Map;
 
 public class ProcessShiftClick implements ItemClickProcess
 {
-    protected final Simplestack plugin;
-
     protected Map<ShiftType, List<ItemClickProcess>> shiftProcesses;
 
-    public ProcessShiftClick(Simplestack plugin)
+    public ProcessShiftClick()
     {
-        this.plugin = plugin;
         this.shiftProcesses = new EnumMap<>(ShiftType.class);
         for(ShiftType type : ShiftType.values())
         {
@@ -30,7 +27,7 @@ public class ProcessShiftClick implements ItemClickProcess
         }
         ItemClickProcess sameProcess = new ProcessMoveSameInv();
         shiftProcesses.get(ShiftType.SAME).add(sameProcess);
-        shiftProcesses.get(ShiftType.OTHER).add(new ProcessMoveOtherInv(plugin, sameProcess));
+        shiftProcesses.get(ShiftType.OTHER).add(new ProcessMoveOtherInv(sameProcess));
         shiftProcesses.get(ShiftType.HOTBAR).add(new ProcessMoveHotbar(sameProcess));
         shiftProcesses.get(ShiftType.HOTBAR_REVERSE).add(new ProcessMoveHotbarReverse(sameProcess));
         shiftProcesses.get(ShiftType.OFFHAND).add(new ProcessMoveOffhand(sameProcess));

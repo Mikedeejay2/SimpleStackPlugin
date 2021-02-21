@@ -12,13 +12,10 @@ import java.util.Map;
 
 public class ProcessInvType implements ItemClickProcess
 {
-    protected final Simplestack plugin;
-
     protected Map<InventoryType, List<ItemClickProcess>> invTypeProcesses;
 
-    public ProcessInvType(Simplestack plugin)
+    public ProcessInvType()
     {
-        this.plugin = plugin;
         this.invTypeProcesses = new EnumMap<>(InventoryType.class);
         for(InventoryType type : InventoryType.values())
         {

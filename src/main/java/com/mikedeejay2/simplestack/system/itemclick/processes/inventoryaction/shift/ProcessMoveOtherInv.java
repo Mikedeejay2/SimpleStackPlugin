@@ -16,13 +16,11 @@ import java.util.Map;
 
 public class ProcessMoveOtherInv implements ItemClickProcess
 {
-    protected final Simplestack plugin;
     protected ItemClickProcess backupProcess;
 
-    public ProcessMoveOtherInv(Simplestack plugin, ItemClickProcess backupProcess)
+    public ProcessMoveOtherInv(ItemClickProcess backupProcess)
     {
         this.backupProcess = backupProcess;
-        this.plugin = plugin;
     }
 
     @Override
@@ -34,7 +32,7 @@ public class ProcessMoveOtherInv implements ItemClickProcess
         Material selectedMat = info.selected.getType();
         int selectedAmt = info.selectedAmt;
         int rawStart = info.clickedBottom ? 0 : info.topInv.getSize();
-        if(InventoryIdentifiers.takeResult(info.getAction()) && !CheckUtils.canStoreItem(plugin, info.topInv, info.selected))
+        if(InventoryIdentifiers.takeResult(info.getAction()) && !CheckUtils.canStoreItem(info.plugin, info.topInv, info.selected))
         {
             return;
         }

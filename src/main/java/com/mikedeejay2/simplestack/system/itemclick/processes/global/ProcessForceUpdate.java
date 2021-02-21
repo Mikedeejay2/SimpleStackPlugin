@@ -7,13 +7,6 @@ import org.bukkit.inventory.Inventory;
 
 public class ProcessForceUpdate implements ItemClickProcess
 {
-    protected final Simplestack plugin;
-
-    public ProcessForceUpdate(Simplestack plugin)
-    {
-        this.plugin = plugin;
-    }
-
     @Override
     public void invoke(ItemClickInfo info)
     {
