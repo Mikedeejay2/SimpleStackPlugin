@@ -5,6 +5,7 @@ import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,16 +18,25 @@ public class ProcessCollectToCursor implements ItemClickProcess
         if(info.cursor == null) return;
         Material cursorMat = info.cursor.getType();
         int cursorAmt = info.cursorAmt;
+        int invSlots = inventory.countSlots();
         for(int amount = 1; amount <= info.cursorMax; ++amount)
         {
-            for(int i = 0; i < info.bottomInv.getSize() + info.topInv.getSize(); ++i)
+            for(int i = 0; i < invSlots; ++i)
             {
-                ItemStack item = inventory.getItem(i);
+                Inventory curInv = i > info.topInv.getSize() ? info.bottomInv : info.topInv;
+                int convertedSlot = inventory.convertSlot(i);
+                ItemStack item = curInv.getItem(convertedSlot);
                 if(item == null) continue;
                 if(item.getType() != cursorMat) continue;
                 if(item.getAmount() > amount) continue;
                 if(!ItemComparison.equalsEachOther(item, info.cursor)) continue;
-                if(inventory.getSlotType(i) == InventoryType.SlotType.RESULT) continue;
+                switch(inventory.getSlotType(i))
+                {
+                    case ARMOR:
+                    case RESULT:
+                    case OUTSIDE:
+                        continue;
+                }
                 int newAmount   = item.getAmount() + cursorAmt;
                 int extraAmount = 0;
                 if(newAmount > info.cursorMax)
