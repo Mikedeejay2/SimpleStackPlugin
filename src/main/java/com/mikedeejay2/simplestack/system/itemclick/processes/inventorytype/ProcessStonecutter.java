@@ -34,7 +34,7 @@ public class ProcessStonecutter implements ItemClickProcess
             takeValue = resultAmt * inputAmt;
             int maxTake = takeValue - 1;
 
-            MoveUtils.resultSlotShift(info, maxTake);
+            takeValue = MoveUtils.resultSlotShift(info, maxTake);
         }
         input.setAmount(input.getAmount() - takeValue);
 
