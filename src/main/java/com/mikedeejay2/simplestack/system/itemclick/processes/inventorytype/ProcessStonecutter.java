@@ -38,6 +38,8 @@ public class ProcessStonecutter implements ItemClickProcess
         input.setAmount(input.getAmount() - takeValue);
 
         ItemStack clonedItem = inventory.getItem(0) == null ? null : result.clone();
+        // Unfortunately, this is the only decent way I've found to preserve the
+        // result slot without having the item be removed from the slot.
         new BukkitRunnable()
         {
             @Override
