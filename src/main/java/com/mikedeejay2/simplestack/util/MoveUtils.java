@@ -541,7 +541,7 @@ public final class MoveUtils
      *
      * @param info The <tt>ItemClickInfo</tt> of the movement
      * @param maxTake The maximum take amount of the item
-     * @return The amount that was successfully stored
+     * @return The amount that was successfully stored, -1 if the operation isn't possible at all
      */
     public static int resultSlotShift(final ItemClickInfo info, final int maxTake)
     {
@@ -551,9 +551,6 @@ public final class MoveUtils
         ItemStack curItem = takeItem.clone();
         final int origAmt = takeItem.getAmount();
         int selectedAmt = takeItem.getAmount() * maxTake;
-        System.out.println("selectedAmt: " + selectedAmt + "\n" +
-                           "takeItem: " + takeItem.getAmount() + "\n" +
-                           "maxTake: " + maxTake);
         for(int i = 0; i < toItems.length; ++i)
         {
             ItemStack item = toItems[i];
@@ -566,20 +563,17 @@ public final class MoveUtils
             if(newAmt > info.selectedMax)
             {
                 selectedAmt = newAmt - info.selectedMax;
-                System.out.println("1");
                 newAmt = info.selectedMax;
             }
             else
             {
                 selectedAmt = 0;
-                System.out.println("2");
             }
             item.setAmount(newAmt);
             if(selectedAmt <= 0)
             {
                 curItem.setAmount(selectedAmt);
-                System.out.println("Full take 1");
-                return maxTake + 1;
+                return maxTake;
             }
         }
 
@@ -592,21 +586,18 @@ public final class MoveUtils
             if(newAmt > info.selectedMax)
             {
                 selectedAmt = newAmt - info.selectedMax;
-                System.out.println("3");
                 newAmt = info.selectedMax;
             }
             else
             {
                 selectedAmt -= newAmt;
-                System.out.println("4");
             }
             item.setAmount(newAmt);
             playerInv.setItem(i, item);
             if(selectedAmt <= 0)
             {
                 curItem.setAmount(0);
-                System.out.println("Full take 2");
-                return maxTake + 1;
+                return maxTake;
             }
         }
 
@@ -619,33 +610,26 @@ public final class MoveUtils
             if(newAmt > info.selectedMax)
             {
                 selectedAmt = newAmt - info.selectedMax;
-                System.out.println("5");
                 newAmt = info.selectedMax;
             }
             else
             {
                 selectedAmt -= newAmt;
-                System.out.println("6");
             }
             item.setAmount(newAmt);
             playerInv.setItem(i, item);
             if(selectedAmt <= 0)
             {
                 curItem.setAmount(0);
-                System.out.println("Full take 3");
-                return maxTake + 1;
+                return maxTake;
             }
         }
         curItem.setAmount(selectedAmt);
-        if(selectedAmt == 0)
-        {
-            System.out.println("Full take 4");
-            return maxTake;
-        }
-        int correctedAmt = selectedAmt + 1;
-        double normAmt = ((double)correctedAmt / (double)origAmt);
+        double normAmt = ((double)selectedAmt / (double)origAmt);
         double extraAmt = maxTake - normAmt;
-        int excess = (int) ((extraAmt % 1) * origAmt);
+        // For some reason Math.ceil needs to be applied here, on rare occasions the value is
+        // very close to a number (i.e 3.999999999984) but isn't perfect.
+        int excess = (int) Math.ceil(((extraAmt % 1) * (double) origAmt));
         if(excess > 1)
         {
             ItemStack dropItem = takeItem.clone();
@@ -653,10 +637,6 @@ public final class MoveUtils
             MoveUtils.dropItemPlayer(info.player, dropItem);
         }
         int takeAmt = (int) extraAmt;
-        System.out.println("normAmt: " + normAmt + "\n" +
-                           "extraAmt: " + extraAmt + "\n" +
-                           "excess: " + excess + "\n" +
-                           "takeAmt: " + takeAmt);
         return takeAmt;
     }
 }

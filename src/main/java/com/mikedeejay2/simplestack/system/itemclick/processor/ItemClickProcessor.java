@@ -6,7 +6,6 @@ import com.mikedeejay2.simplestack.system.SimpleStackProcessor;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.*;
 import com.mikedeejay2.simplestack.system.itemclick.processes.global.ProcessForceUpdate;
-import com.mikedeejay2.simplestack.system.itemclick.processes.global.ProcessResultSlot;
 
 import java.util.*;
 
@@ -31,9 +30,6 @@ public class ItemClickProcessor implements SimpleStackProcessor
         ProcessAction action = new ProcessAction();
         action.initDefault();
         addProcess(action);
-
-        ProcessResultSlot result = new ProcessResultSlot();
-        addProcess(result);
 
         ProcessForceUpdate update = new ProcessForceUpdate();
         addProcess(update);

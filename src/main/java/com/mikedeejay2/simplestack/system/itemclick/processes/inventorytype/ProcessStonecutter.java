@@ -24,32 +24,28 @@ public class ProcessStonecutter implements ItemClickProcess
         Inventory inventory = info.topInv;
         ItemStack result = inventory.getItem(1);
         ItemStack input = inventory.getItem(0);
-        if(result == null) return;
+        if(result == null || input == null) return;
         int inputAmt = input.getAmount();
         int resultAmt = result.getAmount();
         boolean useMax = info.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY;
         int takeValue = 1;
         if(useMax)
         {
-            takeValue = resultAmt * inputAmt;
-            int maxTake = takeValue - 1;
+            int maxTake = resultAmt * inputAmt;
 
             takeValue = MoveUtils.resultSlotShift(info, maxTake);
         }
         input.setAmount(input.getAmount() - takeValue);
 
-        if(input.getAmount() != 0)
+        ItemStack clonedItem = inventory.getItem(0) == null ? null : result.clone();
+        new BukkitRunnable()
         {
-            ItemStack clonedItem = result.clone();
-            new BukkitRunnable()
+            @Override
+            public void run()
             {
-                @Override
-                public void run()
-                {
-                    inventory.setItem(1, clonedItem);
-                    info.player.updateInventory();
-                }
-            }.runTask(info.plugin);
-        }
+                inventory.setItem(1, clonedItem);
+                info.player.updateInventory();
+            }
+        }.runTask(info.plugin);
     }
 }

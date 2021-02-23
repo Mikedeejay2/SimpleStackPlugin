@@ -32,7 +32,7 @@ public class ProcessMoveOtherInv implements ItemClickProcess
         Material selectedMat = info.selected.getType();
         int selectedAmt = info.selectedAmt;
         int rawStart = info.clickedBottom ? 0 : info.topInv.getSize();
-        if(InventoryIdentifiers.takeResult(info.getAction()) && !CheckUtils.canStoreItem(info.plugin, info.topInv, info.selected))
+        if(InventoryIdentifiers.takeResult(info.getAction()) && info.slotType == InventoryType.SlotType.RESULT)
         {
             return;
         }

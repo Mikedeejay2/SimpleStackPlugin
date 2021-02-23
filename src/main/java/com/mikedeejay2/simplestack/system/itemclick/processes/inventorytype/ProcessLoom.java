@@ -35,8 +35,6 @@ public class ProcessLoom implements ItemClickProcess
                 if(curItem.getAmount() == 0) continue;
                 maxTake = Math.min(maxTake, curItem.getAmount());
             }
-            --maxTake;
-
             takeValue = MoveUtils.resultSlotShift(info, maxTake);
         }
 

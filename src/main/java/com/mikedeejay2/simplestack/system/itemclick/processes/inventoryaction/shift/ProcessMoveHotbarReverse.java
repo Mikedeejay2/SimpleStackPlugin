@@ -1,8 +1,10 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes.inventoryaction.shift;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
+import com.mikedeejay2.simplestack.util.CheckUtils;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -26,6 +28,10 @@ public class ProcessMoveHotbarReverse implements ItemClickProcess
         Material selectedMat = info.selected.getType();
         int selectedAmt = info.selectedAmt;
         int rawStart = info.clickedBottom ? 0 : info.topInv.getSize();
+        if(InventoryIdentifiers.takeResult(info.getAction()) && info.slotType == InventoryType.SlotType.RESULT)
+        {
+            return;
+        }
         for(int i = 0; i < toItems.length; ++i)
         {
             int convertedSlot = rawStart + i;

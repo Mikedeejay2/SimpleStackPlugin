@@ -4,6 +4,7 @@ import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
+import com.mikedeejay2.simplestack.util.CheckUtils;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -26,6 +27,10 @@ public class ProcessMoveOffhand implements ItemClickProcess
         ItemStack[]       toItems     = toInv.getContents();
         Material          selectedMat = info.selected.getType();
         int               selectedAmt = info.selectedAmt;
+        if(InventoryIdentifiers.takeResult(info.getAction()) && info.slotType == InventoryType.SlotType.RESULT)
+        {
+            return;
+        }
 
         int start;
         int end;

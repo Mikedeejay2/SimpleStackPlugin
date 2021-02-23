@@ -36,7 +36,6 @@ public class ProcessCrafting implements ItemClickProcess
                 if(curAmt >= maxTake) continue;
                 maxTake = curAmt;
             }
-            --maxTake;
             takeValue = MoveUtils.resultSlotShift(info, maxTake);
         }
 
