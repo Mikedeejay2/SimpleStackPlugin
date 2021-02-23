@@ -1,7 +1,7 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes.inventorytype;
 
+import com.mikedeejay2.mikedeejay2lib.nms.xpcalc.NMS_XP;
 import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
-import com.mikedeejay2.mikedeejay2lib.util.math.XPUtil;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
 import com.mikedeejay2.simplestack.util.MoveUtils;
@@ -36,29 +36,20 @@ public class ProcessGrindstone implements ItemClickProcess
         Location  location = inventory.getLocation();
         World world = location.getWorld();
         if(result == null) return;
+        boolean useMax = info.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY;
+        int takeValue = 1;
+        if(useMax)
+        {
+            takeValue = MoveUtils.resultSlotShift(info, 1);
+        }
+        if(takeValue == 0) return;
+        inventory.setItem(2, null);
 
-//        int xpAmt = 0; // TODO: NMS access for calculating proper grindstone XP output
-//        for(int i = 0; i < inventory.getSize() - 1; ++i)
-//        {
-//            ItemStack item = inventory.getItem(i);
-//            if(item == null) continue;
-//            Map<Enchantment, Integer> enchantMap = item.getEnchantments();
-//            for(Map.Entry<Enchantment, Integer> entry : enchantMap.entrySet())
-//            {
-//                Enchantment enchantment = entry.getKey();
-//                int enchantLevel = entry.getValue();
-//                xpAmt += 1 + enchantLevel * 10;
-//            }
-//        }
-//        int modifier = (int)Math.ceil((double)xpAmt / 2.0D);
-//        xpAmt += modifier + random.nextInt(modifier);
-//        while(xpAmt > 0)
-//        {
-//            int finalXP = XPUtil.getOrbValue(xpAmt);
-//            xpAmt -= finalXP;
-//            ExperienceOrb orb = (ExperienceOrb) world.spawnEntity(location, EntityType.EXPERIENCE_ORB);
-//            orb.setExperience(finalXP);
-//        }
+        NMS_XP xpCalculator = info.plugin.NMS().getXP();
+        int xpAmt = xpCalculator.calculateXP(inventory.getItem(0), world);
+        xpAmt += xpCalculator.calculateXP(inventory.getItem(1), world);
+        xpCalculator.spawnXP(xpAmt, new Location(world, location.getBlockX(), location.getBlockY() + 0.5D, location.getBlockZ() + 0.5D));
+
         world.playSound(location, Sound.BLOCK_GRINDSTONE_USE, SoundCategory.BLOCKS, 1, 1);
 
         for(int i = 0; i < inventory.getSize() - 1; ++i)
