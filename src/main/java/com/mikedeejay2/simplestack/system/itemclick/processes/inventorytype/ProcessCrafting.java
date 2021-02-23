@@ -22,15 +22,14 @@ public class ProcessCrafting implements ItemClickProcess
         Inventory inventory = info.topInv;
         ItemStack result = inventory.getItem(0);
         if(result == null) return;
-        ItemStack[] inputs = inventory.getContents();
         boolean useMax = info.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY;
         int takeValue = 1;
         if(useMax)
         {
             int maxTake = Integer.MAX_VALUE;
-            for(int i = 1; i < inputs.length; ++i)
+            for(int i = 1; i < inventory.getSize(); ++i)
             {
-                ItemStack curStack = inputs[i];
+                ItemStack curStack = inventory.getItem(i);
                 if(curStack == null || curStack.getType() == Material.AIR) continue;
                 int curAmt = curStack.getAmount();
                 if(curAmt >= maxTake) continue;
@@ -39,9 +38,9 @@ public class ProcessCrafting implements ItemClickProcess
             takeValue = MoveUtils.resultSlotShift(info, maxTake);
         }
 
-        for(int i = 1; i < inputs.length; ++i)
+        for(int i = 1; i < inventory.getSize(); ++i)
         {
-            ItemStack curItem = inputs[i];
+            ItemStack curItem = inventory.getItem(i);
             if(curItem == null || curItem.getType() == Material.AIR) continue;
             if(curItem.getAmount() == 0) continue;
             int newAmount = curItem.getAmount() - takeValue;

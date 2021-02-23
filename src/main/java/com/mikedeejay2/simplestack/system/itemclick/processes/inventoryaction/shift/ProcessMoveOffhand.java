@@ -24,7 +24,6 @@ public class ProcessMoveOffhand implements ItemClickProcess
     {
         info.player.sendMessage("Move to Offhand");
         Inventory toInv       = info.clickedBottom ? info.bottomInv : info.topInv;
-        ItemStack[]       toItems     = toInv.getContents();
         Material          selectedMat = info.selected.getType();
         int               selectedAmt = info.selectedAmt;
         if(InventoryIdentifiers.takeResult(info.getAction()) && info.slotType == InventoryType.SlotType.RESULT)
@@ -47,7 +46,7 @@ public class ProcessMoveOffhand implements ItemClickProcess
 
         for(int i = start; i < end; ++i)
         {
-            ItemStack item = toItems[i];
+            ItemStack item = toInv.getItem(i);
             if(item == null) continue;
             if(item.getType() == Material.AIR) continue;
             if(!ItemComparison.equalsEachOther(item, info.selected)) continue;
@@ -72,7 +71,7 @@ public class ProcessMoveOffhand implements ItemClickProcess
         }
         for(int i = start; i < end; ++i)
         {
-            ItemStack item = toItems[i];
+            ItemStack item = toInv.getItem(i);
             if(item != null && item.getType() != Material.AIR) continue;
             item = info.selected.clone();
             int newAmt = selectedAmt;

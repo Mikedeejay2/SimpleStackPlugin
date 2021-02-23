@@ -22,15 +22,14 @@ public class ProcessLoom implements ItemClickProcess
         Inventory inventory = info.topInv;
         ItemStack result    = inventory.getItem(3);
         if(result == null) return;
-        ItemStack[] inputs = inventory.getContents();
         boolean useMax = info.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY;
         int takeValue = 1;
         if(useMax)
         {
             int maxTake = Integer.MAX_VALUE;
-            for(int i = 0; i < inputs.length - 1; ++i)
+            for(int i = 0; i < inventory.getSize() - 1; ++i)
             {
-                ItemStack curItem = inputs[i];
+                ItemStack curItem = inventory.getItem(i);
                 if(curItem == null) continue;
                 if(curItem.getAmount() == 0) continue;
                 maxTake = Math.min(maxTake, curItem.getAmount());
@@ -38,9 +37,9 @@ public class ProcessLoom implements ItemClickProcess
             takeValue = MoveUtils.resultSlotShift(info, maxTake);
         }
 
-        for(int i = 0; i < inputs.length - 1; ++i)
+        for(int i = 0; i < inventory.getSize() - 1; ++i)
         {
-            ItemStack curItem = inputs[i];
+            ItemStack curItem = inventory.getItem(i);
             if(curItem == null) continue;
             if(curItem.getAmount() == 0) continue;
             curItem.setAmount(curItem.getAmount() - takeValue);

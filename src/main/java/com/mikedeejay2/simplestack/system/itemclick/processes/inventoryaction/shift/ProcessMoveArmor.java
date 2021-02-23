@@ -22,7 +22,6 @@ public class ProcessMoveArmor implements ItemClickProcess
     {
         info.player.sendMessage("Move to Armor");
         Inventory toInv = info.bottomInv;
-        ItemStack[] toItems = toInv.getContents();
         Material selectedMat = info.selected.getType();
         int selectedAmt = info.selectedAmt;
 
@@ -54,7 +53,7 @@ public class ProcessMoveArmor implements ItemClickProcess
 
         for(int i = start; i < end; ++i)
         {
-            ItemStack item = toItems[i];
+            ItemStack item = toInv.getItem(i);
             if(item == null) continue;
             if(item.getType() == Material.AIR) continue;
             if(!ItemComparison.equalsEachOther(item, info.selected)) continue;
@@ -79,7 +78,7 @@ public class ProcessMoveArmor implements ItemClickProcess
         }
         for(int i = start; i < end; ++i)
         {
-            ItemStack item = toItems[i];
+            ItemStack item = toInv.getItem(i);
             if(item != null && item.getType() != Material.AIR) continue;
             item = info.selected.clone();
             int newAmt = selectedAmt;
