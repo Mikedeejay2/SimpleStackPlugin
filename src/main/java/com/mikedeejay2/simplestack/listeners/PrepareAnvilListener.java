@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Listens for Prepare Anvil events
@@ -30,7 +31,12 @@ public class PrepareAnvilListener implements Listener
     @EventHandler
     public void prepareAnvilEvent(PrepareAnvilEvent event)
     {
-        AnvilInventory inv = event.getInventory();
-        CheckUtils.prepareSmithingAnvil(event.getResult(), inv.getItem(0), inv.getItem(1));
+        AnvilInventory inv    = event.getInventory();
+        ItemStack      input1 = inv.getItem(0);
+        ItemStack      input2 = inv.getItem(1);
+        ItemStack result = event.getResult();
+        if(input1 == null || result == null || input2 == null) return;
+        int amount = Math.min(input1.getAmount(), input2.getAmount());
+        result.setAmount(amount);
     }
 }

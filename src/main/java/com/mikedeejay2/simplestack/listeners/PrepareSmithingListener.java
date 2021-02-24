@@ -5,6 +5,7 @@ import com.mikedeejay2.simplestack.util.CheckUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.SmithingInventory;
 
 /**
@@ -31,6 +32,11 @@ public class PrepareSmithingListener implements Listener
     public void prepareSmithingEvent(PrepareSmithingEvent event)
     {
         SmithingInventory inv = event.getInventory();
-        CheckUtils.prepareSmithingAnvil(event.getResult(), inv.getItem(0), inv.getItem(1));
+        ItemStack input1 = inv.getItem(0);
+        ItemStack input2 = inv.getItem(1);
+        ItemStack result = event.getResult();
+        if(input1 == null || result == null || input2 == null) return;
+        int amount = Math.min(input1.getAmount(), input2.getAmount());
+        result.setAmount(amount);
     }
 }
