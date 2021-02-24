@@ -21,6 +21,12 @@ public class ProcessForceUpdate implements ItemClickProcess
                 inventory.setItem(1, inventory.getItem(1));
             }
             break;
+            case CARTOGRAPHY:
+            {
+                Inventory inventory = info.clickedInv;
+                inventory.setItem(0, inventory.getItem(0));
+            }
+            break;
         }
     }
 }
