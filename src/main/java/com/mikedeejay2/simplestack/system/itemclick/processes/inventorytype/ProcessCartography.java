@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes.inventorytype;
 
 import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
+import com.mikedeejay2.mikedeejay2lib.util.map.MapUtil;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
 import com.mikedeejay2.simplestack.util.MoveUtils;
@@ -33,18 +34,9 @@ public class ProcessCartography implements ItemClickProcess
 
             takeValue = MoveUtils.resultSlotShift(info, maxTake);
         }
-        // TODO: Create util to create new map and increment the map before giving it to the player
-//        MapMeta meta    = (MapMeta) result.getItemMeta();
-//        MapView mapView = meta.getMapView();
-//        switch(mapView.getScale())
-//        {
-//            case CLOSEST: mapView.setScale(MapView.Scale.CLOSE); break;
-//            case CLOSE: mapView.setScale(MapView.Scale.NORMAL); break;
-//            case NORMAL: mapView.setScale(MapView.Scale.FAR); break;
-//            case FAR: mapView.setScale(MapView.Scale.FARTHEST); break;
-//        }
-//        meta.setMapView(mapView);
-//        result.setItemMeta(meta);
+        MapMeta meta = (MapMeta) result.getItemMeta();
+        MapUtil.incrementMapSize(meta);
+        result.setItemMeta(meta);
 
         input1.setAmount(input1.getAmount() - takeValue);
         input2.setAmount(input2.getAmount() - takeValue);
