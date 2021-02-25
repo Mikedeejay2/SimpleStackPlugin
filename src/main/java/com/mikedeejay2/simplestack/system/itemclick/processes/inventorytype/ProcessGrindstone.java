@@ -41,8 +41,7 @@ public class ProcessGrindstone implements ItemClickProcess
         inventory.setItem(2, null);
 
         NMS_XP xpCalculator = info.plugin.NMS().getXP();
-        int xpAmt = xpCalculator.calculateXP(inventory.getItem(0), world);
-        xpAmt += xpCalculator.calculateXP(inventory.getItem(1), world);
+        int xpAmt = xpCalculator.calculateXP(world, inventory.getItem(0), inventory.getItem(1));
         xpCalculator.spawnXP(xpAmt, new Location(world, location.getBlockX(), location.getBlockY() + 0.5D, location.getBlockZ() + 0.5D));
 
         world.playSound(location, Sound.BLOCK_GRINDSTONE_USE, SoundCategory.BLOCKS, 1, 1);
