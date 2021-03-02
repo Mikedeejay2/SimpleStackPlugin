@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes.inventorytype;
 
+import com.mikedeejay2.mikedeejay2lib.nms.merchant.NMS_Merchant;
 import com.mikedeejay2.mikedeejay2lib.nms.xpcalc.NMS_XP;
 import com.mikedeejay2.mikedeejay2lib.util.debug.DebugUtil;
 import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
@@ -37,8 +38,10 @@ public class ProcessMerchant implements ItemClickProcess
         int maxUses = recipe.getMaxUses();
         int usesLeft = maxUses - curUses;
         float priceMultiplier = recipe.getPriceMultiplier();
-        boolean isVillager = merchant instanceof Villager;
-        boolean isAbstractVillager = merchant instanceof AbstractVillager;
+        NMS_Merchant nmsMerchant = info.plugin.NMS().getMerchant();
+        AbstractVillager aVillager = nmsMerchant.getVillager(merchant);
+        boolean isVillager = aVillager instanceof Villager;
+        boolean isAbstractVillager = aVillager != null;
 
         List<ItemStack> ingredientList = recipe.getIngredients();
         ItemStack[] ingredients = new ItemStack[ingredientList.size()];
@@ -98,7 +101,7 @@ public class ProcessMerchant implements ItemClickProcess
         if(isVillager)
         {
             System.out.println(DebugUtil.getLineNumber());
-            Villager villager = (Villager) merchant;
+            Villager villager = (Villager) aVillager;
             int experience = villager.getVillagerExperience();
             int newXP = recipe.getVillagerExperience();
             villager.setVillagerExperience(experience + newXP);
@@ -108,7 +111,7 @@ public class ProcessMerchant implements ItemClickProcess
         {
             System.out.println(DebugUtil.getLineNumber());
             NMS_XP xp = info.plugin.NMS().getXP();
-            xp.calculateXP((AbstractVillager) merchant);
+            xp.calculateXP(aVillager);
         }
 
         System.out.println(DebugUtil.getLineNumber());
