@@ -3,7 +3,7 @@ package com.mikedeejay2.simplestack.gui.events;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIListModule;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.gui.GUICreator;

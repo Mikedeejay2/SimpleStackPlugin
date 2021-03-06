@@ -11,10 +11,11 @@ import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractHandlerList;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.normal.GUIInteractExecutorDefaultInv;
 import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIListModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.animation.GUIAnimationModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIBorderModule;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.list.ListViewMode;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.mikedeejay2lib.util.chat.Chat;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
@@ -221,11 +222,11 @@ public class GUIConfigModule implements GUIModule
         }
         itemTypeAmountList.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.item_type_amts.title"), 6);
-            GUIBorderModule border = new GUIBorderModule();
+            GUIBorderModule border = new GUIBorderModule(new GUIItem(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME)));
             gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
             gui.addModule(navi);
-            GUIListModule listModule = new GUIListModule(plugin);
+            GUIListModule listModule = new GUIListModule(plugin, ListViewMode.PAGED, 2, 5, 1, 9);
             GUIItem padItem = new GUIItem(null);
             padItem.setMovable(true);
             listModule.addEndItem(padItem);
@@ -337,11 +338,11 @@ public class GUIConfigModule implements GUIModule
         ));
         language.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.language.title"), 5);
-            GUIBorderModule border = new GUIBorderModule();
+            GUIBorderModule border = new GUIBorderModule(new GUIItem(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME)));
             gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
             gui.addModule(navi);
-            GUIListModule langList = new GUIListModule(plugin);
+            GUIListModule langList = new GUIListModule(plugin, ListViewMode.PAGED, 2, 5, 1, 9);
             gui.addModule(langList);
             langList.setGUIItems(GUICreator.getLanguageList(plugin, player));
             GUIAnimationModule animModule = new GUIAnimationModule(plugin, 10);
@@ -397,11 +398,11 @@ public class GUIConfigModule implements GUIModule
         }
         uniqueItemList.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.unique_items.title"), 6);
-            GUIBorderModule border = new GUIBorderModule();
+            GUIBorderModule border = new GUIBorderModule(new GUIItem(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME)));
             gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
             gui.addModule(navi);
-            GUIListModule listModule = new GUIListModule(plugin);
+            GUIListModule listModule = new GUIListModule(plugin, ListViewMode.PAGED, 2, 5, 1, 9);
             GUIItem padItem = new GUIItem(null);
             padItem.setMovable(true);
             listModule.addEndItem(padItem);
@@ -451,11 +452,11 @@ public class GUIConfigModule implements GUIModule
         }
         itemTypeList.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, plugin.langManager().getText(player, "simplestack.gui.item_types.title"), 6);
-            GUIBorderModule border = new GUIBorderModule();
+            GUIBorderModule border = new GUIBorderModule(new GUIItem(ItemCreator.createHeadItem(Base64Head.WHITE.get(), 1, GUIContainer.EMPTY_NAME)));
             gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
             gui.addModule(navi);
-            GUIListModule listModule = new GUIListModule(plugin);
+            GUIListModule listModule = new GUIListModule(plugin, ListViewMode.PAGED, 2, 5, 1, 9);
             GUIItem padItem = new GUIItem(null);
             padItem.setMovable(true);
             listModule.addEndItem(padItem);
