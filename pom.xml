@@ -108,7 +108,7 @@
                                 </relocation>
                             </relocations>
                             <minimizeJar>true</minimizeJar>
-                            <outputDirectory>${serverDirectory}</outputDirectory>
+                            <outputFile>${serverDirectory}</outputFile>
                         </configuration>
                     </execution>
                 </executions>
