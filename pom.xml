@@ -108,8 +108,7 @@
                                 </relocation>
                             </relocations>
                             <minimizeJar>true</minimizeJar>
-                            <!-- This is the location to my development server. You should change this. -->
-                            <outputFile>C:\Users\mdeej\IdeaProjects\MINECRAFT SPIGOT PLUGIN TOOLS\Dev Server Latest\plugins\${project.name}-${project.version}.jar</outputFile>
+                            <outputDirectory>${serverDirectory}</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
