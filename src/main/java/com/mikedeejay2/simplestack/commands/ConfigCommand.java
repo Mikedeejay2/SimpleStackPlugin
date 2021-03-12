@@ -40,7 +40,7 @@ public class ConfigCommand implements SubCommand
         }
         else if(playerGUI.getGUI().containsModule(GUINavigatorModule.class))
         {
-            playerGUI.openGUI();
+            playerGUI.getGUI().open(player);
         }
         else
         {
