@@ -36,7 +36,7 @@ public class ConfigCommand implements SubCommand
         PlayerGUI playerGUI = plugin.guiManager().getPlayer(player);
         if(playerGUI.getGUI() == null)
         {
-            playerGUI.setGUI(GUICreator.createMainGUI(plugin, player));
+            GUICreator.createMainGUI(plugin, player).open(player);
         }
         else if(playerGUI.getGUI().containsModule(GUINavigatorModule.class))
         {
@@ -44,7 +44,7 @@ public class ConfigCommand implements SubCommand
         }
         else
         {
-            playerGUI.setGUI(GUICreator.createMainGUI(plugin, player));
+            GUICreator.createMainGUI(plugin, player).open(player);
         }
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
     }
