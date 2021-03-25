@@ -30,7 +30,9 @@ public class ReloadCommand implements SubCommand
     {
         Config config = plugin.config();
         config.reload(true);
-        plugin.chat().sendMessage(sender, "&e&l" + plugin.langManager().getTextLib(sender, "generic.success") + "&r &9" + plugin.langManager().getText(sender, "simplestack.reload.success"));
+        plugin.sendMessage(sender,
+                           "&e&l" + plugin.getLibLangManager().getText(sender, "generic.success") +
+                                   "&r &9" + plugin.getLangManager().getText(sender, "simplestack.reload.success"));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
@@ -45,7 +47,7 @@ public class ReloadCommand implements SubCommand
     @Override
     public String info(CommandSender sender)
     {
-        return plugin.langManager().getText(sender, "simplestack.commands.reload.info");
+        return plugin.getLangManager().getText(sender, "simplestack.commands.reload.info");
     }
 
     @Override

@@ -37,15 +37,15 @@ public class RemoveItemCommand implements SubCommand
         ItemStack heldItem = player.getInventory().getItemInMainHand();
         if(heldItem.getType() == Material.AIR)
         {
-            plugin.chat().sendMessage(player, "&c" + plugin.langManager().getText(player, "simplestack.warnings.held_item_required"));
+            plugin.sendMessage(player, "&c" + plugin.getLangManager().getText(player, "simplestack.warnings.held_item_required"));
             return;
         }
         Config config = plugin.config();
         config.removeUniqueItem(player, heldItem);
         config.saveToDisk(true);
-        plugin.chat().sendMessage(sender,
-                "&e&l" + plugin.langManager().getTextLib(player, "generic.success") +
-                        "&r &9" + plugin.langManager().getText(player, "simplestack.commands.removeitem.success"));
+        plugin.sendMessage(sender,
+                "&e&l" + plugin.getLibLangManager().getText(player, "generic.success") +
+                        "&r &9" + plugin.getLangManager().getText(player, "simplestack.commands.removeitem.success"));
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
     }
 
@@ -58,7 +58,7 @@ public class RemoveItemCommand implements SubCommand
     @Override
     public String info(CommandSender sender)
     {
-        return plugin.langManager().getText(sender, "simplestack.commands.removeitem.info");
+        return plugin.getLangManager().getText(sender, "simplestack.commands.removeitem.info");
     }
 
     @Override

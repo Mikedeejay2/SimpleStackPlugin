@@ -38,7 +38,7 @@ public class ProcessMerchant implements ItemClickProcess
         int maxUses = recipe.getMaxUses();
         int usesLeft = maxUses - curUses;
         float priceMultiplier = recipe.getPriceMultiplier();
-        NMS_Merchant nmsMerchant = info.plugin.NMS().getMerchant();
+        NMS_Merchant nmsMerchant = info.plugin.getNMSHandler().getMerchant();
         AbstractVillager aVillager = nmsMerchant.getVillager(merchant);
         boolean isVillager = aVillager instanceof Villager;
         boolean isAbstractVillager = aVillager != null;
@@ -110,7 +110,7 @@ public class ProcessMerchant implements ItemClickProcess
         if(isAbstractVillager)
         {
             System.out.println(DebugUtil.getLineNumber());
-            NMS_XP xp = info.plugin.NMS().getXP();
+            NMS_XP xp = info.plugin.getNMSHandler().getXP();
             xp.calculateXP(aVillager);
         }
 

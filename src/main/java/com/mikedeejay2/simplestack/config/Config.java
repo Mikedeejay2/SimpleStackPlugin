@@ -20,6 +20,7 @@ import java.util.*;
  */
 public class Config extends YamlFile
 {
+    private final Simplestack plugin;
     //Variables
     // List mode of the material list. Either Blacklist of Whitelist.
     private ListMode listMode;
@@ -51,6 +52,7 @@ public class Config extends YamlFile
     public Config(Simplestack plugin)
     {
         super(plugin, "config.yml");
+        this.plugin = plugin;
         this.modified = false;
         this.loaded = false;
         if(!fileExists())
@@ -67,7 +69,7 @@ public class Config extends YamlFile
     private void loadData()
     {
         langLocale = getDefaultLang();
-        plugin.langManager().setDefaultLang(langLocale);
+        plugin.getLangManager().setDefaultLang(langLocale);
 
         loadDefaultAmount();
         loadListMode();
@@ -114,7 +116,7 @@ public class Config extends YamlFile
         if(maxAmount > 64 || maxAmount <= 0)
         {
             maxAmount = 64;
-            plugin.chat().sendMessageLang("simplestack.warnings.invalid_max_amount");
+            plugin.sendMessage(plugin.getLangManager().getText("simplestack.warnings.invalid_max_amount"));
         }
     }
 
@@ -131,13 +133,13 @@ public class Config extends YamlFile
             Material material = Material.matchMaterial(mat);
             if(material == null && !mat.equals("Example Item"))
             {
-                plugin.getLogger().warning(plugin.langManager().getText("simplestack.warnings.invalid_material", new String[]{"MAT"}, new String[]{mat}));
+                plugin.getLogger().warning(plugin.getLangManager().getText("simplestack.warnings.invalid_material", new String[]{"MAT"}, new String[]{mat}));
                 continue;
             }
             int amount = section.getInt(mat);
             if(amount == 0 || amount > 64)
             {
-                plugin.getLogger().warning(plugin.langManager().getText("simplestack.warnings.number_outside_of_range", new String[]{"MAT"}, new String[]{mat.toString()}));
+                plugin.getLogger().warning(plugin.getLangManager().getText("simplestack.warnings.number_outside_of_range", new String[]{"MAT"}, new String[]{mat.toString()}));
                 continue;
             }
             if(material != null) itemAmounts.put(material, amount);
@@ -157,7 +159,7 @@ public class Config extends YamlFile
         catch(Exception e)
         {
             plugin.getLogger().warning(
-                    plugin.langManager().getText("simplestack.warnings.invalid_list_mode", new String[]{"MODE"}, new String[]{listMode})
+                    plugin.getLangManager().getText("simplestack.warnings.invalid_list_mode", new String[]{"MODE"}, new String[]{listMode})
             );
             this.listMode = ListMode.BLACKLIST;
         }
@@ -176,7 +178,7 @@ public class Config extends YamlFile
             Material material = Material.matchMaterial(mat);
             if(material == null && !mat.equals("Example Item"))
             {
-                plugin.getLogger().warning(plugin.langManager().getText("simplestack.warnings.invalid_material", new String[]{"MAT"}, new String[]{mat}));
+                plugin.getLogger().warning(plugin.getLangManager().getText("simplestack.warnings.invalid_material", new String[]{"MAT"}, new String[]{mat}));
                 continue;
             }
             if(material == null) continue;
@@ -200,7 +202,7 @@ public class Config extends YamlFile
         {
             if(item == null || item.getType().isAir())
             {
-                plugin.getLogger().warning(plugin.langManager().getText("simplestack.warnings.invalid_unique_item"));
+                plugin.getLogger().warning(plugin.getLangManager().getText("simplestack.warnings.invalid_unique_item"));
                 continue;
             }
             uniqueItemList.add(item);
@@ -538,7 +540,7 @@ public class Config extends YamlFile
     {
         if(containsMaterial(material))
         {
-            plugin.chat().sendMessageLang(player, "simplestack.warnings.material_already_exists");
+            plugin.sendMessage(player, plugin.getLangManager().getText(player, "simplestack.warnings.material_already_exists"));
             return false;
         }
         materialList.add(material);
@@ -604,7 +606,7 @@ public class Config extends YamlFile
     public void setLangLocale(String newLocale)
     {
         this.langLocale = newLocale;
-        plugin.langManager().setDefaultLang(newLocale);
+        plugin.getLangManager().setDefaultLang(newLocale);
         setModified(true);
     }
 
@@ -634,7 +636,7 @@ public class Config extends YamlFile
     {
         if(!hasCustomAmount(material))
         {
-            plugin.chat().sendMessageLang(player, "simplestack.warnings.custom_amount_does_not_exist");
+            plugin.sendMessage(player, plugin.getLangManager().getText(player, "simplestack.warnings.custom_amount_does_not_exist"));
             return;
         }
         itemAmounts.remove(material);

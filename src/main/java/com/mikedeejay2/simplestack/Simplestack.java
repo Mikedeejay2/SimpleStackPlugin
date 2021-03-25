@@ -1,7 +1,10 @@
 package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.mikedeejay2lib.PluginBase;
+import com.mikedeejay2.mikedeejay2lib.text.language.LangManager;
+import com.mikedeejay2.mikedeejay2lib.util.bstats.BStats;
 import com.mikedeejay2.mikedeejay2lib.util.recipe.RecipeUtil;
+import com.mikedeejay2.mikedeejay2lib.util.update.UpdateChecker;
 import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.listeners.*;
@@ -29,13 +32,21 @@ public final class Simplestack extends PluginBase
     // The config of Simple Stack which stores all customizable data
     private Config config;
 
+    private BStats bStats;
+    private UpdateChecker updateChecker;
+    private LangManager langManager;
+
     @Override
     public void onEnable()
     {
         super.onEnable();
-        chat.setTitleString("&b[&9" + this.getDescription().getName() + "&b] &r");
+        this.prefix = "&b[&9" + this.getDescription().getName() + "&b] &r";
 
+        this.langManager = new LangManager(this, "lang");
+
+        this.bStats = new BStats(this);
         this.bStats.init(9379);
+        this.updateChecker = new UpdateChecker(this);
         this.updateChecker.init("Mikedeejay2", "SimpleStackPlugin");
         this.updateChecker.checkForUpdates(10);
 
@@ -105,5 +116,10 @@ public final class Simplestack extends PluginBase
     public Config config()
     {
         return config;
+    }
+
+    public LangManager getLangManager()
+    {
+        return langManager;
     }
 }

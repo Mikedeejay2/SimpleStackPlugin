@@ -36,35 +36,35 @@ public class SetAmountCommand implements SubCommand
     {
         if(args.length < 2)
         {
-            plugin.chat().sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.number_required") + "\n" +
-                    plugin.langManager().getText("simplestack.commands.setamount.format"));
+            plugin.sendMessage(sender, "&c" + plugin.getLibLangManager().getText(sender, "errors.number_required") + "\n" +
+                    plugin.getLangManager().getText("simplestack.commands.setamount.format"));
             return;
         }
         if(!NumberUtils.isNumber(args[1]))
         {
-            plugin.chat().sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.not_a_number"));
+            plugin.sendMessage(sender, "&c" + plugin.getLibLangManager().getText(sender, "errors.not_a_number"));
             return;
         }
         int amount = Integer.parseInt(args[1]);
         if(amount < 0)
         {
-            plugin.chat().sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.number_less_than_zero"));
+            plugin.sendMessage(sender, "&c" + plugin.getLibLangManager().getText(sender, "errors.number_less_than_zero"));
             return;
         }
         Player player = (Player) sender;
         ItemStack item = player.getInventory().getItemInMainHand();
         if(item.getType() == Material.AIR)
         {
-            plugin.chat().sendMessage(sender, "&c" + plugin.langManager().getTextLib(sender, "errors.invalid_item_held"));
+            plugin.sendMessage(sender, "&c" + plugin.getLibLangManager().getText(sender, "errors.invalid_item_held"));
             return;
         }
         item.setAmount(amount);
         if(amount > plugin.config().getMaxAmount())
         {
-            plugin.chat().sendMessage(sender, "&e" + plugin.langManager().getTextLib(sender, "warnings.big_number"));
+            plugin.sendMessage(sender, "&e" + plugin.getLibLangManager().getText(sender, "warnings.big_number"));
         }
-        plugin.chat().sendMessage(sender, "&e&l" + plugin.langManager().getTextLib(sender, "generic.success") + "&r &9" +
-                plugin.langManager().getText(sender, "simplestack.commands.setamount.success"));
+        plugin.sendMessage(sender, "&e&l" + plugin.getLibLangManager().getText(sender, "generic.success") + "&r &9" +
+                plugin.getLangManager().getText(sender, "simplestack.commands.setamount.success"));
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.5f, 1f);
     }
 
@@ -76,7 +76,7 @@ public class SetAmountCommand implements SubCommand
 
     public String info(CommandSender sender)
     {
-        return plugin.langManager().getText(sender, "simplestack.commands.setamount.info");
+        return plugin.getLangManager().getText(sender, "simplestack.commands.setamount.info");
     }
 
     @Override

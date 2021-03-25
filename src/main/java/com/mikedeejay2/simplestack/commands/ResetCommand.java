@@ -32,7 +32,9 @@ public class ResetCommand implements SubCommand
     public void onCommand(CommandSender sender, String[] args)
     {
         plugin.config().resetFromJar(true);
-        plugin.chat().sendMessage(sender, "&e&l" + plugin.langManager().getTextLib(sender, "generic.success") + "&r &9" + plugin.langManager().getText(sender, "simplestack.reset.success"));
+        plugin.sendMessage(sender,
+                                  "&e&l" + plugin.getLibLangManager().getText(sender, "generic.success") +
+                                  "&r &9" + plugin.getLangManager().getText(sender, "simplestack.reset.success"));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
@@ -47,7 +49,7 @@ public class ResetCommand implements SubCommand
     @Override
     public String info(CommandSender sender)
     {
-        return plugin.langManager().getText(sender, "simplestack.commands.reset.info");
+        return plugin.getLangManager().getText(sender, "simplestack.commands.reset.info");
     }
 
     @Override

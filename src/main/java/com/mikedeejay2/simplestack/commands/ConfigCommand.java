@@ -33,7 +33,7 @@ public class ConfigCommand implements SubCommand
     public void onCommand(CommandSender sender, String[] args)
     {
         Player player = (Player) sender;
-        PlayerGUI playerGUI = plugin.guiManager().getPlayer(player);
+        PlayerGUI playerGUI = plugin.getGUIManager().getPlayer(player);
         if(playerGUI.getGUI() == null)
         {
             GUICreator.createMainGUI(plugin, player).open(player);
@@ -58,7 +58,7 @@ public class ConfigCommand implements SubCommand
     @Override
     public String info(CommandSender sender)
     {
-        return plugin.langManager().getText(sender, "simplestack.commands.config.info");
+        return plugin.getLangManager().getText(sender, "simplestack.commands.config.info");
     }
 
     @Override
