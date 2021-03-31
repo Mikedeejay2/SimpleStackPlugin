@@ -42,7 +42,7 @@ public class HelpCommand implements SubCommand
         String                     ver           = plugin.getDescription().getVersion();
         String[]                   ssArr         = {"Simple", "Stack"};
         String                     version       = lang.getText(sender, "simplestack.version", new String[]{"VERSION"}, new String[]{ver});
-        CommandManager             manager       = plugin.commandManager();
+        CommandManager             manager       = plugin.getCommandManager();
         String[]                   commands      = manager.getAllCommandStrings(false);
         ArrayList<BaseComponent[]> lines         = new ArrayList<>();
         String                     lineString    = "&b &m                                                                              ";
@@ -62,7 +62,7 @@ public class HelpCommand implements SubCommand
         for(int i = 1; i < commands.length; i++)
         {
             String command = commands[i];
-            String commandInfo = manager.getSubcommand(command).info(sender);
+            String commandInfo = manager.getSubcommand(command).getInfo(sender);
             String hoverText = "&d" + lang.getText(sender, "simplestack.commands.click_to_run", new String[]{"COMMAND"}, new String[]{"/simplestack " + command});
 
             BaseComponent[] line = ChatConverter.getBaseComponentArray("  &b/simplestack " + command + " &d- &f" + commandInfo + "\n");
@@ -86,32 +86,20 @@ public class HelpCommand implements SubCommand
     }
 
     @Override
-    public String name()
+    public String getName()
     {
         return "help";
     }
 
     @Override
-    public String info(CommandSender sender)
+    public String getInfo(CommandSender sender)
     {
         return plugin.getLangManager().getText(sender, "simplestack.commands.help.info");
     }
 
     @Override
-    public String[] aliases()
-    {
-        return new String[0];
-    }
-
-    @Override
-    public String permission()
+    public String getPermission()
     {
         return "simplestack.help";
-    }
-
-    @Override
-    public boolean playerRequired()
-    {
-        return false;
     }
 }

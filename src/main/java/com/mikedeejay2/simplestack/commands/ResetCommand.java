@@ -41,32 +41,20 @@ public class ResetCommand implements SubCommand
     }
 
     @Override
-    public String name()
+    public String getName()
     {
         return "reset";
     }
 
     @Override
-    public String info(CommandSender sender)
+    public String getInfo(CommandSender sender)
     {
         return plugin.getLangManager().getText(sender, "simplestack.commands.reset.info");
     }
 
     @Override
-    public String[] aliases()
-    {
-        return new String[0];
-    }
-
-    @Override
-    public String permission()
+    public String getPermission()
     {
         return "simplestack.reset";
-    }
-
-    @Override
-    public boolean playerRequired()
-    {
-        return false;
     }
 }

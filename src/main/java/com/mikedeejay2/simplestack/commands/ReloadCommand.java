@@ -7,6 +7,11 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class ReloadCommand implements SubCommand
 {
     private final Simplestack plugin;
@@ -39,32 +44,26 @@ public class ReloadCommand implements SubCommand
     }
 
     @Override
-    public String name()
+    public String getName()
     {
         return "reload";
     }
 
     @Override
-    public String info(CommandSender sender)
+    public String getInfo(CommandSender sender)
     {
         return plugin.getLangManager().getText(sender, "simplestack.commands.reload.info");
     }
 
     @Override
-    public String[] aliases()
+    public List<String> getAliases()
     {
-        return new String[]{"rl"};
+        return new ArrayList<>(Collections.singleton("rl"));
     }
 
     @Override
-    public String permission()
+    public String getPermission()
     {
         return "simplestack.reload";
-    }
-
-    @Override
-    public boolean playerRequired()
-    {
-        return false;
     }
 }

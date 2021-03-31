@@ -69,30 +69,25 @@ public class SetAmountCommand implements SubCommand
     }
 
     @Override
-    public String name()
+    public String getName()
     {
         return "setamount";
     }
 
-    public String info(CommandSender sender)
+    @Override
+    public String getInfo(CommandSender sender)
     {
         return plugin.getLangManager().getText(sender, "simplestack.commands.setamount.info");
     }
 
     @Override
-    public String[] aliases()
-    {
-        return new String[]{"rl"};
-    }
-
-    @Override
-    public String permission()
+    public String getPermission()
     {
         return "simplestack.setamount";
     }
 
     @Override
-    public boolean playerRequired()
+    public boolean isPlayerRequired()
     {
         return true;
     }

@@ -50,31 +50,25 @@ public class AddItemCommand implements SubCommand
     }
 
     @Override
-    public String name()
+    public String getName()
     {
         return "additem";
     }
 
     @Override
-    public String info(CommandSender sender)
+    public String getInfo(CommandSender sender)
     {
         return plugin.getLangManager().getText(sender, "simplestack.commands.additem.info");
     }
 
     @Override
-    public String[] aliases()
-    {
-        return new String[0];
-    }
-
-    @Override
-    public String permission()
+    public String getPermission()
     {
         return "simplestack.additem";
     }
 
     @Override
-    public boolean playerRequired()
+    public boolean isPlayerRequired()
     {
         return true;
     }
