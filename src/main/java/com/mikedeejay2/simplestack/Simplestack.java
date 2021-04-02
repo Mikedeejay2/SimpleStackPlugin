@@ -42,7 +42,7 @@ public final class Simplestack extends BukkitPlugin
     public void onEnable()
     {
         super.onEnable();
-        setPrefix("&b[&9" + this.getDescription().getName() + "&b] &r");
+        setPrefix("&b[&9" + this.getDescription().getName() + "&b]&r");
 
         this.langManager = new LangManager(this, "lang");
 
@@ -59,6 +59,7 @@ public final class Simplestack extends BukkitPlugin
         this.commandManager.addSubcommand(new ResetCommand(this));
         this.commandManager.addSubcommand(new SetAmountCommand(this));
         this.commandManager.addSubcommand(new ConfigCommand(this));
+        registerCommand(commandManager);
         // These commands are disabled because they don't function very well.
 //        this.commandManager.addSubcommand(new AddItemCommand(this));
 //        this.commandManager.addSubcommand(new RemoveItemCommand(this));
