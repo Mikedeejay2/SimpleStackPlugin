@@ -373,7 +373,6 @@ public class GUIConfigModule implements GUIModule
             .setAmount(config.getMaxAmount())
             .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.default_max_select"))
             .setLore(
-                "&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.default_max_select"),
                 "&f" + plugin.getLangManager().getText(player, "simplestack.gui.config.default_max_desc_l1"),
                 "&f" + plugin.getLangManager().getText(player, "simplestack.gui.config.default_max_desc_l2"),
                 "&7" + plugin.getLangManager().getText(player, "simplestack.gui.config.default_max_desc_l3"),
