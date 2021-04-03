@@ -23,52 +23,45 @@ public class ProcessMerchant implements ItemClickProcess
     {
         if(info.rawSlot != 2) return;
         /* DEBUG */ System.out.println("Process Merchant");
-        System.out.println(DebugUtil.getLineNumber());
         if(!InventoryIdentifiers.takeResult(info.getAction())) return;
         MerchantInventory inventory = (MerchantInventory) info.topInv;
         ItemStack result = inventory.getItem(2);
-        System.out.println(DebugUtil.getLineNumber());
         if(result == null) return;
         Merchant merchant = inventory.getMerchant();
         MerchantRecipe recipe = inventory.getSelectedRecipe();
-        System.out.println(DebugUtil.getLineNumber());
         if(recipe == null) return;
-        System.out.println(DebugUtil.getLineNumber());
         int curUses = recipe.getUses();
         int maxUses = recipe.getMaxUses();
         int usesLeft = maxUses - curUses;
-        float priceMultiplier = recipe.getPriceMultiplier();
         NMS_Merchant nmsMerchant = info.plugin.getNMSHandler().getMerchant();
         AbstractVillager aVillager = nmsMerchant.getVillager(merchant);
         boolean isVillager = aVillager instanceof Villager;
         boolean isAbstractVillager = aVillager != null;
+//        float priceMultiplier = aVillager
 
         List<ItemStack> ingredientList = recipe.getIngredients();
         ItemStack[] ingredients = new ItemStack[ingredientList.size()];
-        System.out.println(DebugUtil.getLineNumber());
         for(int i = 0; i < ingredientList.size(); ++i)
         {
             ItemStack curItem = ingredientList.get(i);
-            curItem.setAmount((int) (curItem.getAmount() * (priceMultiplier + 1)));
-            System.out.println("PriceMultiplier: " + priceMultiplier);
+            curItem.setAmount((int) (curItem.getAmount()));
             ingredients[i] = curItem;
         }
 
         boolean useMax = info.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY;
         int takeValue = 1;
-        System.out.println(DebugUtil.getLineNumber());
         if(useMax)
         {
-            System.out.println(DebugUtil.getLineNumber());
             int maxTake = Integer.MAX_VALUE;
             for(int i = 0; i < ingredients.length; ++i)
             {
-                System.out.println(DebugUtil.getLineNumber());
                 ItemStack curIngredient = ingredients[i];
                 ItemStack curInput = inventory.getItem(i);
+                System.out.println("curIngredient: " + curIngredient);
+                System.out.println("curInput: " + curInput);
+                if(curIngredient.getType() == Material.AIR) continue;
                 if(curInput == null)
                 {
-                    System.out.println(DebugUtil.getLineNumber());
                     maxTake = 0;
                     continue;
                 }
@@ -77,44 +70,40 @@ public class ProcessMerchant implements ItemClickProcess
                 int max = ingAmt == 0 || inAmt == 0 ? 0 : inAmt / ingAmt;
                 maxTake = Math.min(maxTake, max);
             }
-            System.out.println(DebugUtil.getLineNumber());
             maxTake = Math.min(usesLeft, maxTake);
             takeValue = MoveUtils.resultSlotShift(info, maxTake);
         }
 
-        System.out.println(DebugUtil.getLineNumber());
         for(int i = 0; i < ingredients.length; ++i)
         {
-            System.out.println(DebugUtil.getLineNumber());
             ItemStack curIngredient = ingredients[i];
             ItemStack curInput = inventory.getItem(i);
             if(curInput == null) continue;
             int ingAmt = curIngredient.getAmount();
             int takeAmt = ingAmt * takeValue;
             curInput.setAmount(curInput.getAmount() - takeAmt);
-            System.out.println(DebugUtil.getLineNumber());
         }
         recipe.setUses(curUses + takeValue);
 
         System.out.println("Is: " + merchant + " a villager? " + isVillager);
         System.out.println("Is: " + merchant + " an abstract villager? " + isAbstractVillager);
-        if(isVillager)
+        System.out.println("Take amount: " + takeValue);
+
+        for(int i = 0; i < takeValue; ++i)
         {
-            System.out.println(DebugUtil.getLineNumber());
-            Villager villager = (Villager) aVillager;
-            int experience = villager.getVillagerExperience();
-            int newXP = recipe.getVillagerExperience();
-            villager.setVillagerExperience(experience + newXP);
+            if(isVillager)
+            {
+                nmsMerchant.forceTrade(aVillager, recipe, info.player, inventory);
+            }
+
+            if(isAbstractVillager)
+            {
+                NMS_XP xp = info.plugin.getNMSHandler().getXP();
+                int amount = xp.calculateXP(aVillager);
+                xp.spawnXP(amount, aVillager.getLocation());
+            }
         }
 
-        if(isAbstractVillager)
-        {
-            System.out.println(DebugUtil.getLineNumber());
-            NMS_XP xp = info.plugin.getNMSHandler().getXP();
-            xp.calculateXP(aVillager);
-        }
-
-        System.out.println(DebugUtil.getLineNumber());
         info.player.incrementStatistic(Statistic.TRADED_WITH_VILLAGER);
     }
 }
