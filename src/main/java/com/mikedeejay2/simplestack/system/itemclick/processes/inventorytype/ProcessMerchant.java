@@ -7,8 +7,7 @@ import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
 import com.mikedeejay2.simplestack.util.MoveUtils;
-import org.bukkit.Material;
-import org.bukkit.Statistic;
+import org.bukkit.*;
 import org.bukkit.entity.AbstractVillager;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.inventory.InventoryAction;
@@ -37,7 +36,6 @@ public class ProcessMerchant implements ItemClickProcess
         AbstractVillager aVillager = nmsMerchant.getVillager(merchant);
         boolean isVillager = aVillager instanceof Villager;
         boolean isAbstractVillager = aVillager != null;
-//        float priceMultiplier = aVillager
 
         List<ItemStack> ingredientList = recipe.getIngredients();
         ItemStack[] ingredients = new ItemStack[ingredientList.size()];
@@ -93,7 +91,13 @@ public class ProcessMerchant implements ItemClickProcess
         {
             if(isVillager)
             {
-                nmsMerchant.forceTrade(aVillager, recipe, info.player, inventory);
+//                nmsMerchant.forceTrade(aVillager, recipe, info.player, inventory);
+                Villager villager = (Villager) aVillager;
+//            nmsMerchant.setForcedExperience(info.player, villager.getVillagerExperience() + (recipe.getVillagerExperience() * takeValue));
+//            nmsMerchant.forceTrade(aVillager, recipe, info.player, inventory);
+                villager.setVillagerExperience(villager.getVillagerExperience() + recipe.getVillagerExperience());
+                System.out.println("Villager XP: " + villager.getVillagerExperience());
+                System.out.println("Villager level: " + villager.getVillagerLevel());
             }
 
             if(isAbstractVillager)
@@ -104,6 +108,8 @@ public class ProcessMerchant implements ItemClickProcess
             }
         }
 
+        aVillager.getWorld().playSound(aVillager.getLocation(), Sound.ENTITY_VILLAGER_YES, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         info.player.incrementStatistic(Statistic.TRADED_WITH_VILLAGER);
+        info.player.incrementStatistic(Statistic.CRAFT_ITEM, result.getType(), takeValue * result.getAmount());
     }
 }
