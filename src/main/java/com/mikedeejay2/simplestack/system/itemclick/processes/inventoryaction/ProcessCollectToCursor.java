@@ -23,7 +23,7 @@ public class ProcessCollectToCursor implements ItemClickProcess
         {
             for(int i = 0; i < invSlots; ++i)
             {
-                Inventory curInv = i > info.topInv.getSize() ? info.bottomInv : info.topInv;
+                Inventory curInv = i >= info.topInv.getSize() ? info.bottomInv : info.topInv;
                 int convertedSlot = inventory.convertSlot(i);
                 ItemStack item = curInv.getItem(convertedSlot);
                 if(item == null) continue;
