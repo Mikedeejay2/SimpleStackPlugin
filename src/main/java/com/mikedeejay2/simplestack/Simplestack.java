@@ -28,6 +28,8 @@ import com.mikedeejay2.simplestack.runnables.GroundItemStacker;
  */
 public final class Simplestack extends BukkitPlugin
 {
+    private static final int MINIMUM_VERSION = 14;
+
     // Permission for general Simple Stack use
     private final String permission = "simplestack.use";
 
@@ -45,6 +47,7 @@ public final class Simplestack extends BukkitPlugin
     {
         super.onEnable();
         setPrefix("&b[&9" + this.getDescription().getName() + "&b]&r");
+        if(checkVersion()) return;
 
         this.langManager = new LangManager(this, "lang");
 
@@ -91,6 +94,26 @@ public final class Simplestack extends BukkitPlugin
         stacker.runTaskTimer(this, 0, 20);
 
         RecipeUtil.preload(this, 0);
+    }
+
+    /**
+     * Helper method to check the Minecraft version that the Minecraft server is running on.
+     * <p>
+     * If the version is not compatible, disable this plugin.
+     *
+     * @return Whether the plugin has been disabled.
+     */
+    private boolean checkVersion()
+    {
+        if(getMCVersion().getVersionShort() < MINIMUM_VERSION)
+        {
+            sendSevere(String.format("Simple Stack %s is not compatible Minecraft version %s!",
+                                     this.getDescription().getVersion(),
+                                     getMCVersion().getVersionString()));
+            disablePlugin(this);
+            return true;
+        }
+        return false;
     }
 
     @Override
