@@ -22,7 +22,6 @@ public class ProcessMoveHotbar implements ItemClickProcess
     @Override
     public void invoke(ItemClickInfo info)
     {
-        info.player.sendMessage("Move to Hotbar");
         Inventory toInv = info.clickedBottom ? info.topInv : info.bottomInv;
         ItemStack[] toItems = toInv.getStorageContents();
         Material selectedMat = info.selected.getType();

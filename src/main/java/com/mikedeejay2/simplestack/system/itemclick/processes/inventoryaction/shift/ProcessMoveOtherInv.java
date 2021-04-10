@@ -26,7 +26,6 @@ public class ProcessMoveOtherInv implements ItemClickProcess
     @Override
     public void invoke(ItemClickInfo info)
     {
-        info.player.sendMessage("Move to Other Inv");
         Inventory toInv = info.clickedBottom ? info.topInv : info.bottomInv;
         ItemStack[] toItems = toInv.getStorageContents();
         Material selectedMat = info.selected.getType();

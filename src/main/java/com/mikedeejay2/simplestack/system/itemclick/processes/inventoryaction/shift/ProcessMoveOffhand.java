@@ -22,7 +22,6 @@ public class ProcessMoveOffhand implements ItemClickProcess
     @Override
     public void invoke(ItemClickInfo info)
     {
-        info.player.sendMessage("Move to Offhand");
         Inventory toInv       = info.clickedBottom ? info.bottomInv : info.topInv;
         Material          selectedMat = info.selected.getType();
         int               selectedAmt = info.selectedAmt;

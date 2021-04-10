@@ -20,7 +20,6 @@ public class ProcessMoveArmor implements ItemClickProcess
     @Override
     public void invoke(ItemClickInfo info)
     {
-        info.player.sendMessage("Move to Armor");
         Inventory toInv = info.bottomInv;
         Material selectedMat = info.selected.getType();
         int selectedAmt = info.selectedAmt;

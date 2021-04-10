@@ -104,8 +104,8 @@ public class GUIConfigModule implements GUIModule
                 .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_select"))
                 .setLore(
                     "",
-                    "&a&l⊳ " + plugin.getLibLangManager().getText(player, "simplestack.gui.config.creative_drag_duplicate"),
-                    "&7  " + plugin.getLibLangManager().getText(player, "simplestack.gui.config.creative_drag_normal"))
+                    "&a&l⊳ " + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_duplicate"),
+                    "&7  " + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_normal"))
                 .get());
         }
         else
@@ -114,8 +114,8 @@ public class GUIConfigModule implements GUIModule
                 .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_select"))
                 .setLore(
                     "",
-                    "&7  " + plugin.getLibLangManager().getText(player, "simplestack.gui.config.creative_drag_duplicate"),
-                    "&c&l⊳ " + plugin.getLibLangManager().getText(player, "simplestack.gui.config.creative_drag_normal"))
+                    "&7  " + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_duplicate"),
+                    "&c&l⊳ " + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_normal"))
                 .get());
         }
         creativeDrag.addEvent(new GUICreativeDragEvent(plugin));

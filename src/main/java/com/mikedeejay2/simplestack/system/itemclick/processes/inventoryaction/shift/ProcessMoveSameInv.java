@@ -13,7 +13,6 @@ public class ProcessMoveSameInv implements ItemClickProcess
     @Override
     public void invoke(ItemClickInfo info)
     {
-        info.player.sendMessage("Move to Same Inv");
         Inventory toInv = info.clickedBottom ? info.bottomInv : info.topInv;
         ItemStack[] toItems = toInv.getStorageContents();
         Material selectedMat = info.selected.getType();

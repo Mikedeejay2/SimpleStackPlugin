@@ -27,9 +27,9 @@ public final class CancelUtils
      */
     public static boolean cancelStackCheck(Simplestack plugin, ItemStack item)
     {
+        if(item == null) return false;
         Config config = plugin.config();
         Material material = item.getType();
-        if(material == Material.AIR) return true;
         int stackAmount = StackUtils.getMaxAmount(plugin, item);
         if(material.getMaxStackSize() == plugin.config().getMaxAmount() &&
                 stackAmount == plugin.config().getMaxAmount())
