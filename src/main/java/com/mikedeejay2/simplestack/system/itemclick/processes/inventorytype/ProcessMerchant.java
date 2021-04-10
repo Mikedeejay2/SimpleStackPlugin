@@ -11,8 +11,6 @@ import org.bukkit.entity.Villager;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.*;
 
-import java.util.List;
-
 public class ProcessMerchant implements ItemClickProcess
 {
     @Override
@@ -35,49 +33,48 @@ public class ProcessMerchant implements ItemClickProcess
         boolean isVillager = aVillager instanceof Villager;
         boolean isAbstractVillager = aVillager != null;
 
-        List<ItemStack> ingredientList = recipe.getIngredients();
-        ItemStack[] ingredients = new ItemStack[ingredientList.size()];
-        for(int i = 0; i < ingredientList.size(); ++i)
-        {
-            ItemStack curItem = ingredientList.get(i);
-            curItem.setAmount((int) (curItem.getAmount()));
-            ingredients[i] = curItem;
-        }
+        ItemStack ingredient1 = nmsMerchant.getBuyItem1(recipe);
+        ItemStack ingredient2 = nmsMerchant.getBuyItem2(recipe);
+        ItemStack input1 = inventory.getItem(0);
+        ItemStack input2 = inventory.getItem(1);
 
         boolean useMax = info.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY;
         int takeValue = 1;
         if(useMax)
         {
             int maxTake = Integer.MAX_VALUE;
-            for(int i = 0; i < ingredients.length; ++i)
+
+            System.out.println("curInput: " + input1);
+            if(ingredient1.getType() != Material.AIR &&
+               input1 != null &&
+               ingredient1.getAmount() != 0 &&
+               input1.getAmount() != 0)
             {
-                ItemStack curIngredient = ingredients[i];
-                ItemStack curInput = inventory.getItem(i);
-                System.out.println("curIngredient: " + curIngredient);
-                System.out.println("curInput: " + curInput);
-                if(curIngredient.getType() == Material.AIR) continue;
-                if(curInput == null)
-                {
-                    maxTake = 0;
-                    continue;
-                }
-                int ingAmt = curIngredient.getAmount();
-                int inAmt = curInput.getAmount();
-                int max = ingAmt == 0 || inAmt == 0 ? 0 : inAmt / ingAmt;
-                maxTake = Math.min(maxTake, max);
+                maxTake = Math.min(maxTake, input1.getAmount() / ingredient1.getAmount());
             }
+            else if(ingredient2.getType() != Material.AIR &&
+                    input2 != null &&
+                    ingredient2.getAmount() != 0 &&
+                    input2.getAmount() != 0)
+            {
+                maxTake = Math.min(maxTake, input2.getAmount() / ingredient2.getAmount());
+            }
+            else
+            {
+                maxTake = 0;
+            }
+
             maxTake = Math.min(usesLeft, maxTake);
             takeValue = MoveUtils.resultSlotShift(info, maxTake);
         }
 
-        for(int i = 0; i < ingredients.length; ++i)
+        if(input1 != null)
         {
-            ItemStack curIngredient = ingredients[i];
-            ItemStack curInput = inventory.getItem(i);
-            if(curInput == null) continue;
-            int ingAmt = curIngredient.getAmount();
-            int takeAmt = ingAmt * takeValue;
-            curInput.setAmount(curInput.getAmount() - takeAmt);
+            input1.setAmount(input1.getAmount() - (ingredient1.getAmount() * takeValue));
+        }
+        if(input2 != null)
+        {
+            input2.setAmount(input2.getAmount() - (ingredient2.getAmount() * takeValue));
         }
         recipe.setUses(curUses + takeValue);
 
