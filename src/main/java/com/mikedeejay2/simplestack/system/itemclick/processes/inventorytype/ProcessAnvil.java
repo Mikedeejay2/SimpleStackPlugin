@@ -16,7 +16,6 @@ public class ProcessAnvil implements ItemClickProcess
         Inventory inventory = info.topInv;
         if(info.rawSlot != 2) return;
         if(!InventoryIdentifiers.takeResult(info.getAction())) return;
-        /* DEBUG */ System.out.println("Process Anvil");
         ItemStack result = inventory.getItem(2);
         if(result == null) return;
 

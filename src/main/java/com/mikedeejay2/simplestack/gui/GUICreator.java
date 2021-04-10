@@ -11,6 +11,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.gui.debug.GUIDebugOpenerModule;
 import com.mikedeejay2.simplestack.gui.events.GUISwitchLangEvent;
 import com.mikedeejay2.simplestack.gui.modules.GUIConfigModule;
 import org.bukkit.Material;
@@ -41,15 +42,17 @@ public class GUICreator
      */
     public static GUIContainer createMainGUI(Simplestack plugin, Player player)
     {
-        GUIContainer        gui           = new GUIContainer(plugin, plugin.getLangManager().getText(player, "simplestack.gui.config.title"), 5);
-        GUIAnimationModule  animation     = new GUIAnimationModule(plugin, 1);
-        GUIAnimStripsModule outlineModule = new GUIAnimStripsModule(getAnimItem());
-        GUINavigatorModule  naviModule    = new GUINavigatorModule(plugin, "config");
-        GUIConfigModule     configModule  = new GUIConfigModule(plugin);
+        GUIContainer         gui           = new GUIContainer(plugin, plugin.getLangManager().getText(player, "simplestack.gui.config.title"), 5);
+        GUIAnimationModule   animation     = new GUIAnimationModule(plugin, 1);
+        GUIAnimStripsModule  outlineModule = new GUIAnimStripsModule(getAnimItem());
+        GUINavigatorModule   naviModule    = new GUINavigatorModule(plugin, "config");
+        GUIConfigModule      configModule  = new GUIConfigModule(plugin);
+        GUIDebugOpenerModule debugModule   = new GUIDebugOpenerModule(plugin);
         gui.addModule(animation);
         gui.addModule(outlineModule);
         gui.addModule(naviModule);
         gui.addModule(configModule);
+        gui.addModule(debugModule);
         GUIInteractHandler handler = new GUIInteractHandlerDefault(64);
         gui.setInteractionHandler(handler);
 

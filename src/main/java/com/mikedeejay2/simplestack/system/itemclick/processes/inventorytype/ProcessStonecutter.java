@@ -20,7 +20,6 @@ public class ProcessStonecutter implements ItemClickProcess
     {
         if(info.rawSlot != 1) return;
         if(!InventoryIdentifiers.takeResult(info.getAction())) return;
-        /* DEBUG */ System.out.println("Process Stonecutter");
         Inventory inventory = info.topInv;
         ItemStack result = inventory.getItem(1);
         ItemStack input = inventory.getItem(0);

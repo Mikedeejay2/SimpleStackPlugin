@@ -16,7 +16,6 @@ public class ProcessCrafting implements ItemClickProcess
     public void invoke(ItemClickInfo info)
     {
         if(info.rawSlot != 0) return;
-        /* DEBUG */ System.out.println("Process Crafting");
         if(!InventoryIdentifiers.takeResult(info.getAction())) return;
 
         Inventory inventory = info.topInv;

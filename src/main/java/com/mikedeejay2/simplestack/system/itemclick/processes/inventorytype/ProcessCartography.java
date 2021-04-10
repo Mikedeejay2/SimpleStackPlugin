@@ -19,7 +19,6 @@ public class ProcessCartography implements ItemClickProcess
     public void invoke(ItemClickInfo info)
     {
         if(info.rawSlot != 2) return;
-        /* DEBUG */ System.out.println("Process Cartography");
         if(!InventoryIdentifiers.takeResult(info.getAction())) return;
         Inventory inventory = info.topInv;
         ItemStack result = inventory.getItem(2);

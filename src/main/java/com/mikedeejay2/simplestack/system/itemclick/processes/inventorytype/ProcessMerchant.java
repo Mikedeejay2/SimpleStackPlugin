@@ -17,7 +17,6 @@ public class ProcessMerchant implements ItemClickProcess
     public void invoke(ItemClickInfo info)
     {
         if(info.rawSlot != 2) return;
-        /* DEBUG */ System.out.println("Process Merchant");
         if(!InventoryIdentifiers.takeResult(info.getAction())) return;
         MerchantInventory inventory = (MerchantInventory) info.topInv;
         ItemStack result = inventory.getItem(2);
@@ -44,7 +43,6 @@ public class ProcessMerchant implements ItemClickProcess
         {
             int maxTake = Integer.MAX_VALUE;
 
-            System.out.println("curInput: " + input1);
             if(ingredient1.getType() != Material.AIR &&
                input1 != null &&
                ingredient1.getAmount() != 0 &&
@@ -78,10 +76,6 @@ public class ProcessMerchant implements ItemClickProcess
         }
         recipe.setUses(curUses + takeValue);
 
-        System.out.println("Is: " + merchant + " a villager? " + isVillager);
-        System.out.println("Is: " + merchant + " an abstract villager? " + isAbstractVillager);
-        System.out.println("Take amount: " + takeValue);
-
         for(int i = 0; i < takeValue; ++i)
         {
             if(isVillager)
@@ -89,8 +83,6 @@ public class ProcessMerchant implements ItemClickProcess
                 Villager villager = (Villager) aVillager;
                 villager.setVillagerExperience(villager.getVillagerExperience() + recipe.getVillagerExperience());
                 nmsMerchant.postProcess(villager, recipe);
-                System.out.println("Villager XP: " + villager.getVillagerExperience());
-                System.out.println("Villager level: " + villager.getVillagerLevel());
             }
         }
 

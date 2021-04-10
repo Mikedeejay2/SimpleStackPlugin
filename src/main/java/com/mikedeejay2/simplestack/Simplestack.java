@@ -8,6 +8,7 @@ import com.mikedeejay2.mikedeejay2lib.util.recipe.RecipeUtil;
 import com.mikedeejay2.mikedeejay2lib.util.update.UpdateChecker;
 import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.Config;
+import com.mikedeejay2.simplestack.config.DebugConfig;
 import com.mikedeejay2.simplestack.listeners.*;
 import com.mikedeejay2.simplestack.listeners.player.*;
 import com.mikedeejay2.simplestack.runnables.GroundItemStacker;
@@ -32,6 +33,7 @@ public final class Simplestack extends BukkitPlugin
 
     // The config of Simple Stack which stores all customizable data
     private Config config;
+    private DebugConfig debugConfig;
 
     private BStats bStats;
     private UpdateChecker updateChecker;
@@ -66,6 +68,7 @@ public final class Simplestack extends BukkitPlugin
 
         this.config = new Config(this);
         getDataManager().addFile(config);
+        this.debugConfig = new DebugConfig();
 
         registerEvent(new InventoryClickListener(this));
         registerEvent(new EntityPickupItemListener(this));
@@ -128,5 +131,10 @@ public final class Simplestack extends BukkitPlugin
     public CommandManager getCommandManager()
     {
         return commandManager;
+    }
+
+    public DebugConfig getDebugConfig()
+    {
+        return debugConfig;
     }
 }

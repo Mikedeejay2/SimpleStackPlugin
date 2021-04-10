@@ -16,7 +16,6 @@ public class ProcessLoom implements ItemClickProcess
     public void invoke(ItemClickInfo info)
     {
         if(info.rawSlot != 3) return;
-        /* DEBUG */ System.out.println("Process Loom");
         if(!InventoryIdentifiers.takeResult(info.getAction())) return;
 
         Inventory inventory = info.topInv;

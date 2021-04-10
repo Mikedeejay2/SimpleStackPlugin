@@ -40,7 +40,10 @@ public class ItemClickProcessor implements SimpleStackProcessor
         for(ItemClickProcess process : processes)
         {
             process.invoke(info);
-            timer.addPrintPoint("Process `" + process.getClass().getSimpleName() + "`");
+            if(plugin.getDebugConfig().isPrintTimings())
+            {
+                timer.addPrintPoint("Process `" + process.getClass().getSimpleName() + "`");
+            }
         }
     }
 

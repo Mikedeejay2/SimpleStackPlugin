@@ -23,7 +23,6 @@ public class ProcessGrindstone implements ItemClickProcess
     public void invoke(ItemClickInfo info)
     {
         if(info.rawSlot != 2) return;
-        /* DEBUG */ System.out.println("Process Grindstone");
         if(!InventoryIdentifiers.takeResult(info.getAction())) return;
 
         GrindstoneInventory inventory = (GrindstoneInventory) info.topInv;
