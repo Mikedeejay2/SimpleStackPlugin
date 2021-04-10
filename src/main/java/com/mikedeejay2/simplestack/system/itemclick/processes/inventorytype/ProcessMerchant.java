@@ -1,8 +1,6 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes.inventorytype;
 
 import com.mikedeejay2.mikedeejay2lib.nms.merchant.NMS_Merchant;
-import com.mikedeejay2.mikedeejay2lib.nms.xpcalc.NMS_XP;
-import com.mikedeejay2.mikedeejay2lib.util.debug.DebugUtil;
 import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
@@ -91,20 +89,11 @@ public class ProcessMerchant implements ItemClickProcess
         {
             if(isVillager)
             {
-//                nmsMerchant.forceTrade(aVillager, recipe, info.player, inventory);
                 Villager villager = (Villager) aVillager;
-//            nmsMerchant.setForcedExperience(info.player, villager.getVillagerExperience() + (recipe.getVillagerExperience() * takeValue));
-//            nmsMerchant.forceTrade(aVillager, recipe, info.player, inventory);
                 villager.setVillagerExperience(villager.getVillagerExperience() + recipe.getVillagerExperience());
+                nmsMerchant.postProcess(villager, recipe);
                 System.out.println("Villager XP: " + villager.getVillagerExperience());
                 System.out.println("Villager level: " + villager.getVillagerLevel());
-            }
-
-            if(isAbstractVillager)
-            {
-                NMS_XP xp = info.plugin.getNMSHandler().getXP();
-                int amount = xp.calculateXP(aVillager);
-                xp.spawnXP(amount, aVillager.getLocation());
             }
         }
 
