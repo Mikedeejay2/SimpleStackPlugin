@@ -30,7 +30,6 @@ public class ProcessMerchant implements ItemClickProcess
         NMS_Merchant nmsMerchant = info.plugin.getNMSHandler().getMerchant();
         AbstractVillager aVillager = nmsMerchant.getVillager(merchant);
         boolean isVillager = aVillager instanceof Villager;
-        boolean isAbstractVillager = aVillager != null;
 
         ItemStack ingredient1 = nmsMerchant.getBuyItem1(recipe);
         ItemStack ingredient2 = nmsMerchant.getBuyItem2(recipe);
