@@ -44,6 +44,7 @@ public class InventoryCloseListener implements Listener
                 type == InventoryType.ANVIL ||
                 type == InventoryType.LOOM ||
                 type == InventoryType.GRINDSTONE ||
+                type == InventoryType.MERCHANT ||
                 (plugin.getMCVersion().getVersionShort() >= 16 && type == InventoryType.SMITHING)
           ) ) return;
         Inventory playerInv = player.getInventory();

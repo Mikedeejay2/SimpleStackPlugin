@@ -28,6 +28,10 @@ public class ProcessInvType implements ItemClickProcess
         ItemClickProcess crafting = new ProcessCrafting();
         addProcess(InventoryType.CRAFTING, crafting);
         addProcess(InventoryType.WORKBENCH, crafting);
+        ItemClickProcess furnace = new ProcessFurnace();
+        addProcess(InventoryType.FURNACE, furnace);
+        addProcess(InventoryType.SMOKER, furnace);
+        addProcess(InventoryType.BLAST_FURNACE, furnace);
         addProcess(InventoryType.MERCHANT, new ProcessMerchant());
         addProcess(InventoryType.ANVIL, new ProcessAnvil());
         addProcess(InventoryType.SMITHING, new ProcessSmithing());
