@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.util;
 
+import com.mikedeejay2.mikedeejay2lib.util.debug.DebugUtil;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
@@ -573,7 +574,7 @@ public final class MoveUtils
             if(selectedAmt <= 0)
             {
                 curItem.setAmount(selectedAmt);
-                return maxTake;
+                return maxTake * origAmt;
             }
         }
 
@@ -597,7 +598,7 @@ public final class MoveUtils
             if(selectedAmt <= 0)
             {
                 curItem.setAmount(0);
-                return maxTake;
+                return maxTake * origAmt;
             }
         }
 
@@ -621,22 +622,17 @@ public final class MoveUtils
             if(selectedAmt <= 0)
             {
                 curItem.setAmount(0);
-                return maxTake;
+                return maxTake * origAmt;
             }
         }
         curItem.setAmount(selectedAmt);
-        double normAmt = ((double)selectedAmt / (double)origAmt);
-        double extraAmt = maxTake - normAmt;
-        // For some reason Math.ceil needs to be applied here, on rare occasions the value is
-        // very close to a number (i.e 3.999999999984) but isn't perfect.
-        int excess = (int) Math.ceil(((extraAmt % 1) * (double) origAmt));
-        if(excess > 1)
-        {
-            ItemStack dropItem = takeItem.clone();
-            dropItem.setAmount(excess);
-            MoveUtils.dropItemPlayer(info.player, dropItem);
-        }
-        int takeAmt = (int) extraAmt;
+
+        if(selectedAmt <= 0) return maxTake * origAmt;
+        ItemStack dropItem = takeItem.clone();
+        dropItem.setAmount(selectedAmt);
+        MoveUtils.dropItemPlayer(info.player, dropItem);
+
+        int takeAmt = (origAmt * maxTake) - selectedAmt;
         return takeAmt;
     }
 }

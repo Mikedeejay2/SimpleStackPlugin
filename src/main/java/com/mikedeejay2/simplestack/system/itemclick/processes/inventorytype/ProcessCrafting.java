@@ -1,14 +1,16 @@
 package com.mikedeejay2.simplestack.system.itemclick.processes.inventorytype;
 
 import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
-import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
 import com.mikedeejay2.simplestack.util.MoveUtils;
+import com.mikedeejay2.simplestack.util.StackUtils;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.math.BigDecimal;
 
 public class ProcessCrafting implements ItemClickProcess
 {
@@ -35,6 +37,17 @@ public class ProcessCrafting implements ItemClickProcess
                 maxTake = curAmt;
             }
             takeValue = MoveUtils.resultSlotShift(info, maxTake);
+        }
+        else
+        {
+            int maxResult = StackUtils.getMaxAmount(info.plugin, result);
+            int extraAmount = result.getAmount() - maxResult;
+            if(extraAmount > 0)
+            {
+                ItemClickInfo newInfo = new ItemClickInfo(info);
+                newInfo.selected.setAmount(extraAmount);
+                MoveUtils.resultSlotShift(newInfo, 1);
+            }
         }
 
         for(int i = 1; i < inventory.getSize(); ++i)

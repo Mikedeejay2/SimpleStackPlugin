@@ -85,8 +85,8 @@ public final class ItemClickInfo
         this.plugin         = other.plugin;
         this.player         = other.player;
         this.clickType      = other.clickType;
-        this.cursor         = other.cursor;
-        this.selected       = other.selected;
+        this.cursor         = other.cursor == null ? null : other.cursor.clone();
+        this.selected       = other.selected == null ? null : other.selected.clone();
         this.slot           = other.slot;
         this.rawSlot        = other.rawSlot;
         this.hotbar         = other.hotbar;
