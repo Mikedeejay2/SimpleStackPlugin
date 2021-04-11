@@ -40,14 +40,7 @@ public class ProcessCrafting implements ItemClickProcess
         }
         else
         {
-            int maxResult = StackUtils.getMaxAmount(info.plugin, result);
-            int extraAmount = result.getAmount() - maxResult;
-            if(extraAmount > 0)
-            {
-                ItemClickInfo newInfo = new ItemClickInfo(info);
-                newInfo.selected.setAmount(extraAmount);
-                MoveUtils.resultSlotShift(newInfo, 1);
-            }
+            MoveUtils.storeExtra(info, result);
         }
 
         for(int i = 1; i < inventory.getSize(); ++i)

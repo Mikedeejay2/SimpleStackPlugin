@@ -33,6 +33,10 @@ public class ProcessCartography implements ItemClickProcess
 
             takeValue = MoveUtils.resultSlotShift(info, maxTake);
         }
+        else
+        {
+            MoveUtils.storeExtra(info, result);
+        }
         MapMeta meta = (MapMeta) result.getItemMeta();
         MapUtil.incrementMapSize(meta);
         result.setItemMeta(meta);

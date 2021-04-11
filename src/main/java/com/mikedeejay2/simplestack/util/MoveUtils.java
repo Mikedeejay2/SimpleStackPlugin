@@ -635,4 +635,16 @@ public final class MoveUtils
         int takeAmt = (origAmt * maxTake) - selectedAmt;
         return takeAmt;
     }
+
+    public static void storeExtra(ItemClickInfo info, ItemStack result)
+    {
+        int maxResult = StackUtils.getMaxAmount(info.plugin, result);
+        int extraAmount = result.getAmount() - maxResult;
+        if(extraAmount > 0)
+        {
+            ItemClickInfo newInfo = new ItemClickInfo(info);
+            newInfo.selected.setAmount(extraAmount);
+            MoveUtils.resultSlotShift(newInfo, 1);
+        }
+    }
 }

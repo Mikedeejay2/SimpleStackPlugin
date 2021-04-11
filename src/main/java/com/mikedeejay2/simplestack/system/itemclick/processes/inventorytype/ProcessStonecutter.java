@@ -34,6 +34,10 @@ public class ProcessStonecutter implements ItemClickProcess
 
             takeValue = MoveUtils.resultSlotShift(info, maxTake);
         }
+        else
+        {
+            MoveUtils.storeExtra(info, result);
+        }
         input.setAmount(input.getAmount() - takeValue);
 
         ItemStack clonedItem = inventory.getItem(0) == null ? null : result.clone();

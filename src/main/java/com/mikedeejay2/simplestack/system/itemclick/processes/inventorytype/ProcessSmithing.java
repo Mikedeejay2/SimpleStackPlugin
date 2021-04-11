@@ -4,7 +4,9 @@ import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
 import com.mikedeejay2.simplestack.util.CheckUtils;
+import com.mikedeejay2.simplestack.util.MoveUtils;
 import org.bukkit.Sound;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -42,6 +44,11 @@ public class ProcessSmithing implements ItemClickProcess
         if(!item2Null)
         {
             item2.setAmount(item2Amount - amount);
+        }
+
+        if(info.getAction() != InventoryAction.MOVE_TO_OTHER_INVENTORY)
+        {
+            MoveUtils.storeExtra(info, result);
         }
 
         info.player.getWorld().playSound(info.player.getLocation(), Sound.BLOCK_SMITHING_TABLE_USE, 1, 1);

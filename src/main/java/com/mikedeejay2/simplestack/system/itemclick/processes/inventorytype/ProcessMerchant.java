@@ -65,6 +65,10 @@ public class ProcessMerchant implements ItemClickProcess
             maxTake = Math.min(usesLeft, maxTake);
             takeValue = MoveUtils.resultSlotShift(info, maxTake);
         }
+        else
+        {
+            MoveUtils.storeExtra(info, result);
+        }
 
         if(input1 != null)
         {

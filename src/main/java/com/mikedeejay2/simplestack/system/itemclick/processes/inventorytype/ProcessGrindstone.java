@@ -5,6 +5,7 @@ import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemclick.processes.ItemClickProcess;
 import com.mikedeejay2.simplestack.util.MoveUtils;
+import com.mikedeejay2.simplestack.util.StackUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -35,6 +36,10 @@ public class ProcessGrindstone implements ItemClickProcess
         if(useMax)
         {
             takeValue = MoveUtils.resultSlotShift(info, 1);
+        }
+        else
+        {
+            MoveUtils.storeExtra(info, result);
         }
         if(takeValue == 0) return;
         inventory.setItem(2, null);

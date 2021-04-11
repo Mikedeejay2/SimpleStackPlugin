@@ -35,6 +35,10 @@ public class ProcessLoom implements ItemClickProcess
             }
             takeValue = MoveUtils.resultSlotShift(info, maxTake);
         }
+        else
+        {
+            MoveUtils.storeExtra(info, result);
+        }
 
         for(int i = 0; i < inventory.getSize() - 1; ++i)
         {
