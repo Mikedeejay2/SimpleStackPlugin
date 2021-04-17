@@ -15,7 +15,6 @@ import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.animation.GUIAnimationModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIBorderModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.list.ListViewMode;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
@@ -230,7 +229,7 @@ public class GUIConfigModule implements GUIModule
             gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
             gui.addModule(navi);
-            GUIListModule listModule = new GUIListModule(plugin, ListViewMode.PAGED, 2, 5, 1, 9);
+            GUIListModule listModule = new GUIListModule(plugin, GUIListModule.ListViewMode.PAGED, 2, 5, 1, 9);
             GUIItem padItem = new GUIItem(null);
             padItem.setMovable(true);
             listModule.addEndItem(padItem);
@@ -350,7 +349,7 @@ public class GUIConfigModule implements GUIModule
             gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
             gui.addModule(navi);
-            GUIListModule langList = new GUIListModule(plugin, ListViewMode.PAGED, 2, 5, 1, 9);
+            GUIListModule langList = new GUIListModule(plugin, GUIListModule.ListViewMode.PAGED, 2, 5, 1, 9);
             gui.addModule(langList);
             langList.setGUIItems(GUICreator.getLanguageList(plugin, player));
             GUIAnimationModule animModule = new GUIAnimationModule(plugin, 10);
@@ -415,7 +414,7 @@ public class GUIConfigModule implements GUIModule
             gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
             gui.addModule(navi);
-            GUIListModule listModule = new GUIListModule(plugin, ListViewMode.PAGED, 2, 5, 1, 9);
+            GUIListModule listModule = new GUIListModule(plugin, GUIListModule.ListViewMode.PAGED, 2, 5, 1, 9);
             GUIItem padItem = new GUIItem(null);
             padItem.setMovable(true);
             listModule.addEndItem(padItem);
@@ -471,7 +470,7 @@ public class GUIConfigModule implements GUIModule
             gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
             gui.addModule(navi);
-            GUIListModule listModule = new GUIListModule(plugin, ListViewMode.PAGED, 2, 5, 1, 9);
+            GUIListModule listModule = new GUIListModule(plugin, GUIListModule.ListViewMode.PAGED, 2, 5, 1, 9);
             GUIItem padItem = new GUIItem(null);
             padItem.setMovable(true);
             listModule.addEndItem(padItem);
