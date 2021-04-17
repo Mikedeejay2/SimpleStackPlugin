@@ -70,7 +70,6 @@ public final class Simplestack extends BukkitPlugin
 //        this.commandManager.addSubcommand(new RemoveItemCommand(this));
 
         this.config = new Config(this);
-        getDataManager().addFile(config);
         this.debugConfig = new DebugConfig();
 
         registerEvent(new InventoryClickListener(this));
