@@ -205,7 +205,6 @@ public class GUIConfigModule implements GUIModule
         AnimatedGUIItem itemTypeAmountList = new AnimatedGUIItem(ItemBuilder.of(Material.BARRIER)
             .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.item_type_amts.title"))
             .setLore(
-                "&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.item_type_amts.title"),
                 "&f" + plugin.getLangManager().getText(player, "simplestack.gui.config.item_type_description"))
             .get(), true);
         final Map<Material, Integer> itemAmounts = plugin.config().getItemAmounts();
