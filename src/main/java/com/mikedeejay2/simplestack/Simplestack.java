@@ -12,6 +12,7 @@ import com.mikedeejay2.simplestack.config.DebugConfig;
 import com.mikedeejay2.simplestack.listeners.*;
 import com.mikedeejay2.simplestack.listeners.player.*;
 import com.mikedeejay2.simplestack.runnables.GroundItemStacker;
+import org.bukkit.Bukkit;
 
 /**
  * Simple Stack plugin for Minecraft 1.14 - 1.16
@@ -72,7 +73,7 @@ public final class Simplestack extends BukkitPlugin
         this.config = new Config(this);
         this.debugConfig = new DebugConfig();
 
-        registerEvent(new InventoryClickListener(this));
+        registerEventLast(new InventoryClickListener(this));
         registerEvent(new EntityPickupItemListener(this));
         registerEvent(new BlockBreakListener(this));
         registerEvent(new InventoryMoveItemListener(this));
