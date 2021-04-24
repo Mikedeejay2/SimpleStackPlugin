@@ -39,7 +39,7 @@ public class InventoryClickListener implements Listener
      *
      * @param event The event being activated
      */
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void stackEvent(InventoryClickEvent event)
     {
         Player                 player      = (Player) event.getWhoClicked();

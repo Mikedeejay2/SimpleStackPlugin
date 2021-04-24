@@ -2,6 +2,7 @@ package com.mikedeejay2.simplestack.listeners;
 
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ItemSpawnEvent;
 
@@ -25,7 +26,7 @@ public class ItemSpawnListener implements Listener
      *
      * @param event The event being activated
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void itemSpawnEvent(ItemSpawnEvent event)
     {
 

@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.listeners;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CheckUtils;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
@@ -28,7 +29,7 @@ public class PrepareAnvilListener implements Listener
      *
      * @param event The event being activated
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void prepareAnvilEvent(PrepareAnvilEvent event)
     {
         AnvilInventory inv    = event.getInventory();

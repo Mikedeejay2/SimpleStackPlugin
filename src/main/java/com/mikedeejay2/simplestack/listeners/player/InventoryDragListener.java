@@ -36,7 +36,7 @@ public class InventoryDragListener implements Listener
      *
      * @param event The event being activated
      */
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void inventoryDragEvent(InventoryDragEvent event)
     {
         if(event.getType() != DragType.EVEN) return;

@@ -73,22 +73,24 @@ public final class Simplestack extends BukkitPlugin
         this.config = new Config(this);
         this.debugConfig = new DebugConfig();
 
-        registerEventLast(new InventoryClickListener(this));
-        registerEvent(new EntityPickupItemListener(this));
-        registerEvent(new BlockBreakListener(this));
-        registerEvent(new InventoryMoveItemListener(this));
-        registerEvent(new InventoryCloseListener(this));
-        registerEvent(new PrepareAnvilListener(this));
-        registerEvent(new InventoryDragListener(this));
-        registerEvent(new PlayerBucketEmptyListener(this));
-        registerEvent(new ItemMergeListener(this));
-        registerEvent(new InventoryPickupItemListener(this));
-        registerEvent(new PlayerItemConsumeListener(this));
-        registerEvent(new PrepareItemCraftListener(this));
-        if(getMCVersion().getVersionShort() >= 16)
-        {
-            registerEvent(new PrepareSmithingListener(this));
-        }
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+            registerEvent(new InventoryClickListener(this));
+            registerEvent(new EntityPickupItemListener(this));
+            registerEvent(new BlockBreakListener(this));
+            registerEvent(new InventoryMoveItemListener(this));
+            registerEvent(new InventoryCloseListener(this));
+            registerEvent(new PrepareAnvilListener(this));
+            registerEvent(new InventoryDragListener(this));
+            registerEvent(new PlayerBucketEmptyListener(this));
+            registerEvent(new ItemMergeListener(this));
+            registerEvent(new InventoryPickupItemListener(this));
+            registerEvent(new PlayerItemConsumeListener(this));
+            registerEvent(new PrepareItemCraftListener(this));
+            if(getMCVersion().getVersionShort() >= 16)
+            {
+                registerEvent(new PrepareSmithingListener(this));
+            }
+        }, 1);
 
         GroundItemStacker stacker = new GroundItemStacker(this);
         stacker.runTaskTimer(this, 0, 20);
