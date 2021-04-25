@@ -1,7 +1,6 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
 import com.mikedeejay2.simplestack.Simplestack;
-import com.mikedeejay2.simplestack.system.itemclick.handlers.ItemClickHandler;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.CheckUtils;
 import org.bukkit.entity.Player;
@@ -12,8 +11,6 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -24,13 +21,10 @@ import org.bukkit.inventory.ItemStack;
 public class InventoryClickListener implements Listener
 {
     private final Simplestack plugin;
-    protected ItemClickHandler handler;
 
     public InventoryClickListener(Simplestack plugin)
     {
         this.plugin = plugin;
-        this.handler = new ItemClickHandler(plugin);
-        handler.initDefault();
     }
 
     /**
@@ -42,21 +36,17 @@ public class InventoryClickListener implements Listener
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void stackEvent(InventoryClickEvent event)
     {
-        Player                 player      = (Player) event.getWhoClicked();
-        InventoryAction        action      = event.getAction();
-        CheckUtils.updateGUIManual(plugin, player.getOpenInventory().getTopInventory());
+        Player player = (Player) event.getWhoClicked();
+        InventoryAction action = event.getAction();
+//        CheckUtils.updateGUIManual(plugin, player.getOpenInventory().getTopInventory());
         if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
-        ItemStack              itemPickUp  = event.getCurrentItem();
-        ItemStack              itemPutDown = event.getCursor();
-        ClickType              clickType   = event.getClick();
-        InventoryView          view        = player.getOpenInventory();
-        Inventory              topInv      = view.getTopInventory();
-        Inventory              bottomInv   = view.getBottomInventory();
-        int                    slot        = event.getSlot();
-        InventoryType.SlotType slotType    = event.getSlotType();
-        Inventory              clickedInv  = event.getClickedInventory();
+        ItemStack selectedItem = event.getCurrentItem();
+        ItemStack cursorItem = event.getCursor();
+        ClickType clickType = event.getClick();
+        int slot = event.getSlot();
+        InventoryType.SlotType slotType = event.getSlotType();
         if(clickType == ClickType.CREATIVE || (plugin.getMCVersion().getVersionShort() >= 16 && clickType == ClickType.SWAP_OFFHAND)) return;
-        if(CancelUtils.cancelStackCheck(plugin, itemPickUp) || CancelUtils.cancelStackCheck(plugin, itemPutDown)) return;
+        if(CancelUtils.cancelStackCheck(plugin, selectedItem) || CancelUtils.cancelStackCheck(plugin, cursorItem)) return;
         event.setCancelled(true);
         if(plugin.getDebugConfig().isPrintAction())
         {
@@ -67,11 +57,11 @@ public class InventoryClickListener implements Listener
                     "Slot: " + slot + "\n" +
                     "RawSlot: " + event.getRawSlot() + "\n" +
                     "HotBar Slot: " + event.getHotbarButton() + "\n" +
-                    "Selected Item: " + itemPickUp + "\n" +
-                    "Cursor Item: " + itemPutDown + "\n" +
+                    "Selected Item: " + selectedItem + "\n" +
+                    "Cursor Item: " + cursorItem + "\n" +
                     "Slot Type: " + slotType + "\n"
             );
         }
-            handler.handle(event);
+        plugin.getItemClickHandler().handle(event);
     }
 }
