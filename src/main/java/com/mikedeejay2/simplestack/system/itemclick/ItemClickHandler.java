@@ -2,7 +2,7 @@ package com.mikedeejay2.simplestack.system.itemclick;
 
 import com.mikedeejay2.mikedeejay2lib.util.debug.DebugTimer;
 import com.mikedeejay2.simplestack.Simplestack;
-import com.mikedeejay2.simplestack.system.SimpleStackHandler;
+import com.mikedeejay2.simplestack.system.generic.SimpleStackHandler;
 import com.mikedeejay2.simplestack.system.itemclick.process.ItemClickProcessor;
 import com.mikedeejay2.simplestack.system.itemclick.preprocess.ItemClickPreprocessor;
 import org.bukkit.event.inventory.InventoryClickEvent;

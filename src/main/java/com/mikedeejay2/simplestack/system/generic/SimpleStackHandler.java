@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.system;
+package com.mikedeejay2.simplestack.system.generic;
 
 import org.bukkit.event.Event;
 
