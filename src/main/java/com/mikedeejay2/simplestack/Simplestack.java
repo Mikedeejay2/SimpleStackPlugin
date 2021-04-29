@@ -12,7 +12,7 @@ import com.mikedeejay2.simplestack.config.DebugConfig;
 import com.mikedeejay2.simplestack.listeners.*;
 import com.mikedeejay2.simplestack.listeners.player.*;
 import com.mikedeejay2.simplestack.runnables.GroundItemStacker;
-import com.mikedeejay2.simplestack.system.itemclick.handlers.ItemClickHandler;
+import com.mikedeejay2.simplestack.system.itemclick.ItemClickHandler;
 import org.bukkit.Bukkit;
 
 /**
