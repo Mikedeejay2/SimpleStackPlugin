@@ -10,10 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.DragType;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.inventory.BeaconInventory;
-import org.bukkit.inventory.BrewerInventory;
-import org.bukkit.inventory.InventoryView;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.*;
 
 /**
  * Listens for Inventory Drag events
@@ -47,7 +44,6 @@ public class InventoryDragListener implements Listener
 
         ItemStack cursor = event.getOldCursor();
         if(CancelUtils.cancelStackCheck(plugin, cursor)) return;
-        if(CancelUtils.cancelGUICheck(plugin, event.getInventory(), cursor)) return;
         GameMode gameMode = player.getGameMode();
         if(gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE)
         {
