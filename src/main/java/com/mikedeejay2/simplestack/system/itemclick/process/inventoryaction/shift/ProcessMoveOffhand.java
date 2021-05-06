@@ -21,9 +21,9 @@ public class ProcessMoveOffhand implements ItemClickProcess
     @Override
     public void invoke(ItemClickInfo info)
     {
-        Inventory toInv       = info.clickedBottom ? info.bottomInv : info.topInv;
-        Material          selectedMat = info.selected.getType();
-        int               selectedAmt = info.selectedAmt;
+        Inventory toInv = info.clickedBottom ? info.bottomInv : info.topInv;
+        Material selectedMat = info.selected.getType();
+        int selectedAmt = info.selectedAmt;
         if(InventoryIdentifiers.takeResult(info.getAction()) && info.slotType == InventoryType.SlotType.RESULT)
         {
             return;

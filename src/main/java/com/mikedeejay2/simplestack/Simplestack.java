@@ -92,6 +92,7 @@ public final class Simplestack extends BukkitPlugin
             registerEvent(new InventoryPickupItemListener(this));
             registerEvent(new PlayerItemConsumeListener(this));
             registerEvent(new PrepareItemCraftListener(this));
+            registerEvent(new ItemSpawnListener(this));
             if(getMCVersion().getVersionShort() >= 16)
             {
                 registerEvent(new PrepareSmithingListener(this));
