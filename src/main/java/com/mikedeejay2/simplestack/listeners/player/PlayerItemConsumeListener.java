@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.MoveUtils;
@@ -39,30 +40,31 @@ public class PlayerItemConsumeListener implements Listener
     {
         Player player = event.getPlayer();
         ItemStack stack = event.getItem();
-        if(!stack.getType().toString().endsWith("_STEW") && !stack.getType().toString().endsWith("_SOUP")) return;
-        if(player.getGameMode() == GameMode.CREATIVE) return;
-        if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
-        PlayerInventory inv = player.getInventory();
-        int slot = inv.getHeldItemSlot();
-        if(!stack.equals(inv.getItemInMainHand()))
-        {
-            slot = 40;
-        }
         if(CancelUtils.cancelStackCheck(plugin, stack)) return;
-        if(stack.getAmount() <= 1) return;
-        stack.setAmount(stack.getAmount()-1);
-        MoveUtils.moveItem(plugin, new ItemStack(Material.BOWL, 1), inv);
-
-        int finalSlot = slot;
-        ItemStack finalStack = stack;
-        new BukkitRunnable()
+        if(InventoryIdentifiers.isSoup(stack.getType()))
         {
-            @Override
-            public void run()
+            if(player.getGameMode() == GameMode.CREATIVE) return;
+            if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
+            PlayerInventory inv = player.getInventory();
+            int slot = inv.getHeldItemSlot();
+            if(!stack.equals(inv.getItemInMainHand()))
             {
-                inv.setItem(finalSlot, finalStack);
-                player.updateInventory();
+                slot = InventoryIdentifiers.OFFHAND_SLOT;
             }
-        }.runTask(plugin);
+            if(stack.getAmount() <= 1) return;
+            stack.setAmount(stack.getAmount() - 1);
+            MoveUtils.moveItem(plugin, new ItemStack(Material.BOWL, 1), inv);
+
+            int finalSlot = slot;
+            new BukkitRunnable()
+            {
+                @Override
+                public void run()
+                {
+                    inv.setItem(finalSlot, stack);
+                    player.updateInventory();
+                }
+            }.runTask(plugin);
+        }
     }
 }

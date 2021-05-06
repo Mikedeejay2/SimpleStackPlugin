@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.MoveUtils;
@@ -38,10 +39,9 @@ public class PlayerBucketEmptyListener implements Listener
     {
         Player player = event.getPlayer();
         if(player.getGameMode() == GameMode.CREATIVE) return;
-        if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
         int slot = player.getInventory().getHeldItemSlot();
         ItemStack stack = player.getInventory().getItemInMainHand();
-        if(!stack.getType().toString().endsWith("BUCKET"))
+        if(!InventoryIdentifiers.isBucket(stack.getType()))
         {
             slot = 40;
             stack = player.getInventory().getItemInOffHand();
