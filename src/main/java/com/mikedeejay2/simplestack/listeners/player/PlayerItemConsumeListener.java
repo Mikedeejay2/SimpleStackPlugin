@@ -38,14 +38,14 @@ public class PlayerItemConsumeListener implements Listener
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void playerItemConsumeEvent(PlayerItemConsumeEvent event)
     {
+        System.out.println("Consumed: " + event.getItem().getType());
         Player player = event.getPlayer();
         ItemStack stack = event.getItem();
         if(CancelUtils.cancelStackCheck(plugin, stack)) return;
+        PlayerInventory inv = player.getInventory();
         if(InventoryIdentifiers.isSoup(stack.getType()))
         {
             if(player.getGameMode() == GameMode.CREATIVE) return;
-            if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
-            PlayerInventory inv = player.getInventory();
             int slot = inv.getHeldItemSlot();
             if(!stack.equals(inv.getItemInMainHand()))
             {
@@ -65,6 +65,12 @@ public class PlayerItemConsumeListener implements Listener
                     player.updateInventory();
                 }
             }.runTask(plugin);
+        }
+        else if(InventoryIdentifiers.isBucket(stack.getType()))
+        {
+            if(player.getGameMode() == GameMode.CREATIVE) return;
+            if(stack.getAmount() <= 1) return;
+            MoveUtils.moveItem(plugin, new ItemStack(Material.BUCKET, 1), inv);
         }
     }
 }
