@@ -2,22 +2,17 @@ package com.mikedeejay2.simplestack.system.itemclick;
 
 import com.mikedeejay2.mikedeejay2lib.util.debug.DebugTimer;
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.system.generic.HandlerBase;
 import com.mikedeejay2.simplestack.system.generic.SimpleStackHandler;
 import com.mikedeejay2.simplestack.system.itemclick.process.ItemClickProcessor;
 import com.mikedeejay2.simplestack.system.itemclick.preprocess.ItemClickPreprocessor;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class ItemClickHandler implements SimpleStackHandler<InventoryClickEvent>
+public class ItemClickHandler extends HandlerBase<InventoryClickEvent, ItemClickPreprocessor, ItemClickProcessor>
 {
-    protected final Simplestack plugin;
-    protected ItemClickProcessor processor;
-    protected ItemClickPreprocessor preprocessor;
-
     public ItemClickHandler(Simplestack plugin)
     {
-        this.plugin = plugin;
-        this.processor = new ItemClickProcessor(plugin);
-        this.preprocessor = new ItemClickPreprocessor(plugin);
+        super(plugin, new ItemClickPreprocessor(plugin), new ItemClickProcessor(plugin));
     }
 
     public void initDefault()
@@ -50,15 +45,5 @@ public class ItemClickHandler implements SimpleStackHandler<InventoryClickEvent>
         {
             info.player.sendMessage("Action NEW: " + info.getAction());
         }
-    }
-
-    public ItemClickProcessor getProcessor()
-    {
-        return processor;
-    }
-
-    public ItemClickPreprocessor getPreprocessor()
-    {
-        return preprocessor;
     }
 }
