@@ -38,7 +38,6 @@ public class PlayerItemConsumeListener implements Listener
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void playerItemConsumeEvent(PlayerItemConsumeEvent event)
     {
-        System.out.println("Consumed: " + event.getItem().getType());
         Player player = event.getPlayer();
         ItemStack stack = event.getItem();
         if(CancelUtils.cancelStackCheck(plugin, stack)) return;
