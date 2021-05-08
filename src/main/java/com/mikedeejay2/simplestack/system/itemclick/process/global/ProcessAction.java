@@ -1,6 +1,7 @@
-package com.mikedeejay2.simplestack.system.itemclick.process;
+package com.mikedeejay2.simplestack.system.itemclick.process.global;
 
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
+import com.mikedeejay2.simplestack.system.itemclick.process.ItemClickProcess;
 import com.mikedeejay2.simplestack.system.itemclick.process.inventoryaction.*;
 import org.bukkit.event.inventory.InventoryAction;
 

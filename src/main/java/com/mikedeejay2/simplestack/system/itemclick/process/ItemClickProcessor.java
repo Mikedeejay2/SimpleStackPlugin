@@ -3,7 +3,9 @@ package com.mikedeejay2.simplestack.system.itemclick.process;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.system.generic.ProcessorBase;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
+import com.mikedeejay2.simplestack.system.itemclick.process.global.ProcessAction;
 import com.mikedeejay2.simplestack.system.itemclick.process.global.ProcessForceUpdate;
+import com.mikedeejay2.simplestack.system.itemclick.process.global.ProcessInvType;
 
 public class ItemClickProcessor extends ProcessorBase<ItemClickProcess, ItemClickInfo, ItemClickProcessor>
 {

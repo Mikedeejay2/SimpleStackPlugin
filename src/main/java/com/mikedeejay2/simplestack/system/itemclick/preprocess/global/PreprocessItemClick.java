@@ -1,7 +1,8 @@
-package com.mikedeejay2.simplestack.system.itemclick.preprocess;
+package com.mikedeejay2.simplestack.system.itemclick.preprocess.global;
 
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
+import com.mikedeejay2.simplestack.system.itemclick.preprocess.ItemClickPreprocess;
 import com.mikedeejay2.simplestack.system.itemclick.preprocess.clicktype.*;
 import org.bukkit.event.inventory.ClickType;
 
