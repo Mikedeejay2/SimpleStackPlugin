@@ -36,32 +36,53 @@ public class InventoryDragListener implements Listener
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void inventoryDragEvent(InventoryDragEvent event)
     {
-        if(event.getType() != DragType.EVEN) return;
-        InventoryView inventoryView = event.getView();
-        if(event.getInventory() instanceof BrewerInventory || event.getInventory() instanceof BeaconInventory) return;
-        Player player = (Player) inventoryView.getPlayer();
+        Player player = (Player) event.getWhoClicked();
         if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
-
-        ItemStack cursor = event.getOldCursor();
-        if(CancelUtils.cancelStackCheck(plugin, cursor)) return;
-        GameMode gameMode = player.getGameMode();
-        if(gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE)
-        {
-            MoveUtils.dragItemsSurvival(plugin, event, inventoryView, player, cursor);
-        }
-        else
-        {
-            if(plugin.config().shouldCreativeDrag())
-            {
-                MoveUtils.dragItemsCreative(plugin, event, inventoryView, player, cursor);
-            }
-            else
-            {
-                MoveUtils.dragItemsSurvival(plugin, event, inventoryView, player, cursor);
-            }
-        }
-
-        player.updateInventory();
+        ItemStack itemStack = event.getOldCursor();
+//        if(CancelUtils.cancelStackCheck(plugin, itemStack)) return;
         event.setCancelled(true);
+
+        if(plugin.getDebugConfig().isPrintAction())
+        {
+            player.sendMessage(
+                "\n\n" +
+                    "Old Cursor: " + event.getOldCursor() + "\n" +
+                    "New Cursor: " + event.getCursor() + "\n" +
+                    "RawSlots: " + event.getRawSlots() + "\n" +
+                    "Slots: " + event.getInventorySlots() + "\n" +
+                    "New Items: " + event.getNewItems() + "\n" +
+                    "Drag Type: " + event.getType() + "\n"
+                              );
+        }
+
+        plugin.getItemDragHandler().handle(event);
+
+//        if(event.getType() != DragType.EVEN) return;
+//        InventoryView inventoryView = event.getView();
+//        if(event.getInventory() instanceof BrewerInventory || event.getInventory() instanceof BeaconInventory) return;
+//        Player player = (Player) inventoryView.getPlayer();
+//        if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
+//
+//        ItemStack cursor = event.getOldCursor();
+//        if(CancelUtils.cancelStackCheck(plugin, cursor)) return;
+//        GameMode gameMode = player.getGameMode();
+//        if(gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE)
+//        {
+//            MoveUtils.dragItemsSurvival(plugin, event, inventoryView, player, cursor);
+//        }
+//        else
+//        {
+//            if(plugin.config().shouldCreativeDrag())
+//            {
+//                MoveUtils.dragItemsCreative(plugin, event, inventoryView, player, cursor);
+//            }
+//            else
+//            {
+//                MoveUtils.dragItemsSurvival(plugin, event, inventoryView, player, cursor);
+//            }
+//        }
+//
+//        player.updateInventory();
+//        event.setCancelled(true);
     }
 }

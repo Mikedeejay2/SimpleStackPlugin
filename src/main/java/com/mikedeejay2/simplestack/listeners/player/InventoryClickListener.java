@@ -38,7 +38,6 @@ public class InventoryClickListener implements Listener
     {
         Player player = (Player) event.getWhoClicked();
         InventoryAction action = event.getAction();
-//        CheckUtils.updateGUIManual(plugin, player.getOpenInventory().getTopInventory());
         if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
         ItemStack selectedItem = event.getCurrentItem();
         ItemStack cursorItem = event.getCursor();

@@ -4,6 +4,6 @@ public enum ItemDragType
 {
     SINGLE,
     EVEN,
-    MAX,
+    CLONE,
     ;
 }

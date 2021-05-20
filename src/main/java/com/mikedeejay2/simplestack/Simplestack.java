@@ -13,6 +13,7 @@ import com.mikedeejay2.simplestack.listeners.*;
 import com.mikedeejay2.simplestack.listeners.player.*;
 import com.mikedeejay2.simplestack.runnables.GroundItemStacker;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickHandler;
+import com.mikedeejay2.simplestack.system.itemdrag.ItemDragHandler;
 import org.bukkit.Bukkit;
 
 /**
@@ -45,6 +46,7 @@ public final class Simplestack extends BukkitPlugin
     private CommandManager commandManager;
 
     protected ItemClickHandler itemClickHandler;
+    protected ItemDragHandler itemDragHandler;
 
     @Override
     public void onEnable()
@@ -78,6 +80,8 @@ public final class Simplestack extends BukkitPlugin
 
         this.itemClickHandler = new ItemClickHandler(this);
         itemClickHandler.initDefault();
+        this.itemDragHandler = new ItemDragHandler(this);
+        itemDragHandler.initDefault();
 
         Bukkit.getScheduler().runTaskLater(this, () -> {
             registerEvent(new InventoryClickListener(this));
@@ -173,5 +177,10 @@ public final class Simplestack extends BukkitPlugin
     public ItemClickHandler getItemClickHandler()
     {
         return itemClickHandler;
+    }
+
+    public ItemDragHandler getItemDragHandler()
+    {
+        return itemDragHandler;
     }
 }
