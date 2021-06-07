@@ -2,7 +2,6 @@ package com.mikedeejay2.simplestack.system.itemdrag;
 
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.DragType;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;

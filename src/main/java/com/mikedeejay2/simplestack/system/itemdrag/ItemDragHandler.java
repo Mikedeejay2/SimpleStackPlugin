@@ -3,7 +3,6 @@ package com.mikedeejay2.simplestack.system.itemdrag;
 import com.mikedeejay2.mikedeejay2lib.util.debug.DebugTimer;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.system.generic.HandlerBase;
-import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import com.mikedeejay2.simplestack.system.itemdrag.preprocess.ItemDragPreprocessor;
 import com.mikedeejay2.simplestack.system.itemdrag.process.ItemDragProcessor;
 import org.bukkit.event.inventory.InventoryDragEvent;

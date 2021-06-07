@@ -1,12 +1,8 @@
 package com.mikedeejay2.simplestack.system.itemdrag.preprocess.dragtype;
 
-import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
-import com.mikedeejay2.simplestack.system.itemclick.preprocess.ItemClickPreprocess;
-import com.mikedeejay2.simplestack.system.itemclick.preprocess.global.PreprocessItemClick;
 import com.mikedeejay2.simplestack.system.itemdrag.ItemDragInfo;
 import com.mikedeejay2.simplestack.system.itemdrag.ItemDragType;
 import com.mikedeejay2.simplestack.system.itemdrag.preprocess.ItemDragPreprocess;
-import org.bukkit.event.inventory.ClickType;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
