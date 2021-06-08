@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.system.itemdrag;
 
 import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.util.StackUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.DragType;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -24,6 +25,9 @@ public final class ItemDragInfo
     public final Player player;
     public final DragType oldType;
     public final boolean cursorNull;
+    public final int cursorAmount;
+    public final int oldCursorAmount;
+    public final int stackSize;
 
     private ItemDragType type;
 
@@ -41,6 +45,9 @@ public final class ItemDragInfo
         this.type = ItemDragType.NOTHING;
         this.oldType = event.getType();
         this.cursorNull = cursor == null;
+        this.cursorAmount = cursorNull ? 0 : cursor.getAmount();
+        this.oldCursorAmount = oldCursor.getAmount();
+        this.stackSize = StackUtils.getMaxAmount(plugin, oldCursor);
     }
 
     public ItemDragType getType()

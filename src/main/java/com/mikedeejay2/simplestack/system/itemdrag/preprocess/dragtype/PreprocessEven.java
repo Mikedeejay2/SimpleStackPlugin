@@ -9,7 +9,6 @@ public class PreprocessEven implements ItemDragPreprocess
     @Override
     public void invoke(ItemDragInfo data)
     {
-        System.out.println("AAA");
         data.setType(ItemDragType.EVEN);
     }
 }
