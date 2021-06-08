@@ -5,5 +5,6 @@ public enum ItemDragType
     SINGLE,
     EVEN,
     CLONE,
+    NOTHING
     ;
 }
