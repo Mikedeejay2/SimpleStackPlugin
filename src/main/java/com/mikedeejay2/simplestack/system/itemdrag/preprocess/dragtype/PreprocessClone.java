@@ -12,7 +12,6 @@ public class PreprocessClone implements ItemDragPreprocess
     @Override
     public void invoke(ItemDragInfo data)
     {
-//        System.out.println("Stack size: " + data.cursorAmount);
         if(data.player.getGameMode() != GameMode.CREATIVE) return;
         if(data.newItems.size() < 2) return;
         int stackSize = data.oldCursor.getMaxStackSize();
@@ -26,11 +25,7 @@ public class PreprocessClone implements ItemDragPreprocess
         boolean equalAmounts = totalStackSize + data.cursorAmount == data.oldCursorAmount;
         boolean cursorNotEmpty = data.cursorAmount != 0;
         boolean cursorLargerThan = data.cursorAmount > stackSize;
-//        System.out.println("equalAmounts: " + equalAmounts);
-//        System.out.println("cursorNotEmpty: " + cursorNotEmpty);
-//        System.out.println("cursorLargerThan: " + cursorLargerThan);
         if(equalAmounts && cursorNotEmpty && cursorLargerThan) return;
-        System.out.println("Success");
         data.setType(ItemDragType.CLONE);
     }
 }
