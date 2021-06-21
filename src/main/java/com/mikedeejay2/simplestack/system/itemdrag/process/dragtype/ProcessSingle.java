@@ -16,7 +16,6 @@ public class ProcessSingle implements ItemDragProcess
     @Override
     public void invoke(ItemDragInfo data)
     {
-        System.out.println("Process Single");
         ItemStack originalItem = data.oldCursor;
         int amount = data.oldCursorAmount;
         for(int slot : data.rawSlots)

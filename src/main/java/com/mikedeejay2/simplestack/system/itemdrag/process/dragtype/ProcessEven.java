@@ -14,7 +14,6 @@ public class ProcessEven implements ItemDragProcess
     @Override
     public void invoke(ItemDragInfo data)
     {
-        System.out.println("Process Even");
         ItemStack originalItem = data.oldCursor;
         int amount = data.oldCursorAmount;
         int perSlot = amount / data.rawSlots.size();

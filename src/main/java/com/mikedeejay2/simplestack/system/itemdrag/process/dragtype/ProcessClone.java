@@ -15,7 +15,6 @@ public class ProcessClone implements ItemDragProcess
     @Override
     public void invoke(ItemDragInfo data)
     {
-        System.out.println("Process Clone");
         ItemStack originalItem = data.oldCursor;
         int maxAmt = StackUtils.getMaxAmount(data.plugin, originalItem);
         for(int slot : data.rawSlots)
