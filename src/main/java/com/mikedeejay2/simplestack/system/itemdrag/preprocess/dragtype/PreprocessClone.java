@@ -21,7 +21,6 @@ public class PreprocessClone implements ItemDragPreprocess
             if(itemStack.getAmount() != stackSize) return;
             totalStackSize += itemStack.getAmount();
         }
-        DebugUtil.printLineNumber();
         boolean equalAmounts = totalStackSize + data.cursorAmount == data.oldCursorAmount;
         boolean cursorNotEmpty = data.cursorAmount != 0;
         boolean cursorLargerThan = data.cursorAmount > stackSize;
