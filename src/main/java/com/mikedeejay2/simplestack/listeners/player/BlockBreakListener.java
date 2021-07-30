@@ -7,6 +7,7 @@ import com.mikedeejay2.simplestack.util.ShulkerBoxes;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -32,7 +33,7 @@ public class BlockBreakListener implements Listener
      *
      * @param event The event being activated
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void blockBreakEvent(BlockBreakEvent event)
     {
         Player player = event.getPlayer();

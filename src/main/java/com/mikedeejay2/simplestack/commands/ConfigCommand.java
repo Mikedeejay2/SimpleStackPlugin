@@ -1,6 +1,6 @@
 package com.mikedeejay2.simplestack.commands;
 
-import com.mikedeejay2.mikedeejay2lib.commands.AbstractSubCommand;
+import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
 import com.mikedeejay2.mikedeejay2lib.gui.manager.PlayerGUI;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.simplestack.Simplestack;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  *
  * @author Mikedeejay2
  */
-public class ConfigCommand extends AbstractSubCommand
+public class ConfigCommand implements SubCommand
 {
     private final Simplestack plugin;
 
@@ -27,54 +27,48 @@ public class ConfigCommand extends AbstractSubCommand
      * Opens a configuration GUI for the player that ran the command.
      *
      * @param sender The CommandSender that sent the command
-     * @param args The arguments for the command (subcommands)
+     * @param args   The arguments for the command (subcommands)
      */
     @Override
     public void onCommand(CommandSender sender, String[] args)
     {
         Player player = (Player) sender;
-        PlayerGUI playerGUI = plugin.guiManager().getPlayer(player);
+        PlayerGUI playerGUI = plugin.getGUIManager().getPlayer(player);
         if(playerGUI.getGUI() == null)
         {
-            playerGUI.setGUI(GUICreator.createMainGUI(plugin, player));
+            GUICreator.createMainGUI(plugin, player).open(player);
         }
         else if(playerGUI.getGUI().containsModule(GUINavigatorModule.class))
         {
-            playerGUI.openGUI();
+            playerGUI.getGUI().open(player);
         }
         else
         {
-            playerGUI.setGUI(GUICreator.createMainGUI(plugin, player));
+            GUICreator.createMainGUI(plugin, player).open(player);
         }
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
     }
 
     @Override
-    public String name()
+    public String getName()
     {
         return "config";
     }
 
     @Override
-    public String info(CommandSender sender)
+    public String getInfo(CommandSender sender)
     {
-        return plugin.langManager().getText(sender, "simplestack.commands.config.info");
+        return plugin.getLangManager().getText(sender, "simplestack.commands.config.info");
     }
 
     @Override
-    public String[] aliases()
-    {
-        return new String[0];
-    }
-
-    @Override
-    public String permission()
+    public String getPermission()
     {
         return "simplestack.config";
     }
 
     @Override
-    public boolean playerRequired()
+    public boolean isPlayerRequired()
     {
         return true;
     }

@@ -1,13 +1,17 @@
 package com.mikedeejay2.simplestack.util;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.*;
 
 /**
@@ -138,5 +142,19 @@ public final class CancelUtils
             if(ShulkerBoxes.isShulkerBox(blockType)) return true;
         }
         return false;
+    }
+
+    public static boolean cancelCurseOfBinding(InventoryClickEvent event)
+    {
+        if(event.getWhoClicked().getGameMode() == GameMode.CREATIVE) return false;
+        if(event.getClickedInventory() != event.getWhoClicked().getOpenInventory().getBottomInventory()) return false;
+        int slot = event.getSlot();
+        if(slot != InventoryIdentifiers.BOOTS_SLOT &&
+            slot != InventoryIdentifiers.LEGGINGS_SLOT &&
+            slot != InventoryIdentifiers.CHESTPLATE_SLOT &&
+            slot != InventoryIdentifiers.HELMET_SLOT) return false;
+        ItemStack item = event.getCurrentItem();
+        if(item == null || !item.hasItemMeta()) return false;
+        return item.getItemMeta().hasEnchant(Enchantment.BINDING_CURSE);
     }
 }

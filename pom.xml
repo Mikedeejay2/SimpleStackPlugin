@@ -6,7 +6,7 @@
 
     <groupId>com.mikedeejay2</groupId>
     <artifactId>simplestack</artifactId>
-    <version>1.3.6</version>
+    <version>1.3.7</version>
     <packaging>jar</packaging>
 
     <name>SimpleStack</name>
@@ -30,12 +30,8 @@
             <url>https://libraries.minecraft.net/</url>
         </repository>
         <repository>
-            <id>Mikedeejay2Lib-mvn-repo</id>
-            <url>https://github.com/Mikedeejay2/Mikedeejay2Lib/raw/mvn-repo/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
+            <id>Mikedeejay2-Maven-Repo</id>
+            <url>https://github.com/Mikedeejay2/Mikedeejay2-Maven-Repo/raw/master/</url>
         </repository>
         <repository>
             <id>CodeMC</id>
@@ -47,7 +43,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.16.4-R0.1-SNAPSHOT</version>
+            <version>1.17.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -59,7 +55,7 @@
         <dependency>
             <groupId>com.mikedeejay2</groupId>
             <artifactId>mikedeejay2lib</artifactId>
-            <version>1.0.0</version>
+            <version>1.17.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
@@ -111,9 +107,7 @@
                                     <shadedPattern>${project.groupId}.${project.artifactId}.internal.bstats</shadedPattern>
                                 </relocation>
                             </relocations>
-                            <minimizeJar>true</minimizeJar>
-                            <!-- This is the location to my development server. You should change this. -->
-                            <outputFile>C:\Users\mdeej\IdeaProjects\MINECRAFT SPIGOT PLUGIN TOOLS\Dev Server Latest\plugins\${project.name}-${project.version}.jar</outputFile>
+                            <outputFile>${serverDirectory}</outputFile>
                         </configuration>
                     </execution>
                 </executions>

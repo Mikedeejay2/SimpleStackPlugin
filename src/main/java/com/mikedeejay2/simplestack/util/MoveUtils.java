@@ -51,7 +51,8 @@ public final class MoveUtils
         if(item.getAmount() == 0) return true;
         for(int i = 0; i < inv.getStorageContents().length; i++)
         {
-            if(inv.getItem(i) != null) continue;
+            ItemStack curItem = inv.getItem(i);
+            if(curItem != null && curItem.getType() != Material.AIR) continue;
             inv.setItem(i, item);
             groundItem.remove();
             entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1f, 1);

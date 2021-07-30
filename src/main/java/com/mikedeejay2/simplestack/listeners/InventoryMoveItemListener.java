@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -31,7 +32,7 @@ public class InventoryMoveItemListener implements Listener
      *
      * @param event The event being activated
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void inventoryMoveItemEvent(InventoryMoveItemEvent event)
     {
         if(!plugin.config().shouldProcessHoppers()) return;

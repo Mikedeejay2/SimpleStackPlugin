@@ -1,13 +1,18 @@
 package com.mikedeejay2.simplestack.commands;
 
-import com.mikedeejay2.mikedeejay2lib.commands.AbstractSubCommand;
+import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ReloadCommand extends AbstractSubCommand
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+public class ReloadCommand implements SubCommand
 {
     private final Simplestack plugin;
 
@@ -23,46 +28,42 @@ public class ReloadCommand extends AbstractSubCommand
      * plugin function with the modified config.
      *
      * @param sender The <tt>CommandSender</tt> that sent the command
-     * @param args The arguments for the command (subcommands)
+     * @param args   The arguments for the command (subcommands)
      */
     @Override
     public void onCommand(CommandSender sender, String[] args)
     {
         Config config = plugin.config();
         config.reload(true);
-        plugin.chat().sendMessage(sender, "&e&l" + plugin.langManager().getTextLib(sender, "generic.success") + "&r &9" + plugin.langManager().getText(sender, "simplestack.reload.success"));
+        plugin.sendMessage(sender,
+                           "&e&l" + plugin.getLibLangManager().getText(sender, "generic.success") +
+                               "&r &9" + plugin.getLangManager().getText(sender, "simplestack.reload.success"));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
     }
 
     @Override
-    public String name()
+    public String getName()
     {
         return "reload";
     }
 
     @Override
-    public String info(CommandSender sender)
+    public String getInfo(CommandSender sender)
     {
-        return plugin.langManager().getText(sender, "simplestack.commands.reload.info");
+        return plugin.getLangManager().getText(sender, "simplestack.commands.reload.info");
     }
 
     @Override
-    public String[] aliases()
+    public List<String> getAliases()
     {
-        return new String[]{"rl"};
+        return new ArrayList<>(Collections.singleton("rl"));
     }
 
     @Override
-    public String permission()
+    public String getPermission()
     {
         return "simplestack.reload";
-    }
-
-    @Override
-    public boolean playerRequired()
-    {
-        return false;
     }
 }

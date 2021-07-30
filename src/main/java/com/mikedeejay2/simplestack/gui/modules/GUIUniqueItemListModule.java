@@ -2,8 +2,8 @@ package com.mikedeejay2.simplestack.gui.modules;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIListModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Mikedeejay2
  */
-public class GUIUniqueItemListModule extends GUIModule
+public class GUIUniqueItemListModule implements GUIModule
 {
     private final Simplestack plugin;
 
@@ -31,7 +31,7 @@ public class GUIUniqueItemListModule extends GUIModule
      * to the config after it's been modified
      *
      * @param player The player that closed the GUI
-     * @param gui The GUIContainer
+     * @param gui    The GUIContainer
      */
     @Override
     public void onClose(Player player, GUIContainer gui)

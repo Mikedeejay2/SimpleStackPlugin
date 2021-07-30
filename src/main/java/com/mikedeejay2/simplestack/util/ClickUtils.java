@@ -32,6 +32,7 @@ public final class ClickUtils
         int slot = event.getSlot();
         Inventory topInv = player.getOpenInventory().getTopInventory();
         if(CancelUtils.cancelMoveCheck(plugin, itemInCursor, clickedInv, slot)) return;
+        if(CancelUtils.cancelCurseOfBinding(event)) return;
         if(!ItemComparison.equalsEachOther(itemInCursor, itemInSlot))
         {
             player.setItemOnCursor(itemInSlot);
@@ -79,6 +80,7 @@ public final class ClickUtils
         int slot = event.getSlot();
         Inventory clickedInv = event.getClickedInventory();
         if(CancelUtils.cancelMoveCheck(plugin, itemInCursor, clickedInv, slot)) return;
+        if(CancelUtils.cancelCurseOfBinding(event)) return;
         if(!ItemComparison.equalsEachOther(itemInCursor, itemInSlot))
         {
             if(itemInSlot.getType() == Material.AIR && itemInCursor.getType() != Material.AIR)
@@ -128,6 +130,7 @@ public final class ClickUtils
      */
     public static void shiftClick(Simplestack plugin, ItemStack itemInSlot, Player player, InventoryClickEvent event)
     {
+        if(CancelUtils.cancelCurseOfBinding(event)) return;
         Inventory inv = null;
         Inventory topInv = player.getOpenInventory().getTopInventory();
         Inventory bottomInv = player.getOpenInventory().getBottomInventory();
@@ -188,7 +191,7 @@ public final class ClickUtils
             {
                 topInv.setItem(0, null);
                 topInv.setItem(1, null);
-                ClickUtils.shiftClickSameInv(plugin, itemInSlot, event, bottomInv);
+                MoveUtils.moveItemReverseHotbar(plugin, itemInSlot, clickedInventory, slot, bottomInv);
                 return;
             }
             else if(topInv instanceof CraftingInventory ||

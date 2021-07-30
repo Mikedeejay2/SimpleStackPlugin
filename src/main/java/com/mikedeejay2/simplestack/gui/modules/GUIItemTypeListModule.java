@@ -1,19 +1,12 @@
 package com.mikedeejay2.simplestack.gui.modules;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
-import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIListModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
-import com.mikedeejay2.mikedeejay2lib.util.head.Base64Heads;
-import com.mikedeejay2.mikedeejay2lib.util.item.ItemCreator;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
 import com.mikedeejay2.simplestack.Simplestack;
-import com.mikedeejay2.simplestack.config.ListMode;
-import com.mikedeejay2.simplestack.gui.events.GUISwitchListModeEvent;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +14,11 @@ import java.util.List;
 /**
  * The <tt>GUIModule</tt> for the item type list.
  * This module is simply for saving the list upon close and
- * adding the blacklist / whitelis button.
+ * adding the blacklist / whitelist button.
  *
  * @author Mikedeejay2
  */
-public class GUIItemTypeListModule extends GUIModule
+public class GUIItemTypeListModule implements GUIModule
 {
     private final Simplestack plugin;
 
@@ -39,7 +32,7 @@ public class GUIItemTypeListModule extends GUIModule
      * config.
      *
      * @param player The player that closed the GUI
-     * @param gui The <tt>GUIContainer</tt> of the GUI
+     * @param gui    The <tt>GUIContainer</tt> of the GUI
      */
     @Override
     public void onClose(Player player, GUIContainer gui)
