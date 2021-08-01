@@ -39,6 +39,8 @@ public final class Simplestack extends BukkitPlugin
     {
         super.onEnable();
 
+        setPrefix("&b[&9" + this.getDescription().getName() + "&b]&r");
+
         this.commandManager = new CommandManager(this, "simplestack");
         commandManager.setDefaultSubCommand("help");
         registerCommand(commandManager);
