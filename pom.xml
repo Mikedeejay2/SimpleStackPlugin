@@ -32,6 +32,10 @@
         <repository>
             <id>Mikedeejay2-Maven-Repo</id>
             <url>https://github.com/Mikedeejay2/Mikedeejay2-Maven-Repo/raw/master/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
         </repository>
         <repository>
             <id>CodeMC</id>
