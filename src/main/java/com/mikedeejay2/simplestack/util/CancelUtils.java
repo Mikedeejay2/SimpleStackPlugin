@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.util;
 
 import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
+import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
@@ -113,7 +114,7 @@ public final class CancelUtils
             if(slot == 2 && !typeString.endsWith("PATTERN")) return true;
         }
         if(inv instanceof AnvilInventory && slot == 2) return true;
-        if(plugin.getMCVersion().getVersionShort() >= 16 && inv instanceof SmithingInventory && slot == 2) return true;
+        if(MinecraftVersion.getVersionShort() >= 16 && inv instanceof SmithingInventory && slot == 2) return true;
         if(inv instanceof GrindstoneInventory && slot == 2) return true;
         if(inv instanceof BrewerInventory)
         {
@@ -132,7 +133,7 @@ public final class CancelUtils
     public static boolean cancelGUICheck(Simplestack plugin, Inventory inv, ItemStack cursorItem)
     {
         if(inv == null) return true;
-        if(plugin.getMCVersion().getVersionShort() >= 16 && inv instanceof SmithingInventory) return false;
+        if(MinecraftVersion.getVersionShort() >= 16 && inv instanceof SmithingInventory) return false;
         if(ShulkerBoxes.isShulkerBox(cursorItem.getType()) && inv.getLocation() != null)
         {
             Location location = inv.getLocation();

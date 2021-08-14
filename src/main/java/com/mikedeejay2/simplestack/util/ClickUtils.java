@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.util;
 
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
+import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -197,7 +198,7 @@ public final class ClickUtils
             else if(topInv instanceof CraftingInventory ||
                     topInv instanceof FurnaceInventory ||
                     topInv instanceof AnvilInventory ||
-                    (plugin.getMCVersion().getVersionShort() >= 16 && topInv instanceof SmithingInventory) ||
+                    (MinecraftVersion.getVersionShort() >= 16 && topInv instanceof SmithingInventory) ||
                     topInv instanceof GrindstoneInventory)
             {
                 playerOrder = true;
@@ -208,7 +209,7 @@ public final class ClickUtils
             if((topInv instanceof CraftingInventory && slot == 0) ||
             (topInv instanceof FurnaceInventory && slot == 2) ||
             (topInv instanceof AnvilInventory && slot == 2) ||
-            (plugin.getMCVersion().getVersionShort() >= 16 && topInv instanceof SmithingInventory && slot == 2) ||
+            (MinecraftVersion.getVersionShort() >= 16 && topInv instanceof SmithingInventory && slot == 2) ||
             (topInv instanceof EnchantingInventory && slot == 0) ||
             (topInv instanceof GrindstoneInventory && slot == 2) ||
             (topInv instanceof StonecutterInventory && slot == 2) ||
@@ -245,7 +246,7 @@ public final class ClickUtils
             clickedInventory.setItem(slot, itemInSlot);
             return;
         }
-        else if(toInv instanceof AnvilInventory || (plugin.getMCVersion().getVersionShort() >= 16 && toInv instanceof SmithingInventory))
+        else if(toInv instanceof AnvilInventory || (MinecraftVersion.getVersionShort() >= 16 && toInv instanceof SmithingInventory))
         {
             --endSlot;
         }

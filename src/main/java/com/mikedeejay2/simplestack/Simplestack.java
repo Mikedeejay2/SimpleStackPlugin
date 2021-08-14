@@ -5,6 +5,7 @@ import com.mikedeejay2.mikedeejay2lib.commands.CommandManager;
 import com.mikedeejay2.mikedeejay2lib.text.language.LangManager;
 import com.mikedeejay2.mikedeejay2lib.util.bstats.BStats;
 import com.mikedeejay2.mikedeejay2lib.util.update.UpdateChecker;
+import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.listeners.*;
@@ -76,7 +77,7 @@ public final class Simplestack extends BukkitPlugin
             registerEvent(new InventoryPickupItemListener(this));
             registerEvent(new PlayerItemConsumeListener(this));
             registerEvent(new ItemSpawnListener(this));
-            if(getMCVersion().getVersionShort() >= 16)
+            if(MinecraftVersion.getVersionShort() >= 16)
             {
                 registerEvent(new PrepareSmithingListener(this));
             }
