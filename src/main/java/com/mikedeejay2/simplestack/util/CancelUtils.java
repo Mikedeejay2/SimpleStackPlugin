@@ -134,6 +134,7 @@ public final class CancelUtils
     {
         if(inv == null) return true;
         if(MinecraftVersion.getVersionShort() >= 16 && inv instanceof SmithingInventory) return false;
+        if(inv instanceof MerchantInventory) return true;
         if(ShulkerBoxes.isShulkerBox(cursorItem.getType()) && inv.getLocation() != null)
         {
             Location location = inv.getLocation();
