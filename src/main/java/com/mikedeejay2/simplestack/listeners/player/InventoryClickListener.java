@@ -4,6 +4,7 @@ import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.CheckUtils;
 import com.mikedeejay2.simplestack.util.ClickUtils;
+import com.mikedeejay2.simplestack.util.MoveUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -36,6 +37,11 @@ public class InventoryClickListener implements Listener
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void stackEvent(InventoryClickEvent event)
     {
+        if(MoveUtils.doNotMove.contains(event.getWhoClicked()))
+        {
+            event.setCancelled(true);
+            return;
+        }
         Player player = (Player) event.getWhoClicked();
         InventoryAction action = event.getAction();
         CheckUtils.updateGUIManual(plugin, player.getOpenInventory().getTopInventory());

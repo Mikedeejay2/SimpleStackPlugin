@@ -39,6 +39,11 @@ public class InventoryDragListener implements Listener
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void inventoryDragEvent(InventoryDragEvent event)
     {
+        if(MoveUtils.doNotMove.contains(event.getWhoClicked()))
+        {
+            event.setCancelled(true);
+            return;
+        }
         if(event.getType() != DragType.EVEN) return;
         InventoryView inventoryView = event.getView();
         if(event.getInventory() instanceof BrewerInventory || event.getInventory() instanceof BeaconInventory) return;

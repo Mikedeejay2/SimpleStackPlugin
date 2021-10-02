@@ -18,7 +18,9 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Utilities for moving items from one location to another
@@ -27,6 +29,11 @@ import java.util.Arrays;
  */
 public final class MoveUtils
 {
+    /**
+     * A list holding all players whose movements should not be processed
+     */
+    public static final List<Player> doNotMove = new ArrayList<>();
+
     /**
      * Emulates picking up an item that is regularly unstackable from the ground
      * and attempting to stack it with other items in the player's inventory.
@@ -419,6 +426,7 @@ public final class MoveUtils
      */
     public static void dragItemsSurvival(Simplestack plugin, InventoryDragEvent event, InventoryView inventoryView, Player player, ItemStack cursor)
     {
+        doNotMove.add(player);
         Integer[] slots = event.getNewItems().keySet().toArray(new Integer[0]);
         ItemStack[] newItems = event.getNewItems().values().toArray(new ItemStack[0]);
         for(int i = 0; i < slots.length; i++)
@@ -471,6 +479,7 @@ public final class MoveUtils
                 ItemStack newCursor = cursor.clone();
                 newCursor.setAmount(amountLeft + finalNewExtraAmount);
                 player.setItemOnCursor(newCursor);
+                doNotMove.remove(player);
             }
         }.runTask(plugin);
     }
