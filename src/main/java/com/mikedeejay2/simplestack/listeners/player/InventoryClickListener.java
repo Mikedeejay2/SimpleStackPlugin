@@ -58,8 +58,9 @@ public class InventoryClickListener implements Listener
 
         boolean cancel1 = CancelUtils.cancelStackCheck(plugin, itemPickUp);
         boolean cancel2 = CancelUtils.cancelStackCheck(plugin, itemPutDown);
-        boolean cancel3 = CancelUtils.cancelGUICheck(plugin, topInv, itemPutDown);
-        if((cancel1 && cancel2) || event.isCancelled() || cancel3)
+        boolean cancel3 = CancelUtils.cancelGUICheck(topInv, itemPutDown);
+        boolean cancel4 = CancelUtils.cancelItemClick(clickedInv, itemPutDown, slot);
+        if((cancel1 && cancel2) || event.isCancelled() || cancel3 || cancel4)
         {
             return;
         }

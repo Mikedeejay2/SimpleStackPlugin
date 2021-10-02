@@ -130,19 +130,26 @@ public final class CancelUtils
      * @param inv Inventory to check
      * @return If inventory should be cancelled
      */
-    public static boolean cancelGUICheck(Simplestack plugin, Inventory inv, ItemStack cursorItem)
+    public static boolean cancelGUICheck(Inventory inv, ItemStack cursorItem)
     {
         if(inv == null) return true;
         if(MinecraftVersion.getVersionShort() >= 16 && inv instanceof SmithingInventory) return false;
-        if(inv instanceof MerchantInventory) return true;
         if(ShulkerBoxes.isShulkerBox(cursorItem.getType()) && inv.getLocation() != null)
         {
             Location location = inv.getLocation();
             World world = location.getWorld();
             Block block = world.getBlockAt(location);
             Material blockType = block.getType();
-            if(ShulkerBoxes.isShulkerBox(blockType)) return true;
+            return ShulkerBoxes.isShulkerBox(blockType);
         }
+        return false;
+    }
+
+    public static boolean cancelItemClick(Inventory clickedInv, ItemStack cursorItem, int slot)
+    {
+        if(clickedInv instanceof PlayerInventory) return false;
+        if(MinecraftVersion.getVersionShort() >= 14 && clickedInv instanceof GrindstoneInventory) return true;
+        if(clickedInv instanceof MerchantInventory && slot == 2) return true;
         return false;
     }
 
