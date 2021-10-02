@@ -13,6 +13,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.BlockStateMeta;
@@ -366,7 +367,7 @@ public final class MoveUtils
      * @param event Event that this method is being run in
      * @param block The block to check
      */
-    public static void preserveShulkerBox(BlockBreakEvent event, Block block)
+    public static void preserveShulkerBox(Block block)
     {
         Location location = block.getLocation();
         World world = location.getWorld();
@@ -385,7 +386,6 @@ public final class MoveUtils
 
         world.dropItemNaturally(location, item);
         block.setType(Material.AIR);
-        event.setCancelled(true);
     }
 
 

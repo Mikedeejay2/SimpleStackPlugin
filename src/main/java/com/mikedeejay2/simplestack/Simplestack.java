@@ -40,7 +40,7 @@ public final class Simplestack extends BukkitPlugin
     {
         super.onEnable();
 
-        setPrefix("&b[&9" + this.getDescription().getName() + "&b]&r");
+        setPrefix("&b[&9" + this.getDescription().getName() + "&b]&r ");
 
         this.commandManager = new CommandManager(this, "simplestack");
         commandManager.setDefaultSubCommand("help");
@@ -77,6 +77,8 @@ public final class Simplestack extends BukkitPlugin
             registerEvent(new InventoryPickupItemListener(this));
             registerEvent(new PlayerItemConsumeListener(this));
             registerEvent(new ItemSpawnListener(this));
+            registerEvent(new BlockExplodeListener(this));
+            registerEvent(new EntityExplodeListener(this));
             if(MinecraftVersion.getVersionShort() >= 16)
             {
                 registerEvent(new PrepareSmithingListener(this));

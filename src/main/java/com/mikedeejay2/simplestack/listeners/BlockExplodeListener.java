@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.listeners.player;
+package com.mikedeejay2.simplestack.listeners;
 
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CancelUtils;
@@ -10,38 +10,36 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.block.BlockExplodeEvent;
 
 /**
- * Listens for block breaking events
+ * Listens for block explode events
  *
  * @author Mikedeejay2
  */
-public class BlockBreakListener implements Listener
+public class BlockExplodeListener implements Listener
 {
     private final Simplestack plugin;
 
-    public BlockBreakListener(Simplestack plugin)
+    public BlockExplodeListener(Simplestack plugin)
     {
         this.plugin = plugin;
     }
 
     /**
-     * BlockBreakEvent
+     * BlockExplodeEvent
      * This is needed for when a shulker box breaks, because by default Minecraft
      * unstacks items inside of a shulker box automatically
      *
      * @param event The event being activated
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void blockBreakEvent(BlockBreakEvent event)
+    public void blockExplodeEvent(BlockExplodeEvent event)
     {
-        Player player = event.getPlayer();
-        Block block = event.getBlock();
-        if(!ShulkerBoxes.isShulkerBox(block.getType())) return;
-        if(CancelUtils.cancelPlayerCheck(plugin, player)) return;
-
-        MoveUtils.preserveShulkerBox(block);
-        event.setCancelled(true);
+        for(Block block : event.blockList())
+        {
+            if(!ShulkerBoxes.isShulkerBox(block.getType())) continue;
+            MoveUtils.preserveShulkerBox(block);
+        }
     }
 }
