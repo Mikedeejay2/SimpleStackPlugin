@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.listeners.player;
 
+import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.util.CancelUtils;
 import com.mikedeejay2.simplestack.util.MoveUtils;
@@ -46,7 +47,7 @@ public class InventoryCloseListener implements Listener
                 type == InventoryType.LOOM ||
                 type == InventoryType.GRINDSTONE ||
                 type == InventoryType.MERCHANT ||
-                (plugin.getMCVersion().getVersionShort() >= 16 && type == InventoryType.SMITHING)
+                (MinecraftVersion.getVersionShort() >= 16 && type == InventoryType.SMITHING)
           ) ) return;
         Inventory playerInv = player.getInventory();
         MoveUtils.moveAllItemsToPlayerInv(plugin, inv, player, playerInv);

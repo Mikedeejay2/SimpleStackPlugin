@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.gui.events;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
 import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEvent;
+import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEventInfo;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.config.Config;
@@ -25,11 +26,11 @@ public class GUIMaxStackEvent implements GUIEvent
     }
 
     @Override
-    public void execute(InventoryClickEvent event, GUIContainer gui)
+    public void execute(GUIEventInfo event)
     {
         ClickType type = event.getClick();
         if(type == ClickType.DOUBLE_CLICK) return;
-        GUILayer layer      = gui.getLayer(0);
+        GUILayer layer      = event.getGUI().getLayer(0);
         Config   config     = plugin.config();
         int      slot       = event.getSlot();
         int      row        = layer.getRowFromSlot(slot);

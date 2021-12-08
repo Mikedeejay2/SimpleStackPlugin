@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.util;
 
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
+import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.Simplestack;
 import com.mikedeejay2.simplestack.system.itemclick.ItemClickInfo;
 import org.bukkit.Material;
@@ -302,7 +303,7 @@ public final class CheckUtils
      */
     public static void useSmithingCheck(Simplestack plugin, Player player, Inventory topInv, int slot, Inventory clickedInventory, boolean rightClick)
     {
-        if(plugin.getMCVersion().getVersionShort() < 16) return;
+        if(MinecraftVersion.getVersionShort() < 16) return;
         Sound sound = Sound.BLOCK_SMITHING_TABLE_USE;
         if(clickedInventory instanceof SmithingInventory && slot == 2)
         {
@@ -363,7 +364,7 @@ public final class CheckUtils
                 {
                     triggerAnvilSmithingUpdate(topInv);
                 }
-                if(plugin.getMCVersion().getVersionShort() < 16) return;
+                if(MinecraftVersion.getVersionShort() < 16) return;
                 if(topInv instanceof SmithingInventory)
                 {
                     triggerAnvilSmithingUpdate(topInv);

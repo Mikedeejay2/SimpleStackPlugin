@@ -6,6 +6,7 @@ import com.mikedeejay2.mikedeejay2lib.text.language.LangManager;
 import com.mikedeejay2.mikedeejay2lib.util.bstats.BStats;
 import com.mikedeejay2.mikedeejay2lib.util.recipe.RecipeUtil;
 import com.mikedeejay2.mikedeejay2lib.util.update.UpdateChecker;
+import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.DebugConfig;
@@ -97,7 +98,7 @@ public final class Simplestack extends BukkitPlugin
             registerEvent(new PlayerItemConsumeListener(this));
             registerEvent(new PrepareItemCraftListener(this));
             registerEvent(new ItemSpawnListener(this));
-            if(getMCVersion().getVersionShort() >= 16)
+            if(MinecraftVersion.getVersionShort() >= 16)
             {
                 registerEvent(new PrepareSmithingListener(this));
             }
@@ -118,11 +119,11 @@ public final class Simplestack extends BukkitPlugin
      */
     private boolean checkVersion()
     {
-        if(getMCVersion().getVersionShort() < MINIMUM_VERSION)
+        if(MinecraftVersion.getVersionShort() < MINIMUM_VERSION)
         {
             sendSevere(String.format("Simple Stack %s is not compatible Minecraft version %s!",
                                      this.getDescription().getVersion(),
-                                     getMCVersion().getVersionString()));
+                                     MinecraftVersion.getVersionString()));
             disablePlugin(this);
             return true;
         }

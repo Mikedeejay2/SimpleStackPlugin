@@ -41,18 +41,20 @@ public class GUIDebugSettingsModule implements GUIModule
                                  "&a&l⊳ False")
                         .get());
 
-        printTimingsOff.addEvent((event, gui1) -> {
+        printTimingsOff.addEvent((event) -> {
             if(event.getClick() != ClickType.LEFT) return;
             int slot = event.getSlot();
+            GUIContainer gui1 = event.getGUI();
             int row = gui1.getRowFromSlot(slot);
             int col = gui1.getColFromSlot(slot);
             layer.setItem(row, col, printTimingsOn);
             debugConfig.setPrintTimings(true);
         });
 
-        printTimingsOn.addEvent((event, gui1) -> {
+        printTimingsOn.addEvent((event) -> {
             if(event.getClick() != ClickType.LEFT) return;
             int slot = event.getSlot();
+            GUIContainer gui1 = event.getGUI();
             int row = gui1.getRowFromSlot(slot);
             int col = gui1.getColFromSlot(slot);
             layer.setItem(row, col, printTimingsOff);
@@ -74,18 +76,20 @@ public class GUIDebugSettingsModule implements GUIModule
                                  "&a&l⊳ False")
                         .get());
 
-        printActionsOn.addEvent((event, gui1) -> {
+        printActionsOn.addEvent((event) -> {
             if(event.getClick() != ClickType.LEFT) return;
             int slot = event.getSlot();
+            GUIContainer gui1 = event.getGUI();
             int row = gui1.getRowFromSlot(slot);
             int col = gui1.getColFromSlot(slot);
             layer.setItem(row, col, printActionsOff);
             debugConfig.setPrintAction(false);
         });
 
-        printActionsOff.addEvent((event, gui1) -> {
+        printActionsOff.addEvent((event) -> {
             if(event.getClick() != ClickType.LEFT) return;
             int slot = event.getSlot();
+            GUIContainer gui1 = event.getGUI();
             int row = gui1.getRowFromSlot(slot);
             int col = gui1.getColFromSlot(slot);
             layer.setItem(row, col, printActionsOn);
