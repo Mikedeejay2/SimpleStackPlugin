@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.gui.events;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
 import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEvent;
+import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEventInfo;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
@@ -28,10 +29,10 @@ public class GUICreativeDragEvent implements GUIEvent
     }
 
     @Override
-    public void execute(InventoryClickEvent event, GUIContainer gui)
+    public void execute(GUIEventInfo event)
     {
         Player   player = (Player) event.getWhoClicked();
-        GUILayer layer  = gui.getLayer(0);
+        GUILayer layer  = event.getGUI().getLayer(0);
         Config   config = plugin.config();
         if(event.getClick() != ClickType.LEFT) return;
         int     slot    = event.getSlot();

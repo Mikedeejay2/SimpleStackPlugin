@@ -2,6 +2,7 @@ package com.mikedeejay2.simplestack.gui.events;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEvent;
+import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEventInfo;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
 import com.mikedeejay2.simplestack.Simplestack;
@@ -30,12 +31,12 @@ public class GUISwitchLangEvent implements GUIEvent
     }
 
     @Override
-    public void execute(InventoryClickEvent event, GUIContainer gui)
+    public void execute(GUIEventInfo event)
     {
         Player player = (Player) event.getWhoClicked();
         Config config = plugin.config();
         config.setLangLocale(locale);
-        GUIListModule listModule = gui.getModule(GUIListModule.class);
+        GUIListModule listModule = event.getGUI().getModule(GUIListModule.class);
         List<GUIItem> langItems = GUICreator.getLanguageList(plugin, player);
         listModule.setGUIItems(langItems);
     }
