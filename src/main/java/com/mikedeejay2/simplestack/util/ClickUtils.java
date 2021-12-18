@@ -113,6 +113,7 @@ public final class ClickUtils
         {
             int bottomAmount = itemInSlot.getAmount() + 1;
             int topAmount = itemInCursor.getAmount() - 1;
+            if(bottomAmount > StackUtils.getMaxAmount(plugin, itemInCursor)) return;
             itemInSlot.setAmount(bottomAmount);
             itemInCursor.setAmount(topAmount);
         }
