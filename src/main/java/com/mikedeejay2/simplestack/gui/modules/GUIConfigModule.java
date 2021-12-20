@@ -2,6 +2,7 @@ package com.mikedeejay2.simplestack.gui.modules;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
+import com.mikedeejay2.mikedeejay2lib.gui.event.button.GUIButtonToggleableEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUICloseEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUIOpenNewEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.GUIInteractHandler;
@@ -70,6 +71,7 @@ public class GUIConfigModule implements GUIModule
         GUIItem groundStacking = getGUIItemGroundStacking(config, player);
         GUIItem switchListMode = getGUIItemSwitchListMode(player);
         GUIItem creativeDrag = getGUIItemCreativeDrag(player);
+        GUIItem stackableArmor = getGUIItemStackableArmor(player);
 
         layer.setItem(2, 3, itemTypeList);
         layer.setItem(2, 4, itemTypeAmountList);
@@ -80,6 +82,7 @@ public class GUIConfigModule implements GUIModule
         layer.setItem(3, 4, groundStacking);
         layer.setItem(3, 5, switchListMode);
         layer.setItem(3, 6, creativeDrag);
+        layer.setItem(3, 7, stackableArmor);
 
         GUIItem closeItem = getGUIItemCloseItem(player);
         layer.setItem(5, 5, closeItem);
@@ -119,6 +122,44 @@ public class GUIConfigModule implements GUIModule
         }
         creativeDrag.addEvent(new GUICreativeDragEvent(plugin));
         return creativeDrag;
+    }
+
+    /**
+     * Get the <tt>GUIItem</tt> for the "Stackable Armor Wearable" button
+     *
+     * @param player The player (For localization)
+     * @return The creative drag mode item
+     */
+    private GUIItem getGUIItemStackableArmor(Player player)
+    {
+        final ItemStack onItem =
+            ItemBuilder.of(Base64Head.GREEN.get())
+                .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.stackable_armor_select"))
+                .setLore(
+                    "",
+                    "&a&l⊳ " + plugin.getLibLangManager().getText(player, "generic.enabled"),
+                    "&7  " + plugin.getLibLangManager().getText(player, "generic.disabled"))
+                .get();
+
+        final ItemStack offItem =
+            ItemBuilder.of(Base64Head.RED.get())
+                .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.stackable_armor_select"))
+                .setLore(
+                    "",
+                    "&7  " + plugin.getLibLangManager().getText(player, "generic.enabled"),
+                    "&c&l⊳ " + plugin.getLibLangManager().getText(player, "generic.disabled"))
+                .get();
+
+        final GUIItem guiItem = new GUIItem(offItem);
+        guiItem.addEvent(new GUIButtonToggleableEvent(info -> {
+            info.getGUIItem().setItem(onItem);
+            plugin.config().setStackableArmor(true);
+        }, info -> {
+            info.getGUIItem().setItem(offItem);
+            plugin.config().setStackableArmor(false);
+        }, plugin.config().shouldStackArmor()));
+
+        return guiItem;
     }
 
     /**

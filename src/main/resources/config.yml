@@ -45,3 +45,10 @@ Ground Stacking Checks: true
 # inventory will always become a full stack. This is a substitute for middle click dragging
 # since middle click dragging can't be detected through the Spigot API.
 Creative Item Dragging: false
+
+# Stackable Armor Wearable: When true, players can wear stacked armor in an armor slot.
+# Keeping this value to false means that only one of an armor piece can be worn at a time.
+# Stacked armor does not add to how much armor a player has but instead increases the
+# overall durability of the stack. When one armor piece breaks, it just decreases the stack
+# by one.
+Stackable Armor Wearable: false

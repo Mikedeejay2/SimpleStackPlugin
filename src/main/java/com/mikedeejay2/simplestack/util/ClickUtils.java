@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.util;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.Simplestack;
@@ -34,6 +35,17 @@ public final class ClickUtils
         Inventory topInv = player.getOpenInventory().getTopInventory();
         if(CancelUtils.cancelMoveCheck(plugin, itemInCursor, clickedInv, slot)) return;
         if(CancelUtils.cancelCurseOfBinding(event)) return;
+        if(!plugin.config().shouldStackArmor() && InventoryIdentifiers.isArmorSlot(slot))
+        {
+            if(itemInSlot == null) rightClick(plugin, itemInSlot, itemInCursor, player, event);
+            else if(itemInCursor != null)
+            {
+                clickedInv.setItem(slot, itemInCursor);
+                player.setItemOnCursor(itemInSlot);
+                player.updateInventory();
+            }
+            return;
+        }
         if(!ItemComparison.equalsEachOther(itemInCursor, itemInSlot))
         {
             player.setItemOnCursor(itemInSlot);
@@ -111,6 +123,7 @@ public final class ClickUtils
 
         if(itemInCursor.getAmount() > 0)
         {
+            if(!plugin.config().shouldStackArmor() && InventoryIdentifiers.isArmorSlot(slot)) return;
             int bottomAmount = itemInSlot.getAmount() + 1;
             int topAmount = itemInCursor.getAmount() - 1;
             if(bottomAmount > StackUtils.getMaxAmount(plugin, itemInCursor)) return;
@@ -443,30 +456,26 @@ public final class ClickUtils
         {
             if(slot < 36)
             {
+                int newSlot;
                 if(type.endsWith("_BOOTS") && inv.getItem(36) == null)
                 {
-                    inv.setItem(36, itemInSlot);
-                    inv.setItem(slot, null);
+                    newSlot = 36;
                 }
                 else if(type.endsWith("_LEGGINGS") && inv.getItem(37) == null)
                 {
-                    inv.setItem(37, itemInSlot);
-                    inv.setItem(slot, null);
+                    newSlot = 37;
                 }
                 else if((type.endsWith("_CHESTPLATE") || type.equals("ELYTRA"))  && inv.getItem(38) == null)
                 {
-                    inv.setItem(38, itemInSlot);
-                    inv.setItem(slot, null);
+                    newSlot = 38;
                 }
                 else if(type.endsWith("_HELMET") && inv.getItem(39) == null)
                 {
-                    inv.setItem(39, itemInSlot);
-                    inv.setItem(slot, null);
+                    newSlot = 39;
                 }
                 else if(type.equals("SHIELD") && inv.getItem(40) == null)
                 {
-                    inv.setItem(40, itemInSlot);
-                    inv.setItem(slot, null);
+                    newSlot = 40;
                 }
                 else
                 {
@@ -482,6 +491,23 @@ public final class ClickUtils
                     {
                         MoveUtils.moveItem(plugin, itemInSlot, clickedInventory, slot, inv, 9, 36, false);
                     }
+                    return;
+                }
+
+                if(plugin.config().shouldStackArmor())
+                {
+                    inv.setItem(newSlot, itemInSlot);
+                    inv.setItem(slot, null);
+                }
+                else
+                {
+                    ItemStack newItem = itemInSlot.clone();
+                    newItem.setAmount(1);
+                    ItemStack extraItem = itemInSlot.clone();
+                    extraItem.setAmount(extraItem.getAmount() - 1);
+
+                    inv.setItem(newSlot, newItem);
+                    inv.setItem(slot, extraItem);
                 }
             }
             else

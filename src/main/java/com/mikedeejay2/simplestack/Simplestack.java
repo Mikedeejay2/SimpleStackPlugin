@@ -79,6 +79,7 @@ public final class Simplestack extends BukkitPlugin
             registerEvent(new ItemSpawnListener(this));
             registerEvent(new BlockExplodeListener(this));
             registerEvent(new EntityExplodeListener(this));
+            registerEvent(new PlayerInteractListener(this));
             if(MinecraftVersion.getVersionShort() >= 16)
             {
                 registerEvent(new PrepareSmithingListener(this));

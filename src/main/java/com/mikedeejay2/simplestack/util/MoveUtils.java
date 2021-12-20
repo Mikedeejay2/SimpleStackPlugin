@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.util;
 
+import com.mikedeejay2.mikedeejay2lib.util.item.InventoryIdentifiers;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.Simplestack;
 import org.bukkit.Location;
@@ -364,7 +365,6 @@ public final class MoveUtils
      * that don't regularly stack. This can be catastrophic because it can unstack past the amount
      * of inventory slots that a shulker box has resulting in data loss.
      *
-     * @param event Event that this method is being run in
      * @param block The block to check
      */
     public static void preserveShulkerBox(Block block)
@@ -460,9 +460,13 @@ public final class MoveUtils
             int newAmount = amountPerItem + item.getAmount();
             int extraAmount = 0;
             int maxAmountInStack = StackUtils.getMaxAmount(plugin, item);
+            if(!plugin.config().shouldStackArmor() && InventoryIdentifiers.isArmorSlot(inventoryView.convertSlot(slots[i])))
+            {
+                maxAmountInStack = 1;
+            }
             if(newAmount > maxAmountInStack)
             {
-                extraAmount = newAmount % maxAmountInStack;
+                extraAmount = newAmount - maxAmountInStack;
                 newAmount = maxAmountInStack;
             }
             item.setAmount(newAmount);

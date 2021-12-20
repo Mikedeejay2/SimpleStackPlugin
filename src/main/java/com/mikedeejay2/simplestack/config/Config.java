@@ -40,6 +40,8 @@ public class Config extends YamlFile
     private boolean groundStacks;
     // Whether the creative middle click dragging should always create a full stack
     private boolean creativeDrag;
+    // Whether stacked armor can be worn or not
+    private boolean stackableArmor;
 
     // Internal config data
     // The unique items json file
@@ -79,6 +81,7 @@ public class Config extends YamlFile
         loadHopperMovement();
         loadGroundStacks();
         loadCreativeDrag();
+        loadStackableArmor();
 
         loaded = true;
     }
@@ -105,6 +108,11 @@ public class Config extends YamlFile
     private void loadGroundStacks()
     {
         groundStacks = accessor.getBoolean("Ground Stacking Checks");
+    }
+
+    private void loadStackableArmor()
+    {
+        stackableArmor = accessor.getBoolean("Stackable Armor Wearable");
     }
 
     /**
@@ -335,6 +343,7 @@ public class Config extends YamlFile
             accessor.setBoolean("Hopper Movement Checks", hopperMovement);
             accessor.setBoolean("Ground Stacking Checks", groundStacks);
             accessor.setBoolean("Creative Item Dragging", creativeDrag);
+            accessor.setBoolean("Stackable Armor Wearable", stackableArmor);
         }
         setModified(false);
 
@@ -782,5 +791,27 @@ public class Config extends YamlFile
     public void setCreativeDrag(boolean creativeDrag)
     {
         this.creativeDrag = creativeDrag;
+        setModified(true);
+    }
+
+    /**
+     * Get whether stacked armor can be worn or not
+     *
+     * @return Whether stacked armor can be worn or not
+     */
+    public boolean shouldStackArmor()
+    {
+        return stackableArmor;
+    }
+
+    /**
+     * Set whether stacked armor can be worn or not
+     *
+     * @param stackableArmor The new stackable armor state
+     */
+    public void setStackableArmor(boolean stackableArmor)
+    {
+        this.stackableArmor = stackableArmor;
+        setModified(true);
     }
 }
