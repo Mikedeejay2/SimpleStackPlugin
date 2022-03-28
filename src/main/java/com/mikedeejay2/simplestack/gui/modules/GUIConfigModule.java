@@ -18,7 +18,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
-import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
 import com.mikedeejay2.simplestack.gui.GUICreator;
@@ -39,11 +39,11 @@ import java.util.Map;
  */
 public class GUIConfigModule implements GUIModule
 {
-    private final Simplestack plugin;
+    private final SimpleStack plugin;
     protected final int LIST_ANIM_AMOUNT = 8;
     protected final int LIST_PREVIEW_AMOUNT = 5;
 
-    public GUIConfigModule(Simplestack plugin)
+    public GUIConfigModule(SimpleStack plugin)
     {
         this.plugin = plugin;
     }

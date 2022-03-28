@@ -4,7 +4,7 @@ import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
 import com.mikedeejay2.mikedeejay2lib.commands.CommandManager;
 import com.mikedeejay2.mikedeejay2lib.text.language.LangManager;
 import com.mikedeejay2.mikedeejay2lib.util.chat.ChatConverter;
-import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.SimpleStack;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -21,9 +21,9 @@ import java.util.ArrayList;
  */
 public class HelpCommand implements SubCommand
 {
-    private final Simplestack plugin;
+    private final SimpleStack plugin;
 
-    public HelpCommand(Simplestack plugin)
+    public HelpCommand(SimpleStack plugin)
     {
         this.plugin = plugin;
     }

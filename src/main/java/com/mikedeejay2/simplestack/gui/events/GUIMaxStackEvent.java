@@ -1,14 +1,12 @@
 package com.mikedeejay2.simplestack.gui.events;
 
-import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
 import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEventInfo;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
-import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.config.Config;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
 
 /**
  * A <tt>GUIEvent</tt> that modifies the max stack amount for all items in Minecraft.
@@ -18,9 +16,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
  */
 public class GUIMaxStackEvent implements GUIEvent
 {
-    private final Simplestack plugin;
+    private final SimpleStack plugin;
 
-    public GUIMaxStackEvent(Simplestack plugin)
+    public GUIMaxStackEvent(SimpleStack plugin)
     {
         this.plugin = plugin;
     }

@@ -4,7 +4,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
-import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.SimpleStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,9 +19,9 @@ import java.util.List;
  */
 public class GUIUniqueItemListModule implements GUIModule
 {
-    private final Simplestack plugin;
+    private final SimpleStack plugin;
 
-    public GUIUniqueItemListModule(Simplestack plugin)
+    public GUIUniqueItemListModule(SimpleStack plugin)
     {
         this.plugin = plugin;
     }

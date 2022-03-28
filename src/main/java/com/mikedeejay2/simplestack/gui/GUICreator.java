@@ -10,7 +10,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIAnimStripsModule
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
-import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.gui.debug.GUIDebugOpenerModule;
 import com.mikedeejay2.simplestack.gui.events.GUISwitchLangEvent;
 import com.mikedeejay2.simplestack.gui.modules.GUIConfigModule;
@@ -40,7 +40,7 @@ public class GUICreator
      * @param player The player requesting to open the GUI (For localization)
      * @return The <tt>GUIContainer</tt> for the main GUI
      */
-    public static GUIContainer createMainGUI(Simplestack plugin, Player player)
+    public static GUIContainer createMainGUI(SimpleStack plugin, Player player)
     {
         GUIContainer         gui           = new GUIContainer(plugin, plugin.getLangManager().getText(player, "simplestack.gui.config.title"), 5);
         GUIAnimationModule   animation     = new GUIAnimationModule(plugin, 1);
@@ -88,7 +88,7 @@ public class GUICreator
      * @param player The player (For localization)
      * @return A list of GUIItems for each language
      */
-    public static List<GUIItem> getLanguageList(Simplestack plugin, Player player)
+    public static List<GUIItem> getLanguageList(SimpleStack plugin, Player player)
     {
         List<GUIItem> items = new ArrayList<>();
         String clickMessage = "&f" + plugin.getLangManager().getText(player, "simplestack.gui.language.language_select");

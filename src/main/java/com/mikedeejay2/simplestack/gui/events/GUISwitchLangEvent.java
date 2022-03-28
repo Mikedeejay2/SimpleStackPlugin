@@ -1,15 +1,13 @@
 package com.mikedeejay2.simplestack.gui.events;
 
-import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEventInfo;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
-import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.gui.GUICreator;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
 
@@ -21,10 +19,10 @@ import java.util.List;
  */
 public class GUISwitchLangEvent implements GUIEvent
 {
-    private final Simplestack plugin;
+    private final SimpleStack plugin;
     private String locale;
 
-    public GUISwitchLangEvent(Simplestack plugin, String locale)
+    public GUISwitchLangEvent(SimpleStack plugin, String locale)
     {
         this.plugin = plugin;
         this.locale = locale;

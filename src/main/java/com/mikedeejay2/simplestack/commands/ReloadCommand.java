@@ -1,22 +1,21 @@
 package com.mikedeejay2.simplestack.commands;
 
 import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
-import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.config.Config;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class ReloadCommand implements SubCommand
 {
-    private final Simplestack plugin;
+    private final SimpleStack plugin;
 
-    public ReloadCommand(Simplestack plugin)
+    public ReloadCommand(SimpleStack plugin)
     {
         this.plugin = plugin;
     }

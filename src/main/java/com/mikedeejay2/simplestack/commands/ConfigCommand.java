@@ -3,7 +3,7 @@ package com.mikedeejay2.simplestack.commands;
 import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
 import com.mikedeejay2.mikedeejay2lib.gui.manager.PlayerGUI;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
-import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.gui.GUICreator;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -16,9 +16,9 @@ import org.bukkit.entity.Player;
  */
 public class ConfigCommand implements SubCommand
 {
-    private final Simplestack plugin;
+    private final SimpleStack plugin;
 
-    public ConfigCommand(Simplestack plugin)
+    public ConfigCommand(SimpleStack plugin)
     {
         this.plugin = plugin;
     }

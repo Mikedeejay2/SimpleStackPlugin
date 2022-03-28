@@ -1,17 +1,15 @@
 package com.mikedeejay2.simplestack.gui.events;
 
-import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
 import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEventInfo;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
-import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.config.Config;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
 
 /**
  * A <tt>GUIEvent</tt> that changes whether hopper movement should be processed by
@@ -21,9 +19,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
  */
 public class GUICreativeDragEvent implements GUIEvent
 {
-    private final Simplestack plugin;
+    private final SimpleStack plugin;
 
-    public GUICreativeDragEvent(Simplestack plugin)
+    public GUICreativeDragEvent(SimpleStack plugin)
     {
         this.plugin = plugin;
     }

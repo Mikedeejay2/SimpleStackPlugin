@@ -5,7 +5,7 @@ import com.mikedeejay2.mikedeejay2lib.data.json.JsonFile;
 import com.mikedeejay2.mikedeejay2lib.data.section.SectionAccessor;
 import com.mikedeejay2.mikedeejay2lib.data.yaml.YamlFile;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
-import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.SimpleStack;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class Config extends YamlFile
 {
-    private final Simplestack plugin;
+    private final SimpleStack plugin;
     //Variables
     // List mode of the material list. Either Blacklist of Whitelist.
     private ListMode listMode;
@@ -49,7 +49,7 @@ public class Config extends YamlFile
     // Whether this config has been loaded or not
     private boolean loaded;
 
-    public Config(Simplestack plugin)
+    public Config(SimpleStack plugin)
     {
         super(plugin, "config.yml");
         this.plugin = plugin;

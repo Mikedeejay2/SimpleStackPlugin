@@ -9,7 +9,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
-import com.mikedeejay2.simplestack.Simplestack;
+import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.gui.GUICreator;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -25,9 +25,9 @@ import java.util.Random;
  */
 public class GUIAboutModule implements GUIModule
 {
-    private final Simplestack plugin;
+    private final SimpleStack plugin;
 
-    public GUIAboutModule(Simplestack plugin)
+    public GUIAboutModule(SimpleStack plugin)
     {
         this.plugin = plugin;
     }
