@@ -42,10 +42,6 @@
             <id>CodeMC</id>
             <url>https://repo.codemc.org/repository/maven-public</url>
         </repository>
-        <repository>
-            <id>Jahia</id>
-            <url>https://maven.jahia.org/maven2/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -77,11 +73,12 @@
             <version>9.2</version>
             <scope>provided</scope>
         </dependency>
+        <!-- If you are attempting to build this plugin you must locate your tools.jar and place it in the -->
+        <!-- libs folder of this project! This jar is used for attaching ASM to the Java runtime. -->
         <dependency>
             <groupId>com.sun</groupId>
             <artifactId>tools</artifactId>
-            <version>1.5.0</version>
-<!--            <scope>system</scope>-->
+            <version>1.7.0_75</version>
         </dependency>
     </dependencies>
 
@@ -92,9 +89,32 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>9</source>
+                    <target>9</target>
                 </configuration>
+            </plugin>
+            <!-- Install tools.jar to local repository before compilation. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <executions>
+                    <execution>
+                        <id>add-sun-tools</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <file>${project.basedir}/libs/tools.jar</file>
+                            <groupId>com.sun</groupId>
+                            <artifactId>tools</artifactId>
+                            <version>1.7.0_75</version>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -109,6 +129,12 @@
                         <configuration>
                             <finalName>${project.name}-${project.version}</finalName>
                             <filters>
+                                <filter>
+                                    <artifact>com.sun:tools</artifact>
+                                    <includes>
+                                        <include>com/sun/tools/attach/**</include>
+                                    </includes>
+                                </filter>
                                 <filter>
                                     <artifact>*:*</artifact>
                                     <excludes>

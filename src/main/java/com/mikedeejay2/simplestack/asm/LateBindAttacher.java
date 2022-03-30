@@ -4,8 +4,6 @@ import com.sun.tools.attach.AgentInitializationException;
 import com.sun.tools.attach.AgentLoadException;
 import com.sun.tools.attach.AttachNotSupportedException;
 import com.sun.tools.attach.VirtualMachine;
-import jdk.internal.agent.Agent;
-import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,7 +31,7 @@ public class LateBindAttacher {
         final Manifest manifest = new Manifest();
         final Attributes mainAttributes = manifest.getMainAttributes();
         mainAttributes.put(Attributes.Name.MANIFEST_VERSION, "1.0");
-        mainAttributes.put(new Attributes.Name("Agent-Class"), Agent.class.getName());
+        mainAttributes.put(new Attributes.Name("Agent-Class"), SimpleStackAgent.class.getName());
         mainAttributes.put(new Attributes.Name("Can-Retransform-Classes"), "true");
         mainAttributes.put(new Attributes.Name("Can-Redefine-Classes"), "true");
         final JarOutputStream jos = new JarOutputStream(new FileOutputStream(jarFile), manifest);

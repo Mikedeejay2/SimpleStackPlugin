@@ -7,6 +7,7 @@ import com.mikedeejay2.mikedeejay2lib.util.bstats.BStats;
 import com.mikedeejay2.mikedeejay2lib.util.recipe.RecipeUtil;
 import com.mikedeejay2.mikedeejay2lib.util.update.UpdateChecker;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
+import com.mikedeejay2.simplestack.asm.test.MainTest;
 import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.DebugConfig;
@@ -71,6 +72,8 @@ public final class SimpleStack extends BukkitPlugin
         this.debugConfig = new DebugConfig();
 
 //        RecipeUtil.preload(this, 0);
+
+        MainTest.main(null);
 
         StackTest stackTest = new StackTest();
     }
