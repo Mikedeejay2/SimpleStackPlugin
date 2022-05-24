@@ -1,15 +1,11 @@
 package com.mikedeejay2.simplestack;
 
-import com.mikedeejay2.jsee.JSEE;
-import com.mikedeejay2.jsee.asm.AgentInfo;
 import com.mikedeejay2.mikedeejay2lib.BukkitPlugin;
 import com.mikedeejay2.mikedeejay2lib.commands.CommandManager;
 import com.mikedeejay2.mikedeejay2lib.text.language.LangManager;
-import com.mikedeejay2.mikedeejay2lib.util.asm.MinecraftJSEE;
 import com.mikedeejay2.mikedeejay2lib.util.bstats.BStats;
 import com.mikedeejay2.mikedeejay2lib.util.update.UpdateChecker;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
-import com.mikedeejay2.simplestack.asm.SimpleStackTransformer;
 import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.DebugConfig;
@@ -69,16 +65,6 @@ public final class SimpleStack extends BukkitPlugin
 
         this.config = new Config(this);
         this.debugConfig = new DebugConfig();
-
-//        RecipeUtil.preload(this, 0);
-
-        this.sendInfo("Initializing SimpleStack transformers...");
-        MinecraftJSEE.initJSEE(SimpleStack.class);
-        JSEE.attachAgent(
-            new AgentInfo(new SimpleStackTransformer()));
-        this.sendInfo("SimpleStack transformers loaded.");
-
-        StackTest stackTest = new StackTest();
     }
 
     /**
