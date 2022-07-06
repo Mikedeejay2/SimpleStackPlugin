@@ -2,7 +2,7 @@ package com.mikedeejay2.simplestack.commands;
 
 import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
 import com.mikedeejay2.simplestack.SimpleStack;
-import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -40,7 +40,7 @@ public class SetAmountCommand implements SubCommand
                     plugin.getLangManager().getText("simplestack.commands.setamount.format"));
             return;
         }
-        if(!NumberUtils.isNumber(args[1]))
+        if(!NumberUtils.isCreatable(args[1]))
         {
             plugin.sendMessage(sender, "&c" + plugin.getLibLangManager().getText(sender, "errors.not_a_number"));
             return;

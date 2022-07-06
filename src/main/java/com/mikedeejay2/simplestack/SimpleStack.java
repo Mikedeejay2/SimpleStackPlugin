@@ -9,6 +9,7 @@ import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.DebugConfig;
+import net.bytebuddy.agent.ByteBuddyAgent;
 
 /**
  * Simple Stack 2 plugin for Minecraft TBD - 1.18.2
@@ -44,7 +45,7 @@ public final class SimpleStack extends BukkitPlugin
     {
         super.onEnable();
         setPrefix("&b[&9" + this.getDescription().getName() + "&b]&r ");
-        if(checkVersion()) return;
+        if(checkVersion() || installByteBuddyAgent()) return;
 
         this.langManager = new LangManager(this, "lang");
 
@@ -65,6 +66,18 @@ public final class SimpleStack extends BukkitPlugin
 
         this.config = new Config(this);
         this.debugConfig = new DebugConfig();
+    }
+
+    private boolean installByteBuddyAgent() {
+        try {
+            ByteBuddyAgent.install();
+        } catch(IllegalStateException e) {
+            sendSevere("SimpleStack is not compatible with this installation of Java!");
+            sendSevere("Common solutions are to use Java 9 or greater OR use a Java 8 JDK that includes the required instrumentation toolkit");
+            this.disablePlugin(this);
+            return true;
+        }
+        return false;
     }
 
     /**
