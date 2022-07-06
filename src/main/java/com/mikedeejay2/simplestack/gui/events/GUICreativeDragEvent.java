@@ -17,46 +17,42 @@ import org.bukkit.event.inventory.ClickType;
  *
  * @author Mikedeejay2
  */
-public class GUICreativeDragEvent implements GUIEvent
-{
+public class GUICreativeDragEvent implements GUIEvent {
     private final SimpleStack plugin;
 
-    public GUICreativeDragEvent(SimpleStack plugin)
-    {
+    public GUICreativeDragEvent(SimpleStack plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public void execute(GUIEventInfo event)
-    {
-        Player   player = (Player) event.getWhoClicked();
-        GUILayer layer  = event.getGUI().getLayer(0);
-        Config   config = plugin.config();
+    public void execute(GUIEventInfo event) {
+        Player player = (Player) event.getWhoClicked();
+        GUILayer layer = event.getGUI().getLayer(0);
+        Config config = plugin.config();
         if(event.getClick() != ClickType.LEFT) return;
-        int     slot    = event.getSlot();
-        int     row     = layer.getRowFromSlot(slot);
-        int     col     = layer.getColFromSlot(slot);
-        GUIItem item    = layer.getItem(row, col);
+        int slot = event.getSlot();
+        int row = layer.getRowFromSlot(slot);
+        int col = layer.getColFromSlot(slot);
+        GUIItem item = layer.getItem(row, col);
         boolean newDrag = !config.shouldCreativeDrag();
-        if(newDrag)
-        {
-            item.setItem(ItemBuilder.of(Base64Head.GREEN.get())
-                .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_select"))
-                .setLore(
-                    "",
-                    "&a&l⊳ " + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_duplicate"),
-                    "&7  " + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_normal"))
-                .get());
-        }
-        else
-        {
-            item.setItem(ItemBuilder.of(Base64Head.RED.get())
-                .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_select"))
-                .setLore(
-                    "",
-                    "&7  " + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_duplicate"),
-                    "&c&l⊳ " + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_normal"))
-                .get());
+        if(newDrag) {
+            item.setItem(
+                ItemBuilder.of(Base64Head.GREEN.get())
+                    .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_select"))
+                    .setLore(
+                        "",
+                        "&a&l⊳ " + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_duplicate"),
+                        "&7  " + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_normal"))
+                    .get());
+        } else {
+            item.setItem(
+                ItemBuilder.of(Base64Head.RED.get())
+                    .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_select"))
+                    .setLore(
+                        "",
+                        "&7  " + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_duplicate"),
+                        "&c&l⊳ " + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_normal"))
+                    .get());
         }
         config.setCreativeDrag(newDrag);
     }

@@ -18,49 +18,45 @@ import org.bukkit.event.inventory.ClickType;
  *
  * @author Mikedeejay2
  */
-public class GUISwitchListModeEvent implements GUIEvent
-{
+public class GUISwitchListModeEvent implements GUIEvent {
     private final SimpleStack plugin;
 
-    public GUISwitchListModeEvent(SimpleStack plugin)
-    {
+    public GUISwitchListModeEvent(SimpleStack plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public void execute(GUIEventInfo event)
-    {
-        Player    player        = (Player) event.getWhoClicked();
-        ClickType type          = event.getClick();
+    public void execute(GUIEventInfo event) {
+        Player player = event.getWhoClicked();
+        ClickType type = event.getClick();
         if(type != ClickType.LEFT) return;
-        GUILayer layer          = event.getGUI().getLayer(0);
-        Config   config         = plugin.config();
-        int      slot           = event.getSlot();
-        int      row            = layer.getRowFromSlot(slot);
-        int      col            = layer.getColFromSlot(slot);
-        GUIItem  switchListMode = layer.getItem(row, col);
+        GUILayer layer = event.getGUI().getLayer(0);
+        Config config = plugin.config();
+        int slot = event.getSlot();
+        int row = layer.getRowFromSlot(slot);
+        int col = layer.getColFromSlot(slot);
+        GUIItem switchListMode = layer.getItem(row, col);
         config.setListMode(config.getListMode() == ListMode.BLACKLIST ? ListMode.WHITELIST : ListMode.BLACKLIST);
-        if(plugin.config().getListMode() == ListMode.BLACKLIST)
-        {
-            switchListMode.setItem(ItemBuilder.of(Base64Head.X_BLACK.get())
-                .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.list_type.blacklist"))
-                .setLore(
-                    "&7" + plugin.getLangManager().getText(player, "simplestack.gui.item_types.change_mode_whitelist"),
-                    "",
-                    "&a&l⊳ " + plugin.getLangManager().getText(player, "simplestack.list_type.blacklist"),
-                    "&7  " + plugin.getLangManager().getText(player, "simplestack.list_type.whitelist"))
-                .get());
-        }
-        else
-        {
-            switchListMode.setItem(ItemBuilder.of(Base64Head.CHECKMARK_WHITE.get())
-                .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.list_type.whitelist"))
-                .setLore(
-                    "&7" + plugin.getLangManager().getText(player, "simplestack.gui.item_types.change_mode_blacklist"),
-                    "",
-                    "&7  " + plugin.getLangManager().getText(player, "simplestack.list_type.blacklist"),
-                    "&a&l⊳ " + plugin.getLangManager().getText(player, "simplestack.list_type.whitelist"))
-                .get());
+        if(plugin.config().getListMode() == ListMode.BLACKLIST) {
+            switchListMode.setItem(
+                ItemBuilder.of(Base64Head.X_BLACK.get())
+                    .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.list_type.blacklist"))
+                    .setLore(
+                        "&7" + plugin.getLangManager().getText(player, "simplestack.gui.item_types.change_mode_whitelist"),
+                        "",
+                        "&a&l⊳ " + plugin.getLangManager().getText(player, "simplestack.list_type.blacklist"),
+                        "&7  " + plugin.getLangManager().getText(player, "simplestack.list_type.whitelist"))
+                    .get());
+        } else {
+            switchListMode.setItem(
+                ItemBuilder.of(Base64Head.CHECKMARK_WHITE.get())
+                    .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.list_type.whitelist"))
+                    .setLore(
+                        "&7" + plugin.getLangManager().getText(player, "simplestack.gui.item_types.change_mode_blacklist"),
+                        "",
+                        "&7  " + plugin.getLangManager().getText(player, "simplestack.list_type.blacklist"),
+                        "&a&l⊳ " + plugin.getLangManager().getText(player, "simplestack.list_type.whitelist"))
+                    .get());
         }
     }
 }

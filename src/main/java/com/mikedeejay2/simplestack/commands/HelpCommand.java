@@ -19,12 +19,10 @@ import java.util.ArrayList;
  *
  * @author Mikedeejay2
  */
-public class HelpCommand implements SubCommand
-{
+public class HelpCommand implements SubCommand {
     private final SimpleStack plugin;
 
-    public HelpCommand(SimpleStack plugin)
-    {
+    public HelpCommand(SimpleStack plugin) {
         this.plugin = plugin;
     }
 
@@ -36,31 +34,29 @@ public class HelpCommand implements SubCommand
      * @param args   The arguments for the command (subcommands)
      */
     @Override
-    public void onCommand(CommandSender sender, String[] args)
-    {
-        LangManager                lang          = plugin.getLangManager();
-        String                     ver           = plugin.getDescription().getVersion();
-        String[]                   ssArr         = {"Simple", "Stack"};
-        String                     version       = lang.getText(sender, "simplestack.version", new String[]{"VERSION"}, new String[]{ver});
-        CommandManager             manager       = plugin.getCommandManager();
-        String[]                   commands      = manager.getAllCommandStrings(false);
-        ArrayList<BaseComponent[]> lines         = new ArrayList<>();
-        String                     lineString    = "&b &m                                                                              ";
-        String                     emptyString   = "                                                                               \n";
-        String                     titleString   = "\n                              &9&l" + ssArr[0] + " &d&l" + ssArr[1] + "&r                               \n";
-        String                     versionString = "  &7" + version + "\n";
+    public void onCommand(CommandSender sender, String[] args) {
+        LangManager lang = plugin.getLangManager();
+        String ver = plugin.getDescription().getVersion();
+        String[] ssArr = {"Simple", "Stack"};
+        String version = lang.getText(sender, "simplestack.version", new String[]{"VERSION"}, new String[]{ver});
+        CommandManager manager = plugin.getCommandManager();
+        String[] commands = manager.getAllCommandStrings(false);
+        ArrayList<BaseComponent[]> lines = new ArrayList<>();
+        String lineString = "&b &m                                                                              ";
+        String emptyString = "                                                                               \n";
+        String titleString = "\n                              &9&l" + ssArr[0] + " &d&l" + ssArr[1] + "&r                               \n";
+        String versionString = "  &7" + version + "\n";
 
-        BaseComponent[] lineComponents    = ChatConverter.getBaseComponentArray(lineString);
-        BaseComponent[] emptyComponents   = ChatConverter.getBaseComponentArray(emptyString);
-        BaseComponent[] titleComponents   = ChatConverter.getBaseComponentArray(titleString);
+        BaseComponent[] lineComponents = ChatConverter.getBaseComponentArray(lineString);
+        BaseComponent[] emptyComponents = ChatConverter.getBaseComponentArray(emptyString);
+        BaseComponent[] titleComponents = ChatConverter.getBaseComponentArray(titleString);
         BaseComponent[] versionComponents = ChatConverter.getBaseComponentArray(versionString);
 
         lines.add(lineComponents);
         lines.add(titleComponents);
         lines.add(emptyComponents);
 
-        for(int i = 1; i < commands.length; i++)
-        {
+        for(int i = 1; i < commands.length; i++) {
             String command = commands[i];
             String commandInfo = manager.getSubcommand(command).getInfo(sender);
             String hoverText = "&d" + lang.getText(sender, "simplestack.commands.click_to_run", new String[]{"COMMAND"}, new String[]{"/simplestack " + command});
@@ -86,20 +82,17 @@ public class HelpCommand implements SubCommand
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "help";
     }
 
     @Override
-    public String getInfo(CommandSender sender)
-    {
+    public String getInfo(CommandSender sender) {
         return plugin.getLangManager().getText(sender, "simplestack.commands.help.info");
     }
 
     @Override
-    public String getPermission()
-    {
+    public String getPermission() {
         return "simplestack.help";
     }
 }

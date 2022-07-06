@@ -14,47 +14,36 @@ import org.bukkit.event.inventory.ClickType;
  *
  * @author Mikedeejay2
  */
-public class GUIMaxStackEvent implements GUIEvent
-{
+public class GUIMaxStackEvent implements GUIEvent {
     private final SimpleStack plugin;
 
-    public GUIMaxStackEvent(SimpleStack plugin)
-    {
+    public GUIMaxStackEvent(SimpleStack plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public void execute(GUIEventInfo event)
-    {
+    public void execute(GUIEventInfo event) {
         ClickType type = event.getClick();
         if(type == ClickType.DOUBLE_CLICK) return;
-        GUILayer layer      = event.getGUI().getLayer(0);
-        Config   config     = plugin.config();
-        int      slot       = event.getSlot();
-        int      row        = layer.getRowFromSlot(slot);
-        int      col        = layer.getColFromSlot(slot);
-        GUIItem  item       = layer.getItem(row, col);
-        boolean  leftClick  = type.isLeftClick();
-        boolean  rightClick = type.isRightClick();
-        boolean  shiftClick = type.isShiftClick();
+        GUILayer layer = event.getGUI().getLayer(0);
+        Config config = plugin.config();
+        int slot = event.getSlot();
+        int row = layer.getRowFromSlot(slot);
+        int col = layer.getColFromSlot(slot);
+        GUIItem item = layer.getItem(row, col);
+        boolean leftClick = type.isLeftClick();
+        boolean rightClick = type.isRightClick();
+        boolean shiftClick = type.isShiftClick();
 
-        if(shiftClick)
-        {
-            if(leftClick)
-            {
+        if(shiftClick) {
+            if(leftClick) {
                 item.setAmount(1);
-            }
-            else if(rightClick)
-            {
+            } else if(rightClick) {
                 item.setAmount(64);
             }
-        }
-        else if(leftClick)
-        {
+        } else if(leftClick) {
             item.setAmount(item.getAmount() > 1 ? item.getAmount() - 1 : 1);
-        }
-        else if(rightClick)
-        {
+        } else if(rightClick) {
             item.setAmount(item.getAmount() < 64 ? item.getAmount() + 1 : 64);
         }
         int amount = item.getAmount();

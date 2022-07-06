@@ -15,12 +15,10 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author Mikedeejay2
  */
-public class AddItemCommand implements SubCommand
-{
+public class AddItemCommand implements SubCommand {
     private final SimpleStack plugin;
 
-    public AddItemCommand(SimpleStack plugin)
-    {
+    public AddItemCommand(SimpleStack plugin) {
         this.plugin = plugin;
     }
 
@@ -31,12 +29,10 @@ public class AddItemCommand implements SubCommand
      * @param args   The arguments for the command (subcommands)
      */
     @Override
-    public void onCommand(CommandSender sender, String[] args)
-    {
+    public void onCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         ItemStack heldItem = player.getInventory().getItemInMainHand();
-        if(heldItem.getType() == Material.AIR)
-        {
+        if(heldItem.getType() == Material.AIR) {
             plugin.sendMessage(player, "&c" + plugin.getLangManager().getText(player, "simplestack.warnings.held_item_required"));
             return;
         }
@@ -44,32 +40,28 @@ public class AddItemCommand implements SubCommand
         config.addUniqueItem(player, heldItem);
         config.saveToDisk(true);
         plugin.sendMessage(sender,
-                "&e&l" + plugin.getLibLangManager().getText(player, "generic.success") +
-                        "&r &9" + plugin.getLangManager().getText(player, "simplestack.commands.additem.success"));
+                           "&e&l" + plugin.getLibLangManager().getText(player, "generic.success") +
+                               "&r &9" + plugin.getLangManager().getText(player, "simplestack.commands.additem.success"));
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "additem";
     }
 
     @Override
-    public String getInfo(CommandSender sender)
-    {
+    public String getInfo(CommandSender sender) {
         return plugin.getLangManager().getText(sender, "simplestack.commands.additem.info");
     }
 
     @Override
-    public String getPermission()
-    {
+    public String getPermission() {
         return "simplestack.additem";
     }
 
     @Override
-    public boolean isPlayerRequired()
-    {
+    public boolean isPlayerRequired() {
         return true;
     }
 }

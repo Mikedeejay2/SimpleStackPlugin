@@ -17,46 +17,42 @@ import org.bukkit.event.inventory.ClickType;
  *
  * @author Mikedeejay2
  */
-public class GUIHopperMovementEvent implements GUIEvent
-{
+public class GUIHopperMovementEvent implements GUIEvent {
     private final SimpleStack plugin;
 
-    public GUIHopperMovementEvent(SimpleStack plugin)
-    {
+    public GUIHopperMovementEvent(SimpleStack plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public void execute(GUIEventInfo event)
-    {
-        Player   player   = (Player) event.getWhoClicked();
-        GUILayer layer    = event.getGUI().getLayer(0);
-        Config   config   = plugin.config();
+    public void execute(GUIEventInfo event) {
+        Player player = (Player) event.getWhoClicked();
+        GUILayer layer = event.getGUI().getLayer(0);
+        Config config = plugin.config();
         if(event.getClick() != ClickType.LEFT) return;
-        int     slot      = event.getSlot();
-        int     row       = layer.getRowFromSlot(slot);
-        int     col       = layer.getColFromSlot(slot);
-        GUIItem item      = layer.getItem(row, col);
+        int slot = event.getSlot();
+        int row = layer.getRowFromSlot(slot);
+        int col = layer.getColFromSlot(slot);
+        GUIItem item = layer.getItem(row, col);
         boolean newHopper = !config.shouldProcessHoppers();
-        if(newHopper)
-        {
-            item.setItem(ItemBuilder.of(Base64Head.GREEN.get())
-                .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.hopper_move_select"))
-                .setLore(
+        if(newHopper) {
+            item.setItem(
+                ItemBuilder.of(Base64Head.GREEN.get())
+                    .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.hopper_move_select"))
+                    .setLore(
                         "",
                         "&a&l⊳ " + plugin.getLibLangManager().getText(player, "generic.enabled"),
                         "&7  " + plugin.getLibLangManager().getText(player, "generic.disabled"))
-                .get());
-        }
-        else
-        {
-            item.setItem(ItemBuilder.of(Base64Head.RED.get())
-                .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.hopper_move_select"))
-                .setLore(
-                    "",
-                    "&7  " + plugin.getLibLangManager().getText(player, "generic.enabled"),
-                    "&c&l⊳ " + plugin.getLibLangManager().getText(player, "generic.disabled"))
-                .get());
+                    .get());
+        } else {
+            item.setItem(
+                ItemBuilder.of(Base64Head.RED.get())
+                    .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.hopper_move_select"))
+                    .setLore(
+                        "",
+                        "&7  " + plugin.getLibLangManager().getText(player, "generic.enabled"),
+                        "&c&l⊳ " + plugin.getLibLangManager().getText(player, "generic.disabled"))
+                    .get());
         }
         config.setHopperMovement(newHopper);
     }

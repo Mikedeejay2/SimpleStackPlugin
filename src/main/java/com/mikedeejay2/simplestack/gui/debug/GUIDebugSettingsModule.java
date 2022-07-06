@@ -8,38 +8,34 @@ import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.config.DebugConfig;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
-public class GUIDebugSettingsModule implements GUIModule
-{
+public class GUIDebugSettingsModule implements GUIModule {
     private final DebugConfig debugConfig;
 
-    public GUIDebugSettingsModule(DebugConfig debugConfig)
-    {
+    public GUIDebugSettingsModule(DebugConfig debugConfig) {
         this.debugConfig = debugConfig;
     }
 
     @Override
-    public void onOpenHead(Player player, GUIContainer gui)
-    {
+    public void onOpenHead(Player player, GUIContainer gui) {
         GUILayer layer = gui.getLayer("settings");
 
         final GUIItem printTimingsOn = new GUIItem(
-                ItemBuilder.of(Base64Head.CHECKMARK_GREEN.get())
-                        .setName("&bPrint Timings")
-                        .setLore("",
-                                 "&a&l⊳ True",
-                                 "&7  False")
-                        .get());
+            ItemBuilder.of(Base64Head.CHECKMARK_GREEN.get())
+                .setName("&bPrint Timings")
+                .setLore("",
+                         "&a&l⊳ True",
+                         "&7  False")
+                .get());
         final GUIItem printTimingsOff = new GUIItem(
-                ItemBuilder.of(Base64Head.X_RED.get())
-                        .setName("&bPrint Timings")
-                        .setLore("",
-                                 "&7  True",
-                                 "&a&l⊳ False")
-                        .get());
+            ItemBuilder.of(Base64Head.X_RED.get())
+                .setName("&bPrint Timings")
+                .setLore("",
+                         "&7  True",
+                         "&a&l⊳ False")
+                .get());
 
         printTimingsOff.addEvent((event) -> {
             if(event.getClick() != ClickType.LEFT) return;
@@ -62,19 +58,19 @@ public class GUIDebugSettingsModule implements GUIModule
         });
 
         final GUIItem printActionsOn = new GUIItem(
-                ItemBuilder.of(Base64Head.CHECKMARK_GREEN.get())
-                        .setName("&bPrint Actions")
-                        .setLore("",
-                                 "&a&l⊳ True",
-                                 "&7  False")
-                        .get());
+            ItemBuilder.of(Base64Head.CHECKMARK_GREEN.get())
+                .setName("&bPrint Actions")
+                .setLore("",
+                         "&a&l⊳ True",
+                         "&7  False")
+                .get());
         final GUIItem printActionsOff = new GUIItem(
-                ItemBuilder.of(Base64Head.X_RED.get())
-                        .setName("&bPrint Actions")
-                        .setLore("",
-                                 "&7  True",
-                                 "&a&l⊳ False")
-                        .get());
+            ItemBuilder.of(Base64Head.X_RED.get())
+                .setName("&bPrint Actions")
+                .setLore("",
+                         "&7  True",
+                         "&a&l⊳ False")
+                .get());
 
         printActionsOn.addEvent((event) -> {
             if(event.getClick() != ClickType.LEFT) return;
@@ -97,14 +93,14 @@ public class GUIDebugSettingsModule implements GUIModule
         });
 
         ItemBuilder infoBuilder = ItemBuilder.of(Base64Head.EXCLAMATION_MARK_RED.get())
-                .setName("&a&lINFO")
-                .setLore("",
-                         "&fWelcome to the debug menu!",
-                         "&fThis menu has options that shouldn't",
-                         "&fbe modified unless you have been",
-                         "&fexplicitly told to.",
-                         "&fOr you can mess with them",
-                         "&fif you know what you're doing.");
+            .setName("&a&lINFO")
+            .setLore("",
+                     "&fWelcome to the debug menu!",
+                     "&fThis menu has options that shouldn't",
+                     "&fbe modified unless you have been",
+                     "&fexplicitly told to.",
+                     "&fOr you can mess with them",
+                     "&fif you know what you're doing.");
 
         AnimatedGUIItem infoItem = new AnimatedGUIItem(infoBuilder.get(), true);
         infoItem.addFrame(infoBuilder.get(), 20);

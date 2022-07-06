@@ -19,12 +19,10 @@ import java.util.Map;
  *
  * @author Mikedeejay2
  */
-public class GUIItemTypeAmountModule implements GUIModule
-{
+public class GUIItemTypeAmountModule implements GUIModule {
     private final SimpleStack plugin;
 
-    public GUIItemTypeAmountModule(SimpleStack plugin)
-    {
+    public GUIItemTypeAmountModule(SimpleStack plugin) {
         this.plugin = plugin;
     }
 
@@ -36,13 +34,11 @@ public class GUIItemTypeAmountModule implements GUIModule
      * @param gui    The <tt>GUIContainer</tt> of the GUI
      */
     @Override
-    public void onClose(Player player, GUIContainer gui)
-    {
+    public void onClose(Player player, GUIContainer gui) {
         GUIListModule list = gui.getModule(GUIListModule.class);
         List<GUIItem> listItems = list.getList();
         Map<Material, Integer> newItems = new HashMap<>();
-        for(GUIItem guiItem : listItems)
-        {
+        for(GUIItem guiItem : listItems) {
             if(guiItem == null || guiItem.getItemBase() == null) continue;
             ItemStack item = guiItem.getItemBase();
             Material material = item.getType();

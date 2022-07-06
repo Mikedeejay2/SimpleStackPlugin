@@ -17,21 +17,18 @@ import java.util.List;
  *
  * @author Mikedeejay2
  */
-public class GUISwitchLangEvent implements GUIEvent
-{
+public class GUISwitchLangEvent implements GUIEvent {
     private final SimpleStack plugin;
     private String locale;
 
-    public GUISwitchLangEvent(SimpleStack plugin, String locale)
-    {
+    public GUISwitchLangEvent(SimpleStack plugin, String locale) {
         this.plugin = plugin;
         this.locale = locale;
     }
 
     @Override
-    public void execute(GUIEventInfo event)
-    {
-        Player player = (Player) event.getWhoClicked();
+    public void execute(GUIEventInfo event) {
+        Player player = event.getWhoClicked();
         Config config = plugin.config();
         config.setLangLocale(locale);
         GUIListModule listModule = event.getGUI().getModule(GUIListModule.class);
@@ -39,8 +36,7 @@ public class GUISwitchLangEvent implements GUIEvent
         listModule.setGUIItems(langItems);
     }
 
-    public String getLocale()
-    {
+    public String getLocale() {
         return locale;
     }
 }

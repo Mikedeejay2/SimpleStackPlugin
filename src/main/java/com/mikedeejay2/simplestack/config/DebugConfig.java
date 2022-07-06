@@ -1,33 +1,27 @@
 package com.mikedeejay2.simplestack.config;
 
-public class DebugConfig
-{
+public class DebugConfig {
     private boolean printTimings;
     private boolean printAction;
 
-    public DebugConfig()
-    {
+    public DebugConfig() {
         this.printTimings = false;
         this.printAction = false;
     }
 
-    public boolean isPrintTimings()
-    {
+    public boolean isPrintTimings() {
         return printTimings;
     }
 
-    public void setPrintTimings(boolean printTimings)
-    {
+    public void setPrintTimings(boolean printTimings) {
         this.printTimings = printTimings;
     }
 
-    public boolean isPrintAction()
-    {
+    public boolean isPrintAction() {
         return printAction;
     }
 
-    public void setPrintAction(boolean printAction)
-    {
+    public void setPrintAction(boolean printAction) {
         this.printAction = printAction;
     }
 }

@@ -17,12 +17,10 @@ import java.util.List;
  *
  * @author Mikedeejay2
  */
-public class GUIUniqueItemListModule implements GUIModule
-{
+public class GUIUniqueItemListModule implements GUIModule {
     private final SimpleStack plugin;
 
-    public GUIUniqueItemListModule(SimpleStack plugin)
-    {
+    public GUIUniqueItemListModule(SimpleStack plugin) {
         this.plugin = plugin;
     }
 
@@ -34,13 +32,11 @@ public class GUIUniqueItemListModule implements GUIModule
      * @param gui    The GUIContainer
      */
     @Override
-    public void onClose(Player player, GUIContainer gui)
-    {
+    public void onClose(Player player, GUIContainer gui) {
         GUIListModule list = gui.getModule(GUIListModule.class);
         List<GUIItem> listItems = list.getList();
         List<ItemStack> newItems = new ArrayList<>();
-        for(GUIItem guiItem : listItems)
-        {
+        for(GUIItem guiItem : listItems) {
             newItems.add(guiItem.getItemBase());
         }
         plugin.config().setUniqueItemList(newItems);

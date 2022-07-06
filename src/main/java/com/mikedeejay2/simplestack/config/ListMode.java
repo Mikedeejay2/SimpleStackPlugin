@@ -11,8 +11,7 @@ package com.mikedeejay2.simplestack.config;
  *
  * @author Mikedeejay2
  */
-public enum ListMode
-{
+public enum ListMode {
     // Only the items in the list will be stackable by default
     WHITELIST,
     // Only the items int the list will be unstackable by default.

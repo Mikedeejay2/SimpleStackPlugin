@@ -11,12 +11,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ReloadCommand implements SubCommand
-{
+public class ReloadCommand implements SubCommand {
     private final SimpleStack plugin;
 
-    public ReloadCommand(SimpleStack plugin)
-    {
+    public ReloadCommand(SimpleStack plugin) {
         this.plugin = plugin;
     }
 
@@ -30,39 +28,34 @@ public class ReloadCommand implements SubCommand
      * @param args   The arguments for the command (subcommands)
      */
     @Override
-    public void onCommand(CommandSender sender, String[] args)
-    {
+    public void onCommand(CommandSender sender, String[] args) {
         Config config = plugin.config();
         config.reload(true);
         plugin.sendMessage(sender,
                            "&e&l" + plugin.getLibLangManager().getText(sender, "generic.success") +
-                                   "&r &9" + plugin.getLangManager().getText(sender, "simplestack.reload.success"));
+                               "&r &9" + plugin.getLangManager().getText(sender, "simplestack.reload.success"));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "reload";
     }
 
     @Override
-    public String getInfo(CommandSender sender)
-    {
+    public String getInfo(CommandSender sender) {
         return plugin.getLangManager().getText(sender, "simplestack.commands.reload.info");
     }
 
     @Override
-    public List<String> getAliases()
-    {
+    public List<String> getAliases() {
         return new ArrayList<>(Collections.singleton("rl"));
     }
 
     @Override
-    public String getPermission()
-    {
+    public String getPermission() {
         return "simplestack.reload";
     }
 }

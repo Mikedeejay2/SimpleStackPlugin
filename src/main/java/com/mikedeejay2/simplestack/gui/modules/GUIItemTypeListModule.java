@@ -18,12 +18,10 @@ import java.util.List;
  *
  * @author Mikedeejay2
  */
-public class GUIItemTypeListModule implements GUIModule
-{
+public class GUIItemTypeListModule implements GUIModule {
     private final SimpleStack plugin;
 
-    public GUIItemTypeListModule(SimpleStack plugin)
-    {
+    public GUIItemTypeListModule(SimpleStack plugin) {
         this.plugin = plugin;
     }
 
@@ -35,13 +33,11 @@ public class GUIItemTypeListModule implements GUIModule
      * @param gui    The <tt>GUIContainer</tt> of the GUI
      */
     @Override
-    public void onClose(Player player, GUIContainer gui)
-    {
+    public void onClose(Player player, GUIContainer gui) {
         GUIListModule list = gui.getModule(GUIListModule.class);
         List<GUIItem> listItems = list.getList();
         List<Material> newItems = new ArrayList<>();
-        for(GUIItem guiItem : listItems)
-        {
+        for(GUIItem guiItem : listItems) {
             newItems.add(guiItem.getItemBase().getType());
         }
         plugin.config().setMaterialList(newItems);

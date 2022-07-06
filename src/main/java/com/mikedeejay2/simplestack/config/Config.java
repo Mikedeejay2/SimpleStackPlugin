@@ -18,8 +18,7 @@ import java.util.*;
  *
  * @author Mikedeejay2
  */
-public class Config extends YamlFile
-{
+public class Config extends YamlFile {
     private final SimpleStack plugin;
     //Variables
     // List mode of the material list. Either Blacklist of Whitelist.
@@ -49,25 +48,21 @@ public class Config extends YamlFile
     // Whether this config has been loaded or not
     private boolean loaded;
 
-    public Config(SimpleStack plugin)
-    {
+    public Config(SimpleStack plugin) {
         super(plugin, "config.yml");
         this.plugin = plugin;
         this.modified = false;
         this.loaded = false;
-        if(!fileExists())
-        {
+        if(!fileExists()) {
             loadFromJar(true);
             super.saveToDisk(true);
-        }
-        else loadFromDisk(true);
+        } else loadFromDisk(true);
     }
 
     /**
      * Load all data from the config files into this class.
      */
-    private void loadData()
-    {
+    private void loadData() {
         langLocale = getDefaultLang();
         plugin.getLangManager().setDefaultLang(langLocale);
 
@@ -86,35 +81,30 @@ public class Config extends YamlFile
     /**
      * Load creative item dragging into <tt>creativeDrag</tt> variable of this config
      */
-    private void loadCreativeDrag()
-    {
+    private void loadCreativeDrag() {
         creativeDrag = accessor.getBoolean("Creative Item Dragging");
     }
 
     /**
      * Load hopper movement into the <tt>hopperMovement</tt> variable of this config
      */
-    private void loadHopperMovement()
-    {
+    private void loadHopperMovement() {
         hopperMovement = accessor.getBoolean("Hopper Movement Checks");
     }
 
     /**
      * Load ground stacking into the <tt>groundStacks</tt> variable of this config
      */
-    private void loadGroundStacks()
-    {
+    private void loadGroundStacks() {
         groundStacks = accessor.getBoolean("Ground Stacking Checks");
     }
 
     /**
      * Load the default max amount into the <tt>maxAmount</tt> variable for this config
      */
-    private void loadDefaultAmount()
-    {
+    private void loadDefaultAmount() {
         maxAmount = accessor.getInt("Default Max Amount");
-        if(maxAmount > 64 || maxAmount <= 0)
-        {
+        if(maxAmount > 64 || maxAmount <= 0) {
             maxAmount = 64;
             plugin.sendMessage(plugin.getLangManager().getText("simplestack.warnings.invalid_max_amount"));
         }
@@ -123,22 +113,18 @@ public class Config extends YamlFile
     /**
      * Load item amounts into the <tt>itemAmounts</tt> map for this config
      */
-    private void loadItemAmounts()
-    {
+    private void loadItemAmounts() {
         itemAmounts = new HashMap<>();
         SectionAccessor<YamlFile, Object> section = accessor.getSection("Item Amounts");
         Set<String> materialList = section.getKeys(false);
-        for(String mat : materialList)
-        {
+        for(String mat : materialList) {
             Material material = Material.matchMaterial(mat);
-            if(material == null && !mat.equals("Example Item"))
-            {
+            if(material == null && !mat.equals("Example Item")) {
                 plugin.getLogger().warning(plugin.getLangManager().getText("simplestack.warnings.invalid_material", new String[]{"MAT"}, new String[]{mat}));
                 continue;
             }
             int amount = section.getInt(mat);
-            if(amount == 0 || amount > 64)
-            {
+            if(amount == 0 || amount > 64) {
                 plugin.getLogger().warning(plugin.getLangManager().getText("simplestack.warnings.number_outside_of_range", new String[]{"MAT"}, new String[]{mat.toString()}));
                 continue;
             }
@@ -149,17 +135,13 @@ public class Config extends YamlFile
     /**
      * Load the list mode into the <tt>ListMode</tt> variable for this config
      */
-    private void loadListMode()
-    {
+    private void loadListMode() {
         String listMode = accessor.getString("List Mode");
-        try
-        {
+        try {
             this.listMode = ListMode.valueOf(listMode.toUpperCase().replaceAll(" ", "_"));
-        }
-        catch(Exception e)
-        {
+        } catch(Exception e) {
             plugin.getLogger().warning(
-                    plugin.getLangManager().getText("simplestack.warnings.invalid_list_mode", new String[]{"MODE"}, new String[]{listMode})
+                plugin.getLangManager().getText("simplestack.warnings.invalid_list_mode", new String[]{"MODE"}, new String[]{listMode})
             );
             this.listMode = ListMode.BLACKLIST;
         }
@@ -168,16 +150,13 @@ public class Config extends YamlFile
     /**
      * Load the material list into the <tt>materialList</tt> list for this config
      */
-    private void loadMaterialList()
-    {
+    private void loadMaterialList() {
         List<String> matList = accessor.getStringList("Item Types");
         materialList = new ArrayList<>();
 
-        for(String mat : matList)
-        {
+        for(String mat : matList) {
             Material material = Material.matchMaterial(mat);
-            if(material == null && !mat.equals("Example Item"))
-            {
+            if(material == null && !mat.equals("Example Item")) {
                 plugin.getLogger().warning(plugin.getLangManager().getText("simplestack.warnings.invalid_material", new String[]{"MAT"}, new String[]{mat}));
                 continue;
             }
@@ -189,8 +168,7 @@ public class Config extends YamlFile
     /**
      * Load the unique items list into the <tt>uniqueItems</tt> list for this config
      */
-    private void loadItemList()
-    {
+    private void loadItemList() {
         this.uniqueItems = new JsonFile(plugin, "unique_items.json");
         if(!uniqueItems.fileExists()) uniqueItems.saveToDisk(true);
         uniqueItems.loadFromDisk(true);
@@ -198,10 +176,8 @@ public class Config extends YamlFile
         uniqueItemList = new ArrayList<>();
         if(itemList == null) return;
 
-        for(ItemStack item : itemList)
-        {
-            if(item == null || item.getType().isAir())
-            {
+        for(ItemStack item : itemList) {
+            if(item == null || item.getType().isAir()) {
                 plugin.getLogger().warning(plugin.getLangManager().getText("simplestack.warnings.invalid_unique_item"));
                 continue;
             }
@@ -215,8 +191,7 @@ public class Config extends YamlFile
      * @param material The material to search for
      * @return If this item has a custom amount set or not
      */
-    public boolean hasCustomAmount(Material material)
-    {
+    public boolean hasCustomAmount(Material material) {
         return itemAmounts.containsKey(material);
     }
 
@@ -227,27 +202,19 @@ public class Config extends YamlFile
      * @param item The item to get the custom amount for
      * @return The custom amount for this item.
      */
-    public int getAmount(ItemStack item)
-    {
+    public int getAmount(ItemStack item) {
         boolean containsUnique = containsUniqueItem(item);
         boolean containsMaterial = containsMaterial(item.getType());
         boolean hasCustomAmount = hasCustomAmount(item.getType());
-        if(containsUnique)
-        {
+        if(containsUnique) {
             return getUniqueItem(item).getAmount();
-        }
-        else if(hasCustomAmount)
-        {
+        } else if(hasCustomAmount) {
             return itemAmounts.get(item.getType());
-        }
-        else if(
+        } else if(
             (getListMode() == ListMode.WHITELIST && containsMaterial) ||
-            (getListMode() == ListMode.BLACKLIST && !containsMaterial))
-        {
+                (getListMode() == ListMode.BLACKLIST && !containsMaterial)) {
             return getMaxAmount();
-        }
-        else
-        {
+        } else {
             return item.getMaxStackSize();
         }
     }
@@ -258,8 +225,7 @@ public class Config extends YamlFile
      *
      * @return The default lang
      */
-    public String getDefaultLang()
-    {
+    public String getDefaultLang() {
         return accessor.getString("Language");
     }
 
@@ -272,8 +238,7 @@ public class Config extends YamlFile
      * @return Whether the load was successful or not
      */
     @Override
-    public boolean loadFromDisk(boolean throwErrors)
-    {
+    public boolean loadFromDisk(boolean throwErrors) {
         boolean success = super.loadFromDisk(throwErrors);
         updateFromJar(throwErrors);
         super.saveToDisk(throwErrors);
@@ -289,8 +254,7 @@ public class Config extends YamlFile
      * @return Whether the load was successful or not
      */
     @Override
-    public boolean loadFromJar(boolean throwErrors)
-    {
+    public boolean loadFromJar(boolean throwErrors) {
         boolean success = super.loadFromJar(throwErrors);
         loadData();
         return success;
@@ -304,14 +268,11 @@ public class Config extends YamlFile
      * @return Whether the file save was successful or not
      */
     @Override
-    public boolean saveToDisk(boolean throwErrors)
-    {
-        if(loaded)
-        {
+    public boolean saveToDisk(boolean throwErrors) {
+        if(loaded) {
             accessor.setString("List Mode", listMode == ListMode.BLACKLIST ? "Blacklist" : "Whitelist");
             List<String> materials = new ArrayList<>();
-            for(Material material : materialList)
-            {
+            for(Material material : materialList) {
                 if(material == null) continue;
                 materials.add(material.toString());
             }
@@ -321,8 +282,7 @@ public class Config extends YamlFile
 
             accessor.delete("Item Amounts");
             SectionAccessor<YamlFile, Object> itemAmtAccessor = accessor.getSection("Item Amounts");
-            for(Map.Entry<Material, Integer> entry : itemAmounts.entrySet())
-            {
+            for(Map.Entry<Material, Integer> entry : itemAmounts.entrySet()) {
                 Material material = entry.getKey();
                 if(material == null || material == Material.AIR) continue;
                 int amount = entry.getValue();
@@ -352,8 +312,7 @@ public class Config extends YamlFile
      * @return Whether the reset was successful or not
      */
     @Override
-    public boolean resetFromJar(boolean throwErrors)
-    {
+    public boolean resetFromJar(boolean throwErrors) {
         this.loaded = false;
         return super.resetFromJar(throwErrors);
     }
@@ -367,16 +326,13 @@ public class Config extends YamlFile
      * @return Whether the update from jar was successful or not
      */
     @Override
-    public boolean updateFromJar(boolean throwErrors)
-    {
-        if(accessor.contains("Items"))
-        {
+    public boolean updateFromJar(boolean throwErrors) {
+        if(accessor.contains("Items")) {
             List<Material> matList = accessor.getMaterialList("Items");
             accessor.delete("Items");
             accessor.setMaterialList("Item Types", matList);
         }
-        if(accessor.contains("ListMode"))
-        {
+        if(accessor.contains("ListMode")) {
             String listMode = accessor.getString("ListMode");
             accessor.delete("ListMode");
             accessor.setString("List Mode", listMode);
@@ -393,14 +349,10 @@ public class Config extends YamlFile
      * @return Whether the reload was successful or not
      */
     @Override
-    public boolean reload(boolean throwErrors)
-    {
-        if(modified)
-        {
+    public boolean reload(boolean throwErrors) {
+        if(modified) {
             return saveToDisk(true);
-        }
-        else
-        {
+        } else {
             return super.reload(throwErrors);
         }
     }
@@ -415,8 +367,7 @@ public class Config extends YamlFile
      *
      * @return The current <tt>ListMode</tt>
      */
-    public ListMode getListMode()
-    {
+    public ListMode getListMode() {
         return listMode;
     }
 
@@ -425,8 +376,7 @@ public class Config extends YamlFile
      *
      * @return The list of materials
      */
-    public List<Material> getMaterialList()
-    {
+    public List<Material> getMaterialList() {
         return materialList;
     }
 
@@ -435,8 +385,7 @@ public class Config extends YamlFile
      *
      * @return The lang locale
      */
-    public String getLangLocale()
-    {
+    public String getLangLocale() {
         return langLocale;
     }
 
@@ -445,8 +394,7 @@ public class Config extends YamlFile
      *
      * @return A map of material to item amount
      */
-    public Map<Material, Integer> getItemAmounts()
-    {
+    public Map<Material, Integer> getItemAmounts() {
         return itemAmounts;
     }
 
@@ -456,10 +404,8 @@ public class Config extends YamlFile
      * @param item The <tt>ItemStack</tt> to search for
      * @return Whether the item was found in the config
      */
-    public boolean containsUniqueItem(ItemStack item)
-    {
-        for(ItemStack curItem : uniqueItemList)
-        {
+    public boolean containsUniqueItem(ItemStack item) {
+        for(ItemStack curItem : uniqueItemList) {
             if(!ItemComparison.equalsEachOther(curItem, item)) continue;
             return true;
         }
@@ -472,10 +418,8 @@ public class Config extends YamlFile
      * @param item The <tt>ItemStack</tt> to find in the config
      * @return The <tt>ItemStack</tt> found with the same properties in the config
      */
-    public ItemStack getUniqueItem(ItemStack item)
-    {
-        for(ItemStack curItem : uniqueItemList)
-        {
+    public ItemStack getUniqueItem(ItemStack item) {
+        for(ItemStack curItem : uniqueItemList) {
             if(!ItemComparison.equalsEachOther(curItem, item)) continue;
             return curItem;
         }
@@ -488,8 +432,7 @@ public class Config extends YamlFile
      * @param material The material to search for
      * @return Whether the material was found or not
      */
-    public boolean containsMaterial(Material material)
-    {
+    public boolean containsMaterial(Material material) {
         return materialList.contains(material);
     }
 
@@ -499,8 +442,7 @@ public class Config extends YamlFile
      * @param material The material to search for
      * @return Whether a custom amount for the material was found or not
      */
-    public boolean containsItemAmount(Material material)
-    {
+    public boolean containsItemAmount(Material material) {
         return itemAmounts.containsKey(material);
     }
 
@@ -509,8 +451,7 @@ public class Config extends YamlFile
      *
      * @return The default max amount for items
      */
-    public int getMaxAmount()
-    {
+    public int getMaxAmount() {
         return maxAmount;
     }
 
@@ -521,8 +462,7 @@ public class Config extends YamlFile
      * @param player The player that requested the action
      * @param item   The item to add to the config
      */
-    public void addUniqueItem(Player player, ItemStack item)
-    {
+    public void addUniqueItem(Player player, ItemStack item) {
         removeUniqueItem(player, item);
         uniqueItemList.add(item);
         setModified(true);
@@ -536,10 +476,8 @@ public class Config extends YamlFile
      * @param material The material to add to the config
      * @return Whether the action was successful or not
      */
-    public boolean addMaterial(Player player, Material material)
-    {
-        if(containsMaterial(material))
-        {
+    public boolean addMaterial(Player player, Material material) {
+        if(containsMaterial(material)) {
             plugin.sendMessage(player, plugin.getLangManager().getText(player, "simplestack.warnings.material_already_exists"));
             return false;
         }
@@ -556,10 +494,8 @@ public class Config extends YamlFile
      * @param item   The item to from from the config
      * @return Whether the action was successful or not
      */
-    public boolean removeUniqueItem(Player player, ItemStack item)
-    {
-        for(ItemStack curItem : uniqueItemList)
-        {
+    public boolean removeUniqueItem(Player player, ItemStack item) {
+        for(ItemStack curItem : uniqueItemList) {
             if(!ItemComparison.equalsEachOther(item, curItem)) continue;
             uniqueItemList.remove(curItem);
             setModified(true);
@@ -576,8 +512,7 @@ public class Config extends YamlFile
      * @param material The material to remove from the config
      * @return Whether the action was successful or not
      */
-    public boolean removeMaterial(Player player, Material material)
-    {
+    public boolean removeMaterial(Player player, Material material) {
         materialList.remove(material);
         setModified(true);
         return true;
@@ -589,8 +524,7 @@ public class Config extends YamlFile
      *
      * @param newMode The new <tt>ListMode</tt> to use in the config
      */
-    public void setListMode(ListMode newMode)
-    {
+    public void setListMode(ListMode newMode) {
         this.listMode = newMode;
         setModified(true);
     }
@@ -603,8 +537,7 @@ public class Config extends YamlFile
      *
      * @param newLocale
      */
-    public void setLangLocale(String newLocale)
-    {
+    public void setLangLocale(String newLocale) {
         this.langLocale = newLocale;
         plugin.getLangManager().setDefaultLang(newLocale);
         setModified(true);
@@ -618,8 +551,7 @@ public class Config extends YamlFile
      * @param material The material to add to the config
      * @param amount   The new max amount of the item
      */
-    public void addCustomAmount(Player player, Material material, int amount)
-    {
+    public void addCustomAmount(Player player, Material material, int amount) {
         if(hasCustomAmount(material)) removeCustomAmount(player, material);
         itemAmounts.put(material, amount);
         setModified(true);
@@ -632,10 +564,8 @@ public class Config extends YamlFile
      * @param player   The player that requested the action
      * @param material The material to remove from the config
      */
-    public void removeCustomAmount(Player player, Material material)
-    {
-        if(!hasCustomAmount(material))
-        {
+    public void removeCustomAmount(Player player, Material material) {
+        if(!hasCustomAmount(material)) {
             plugin.sendMessage(player, plugin.getLangManager().getText(player, "simplestack.warnings.custom_amount_does_not_exist"));
             return;
         }
@@ -648,8 +578,7 @@ public class Config extends YamlFile
      *
      * @return Whether this files has been modified
      */
-    public boolean isModified()
-    {
+    public boolean isModified() {
         return modified;
     }
 
@@ -658,8 +587,7 @@ public class Config extends YamlFile
      *
      * @param modified The new modified state of this file
      */
-    public void setModified(boolean modified)
-    {
+    public void setModified(boolean modified) {
         this.modified = modified;
     }
 
@@ -668,8 +596,7 @@ public class Config extends YamlFile
      *
      * @param maxAmount The new max stack amount
      */
-    public void setMaxAmount(int maxAmount)
-    {
+    public void setMaxAmount(int maxAmount) {
         this.maxAmount = maxAmount;
         setModified(true);
     }
@@ -679,8 +606,7 @@ public class Config extends YamlFile
      *
      * @return Should process hoppers
      */
-    public boolean shouldProcessHoppers()
-    {
+    public boolean shouldProcessHoppers() {
         return hopperMovement;
     }
 
@@ -689,8 +615,7 @@ public class Config extends YamlFile
      *
      * @param hopperMovement The new hopper processing state
      */
-    public void setHopperMovement(boolean hopperMovement)
-    {
+    public void setHopperMovement(boolean hopperMovement) {
         this.hopperMovement = hopperMovement;
         setModified(true);
     }
@@ -700,8 +625,7 @@ public class Config extends YamlFile
      *
      * @return The list of unique items
      */
-    public List<ItemStack> getUniqueItemList()
-    {
+    public List<ItemStack> getUniqueItemList() {
         return uniqueItemList;
     }
 
@@ -710,11 +634,9 @@ public class Config extends YamlFile
      *
      * @param materialList The new list of materials to use
      */
-    public void setMaterialList(List<Material> materialList)
-    {
+    public void setMaterialList(List<Material> materialList) {
         this.materialList.clear();
-        for(Material material : materialList)
-        {
+        for(Material material : materialList) {
             if(material == null) continue;
             this.materialList.add(material);
         }
@@ -726,8 +648,7 @@ public class Config extends YamlFile
      *
      * @param uniqueItemList The new items list to use
      */
-    public void setUniqueItemList(List<ItemStack> uniqueItemList)
-    {
+    public void setUniqueItemList(List<ItemStack> uniqueItemList) {
         this.uniqueItemList = uniqueItemList;
         setModified(true);
     }
@@ -737,8 +658,7 @@ public class Config extends YamlFile
      *
      * @param itemAmounts The new item amounts list
      */
-    public void setItemAmounts(Map<Material, Integer> itemAmounts)
-    {
+    public void setItemAmounts(Map<Material, Integer> itemAmounts) {
         this.itemAmounts = itemAmounts;
         setModified(true);
     }
@@ -748,8 +668,7 @@ public class Config extends YamlFile
      *
      * @return The ground stacking state
      */
-    public boolean processGroundItems()
-    {
+    public boolean processGroundItems() {
         return groundStacks;
     }
 
@@ -758,8 +677,7 @@ public class Config extends YamlFile
      *
      * @param groundStacks The new state for ground item stacking
      */
-    public void setGroundStacks(boolean groundStacks)
-    {
+    public void setGroundStacks(boolean groundStacks) {
         this.groundStacks = groundStacks;
         setModified(true);
     }
@@ -769,8 +687,7 @@ public class Config extends YamlFile
      *
      * @return Creative drag state
      */
-    public boolean shouldCreativeDrag()
-    {
+    public boolean shouldCreativeDrag() {
         return creativeDrag;
     }
 
@@ -779,8 +696,7 @@ public class Config extends YamlFile
      *
      * @param creativeDrag The new creative drag state
      */
-    public void setCreativeDrag(boolean creativeDrag)
-    {
+    public void setCreativeDrag(boolean creativeDrag) {
         this.creativeDrag = creativeDrag;
     }
 }

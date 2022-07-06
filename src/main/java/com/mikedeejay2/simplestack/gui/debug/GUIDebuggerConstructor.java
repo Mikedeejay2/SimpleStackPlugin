@@ -10,24 +10,21 @@ import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.simplestack.SimpleStack;
 import org.bukkit.Material;
 
-public class GUIDebuggerConstructor implements GUIConstructor
-{
+public class GUIDebuggerConstructor implements GUIConstructor {
     private static final AnimatedGUIItem outlineItem = new AnimatedGUIItem(
-            ItemBuilder.of(Material.BLACK_STAINED_GLASS_PANE).setEmptyName().get(), true)
-            .addFrame(ItemBuilder.of(Material.BLACK_STAINED_GLASS_PANE).setEmptyName().get(), 20)
-            .addFrame(ItemBuilder.of(Material.RED_STAINED_GLASS_PANE).setEmptyName().get(), 1)
-            .addFrame(ItemBuilder.of(Material.BLACK_STAINED_GLASS_PANE).setEmptyName().get(), 100);
+        ItemBuilder.of(Material.BLACK_STAINED_GLASS_PANE).setEmptyName().get(), true)
+        .addFrame(ItemBuilder.of(Material.BLACK_STAINED_GLASS_PANE).setEmptyName().get(), 20)
+        .addFrame(ItemBuilder.of(Material.RED_STAINED_GLASS_PANE).setEmptyName().get(), 1)
+        .addFrame(ItemBuilder.of(Material.BLACK_STAINED_GLASS_PANE).setEmptyName().get(), 100);
 
     private final SimpleStack plugin;
 
-    public GUIDebuggerConstructor(SimpleStack plugin)
-    {
+    public GUIDebuggerConstructor(SimpleStack plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public GUIContainer get()
-    {
+    public GUIContainer get() {
         GUIContainer gui = new GUIContainer(plugin, "&cDebug Menu", 3);
         gui.addModule(new GUIAnimationModule(plugin, 1));
         gui.addModule(new GUIAnimOutlineModule(outlineItem, GUIAnimPattern.LEFT_RIGHT));

@@ -24,8 +24,7 @@ import net.bytebuddy.agent.ByteBuddyAgent;
  *
  * @author Mikedeejay2
  */
-public final class SimpleStack extends BukkitPlugin
-{
+public final class SimpleStack extends BukkitPlugin {
     private static final int MINIMUM_VERSION = 14;
 
     // Permission for general Simple Stack use
@@ -41,8 +40,7 @@ public final class SimpleStack extends BukkitPlugin
     private CommandManager commandManager;
 
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
         super.onEnable();
         setPrefix("&b[&9" + this.getDescription().getName() + "&b]&r ");
         if(checkVersion() || installByteBuddyAgent()) return;
@@ -87,10 +85,8 @@ public final class SimpleStack extends BukkitPlugin
      *
      * @return Whether the plugin has been disabled.
      */
-    private boolean checkVersion()
-    {
-        if(MinecraftVersion.getVersionShort() < MINIMUM_VERSION)
-        {
+    private boolean checkVersion() {
+        if(MinecraftVersion.getVersionShort() < MINIMUM_VERSION) {
             sendSevere(String.format("Simple Stack %s is not compatible Minecraft version %s!",
                                      this.getDescription().getVersion(),
                                      MinecraftVersion.getVersionString()));
@@ -101,11 +97,9 @@ public final class SimpleStack extends BukkitPlugin
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         super.onDisable();
-        if(config.isModified())
-        {
+        if(config.isModified()) {
             config.saveToDisk(true);
         }
     }
@@ -115,8 +109,7 @@ public final class SimpleStack extends BukkitPlugin
      *
      * @return simplestack.use String permission
      */
-    public String getPermission()
-    {
+    public String getPermission() {
         return permission;
     }
 
@@ -125,23 +118,19 @@ public final class SimpleStack extends BukkitPlugin
      *
      * @return The config of Simple Stack
      */
-    public Config config()
-    {
+    public Config config() {
         return config;
     }
 
-    public LangManager getLangManager()
-    {
+    public LangManager getLangManager() {
         return langManager;
     }
 
-    public CommandManager getCommandManager()
-    {
+    public CommandManager getCommandManager() {
         return commandManager;
     }
 
-    public DebugConfig getDebugConfig()
-    {
+    public DebugConfig getDebugConfig() {
         return debugConfig;
     }
 }

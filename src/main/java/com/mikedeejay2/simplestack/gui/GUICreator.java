@@ -27,8 +27,7 @@ import java.util.List;
  *
  * @author Mikedeejay2
  */
-public class GUICreator
-{
+public class GUICreator {
     // The animated gui item seen on the main configuration screen.
     // It's stored so that it doesn't need to be created many times.
     private static AnimatedGUIItem animatedGUIItem = null;
@@ -40,14 +39,13 @@ public class GUICreator
      * @param player The player requesting to open the GUI (For localization)
      * @return The <tt>GUIContainer</tt> for the main GUI
      */
-    public static GUIContainer createMainGUI(SimpleStack plugin, Player player)
-    {
-        GUIContainer         gui           = new GUIContainer(plugin, plugin.getLangManager().getText(player, "simplestack.gui.config.title"), 5);
-        GUIAnimationModule   animation     = new GUIAnimationModule(plugin, 1);
-        GUIAnimStripsModule  outlineModule = new GUIAnimStripsModule(getAnimItem());
-        GUINavigatorModule   naviModule    = new GUINavigatorModule(plugin, "config");
-        GUIConfigModule      configModule  = new GUIConfigModule(plugin);
-        GUIDebugOpenerModule debugModule   = new GUIDebugOpenerModule(plugin);
+    public static GUIContainer createMainGUI(SimpleStack plugin, Player player) {
+        GUIContainer gui = new GUIContainer(plugin, plugin.getLangManager().getText(player, "simplestack.gui.config.title"), 5);
+        GUIAnimationModule animation = new GUIAnimationModule(plugin, 1);
+        GUIAnimStripsModule outlineModule = new GUIAnimStripsModule(getAnimItem());
+        GUINavigatorModule naviModule = new GUINavigatorModule(plugin, "config");
+        GUIConfigModule configModule = new GUIConfigModule(plugin);
+        GUIDebugOpenerModule debugModule = new GUIDebugOpenerModule(plugin);
         gui.addModule(animation);
         gui.addModule(outlineModule);
         gui.addModule(naviModule);
@@ -65,10 +63,8 @@ public class GUICreator
      *
      * @return The animated item
      */
-    public static AnimatedGUIItem getAnimItem()
-    {
-        if(animatedGUIItem == null)
-        {
+    public static AnimatedGUIItem getAnimItem() {
+        if(animatedGUIItem == null) {
             AnimatedGUIItem item = new AnimatedGUIItem(ItemBuilder.of(Material.BLUE_STAINED_GLASS_PANE).setEmptyName().get(), true);
             item.addFrame(ItemBuilder.of(Material.BLUE_STAINED_GLASS_PANE).setEmptyName().get(), 10);
             item.addFrame(ItemBuilder.of(Material.PURPLE_STAINED_GLASS_PANE).setEmptyName().get(), 10);
@@ -88,59 +84,65 @@ public class GUICreator
      * @param player The player (For localization)
      * @return A list of GUIItems for each language
      */
-    public static List<GUIItem> getLanguageList(SimpleStack plugin, Player player)
-    {
+    public static List<GUIItem> getLanguageList(SimpleStack plugin, Player player) {
         List<GUIItem> items = new ArrayList<>();
         String clickMessage = "&f" + plugin.getLangManager().getText(player, "simplestack.gui.language.language_select");
         GUIItem english = new GUIItem(ItemBuilder.of(Base64Head.FLAG_UNITED_STATES.get()).setName("&bEnglish").setLore(clickMessage, "&7en_us").get());
         english.addEvent(new GUISwitchLangEvent(plugin, "en_us"));
 
         GUIItem simplifiedChinese = new GUIItem(ItemBuilder.of(Base64Head.FLAG_CHINA.get())
-                                                        .setName("&b简体中文 (Simplified Chinese)")
-                                                        .setLore(clickMessage, "&7zh_cn")
-                                                        .get());
+                                                    .setName("&b简体中文 (Simplified Chinese)")
+                                                    .setLore(clickMessage, "&7zh_cn")
+                                                    .get());
         simplifiedChinese.addEvent(new GUISwitchLangEvent(plugin, "zh_cn"));
 
-        GUIItem korean = new GUIItem(ItemBuilder.of(Base64Head.FLAG_SOUTH_KOREA.get())
-                                             .setName("&b한국어 (Korean)")
-                                             .setLore(clickMessage, "&7ko_kr")
-                                             .get());
+        GUIItem korean = new GUIItem(
+            ItemBuilder.of(Base64Head.FLAG_SOUTH_KOREA.get())
+                .setName("&b한국어 (Korean)")
+                .setLore(clickMessage, "&7ko_kr")
+                .get());
         korean.addEvent(new GUISwitchLangEvent(plugin, "ko_kr"));
 
-        GUIItem argentina = new GUIItem(ItemBuilder.of(Base64Head.FLAG_ARGENTINA.get())
-                                                .setName("&bEspañol (Argentinian Spanish)")
-                                                .setLore(clickMessage, "&7es_ar")
-                                                .get());
+        GUIItem argentina = new GUIItem(
+            ItemBuilder.of(Base64Head.FLAG_ARGENTINA.get())
+                .setName("&bEspañol (Argentinian Spanish)")
+                .setLore(clickMessage, "&7es_ar")
+                .get());
         argentina.addEvent(new GUISwitchLangEvent(plugin, "es_ar"));
 
-        GUIItem chilean = new GUIItem(ItemBuilder.of(Base64Head.FLAG_CHILE.get())
-                                              .setName("&bEspañol (Chilean Spanish)")
-                                              .setLore(clickMessage, "&7es_cl")
-                                              .get());
+        GUIItem chilean = new GUIItem(
+            ItemBuilder.of(Base64Head.FLAG_CHILE.get())
+                .setName("&bEspañol (Chilean Spanish)")
+                .setLore(clickMessage, "&7es_cl")
+                .get());
         chilean.addEvent(new GUISwitchLangEvent(plugin, "es_cl"));
 
-        GUIItem mexican = new GUIItem(ItemBuilder.of(Base64Head.FLAG_MEXICO.get())
-                                              .setName("&bEspañol (Mexican Spanish)")
-                                              .setLore(clickMessage, "&7es_mx")
-                                              .get());
+        GUIItem mexican = new GUIItem(
+            ItemBuilder.of(Base64Head.FLAG_MEXICO.get())
+                .setName("&bEspañol (Mexican Spanish)")
+                .setLore(clickMessage, "&7es_mx")
+                .get());
         mexican.addEvent(new GUISwitchLangEvent(plugin, "es_mx"));
 
-        GUIItem uruguay = new GUIItem(ItemBuilder.of(Base64Head.FLAG_URUGUAY.get())
-                                              .setName("&bEspañol (Uruguayan Spanish)")
-                                              .setLore(clickMessage, "&7es_uy")
-                                              .get());
+        GUIItem uruguay = new GUIItem(
+            ItemBuilder.of(Base64Head.FLAG_URUGUAY.get())
+                .setName("&bEspañol (Uruguayan Spanish)")
+                .setLore(clickMessage, "&7es_uy")
+                .get());
         uruguay.addEvent(new GUISwitchLangEvent(plugin, "es_uy"));
 
-        GUIItem venezuela = new GUIItem(ItemBuilder.of(Base64Head.FLAG_VENEZUELA.get())
-                                                .setName("&bEspañol (Venezuelan Spanish)")
-                                                .setLore(clickMessage, "&7es_ve")
-                                                .get());
+        GUIItem venezuela = new GUIItem(
+            ItemBuilder.of(Base64Head.FLAG_VENEZUELA.get())
+                .setName("&bEspañol (Venezuelan Spanish)")
+                .setLore(clickMessage, "&7es_ve")
+                .get());
         venezuela.addEvent(new GUISwitchLangEvent(plugin, "es_ve"));
 
-        GUIItem german = new GUIItem(ItemBuilder.of(Base64Head.FLAG_GERMANY.get())
-                                             .setName("&bDeutsch (German)")
-                                             .setLore(clickMessage, "&7de_de")
-                                             .get());
+        GUIItem german = new GUIItem(
+            ItemBuilder.of(Base64Head.FLAG_GERMANY.get())
+                .setName("&bDeutsch (German)")
+                .setLore(clickMessage, "&7de_de")
+                .get());
         german.addEvent(new GUISwitchLangEvent(plugin, "de_de"));
 
         items.add(english);
@@ -157,8 +159,7 @@ public class GUICreator
         int index = 0;
         GUIItem curLangItem = null;
         String curLocale = null;
-        for(int i = 0; i < items.size(); ++i)
-        {
+        for(int i = 0; i < items.size(); ++i) {
             GUIItem curItem = items.get(i);
             String locale = curItem.getEvent(GUISwitchLangEvent.class).getLocale();
             if(!locale.equals(currentLocale)) continue;
@@ -166,8 +167,7 @@ public class GUICreator
             curLangItem = curItem;
             curLocale = locale;
         }
-        if(curLangItem == null)
-        {
+        if(curLangItem == null) {
             curLangItem = items.get(0);
             curLocale = "en_us";
         }
@@ -183,9 +183,9 @@ public class GUICreator
 
         newLangItem.addFrame(curItem, 10);
         newLangItem.addFrame(ItemBuilder.of(Base64Head.CONCRETE_LIME.get())
-                                     .setName(curItemMeta.getDisplayName())
-                                     .setLore(curItemMeta.getLore())
-                                     .get(), 10);
+                                 .setName(curItemMeta.getDisplayName())
+                                 .setLore(curItemMeta.getLore())
+                                 .get(), 10);
         items.remove(index);
         items.add(index, newLangItem);
         return items;

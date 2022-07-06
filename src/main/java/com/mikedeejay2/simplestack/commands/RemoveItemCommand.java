@@ -15,12 +15,10 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author Mikedeejay2
  */
-public class RemoveItemCommand implements SubCommand
-{
+public class RemoveItemCommand implements SubCommand {
     private final SimpleStack plugin;
 
-    public RemoveItemCommand(SimpleStack plugin)
-    {
+    public RemoveItemCommand(SimpleStack plugin) {
         this.plugin = plugin;
     }
 
@@ -31,12 +29,10 @@ public class RemoveItemCommand implements SubCommand
      * @param args   The arguments for the command (subcommands)
      */
     @Override
-    public void onCommand(CommandSender sender, String[] args)
-    {
+    public void onCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         ItemStack heldItem = player.getInventory().getItemInMainHand();
-        if(heldItem.getType() == Material.AIR)
-        {
+        if(heldItem.getType() == Material.AIR) {
             plugin.sendMessage(player, "&c" + plugin.getLangManager().getText(player, "simplestack.warnings.held_item_required"));
             return;
         }
@@ -44,32 +40,28 @@ public class RemoveItemCommand implements SubCommand
         config.removeUniqueItem(player, heldItem);
         config.saveToDisk(true);
         plugin.sendMessage(sender,
-                "&e&l" + plugin.getLibLangManager().getText(player, "generic.success") +
-                        "&r &9" + plugin.getLangManager().getText(player, "simplestack.commands.removeitem.success"));
+                           "&e&l" + plugin.getLibLangManager().getText(player, "generic.success") +
+                               "&r &9" + plugin.getLangManager().getText(player, "simplestack.commands.removeitem.success"));
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "removeitem";
     }
 
     @Override
-    public String getInfo(CommandSender sender)
-    {
+    public String getInfo(CommandSender sender) {
         return plugin.getLangManager().getText(sender, "simplestack.commands.removeitem.info");
     }
 
     @Override
-    public String getPermission()
-    {
+    public String getPermission() {
         return "simplestack.removeitem";
     }
 
     @Override
-    public boolean isPlayerRequired()
-    {
+    public boolean isPlayerRequired() {
         return true;
     }
 }
