@@ -12,10 +12,8 @@ import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.DebugConfig;
 
-import java.io.File;
-
 /**
- * Simple Stack 2 plugin for Minecraft TBD - 1.18.2
+ * Simple Stack v2.0 plugin for Minecraft TBD - 1.19
  * <p>
  * The source code for Simple Stack can be found here:
  * <a href="https://github.com/Mikedeejay2/SimpleStackPlugin">https://github.com/Mikedeejay2/SimpleStackPlugin</a>
@@ -73,7 +71,7 @@ public final class SimpleStack extends BukkitPlugin {
         this.config = new Config(this);
         this.debugConfig = new DebugConfig();
 
-        StackSizeTransformer.inject();
+        StackSizeTransformer.installAgents();
     }
 
     private boolean installByteBuddyAgent() {
@@ -141,10 +139,6 @@ public final class SimpleStack extends BukkitPlugin {
 
     public DebugConfig getDebugConfig() {
         return debugConfig;
-    }
-
-    public static File getPluginFile() {
-        return instance.getFile();
     }
 
     public static SimpleStack getInstance() {

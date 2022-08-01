@@ -33,7 +33,7 @@ public final class StackSizeTransformer {
         }
     }
 
-    public static void inject() {
+    public static void installAgents() {
         new AgentBuilder.Default()
             .disableClassFormatChanges()
             .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION)
@@ -55,55 +55,7 @@ public final class StackSizeTransformer {
                             .and(returns(int.class))
                             .and(takesNoArguments())))))
             .installOnByteBuddyAgent();
-
-
-
-
-//        BYTE_BUDDY
-//            .with(Implementation.Context.Disabled.Factory.INSTANCE)
-//            .redefine(CLASS_ITEM)
-//            .method(named(NMSMappings.get().methodNameItemGetMaxStackSize)
-//                        .and(returns(int.class))
-//                        .and(takesNoArguments()))
-//            .intercept(Advice.to(ItemInterceptor.class).wrap(StubMethod.INSTANCE))
-//            .make()
-//            .load(SimpleStack.class.getClassLoader(), ClassReloadingStrategy.fromInstalledAgent());
-
-//        BYTE_BUDDY
-//            .with(Implementation.Context.Disabled.Factory.INSTANCE)
-//            .redefine(CLASS_ITEM)
-//            .visit(Advice.to(ItemInterceptor.class)
-//                       .on(named(NMSMappings.get().methodNameItemGetMaxStackSize)
-//                               .and(returns(int.class))
-//                               .and(takesNoArguments())))
-//            .make()
-//            .load(SimpleStack.class.getClassLoader(), ClassReloadingStrategy.fromInstalledAgent());
-
-//        BYTE_BUDDY.redefine(CLASS_ITEM_STACK)
-//            .method(named(NMSMappings.get().methodNameItemStackGetMaxStackSize))
-//            .intercept(Advice.to(ItemStackInterceptor.class))
-//            .make()
-//            .load(CLASS_ITEM.getClassLoader(), ClassReloadingStrategy.fromInstalledAgent());
     }
-
-//    private static final class ItemTransformer implements AgentBuilder.Transformer {
-//
-//        @Override
-//        public DynamicType.Builder<?> transform(
-//            DynamicType.Builder<?> builder,
-//            TypeDescription typeDescription,
-//            ClassLoader classLoader,
-//            JavaModule module) {
-//            return builder.visit(Advice.to(ItemInterceptor.class)
-//                       .on(named(NMSMappings.get().methodNameItemGetMaxStackSize)
-//                               .and(returns(int.class))
-//                               .and(takesNoArguments())));
-//        }
-//    }
-
-//    public static void test() {
-//        System.out.println("HI!");
-//    }
 
     public static class ItemAdvice {
         @Advice.OnMethodEnter

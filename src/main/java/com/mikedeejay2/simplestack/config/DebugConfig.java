@@ -1,5 +1,10 @@
 package com.mikedeejay2.simplestack.config;
 
+/**
+ * Secret debug options, these options are never saved to disk and always are false on plugin load/reload.
+ *
+ * @author Mikedeejay2
+ */
 public class DebugConfig {
     private boolean printTimings;
     private boolean printAction;
