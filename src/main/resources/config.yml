@@ -29,19 +29,3 @@ Language: en_us
 # Default Max Amount: Set the default max amount for ALL items in Minecraft
 # This setting could be dangerous, do proper testing before changing this value.
 Default Max Amount: 64
-
-# Hopper Movement Checks: Hoppers will attempt to stack unstackable items together.
-# Setting this to false will stop hopper checks which could increase performance but will
-# Stop stacking of unstackables when moving through hoppers.
-Hopper Movement Checks: true
-
-# Ground Stacking Checks: Simple Stack will check whether unstackable items on the ground
-# will stack together or not.
-# Setting this to false will stop unstackables stacking when on the ground and could
-# increase performance at the cost of unstackables not stacking when on the ground.
-Ground Stacking Checks: true
-
-# Creative Item Dragging: When this is set to true, items that are dragged in a creative
-# inventory will always become a full stack. This is a substitute for middle click dragging
-# since middle click dragging can't be detected through the Spigot API.
-Creative Item Dragging: false

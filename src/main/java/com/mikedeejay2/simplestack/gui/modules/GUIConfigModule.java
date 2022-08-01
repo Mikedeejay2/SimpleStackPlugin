@@ -62,57 +62,20 @@ public class GUIConfigModule implements GUIModule {
         GUIItem uniqueItemList = getGUIItemUniqueItemList(player);
         GUIItem language = getGUIItemLanguage(player);
         GUIItem defaultMaxAmount = getGUIItemDefaultMaxAmount(config, player);
-        GUIItem hopperMovement = getGUIItemHopperMovement(config, player);
-        GUIItem groundStacking = getGUIItemGroundStacking(config, player);
         GUIItem switchListMode = getGUIItemSwitchListMode(player);
-        GUIItem creativeDrag = getGUIItemCreativeDrag(player);
 
         layer.setItem(2, 3, itemTypeList);
         layer.setItem(2, 4, itemTypeAmountList);
         layer.setItem(2, 5, uniqueItemList);
         layer.setItem(2, 6, language);
         layer.setItem(2, 7, defaultMaxAmount);
-        layer.setItem(3, 3, hopperMovement);
-        layer.setItem(3, 4, groundStacking);
         layer.setItem(3, 5, switchListMode);
-        layer.setItem(3, 6, creativeDrag);
 
         GUIItem closeItem = getGUIItemCloseItem(player);
         layer.setItem(5, 5, closeItem);
 
         GUIItem aboutItem = getGUIItemAboutItem(player);
         layer.setItem(1, 5, aboutItem);
-    }
-
-    /**
-     * Get the <tt>GUIItem</tt> for the "Creative Item Dragging Mode" button
-     *
-     * @param player The player (For localization)
-     * @return The creative drag mode item
-     */
-    private GUIItem getGUIItemCreativeDrag(Player player) {
-        GUIItem creativeDrag = new GUIItem(null);
-        if(plugin.config().shouldCreativeDrag()) {
-            creativeDrag.setItem(
-                ItemBuilder.of(Base64Head.GREEN.get())
-                    .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_select"))
-                    .setLore(
-                        "",
-                        "&a&l⊳ " + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_duplicate"),
-                        "&7  " + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_normal"))
-                    .get());
-        } else {
-            creativeDrag.setItem(
-                ItemBuilder.of(Base64Head.RED.get())
-                    .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_select"))
-                    .setLore(
-                        "",
-                        "&7  " + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_duplicate"),
-                        "&c&l⊳ " + plugin.getLangManager().getText(player, "simplestack.gui.config.creative_drag_normal"))
-                    .get());
-        }
-        creativeDrag.addEvent(new GUICreativeDragEvent(plugin));
-        return creativeDrag;
     }
 
     /**
@@ -243,72 +206,6 @@ public class GUIConfigModule implements GUIModule {
             return gui;
         }));
         return itemTypeAmountList;
-    }
-
-    /**
-     * Get the <tt>GUIItem</tt> for the hopper movement button
-     *
-     * @param config The <tt>Config</tt> reference
-     * @param player The player (For localization)
-     * @return The hopper movement button
-     */
-    private GUIItem getGUIItemHopperMovement(Config config, Player player) {
-        GUIItem hopperMovement = new GUIItem(null);
-        if(config.shouldProcessHoppers()) {
-            hopperMovement.setItem(
-                ItemBuilder.of(Base64Head.GREEN.get())
-                    .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.hopper_move_select"))
-                    .setLore(
-                        "",
-                        "&a&l⊳ " + plugin.getLibLangManager().getText(player, "generic.enabled"),
-                        "&7  " + plugin.getLibLangManager().getText(player, "generic.disabled"))
-                    .get());
-        } else {
-            hopperMovement.setItem(
-                ItemBuilder.of(Base64Head.RED.get())
-                    .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.hopper_move_select"))
-                    .setLore(
-                        "",
-                        "&7  " + plugin.getLibLangManager().getText(player, "generic.enabled"),
-                        "&c&l⊳ " + plugin.getLibLangManager().getText(player, "generic.disabled"))
-                    .get());
-        }
-        GUIHopperMovementEvent hopperMovementEvent = new GUIHopperMovementEvent(plugin);
-        hopperMovement.addEvent(hopperMovementEvent);
-        return hopperMovement;
-    }
-
-    /**
-     * Get the <tt>GUIItem</tt> for the ground stacking button
-     *
-     * @param config The <tt>Config</tt> reference
-     * @param player The player (For localization)
-     * @return The ground stacking button
-     */
-    private GUIItem getGUIItemGroundStacking(Config config, Player player) {
-        GUIItem groundStacking = new GUIItem(null);
-        if(config.processGroundItems()) {
-            groundStacking.setItem(
-                ItemBuilder.of(Base64Head.GREEN.get())
-                    .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.ground_stacking_select"))
-                    .setLore(
-                        "",
-                        "&a&l⊳ " + plugin.getLibLangManager().getText(player, "generic.enabled"),
-                        "&7  " + plugin.getLibLangManager().getText(player, "generic.disabled"))
-                    .get());
-        } else {
-            groundStacking.setItem(
-                ItemBuilder.of(Base64Head.RED.get())
-                    .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.ground_stacking_select"))
-                    .setLore(
-                        "",
-                        "&7  " + plugin.getLibLangManager().getText(player, "generic.enabled"),
-                        "&c&l⊳ " + plugin.getLibLangManager().getText(player, "generic.disabled"))
-                    .get());
-        }
-        GUIGroundStackingEvent groundStackingEvent = new GUIGroundStackingEvent(plugin);
-        groundStacking.addEvent(groundStackingEvent);
-        return groundStacking;
     }
 
     /**

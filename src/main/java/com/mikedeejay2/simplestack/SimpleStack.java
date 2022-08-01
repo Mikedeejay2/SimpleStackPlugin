@@ -17,11 +17,14 @@ import com.mikedeejay2.simplestack.config.DebugConfig;
  * <p>
  * The source code for Simple Stack can be found here:
  * <a href="https://github.com/Mikedeejay2/SimpleStackPlugin">https://github.com/Mikedeejay2/SimpleStackPlugin</a>
+ * </p>
  * <p>
  * Simple Stack is powered by Mikedeejay2Lib.
+ * </p>
  * <p>
  * The source code for Mikedeejay2Lib can be found here:
  * <a href="https://github.com/Mikedeejay2/Mikedeejay2Lib">https://github.com/Mikedeejay2/Mikedeejay2Lib</a>
+ * </p>
  *
  * @author Mikedeejay2
  */

@@ -33,12 +33,6 @@ public class Config extends YamlFile {
     private List<ItemStack> uniqueItemList;
     // The max amount for all items in minecraft
     private int maxAmount;
-    // Whether custom hopper stacking occurs or not
-    private boolean hopperMovement;
-    // Whether custom ground stacking occurs or not
-    private boolean groundStacks;
-    // Whether the creative middle click dragging should always create a full stack
-    private boolean creativeDrag;
 
     // Internal config data
     // The unique items json file
@@ -71,32 +65,8 @@ public class Config extends YamlFile {
         loadMaterialList();
         loadItemList();
         loadItemAmounts();
-        loadHopperMovement();
-        loadGroundStacks();
-        loadCreativeDrag();
 
         loaded = true;
-    }
-
-    /**
-     * Load creative item dragging into <tt>creativeDrag</tt> variable of this config
-     */
-    private void loadCreativeDrag() {
-        creativeDrag = accessor.getBoolean("Creative Item Dragging");
-    }
-
-    /**
-     * Load hopper movement into the <tt>hopperMovement</tt> variable of this config
-     */
-    private void loadHopperMovement() {
-        hopperMovement = accessor.getBoolean("Hopper Movement Checks");
-    }
-
-    /**
-     * Load ground stacking into the <tt>groundStacks</tt> variable of this config
-     */
-    private void loadGroundStacks() {
-        groundStacks = accessor.getBoolean("Ground Stacking Checks");
     }
 
     /**
@@ -293,9 +263,6 @@ public class Config extends YamlFile {
 
             SectionAccessor<JsonFile, JsonElement> uniqueItemsAccessor = uniqueItems.getAccessor();
             uniqueItemsAccessor.setItemStackList("items", uniqueItemList);
-            accessor.setBoolean("Hopper Movement Checks", hopperMovement);
-            accessor.setBoolean("Ground Stacking Checks", groundStacks);
-            accessor.setBoolean("Creative Item Dragging", creativeDrag);
         }
         setModified(false);
 
@@ -338,6 +305,15 @@ public class Config extends YamlFile {
             accessor.delete("ListMode");
             accessor.setString("List Mode", listMode);
         }
+        if(accessor.contains("Hopper Movement Checks")) {
+            accessor.delete("Hopper Movement Checks");
+        }
+        if(accessor.contains("Ground Stacking Checks")) {
+            accessor.delete("Ground Stacking Checks");
+        }
+        if(accessor.contains("Creative Item Dragging")) {
+            accessor.delete("Creative Item Dragging");
+        }
         return super.updateFromJar(throwErrors);
     }
 
@@ -353,9 +329,10 @@ public class Config extends YamlFile {
     public boolean reload(boolean throwErrors) {
         if(modified) {
             return saveToDisk(true);
-        } else {
+        } else if(fileExists()) {
             return super.reload(throwErrors);
         }
+        return loadFromJar(true) && super.saveToDisk(true);
     }
 
     /**
@@ -603,25 +580,6 @@ public class Config extends YamlFile {
     }
 
     /**
-     * Returns whether hoppers should process custom stacking or not
-     *
-     * @return Should process hoppers
-     */
-    public boolean shouldProcessHoppers() {
-        return hopperMovement;
-    }
-
-    /**
-     * Set whether hoppers should be processed for unstackables or not
-     *
-     * @param hopperMovement The new hopper processing state
-     */
-    public void setHopperMovement(boolean hopperMovement) {
-        this.hopperMovement = hopperMovement;
-        setModified(true);
-    }
-
-    /**
      * Get the list of unique items from the config
      *
      * @return The list of unique items
@@ -662,42 +620,5 @@ public class Config extends YamlFile {
     public void setItemAmounts(Map<Material, Integer> itemAmounts) {
         this.itemAmounts = itemAmounts;
         setModified(true);
-    }
-
-    /**
-     * Get whether ground items should be processed to stack unstackables
-     *
-     * @return The ground stacking state
-     */
-    public boolean processGroundItems() {
-        return groundStacks;
-    }
-
-    /**
-     * Set whether the config should process ground item movements for unstackables or not
-     *
-     * @param groundStacks The new state for ground item stacking
-     */
-    public void setGroundStacks(boolean groundStacks) {
-        this.groundStacks = groundStacks;
-        setModified(true);
-    }
-
-    /**
-     * Get whether a creative inventory drag event should always create full stacks or not
-     *
-     * @return Creative drag state
-     */
-    public boolean shouldCreativeDrag() {
-        return creativeDrag;
-    }
-
-    /**
-     * Set whether a creative inventory drag event should always create full stacks or not
-     *
-     * @param creativeDrag The new creative drag state
-     */
-    public void setCreativeDrag(boolean creativeDrag) {
-        this.creativeDrag = creativeDrag;
     }
 }
