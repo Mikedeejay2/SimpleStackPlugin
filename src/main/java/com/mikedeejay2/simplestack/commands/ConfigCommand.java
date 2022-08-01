@@ -30,14 +30,7 @@ public class ConfigCommand implements SubCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
-        PlayerGUI playerGUI = plugin.getGUIManager().getPlayer(player);
-        if(playerGUI.getGUI() == null) {
-            GUICreator.createMainGUI(plugin, player).open(player);
-        } else if(playerGUI.getGUI().containsModule(GUINavigatorModule.class)) {
-            playerGUI.getGUI().open(player);
-        } else {
-            GUICreator.createMainGUI(plugin, player).open(player);
-        }
+        GUICreator.createMainGUI(plugin, player).open(player);
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
     }
 
