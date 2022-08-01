@@ -177,8 +177,8 @@ public class GUICreator {
         ItemStack curItem = curLangItem.getItemBase();
         ItemMeta curItemMeta = curItem.getItemMeta();
         List<String> newLore = new ArrayList<>();
-        newLore.add("&a" + plugin.getLibLangManager().getText(player, "generic.enabled"));
-        newLore.add("&7" + curLocale);
+        newLore.add(Colors.format("&a" + plugin.getLibLangManager().getText(player, "generic.enabled")));
+        newLore.add(Colors.format("&7" + curLocale));
         curItemMeta.setLore(newLore);
         curItem.setItemMeta(curItemMeta);
 
