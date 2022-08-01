@@ -7,12 +7,10 @@ import com.mikedeejay2.mikedeejay2lib.util.bstats.BStats;
 import com.mikedeejay2.mikedeejay2lib.util.update.UpdateChecker;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.bytebuddy.ByteBuddyHolder;
-import com.mikedeejay2.simplestack.bytebuddy.StackSizeIntercept;
+import com.mikedeejay2.simplestack.bytebuddy.StackSizeTransformer;
 import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.DebugConfig;
-import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.agent.ByteBuddyAgent;
 
 import java.io.File;
 
@@ -75,7 +73,7 @@ public final class SimpleStack extends BukkitPlugin {
         this.config = new Config(this);
         this.debugConfig = new DebugConfig();
 
-        StackSizeIntercept.inject();
+        StackSizeTransformer.inject();
     }
 
     private boolean installByteBuddyAgent() {
@@ -147,5 +145,9 @@ public final class SimpleStack extends BukkitPlugin {
 
     public static File getPluginFile() {
         return instance.getFile();
+    }
+
+    public static SimpleStack getInstance() {
+        return instance;
     }
 }

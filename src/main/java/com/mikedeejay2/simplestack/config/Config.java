@@ -203,20 +203,21 @@ public class Config extends YamlFile {
      * @return The custom amount for this item.
      */
     public int getAmount(ItemStack item) {
-        boolean containsUnique = containsUniqueItem(item);
-        boolean containsMaterial = containsMaterial(item.getType());
-        boolean hasCustomAmount = hasCustomAmount(item.getType());
-        if(containsUnique) {
+        if(containsUniqueItem(item)) {
             return getUniqueItem(item).getAmount();
-        } else if(hasCustomAmount) {
-            return itemAmounts.get(item.getType());
-        } else if(
-            (getListMode() == ListMode.WHITELIST && containsMaterial) ||
-                (getListMode() == ListMode.BLACKLIST && !containsMaterial)) {
-            return getMaxAmount();
-        } else {
-            return item.getMaxStackSize();
         }
+        return getAmount(item.getType());
+    }
+
+    public int getAmount(Material type) {
+        boolean containsMaterial = containsMaterial(type);
+        boolean hasCustomAmount = hasCustomAmount(type);
+        if(hasCustomAmount) {
+            return itemAmounts.get(type);
+        } else if((getListMode() == ListMode.WHITELIST) == containsMaterial) {
+            return getMaxAmount();
+        }
+        return -1;
     }
 
     /**
