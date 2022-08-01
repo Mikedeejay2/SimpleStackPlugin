@@ -6,10 +6,15 @@ import com.mikedeejay2.mikedeejay2lib.text.language.LangManager;
 import com.mikedeejay2.mikedeejay2lib.util.bstats.BStats;
 import com.mikedeejay2.mikedeejay2lib.util.update.UpdateChecker;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
+import com.mikedeejay2.simplestack.bytebuddy.ByteBuddyHolder;
+import com.mikedeejay2.simplestack.bytebuddy.StackSizeIntercept;
 import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.DebugConfig;
+import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
+
+import java.io.File;
 
 /**
  * Simple Stack 2 plugin for Minecraft TBD - 1.18.2
@@ -25,6 +30,8 @@ import net.bytebuddy.agent.ByteBuddyAgent;
  * @author Mikedeejay2
  */
 public final class SimpleStack extends BukkitPlugin {
+    private static SimpleStack instance;
+
     private static final int MINIMUM_VERSION = 14;
 
     // Permission for general Simple Stack use
@@ -42,7 +49,10 @@ public final class SimpleStack extends BukkitPlugin {
     @Override
     public void onEnable() {
         super.onEnable();
+        instance = this;
+
         setPrefix("&b[&9" + this.getDescription().getName() + "&b]&r ");
+
         if(checkVersion() || installByteBuddyAgent()) return;
 
         this.langManager = new LangManager(this, "lang");
@@ -64,15 +74,15 @@ public final class SimpleStack extends BukkitPlugin {
 
         this.config = new Config(this);
         this.debugConfig = new DebugConfig();
+
+        StackSizeIntercept.inject();
     }
 
     private boolean installByteBuddyAgent() {
-        try {
-            ByteBuddyAgent.install();
-        } catch(IllegalStateException e) {
+        if(ByteBuddyHolder.initialize()) {
             sendSevere("SimpleStack is not compatible with this installation of Java!");
             sendSevere("Common solutions are to use Java 9 or greater OR use a Java 8 JDK that includes the required instrumentation toolkit");
-            this.disablePlugin(this);
+            disablePlugin(this);
             return true;
         }
         return false;
@@ -86,10 +96,11 @@ public final class SimpleStack extends BukkitPlugin {
      * @return Whether the plugin has been disabled.
      */
     private boolean checkVersion() {
-        if(MinecraftVersion.getVersionShort() < MINIMUM_VERSION) {
-            sendSevere(String.format("Simple Stack %s is not compatible Minecraft version %s!",
-                                     this.getDescription().getVersion(),
-                                     MinecraftVersion.getVersionString()));
+        if(MinecraftVersion.getVersionShort() < MINIMUM_VERSION || !NMSMappings.hasMappings()) {
+            sendSevere(String.format(
+                "Simple Stack %s is not compatible Minecraft version %s!",
+                this.getDescription().getVersion(),
+                MinecraftVersion.getVersionString()));
             disablePlugin(this);
             return true;
         }
@@ -132,5 +143,9 @@ public final class SimpleStack extends BukkitPlugin {
 
     public DebugConfig getDebugConfig() {
         return debugConfig;
+    }
+
+    public static File getPluginFile() {
+        return instance.getFile();
     }
 }
