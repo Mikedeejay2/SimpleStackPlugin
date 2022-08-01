@@ -20,7 +20,7 @@ versions of Simple Stack, could include bugs.
 
 ### Translating
 Translating this plugin into other languages is going to be managed on a Discord server once the 2.0
-update is finished.
+update is finished. Alternatively, a pull request can be submitted to update a language file.
 
 ### Downloads
 This plugin can be downloaded through any of the below links:
