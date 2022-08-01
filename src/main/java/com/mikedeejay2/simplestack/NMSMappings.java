@@ -11,7 +11,9 @@ public final class NMSMappings {
             "net.minecraft.world.item.Item",
             "net.minecraft.world.item.ItemStack",
             "m",
-            "f"))
+            "f",
+            "org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack",
+            "asBukkitCopy"))
         .build();
 
     private static final Mappings currentMappings = NMS_MAPPINGS.get(MinecraftVersion.getVersionShort());
@@ -29,16 +31,22 @@ public final class NMSMappings {
         public final String classNameItemStack;
         public final String methodNameItemGetMaxStackSize;
         public final String methodNameItemStackGetMaxStackSize;
+        public final String classNameCraftItemStack;
+        public final String methodNameCraftItemStackAsBukkitCopy;
 
         private Mappings(
             String classNameItem,
             String classNameItemStack,
             String methodNameItemGetMaxStackSize,
-            String methodNameItemStackGetMaxStackSize) {
+            String methodNameItemStackGetMaxStackSize,
+            String classNameCraftItemStack,
+            String methodNameCraftItemStackAsBukkitCopy) {
             this.classNameItem = classNameItem;
             this.classNameItemStack = classNameItemStack;
             this.methodNameItemGetMaxStackSize = methodNameItemGetMaxStackSize;
             this.methodNameItemStackGetMaxStackSize = methodNameItemStackGetMaxStackSize;
+            this.classNameCraftItemStack = classNameCraftItemStack;
+            this.methodNameCraftItemStackAsBukkitCopy = methodNameCraftItemStackAsBukkitCopy;
         }
     }
 }
