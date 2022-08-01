@@ -69,6 +69,8 @@ public final class SimpleStack extends BukkitPlugin {
         this.commandManager.addSubcommand(new ResetCommand(this));
         this.commandManager.addSubcommand(new SetAmountCommand(this));
         this.commandManager.addSubcommand(new ConfigCommand(this));
+        this.commandManager.addSubcommand(new AddItemCommand(this));
+        this.commandManager.addSubcommand(new RemoveItemCommand(this));
         registerCommand(commandManager);
 
         this.config = new Config(this);
