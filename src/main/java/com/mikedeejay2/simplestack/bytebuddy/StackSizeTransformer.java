@@ -72,7 +72,7 @@ public final class StackSizeTransformer {
         // AgentBuilder for net.minecraft.world.item.Item
         new AgentBuilder.Default()
             .disableClassFormatChanges() // Disable class format changes, not possible with runtime agents
-            .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION) // Use retransformation redefition to modify existing NMS classes
+            .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION) // Use retransformation strategy to modify existing NMS classes
             .type(is(CLASS_ITEM)) // Match the Item class
             .transform(((builder, typeDescription, classLoader, module) -> builder.visit(
                 Advice.to(ItemAdvice.class)
@@ -84,7 +84,7 @@ public final class StackSizeTransformer {
         // AgentBuilder for net.minecraft.world.item.ItemStack
         new AgentBuilder.Default()
             .disableClassFormatChanges() // Disable class format changes, not possible with runtime agents
-            .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION) // Use retransformation redefition to modify existing NMS classes
+            .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION) // Use retransformation strategy to modify existing NMS classes
             .type(is(CLASS_ITEM_STACK)) // Match the ItemStack class
             .transform(((builder, typeDescription, classLoader, module) -> builder.visit(
                 Advice.to(ItemStackAdvice.class)
