@@ -18,7 +18,8 @@ public final class NMSMappings {
             "moveItemStackTo",
             "(Lnet/minecraft/world/item/ItemStack;IIZZ)Z",
             849,
-            1))
+            1,
+            "a"))
         .build();
 
     private static final Mappings currentMappings = NMS_MAPPINGS.get(MinecraftVersion.getVersionShort());
@@ -43,6 +44,7 @@ public final class NMSMappings {
         public final String methodDescriptorContainerMoveItemStackTo;
         public final int methodLineNumberContainerMoveItemStackTo;
         public final int methodVarIndexContainerMoveItemStackToStack;
+        public final String methodNameItemStackSplit;
 
         private Mappings(
             String classNameItem,
@@ -54,7 +56,9 @@ public final class NMSMappings {
             String classNameContainer,
             String methodNameContainerMoveItemStackTo,
             String methodDescriptorContainerMoveItemStackTo,
-            int methodLineNumberContainerMoveItemStackTo, int methodVarIndexContainerMoveItemStackToStack) {
+            int methodLineNumberContainerMoveItemStackTo,
+            int methodVarIndexContainerMoveItemStackToStack,
+            String methodNameItemStackSplit) {
             this.classNameItem = classNameItem;
             this.classNameItemStack = classNameItemStack;
             this.methodNameItemGetMaxStackSize = methodNameItemGetMaxStackSize;
@@ -66,6 +70,7 @@ public final class NMSMappings {
             this.methodDescriptorContainerMoveItemStackTo = methodDescriptorContainerMoveItemStackTo;
             this.methodLineNumberContainerMoveItemStackTo = methodLineNumberContainerMoveItemStackTo;
             this.methodVarIndexContainerMoveItemStackToStack = methodVarIndexContainerMoveItemStackToStack;
+            this.methodNameItemStackSplit = methodNameItemStackSplit;
         }
     }
 }
