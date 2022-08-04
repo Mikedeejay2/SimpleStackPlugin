@@ -49,7 +49,8 @@ public class OverstackFixTransformer {
                                               .and(takesArgument(2, int.class))
                                               .and(takesArgument(3, boolean.class))
                                               .and(returns(boolean.class)),
-                                          MoveItemStackToVisitorWrapper.INSTANCE)))) // Inject ItemAdvice into getMaxStackSize() method
+                                          ((it, im, methodVisitor, ic, tp, wf, rf) ->
+                                              new MoveItemStackToMethodVisitor(Opcodes.ASM9, methodVisitor)))))) // Inject ItemAdvice into getMaxStackSize() method
             .installOnByteBuddyAgent(); // Inject
 
     }
@@ -61,95 +62,10 @@ public class OverstackFixTransformer {
         }
     }
 
-    private enum MoveItemStackToVisitorWrapper implements AsmVisitorWrapper.ForDeclaredMethods.MethodVisitorWrapper {
-        INSTANCE;
-
-        @Override
-        public MethodVisitor wrap(
-            TypeDescription instrumentedType,
-            MethodDescription instrumentedMethod,
-            MethodVisitor methodVisitor,
-            Implementation.Context implementationContext,
-            TypePool typePool,
-            int writerFlags,
-            int readerFlags) {
-            return new MoveItemStackToMethodVisitor(Opcodes.ASM9, methodVisitor);
-        }
-    }
-
-//    private static final class ContainerTransformer implements AgentBuilder.Transformer {
-//
-//        @Override
-//        public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module) {
-//            return builder.visit(ContainerVisitorWrapper.INSTANCE);
-//            return builder.method(
-//                named(NMSMappings.get().methodNameContainerMoveItemStackTo)
-//                    .and(returns(boolean.class))
-//                    .and(takesArgument(1, int.class))
-//                    .and(takesArgument(2, int.class))
-//                    .and(takesArgument(3, boolean.class)))
-//                .intercept(new Implementation.Simple());
-//        }
-//    }
-
-//    private enum ContainerVisitorWrapper implements AsmVisitorWrapper {
-//        INSTANCE;
-//
-//        @Override
-//        public int mergeWriter(int flags) {
-//            return flags;
-//        }
-//
-//        @Override
-//        public int mergeReader(int flags) {
-//            return flags;
-//        }
-//
-//        @Override
-//        public ClassVisitor wrap(TypeDescription instrumentedType,
-//                                 ClassVisitor classVisitor,
-//                                 Implementation.Context implementationContext,
-//                                 TypePool typePool,
-//                                 FieldList<FieldDescription.InDefinedShape> fields,
-//                                 MethodList<?> methods,
-//                                 int writerFlags,
-//                                 int readerFlags) {
-//            return new ContainerClassVisitor(Opcodes.ASM9, classVisitor);
-////            return new ClassRemapper(classVisitor, new SimpleRemapper(NMSMappings.get().classNameContainer, ""));
-//        }
-//    }
-//
-//    private static final class ContainerClassVisitor extends ClassVisitor {
-//        private static final String MOVE_ITEM_STACK_TO_NAME = NMSMappings.get().methodNameContainerMoveItemStackTo;
-//        private static final String MOVE_ITEM_STACK_TO_DESCRIPTOR = NMSMappings.get().methodDescriptorContainerMoveItemStackTo;
-//
-//        private ContainerClassVisitor(int api) {
-//            super(api);
-//        }
-//
-//        private ContainerClassVisitor(int api, ClassVisitor classVisitor) {
-//            super(api, classVisitor);
-//        }
-//
-//        @Override
-//        public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
-//            if(name.equals(MOVE_ITEM_STACK_TO_NAME) && descriptor.equals(MOVE_ITEM_STACK_TO_DESCRIPTOR)) {
-//                System.out.println("oiafdjsf;lkjsd;flkjds;flkjsdf;lkasjdf;lkj");
-//                return new MoveItemStackToMethodVisitor(Opcodes.ASM9);
-//            }
-//            return super.visitMethod(access, name, descriptor, signature, exceptions);
-//        }
-//    }
-
-
-
-
-
     private static final class MoveItemStackToMethodVisitor extends MethodVisitor {
         private boolean lineVisited = false;
         private boolean completed = false;
         private int visitMethodInsnCount = 0;
-        private int visitVarInsnCount = 0;
 
         private MoveItemStackToMethodVisitor(int api, MethodVisitor methodVisitor) {
             super(api, methodVisitor);
@@ -171,76 +87,38 @@ public class OverstackFixTransformer {
                     case 2:
                     case 4:
                     case 7:
-                    case 9:
-                    {
-                        // INVOKEVIRTUAL net/minecraft/world/inventory/Slot.a()I
-                        System.out.println("Adding aload stack instruction");
+                    case 9: {
                         super.visitVarInsn(
                             Opcodes.ALOAD,
                             1);
 
-                        System.out.println("Adding max item stack instruction");
                         super.visitMethodInsn(
                             Opcodes.INVOKEVIRTUAL,
                             ITEM_STACK_CLASS_NAME.replace('.', '/'),
                             NMSMappings.get().methodNameItemStackGetMaxStackSize,
                             "()I",
                             false);
-                        System.out.println(ITEM_STACK_CLASS_NAME.replace('.', '/') + "." + NMSMappings.get().methodNameItemStackGetMaxStackSize + "()I");
 
-                        System.out.println("Adding math min instruction");
                         super.visitMethodInsn(
                             Opcodes.INVOKESTATIC,
                             "java/lang/Math",
                             "min",
                             "(II)I",
                             false);
-                        // INVOKEVIRTUAL net/minecraft/world/item/ItemStack.g(I)V
                     } break;
                 }
-                completed = visitMethodInsnCount == 10;
-                System.out.println(owner + "." + name + descriptor);
+                completed = visitMethodInsnCount == 9;
             }
             super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
         }
 
-        @Override
-        public void visitVarInsn(int opcode, int varIndex) {
-            if(lineVisited && !completed) {
-                ++visitVarInsnCount;
-                switch(visitVarInsnCount) {
-                    case 2:
-//                    case 5:
-//                    case 7:
-//                    case 10:
-                    {
-                        // ALOAD stack
-//                        System.out.println("Adding aload stack instruction");
-//                        super.visitVarInsn(
-//                            Opcodes.ALOAD,
-//                            1);
-                        // ALOAD slot
-                    } break;
-                }
-                System.out.println("varIndex " + varIndex);
-            }
-            super.visitVarInsn(opcode, varIndex);
-        }
-
-        @Override
-        public void visitCode() {
-            System.out.println("Visiting code...");
-            super.visitCode();
-            super.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-            super.visitLdcInsn("Test of moveItemStack method");
-            super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
-
-        }
-
-        @Override
-        public void visitMaxs(int maxStack, int maxLocals) {
-            System.out.println("MaxStack: " + maxStack + ", MaxLocals: " + maxLocals);
-            super.visitMaxs(maxStack, maxLocals);
-        }
+//        @Override
+//        public void visitCode() {
+//            System.out.println("Visiting code...");
+//            super.visitCode();
+//            super.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+//            super.visitLdcInsn("Test of moveItemStackTo method");
+//            super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+//        }
     }
 }

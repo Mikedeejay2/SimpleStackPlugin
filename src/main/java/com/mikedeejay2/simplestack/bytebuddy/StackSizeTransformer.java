@@ -90,18 +90,6 @@ public final class StackSizeTransformer {
                             .and(returns(int.class))
                             .and(takesNoArguments()))))) // Inject ItemStackAdvice into getMaxStackSize() method
             .installOnByteBuddyAgent(); // Inject
-
-//        // AgentBuilder for net.minecraft.world.item.ItemStack
-//        new AgentBuilder.Default()
-//            .disableClassFormatChanges()
-//            .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION) // Use retransformation strategy to modify existing NMS classes
-//            .type(is(CLASS_ITEM_STACK)) // Match the ItemStack class
-//            .transform(((builder, typeDescription, classLoader, module) -> builder.visit(
-//                Advice.to(ItemStackAdvice.class)
-//                    .on(named(NMSMappings.get().methodNameItemStackGetMaxStackSize)
-//                            .and(returns(int.class))
-//                            .and(takesNoArguments()))))) // Inject ItemStackAdvice into getMaxStackSize() method
-//            .installOnByteBuddyAgent(); // Inject
     }
 
     public static void reset() {
