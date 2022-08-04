@@ -42,10 +42,6 @@
                             <finalName>${project.name}-${project.version}</finalName>
                             <filters>
                                 <filter>
-                                    <artifact>com.sun:tools</artifact>
-                                    <includes>
-                                        <include>com/sun/tools/attach/**</include>
-                                    </includes>
                                 </filter>
                                 <filter>
                                     <artifact>*:*</artifact>
@@ -53,6 +49,8 @@
                                         <exclude>META-INF/*.SF</exclude>
                                         <exclude>META-INF/*.DSA</exclude>
                                         <exclude>META-INF/*.RSA</exclude>
+                                        <exclude>win32-x86/*</exclude>
+                                        <exclude>win32-x86-64/*</exclude>
                                     </excludes>
                                 </filter>
                             </filters>
@@ -138,7 +136,7 @@
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.12.10</version>
+            <version>1.12.12</version>
         </dependency>
         <dependency>
             <groupId>net.bytebuddy</groupId>
