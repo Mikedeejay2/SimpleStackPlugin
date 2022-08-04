@@ -3,7 +3,9 @@ package com.mikedeejay2.simplestack.bytebuddy;
 import com.mikedeejay2.simplestack.NMSMappings;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.config.DebugConfig;
+import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.agent.builder.AgentBuilder;
+import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.asm.Advice;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -43,6 +45,8 @@ public final class StackSizeTransformer {
     private static final Class<?> CLASS_CRAFT_ITEM_STACK;   // org.bukkit.craftbukkit.inventory.CraftItemStack
     private static final Method METHOD_AS_BUKKIT_COPY;      // org.bukkit.craftbukkit.inventory.CraftItemStack#asBukkitCopy()
 
+    private static ResettableClassFileTransformer transformer;
+
     // Get all NMS classes and methods using NMSMappings
     static {
         try {
@@ -68,10 +72,10 @@ public final class StackSizeTransformer {
      * {@link StackSizeTransformer#getItemStackMaxStackSize(int, long, Object)} depending on which transformed method
      * is being called.
      */
-    public static void installAgents() {
-        // AgentBuilder for net.minecraft.world.item.Item
-        new AgentBuilder.Default()
-            .disableClassFormatChanges() // Disable class format changes, not possible with runtime agents
+    public static void install() {
+        // AgentBuilder for net.minecraft.world.item.Item and net.minecraft.world.item.ItemStack
+        transformer = new AgentBuilder.Default()
+            .disableClassFormatChanges()
             .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION) // Use retransformation strategy to modify existing NMS classes
             .type(is(CLASS_ITEM)) // Match the Item class
             .transform(((builder, typeDescription, classLoader, module) -> builder.visit(
@@ -79,12 +83,6 @@ public final class StackSizeTransformer {
                     .on(named(NMSMappings.get().methodNameItemGetMaxStackSize)
                             .and(returns(int.class))
                             .and(takesNoArguments()))))) // Inject ItemAdvice into getMaxStackSize() method
-            .installOnByteBuddyAgent(); // Inject
-
-        // AgentBuilder for net.minecraft.world.item.ItemStack
-        new AgentBuilder.Default()
-            .disableClassFormatChanges() // Disable class format changes, not possible with runtime agents
-            .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION) // Use retransformation strategy to modify existing NMS classes
             .type(is(CLASS_ITEM_STACK)) // Match the ItemStack class
             .transform(((builder, typeDescription, classLoader, module) -> builder.visit(
                 Advice.to(ItemStackAdvice.class)
@@ -92,6 +90,25 @@ public final class StackSizeTransformer {
                             .and(returns(int.class))
                             .and(takesNoArguments()))))) // Inject ItemStackAdvice into getMaxStackSize() method
             .installOnByteBuddyAgent(); // Inject
+
+//        // AgentBuilder for net.minecraft.world.item.ItemStack
+//        new AgentBuilder.Default()
+//            .disableClassFormatChanges()
+//            .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION) // Use retransformation strategy to modify existing NMS classes
+//            .type(is(CLASS_ITEM_STACK)) // Match the ItemStack class
+//            .transform(((builder, typeDescription, classLoader, module) -> builder.visit(
+//                Advice.to(ItemStackAdvice.class)
+//                    .on(named(NMSMappings.get().methodNameItemStackGetMaxStackSize)
+//                            .and(returns(int.class))
+//                            .and(takesNoArguments()))))) // Inject ItemStackAdvice into getMaxStackSize() method
+//            .installOnByteBuddyAgent(); // Inject
+    }
+
+    public static void reset() {
+        if(transformer != null) {
+            transformer.reset(ByteBuddyHolder.getInstrumentation(), AgentBuilder.RedefinitionStrategy.RETRANSFORMATION);
+            ByteBuddyHolder.getInstrumentation().removeTransformer(transformer);
+        }
     }
 
     /**

@@ -22,9 +22,16 @@ public class ByteBuddyHolder {
      */
     public static boolean initialize() {
         try {
-            instrumentation = ByteBuddyAgent.install();
+            instrumentation = ByteBuddyAgent.getInstrumentation();
         } catch(IllegalStateException ignored) {
-            return true;
+            // ignored
+        }
+        if(instrumentation == null) {
+            try {
+                instrumentation = ByteBuddyAgent.install();
+            } catch(IllegalStateException ignored) {
+                return true;
+            }
         }
         return false;
     }
