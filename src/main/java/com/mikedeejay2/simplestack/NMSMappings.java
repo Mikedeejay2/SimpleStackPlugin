@@ -14,11 +14,6 @@ public final class NMSMappings {
             "f",
             "org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack",
             "asBukkitCopy",
-            "net.minecraft.world.inventory.Container",
-            "moveItemStackTo",
-            "(Lnet/minecraft/world/item/ItemStack;IIZZ)Z",
-            849,
-            1,
             "a"))
         .build();
 
@@ -39,11 +34,6 @@ public final class NMSMappings {
         public final String methodNameItemStackGetMaxStackSize;
         public final String classNameCraftItemStack;
         public final String methodNameCraftItemStackAsBukkitCopy;
-        public final String classNameContainer;
-        public final String methodNameContainerMoveItemStackTo;
-        public final String methodDescriptorContainerMoveItemStackTo;
-        public final int methodLineNumberContainerMoveItemStackTo;
-        public final int methodVarIndexContainerMoveItemStackToStack;
         public final String methodNameItemStackSplit;
 
         private Mappings(
@@ -53,11 +43,6 @@ public final class NMSMappings {
             String methodNameItemStackGetMaxStackSize,
             String classNameCraftItemStack,
             String methodNameCraftItemStackAsBukkitCopy,
-            String classNameContainer,
-            String methodNameContainerMoveItemStackTo,
-            String methodDescriptorContainerMoveItemStackTo,
-            int methodLineNumberContainerMoveItemStackTo,
-            int methodVarIndexContainerMoveItemStackToStack,
             String methodNameItemStackSplit) {
             this.classNameItem = classNameItem;
             this.classNameItemStack = classNameItemStack;
@@ -65,11 +50,6 @@ public final class NMSMappings {
             this.methodNameItemStackGetMaxStackSize = methodNameItemStackGetMaxStackSize;
             this.classNameCraftItemStack = classNameCraftItemStack;
             this.methodNameCraftItemStackAsBukkitCopy = methodNameCraftItemStackAsBukkitCopy;
-            this.classNameContainer = classNameContainer;
-            this.methodNameContainerMoveItemStackTo = methodNameContainerMoveItemStackTo;
-            this.methodDescriptorContainerMoveItemStackTo = methodDescriptorContainerMoveItemStackTo;
-            this.methodLineNumberContainerMoveItemStackTo = methodLineNumberContainerMoveItemStackTo;
-            this.methodVarIndexContainerMoveItemStackToStack = methodVarIndexContainerMoveItemStackToStack;
             this.methodNameItemStackSplit = methodNameItemStackSplit;
         }
     }

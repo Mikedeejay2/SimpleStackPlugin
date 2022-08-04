@@ -7,7 +7,6 @@ import com.mikedeejay2.mikedeejay2lib.util.bstats.BStats;
 import com.mikedeejay2.mikedeejay2lib.util.update.UpdateChecker;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.bytebuddy.ByteBuddyHolder;
-import com.mikedeejay2.simplestack.bytebuddy.QuickMoveTransformer;
 import com.mikedeejay2.simplestack.bytebuddy.StackSizeTransformer;
 import com.mikedeejay2.simplestack.bytebuddy.StackSplitTransformer;
 import com.mikedeejay2.simplestack.commands.*;
@@ -79,7 +78,6 @@ public final class SimpleStack extends BukkitPlugin {
         this.debugConfig = new DebugConfig();
 
         StackSizeTransformer.install();
-        QuickMoveTransformer.install();
         StackSplitTransformer.install();
     }
 
@@ -121,7 +119,6 @@ public final class SimpleStack extends BukkitPlugin {
 
         if(ByteBuddyHolder.getInstrumentation() != null) {
             StackSizeTransformer.reset();
-//            OverstackFixTransformer.reset();
             StackSplitTransformer.reset();
         }
     }
