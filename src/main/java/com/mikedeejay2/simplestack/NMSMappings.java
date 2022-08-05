@@ -27,7 +27,8 @@ public final class NMSMappings {
             "net.minecraft.world.ContainerUtil",
             "a",
             "r",
-            "K"))
+            "K",
+            "o", "e", "g"))
         .build();
 
     private static final Mappings currentMappings = NMS_MAPPINGS.get(MinecraftVersion.getVersionShort());
@@ -61,11 +62,11 @@ public final class NMSMappings {
 
         public final String classNameContainerUtil;
         public final String methodNameContainerUtilRemoveItem;
-//        public final String methodNameItemStackCopy;
-//        public final String methodNameItemStackSetCount;
-//        public final String methodNameItemStackShrink;
         public final String fieldNameItemStackCount;
         public final String methodNameItemStackGetCount;
+        public final String methodNameItemStackCopy;
+        public final String methodNameItemStackSetCount;
+        public final String methodNameItemStackShrink;
 
         private Mappings(
             String classNameItem,
@@ -87,7 +88,10 @@ public final class NMSMappings {
             String classNameContainerUtil,
             String methodNameContainerUtilRemoveItem,
             String fieldNameItemStackCount,
-            String methodNameItemStackGetCount) {
+            String methodNameItemStackGetCount,
+            String methodNameItemStackCopy,
+            String methodNameItemStackSetCount,
+            String methodNameItemStackShrink) {
             this.classNameItem = classNameItem;
             this.classNameItemStack = classNameItemStack;
             this.methodNameItemGetMaxStackSize = methodNameItemGetMaxStackSize;
@@ -108,6 +112,9 @@ public final class NMSMappings {
             this.methodNameContainerUtilRemoveItem = methodNameContainerUtilRemoveItem;
             this.fieldNameItemStackCount = fieldNameItemStackCount;
             this.methodNameItemStackGetCount = methodNameItemStackGetCount;
+            this.methodNameItemStackCopy = methodNameItemStackCopy;
+            this.methodNameItemStackSetCount = methodNameItemStackSetCount;
+            this.methodNameItemStackShrink = methodNameItemStackShrink;
         }
     }
 }

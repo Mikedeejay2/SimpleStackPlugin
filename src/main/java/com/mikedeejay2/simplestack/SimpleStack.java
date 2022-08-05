@@ -77,7 +77,7 @@ public final class SimpleStack extends BukkitPlugin {
 
         StackSizeTransformer.install();
         StackSplitTransformer.install();
-        ItemDropTransformer.install();
+        RemoveItemTransformer.install();
     }
 
     private boolean installByteBuddyAgent() {
@@ -119,7 +119,7 @@ public final class SimpleStack extends BukkitPlugin {
         if(ByteBuddyHolder.getInstrumentation() != null) {
             StackSizeTransformer.reset();
             StackSplitTransformer.reset();
-            ItemDropTransformer.reset();
+            RemoveItemTransformer.reset();
         }
     }
 
