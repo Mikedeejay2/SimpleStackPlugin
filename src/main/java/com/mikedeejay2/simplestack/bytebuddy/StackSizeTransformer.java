@@ -40,8 +40,6 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  * @since 2.0.0
  */
 public final class StackSizeTransformer {
-    private static final Class<?> CLASS_ITEM;               // net.minecraft.world.item.Item
-    private static final Class<?> CLASS_ITEM_STACK;         // net.minecraft.world.item.ItemStack
     private static final Class<?> CLASS_CRAFT_ITEM_STACK;   // org.bukkit.craftbukkit.inventory.CraftItemStack
     private static final Method METHOD_AS_BUKKIT_COPY;      // org.bukkit.craftbukkit.inventory.CraftItemStack#asBukkitCopy()
 
@@ -50,11 +48,10 @@ public final class StackSizeTransformer {
     // Get all NMS classes and methods using NMSMappings
     static {
         try {
-            CLASS_ITEM = Class.forName(NMSMappings.get().classNameItem);
-            CLASS_ITEM_STACK = Class.forName(NMSMappings.get().classNameItemStack);
+            Class<?> itemStackClass = Class.forName(NMSMappings.get().classNameItemStack);
             CLASS_CRAFT_ITEM_STACK = Class.forName(NMSMappings.get().classNameCraftItemStack);
             METHOD_AS_BUKKIT_COPY = CLASS_CRAFT_ITEM_STACK.getMethod(
-                NMSMappings.get().methodNameCraftItemStackAsBukkitCopy, CLASS_ITEM_STACK);
+                NMSMappings.get().methodNameCraftItemStackAsBukkitCopy, itemStackClass);
         } catch(ClassNotFoundException | NoSuchMethodException e) {
             Bukkit.getLogger().severe("SimpleStack cannot locate NMS classes");
             throw new RuntimeException(e);
@@ -77,13 +74,13 @@ public final class StackSizeTransformer {
         transformer = new AgentBuilder.Default()
             .disableClassFormatChanges()
             .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION) // Use retransformation strategy to modify existing NMS classes
-            .type(is(CLASS_ITEM)) // Match the Item class
+            .type(named(NMSMappings.get().classNameItem)) // Match the Item class
             .transform(((builder, typeDescription, classLoader, module) -> builder.visit(
                 Advice.to(ItemAdvice.class)
                     .on(named(NMSMappings.get().methodNameItemGetMaxStackSize)
                             .and(returns(int.class))
                             .and(takesNoArguments()))))) // Inject ItemAdvice into getMaxStackSize() method
-            .type(is(CLASS_ITEM_STACK)) // Match the ItemStack class
+            .type(named(NMSMappings.get().classNameItem)) // Match the ItemStack class
             .transform(((builder, typeDescription, classLoader, module) -> builder.visit(
                 Advice.to(ItemStackAdvice.class)
                     .on(named(NMSMappings.get().methodNameItemStackGetMaxStackSize)
