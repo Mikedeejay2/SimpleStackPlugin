@@ -24,7 +24,7 @@ public class RemoveItemTransformer {
             .type(named(NMSMappings.get().classNameContainerUtil)) // Match the ContainerUtil class
             .transform(((builder, typeDescription, classLoader, module) ->
                 builder.visit(new AsmVisitorWrapper.ForDeclaredMethods()
-                                  .method(named(NMSMappings.get().methodNameItemStackSplit)
+                                  .method(named(NMSMappings.get().methodNameContainerUtilRemoveItem)
                                               .and(takesArgument(0, List.class))
                                               .and(takesArgument(1, int.class))
                                               .and(takesArgument(2, int.class))
