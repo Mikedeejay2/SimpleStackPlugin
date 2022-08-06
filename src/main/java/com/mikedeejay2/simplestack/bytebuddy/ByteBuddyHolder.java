@@ -26,7 +26,7 @@ public class ByteBuddyHolder {
      *
      * @return Whether a failure has occurred
      */
-    public static boolean initialize() {
+    public static boolean install() {
         try {
             instrumentation = ByteBuddyAgent.getInstrumentation();
         } catch(IllegalStateException ignored) {

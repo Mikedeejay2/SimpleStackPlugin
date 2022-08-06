@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.bytebuddy;
 
 import com.mikedeejay2.simplestack.MappingsLookup;
+import com.mikedeejay2.simplestack.SimpleStack;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.asm.AsmVisitorWrapper;
@@ -10,10 +11,11 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 
-public class StackSplitTransformer {
+public class SplitStackTransformer {
     private static ResettableClassFileTransformer transformer;
 
     public static void install() {
+        SimpleStack.getInstance().sendInfo(String.format("Installing \"%s\"...", SplitStackTransformer.class.getSimpleName()));
         // AgentBuilder for net.minecraft.world.item.ItemStack
         transformer = new AgentBuilder.Default()
             .disableClassFormatChanges()

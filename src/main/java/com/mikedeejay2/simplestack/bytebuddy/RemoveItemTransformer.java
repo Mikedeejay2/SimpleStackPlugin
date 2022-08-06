@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.bytebuddy;
 
+import com.mikedeejay2.simplestack.SimpleStack;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.asm.AsmVisitorWrapper;
@@ -18,6 +19,7 @@ public class RemoveItemTransformer {
     private static ResettableClassFileTransformer slotTransformer;
 
     public static void install() {
+        SimpleStack.getInstance().sendInfo(String.format("Installing \"%s\"...", RemoveItemTransformer.class.getSimpleName()));
         // AgentBuilder for net.minecraft.world.ContainerUtil
         containerUtilTransformer = new AgentBuilder.Default()
             .disableClassFormatChanges()

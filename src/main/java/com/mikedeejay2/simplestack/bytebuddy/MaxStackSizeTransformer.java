@@ -30,15 +30,15 @@ import static com.mikedeejay2.simplestack.MappingsLookup.*;
  * <p>
  * This class uses Byte Buddy to inject custom code into the two above methods to change their functionality. Instead
  * of returning the <code>maxStackSize</code> found in <code>net.minecraft.world.item.Item</code>, either
- * {@link StackSizeTransformer#getItemMaxStackSize(int, long, Object)} or
- * {@link StackSizeTransformer#getItemStackMaxStackSize(int, long, Object)} will be called to retrieve the new return
+ * {@link MaxStackSizeTransformer#getItemMaxStackSize(int, long, Object)} or
+ * {@link MaxStackSizeTransformer#getItemStackMaxStackSize(int, long, Object)} will be called to retrieve the new return
  * value from Simple Stack's configuration file.
  * </p>
  *
  * @author Mikedeejay2
  * @since 2.0.0
  */
-public final class StackSizeTransformer {
+public final class MaxStackSizeTransformer {
     private static final Class<?> CLASS_CRAFT_ITEM_STACK;   // org.bukkit.craftbukkit.inventory.CraftItemStack
     private static final Method METHOD_AS_BUKKIT_COPY;      // org.bukkit.craftbukkit.inventory.CraftItemStack#asBukkitCopy()
 
@@ -64,11 +64,12 @@ public final class StackSizeTransformer {
      *     <li><b>{@code net.minecraft.world.item.ItemStack#getMaxStackSize()}</b></li>
      * </ul>
      * These methods are transformed to redirect to either
-     * {@link StackSizeTransformer#getItemMaxStackSize(int, long, Object)} or
-     * {@link StackSizeTransformer#getItemStackMaxStackSize(int, long, Object)} depending on which transformed method
+     * {@link MaxStackSizeTransformer#getItemMaxStackSize(int, long, Object)} or
+     * {@link MaxStackSizeTransformer#getItemStackMaxStackSize(int, long, Object)} depending on which transformed method
      * is being called.
      */
     public static void install() {
+        SimpleStack.getInstance().sendInfo(String.format("Installing \"%s\"...", MaxStackSizeTransformer.class.getSimpleName()));
         // AgentBuilder for net.minecraft.world.item.Item and net.minecraft.world.item.ItemStack
         transformer = new AgentBuilder.Default()
             .disableClassFormatChanges()
@@ -96,7 +97,7 @@ public final class StackSizeTransformer {
      * Advice class for <b>{@code net.minecraft.world.item.Item}</b>. The code in this class is copied over to the code
      * in <b>{@code net.minecraft.world.item.Item#getMaxStackSize()}</b> to redirect functionality of that method to
      * Simple Stack. The method that is called as a result of this advice is
-     * {@link StackSizeTransformer#getItemMaxStackSize(int, long, Object)}
+     * {@link MaxStackSizeTransformer#getItemMaxStackSize(int, long, Object)}
      */
     public static class ItemAdvice {
 
@@ -132,11 +133,11 @@ public final class StackSizeTransformer {
          *         needed to locate and use any of the plugin's classes.
          *     </li>
          *     <li>
-         *         Get the {@link StackSizeTransformer} class using the obtained {@link ClassLoader}. This class is
+         *         Get the {@link MaxStackSizeTransformer} class using the obtained {@link ClassLoader}. This class is
          *         needed to get the redirect methods.
          *     </li>
          *     <li>
-         *         Get the method {@link StackSizeTransformer#getItemMaxStackSize(int, long, Object)}. This method
+         *         Get the method {@link MaxStackSizeTransformer#getItemMaxStackSize(int, long, Object)}. This method
          *         will be run in the plugin's <code>ClassLoader</code> which means that it has access to any plugin
          *         method.
          *     </li>
@@ -164,7 +165,7 @@ public final class StackSizeTransformer {
         public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime, @Advice.This Object item) throws Throwable {
             Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
             ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
-            Class<?> transformerClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.StackSizeTransformer", false, pluginClassLoader);
+            Class<?> transformerClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.MaxStackSizeTransformer", false, pluginClassLoader);
             Method maxStackSizeMethod = transformerClass.getMethod("getItemMaxStackSize", int.class, long.class, Object.class);
             returnValue = (int) maxStackSizeMethod.invoke(null, returnValue, startTime, item);
         }
@@ -174,7 +175,7 @@ public final class StackSizeTransformer {
      * Advice class for <b>{@code net.minecraft.world.item.ItemStack}</b>. The code in this class is copied over to the
      * code in <b>{@code net.minecraft.world.ItemStack.Item#getMaxStackSize()}</b> to redirect functionality of that
      * method to Simple Stack. The method that is called as a result of this advice is
-     * {@link StackSizeTransformer#getItemStackMaxStackSize(int, long, Object)}
+     * {@link MaxStackSizeTransformer#getItemStackMaxStackSize(int, long, Object)}
      */
     public static class ItemStackAdvice {
 
@@ -187,13 +188,13 @@ public final class StackSizeTransformer {
         }
 
         /**
-         * @see StackSizeTransformer.ItemAdvice#onMethodExit(int, long, Object)
+         * @see MaxStackSizeTransformer.ItemAdvice#onMethodExit(int, long, Object)
          */
         @Advice.OnMethodExit
         public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime, @Advice.This Object itemStack) throws Throwable {
             Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
             ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
-            Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.StackSizeTransformer", false, pluginClassLoader);
+            Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.MaxStackSizeTransformer", false, pluginClassLoader);
             Method maxStackSizeMethod = interceptClass.getMethod("getItemStackMaxStackSize", int.class, long.class, Object.class);
             returnValue = (int) maxStackSizeMethod.invoke(null, returnValue, startTime, itemStack);
         }
