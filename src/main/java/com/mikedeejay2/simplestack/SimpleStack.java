@@ -112,7 +112,7 @@ public final class SimpleStack extends BukkitPlugin {
     @Override
     public void onDisable() {
         super.onDisable();
-        if(config.isModified()) {
+        if(config != null && config.isModified()) {
             config.saveToDisk(true);
         }
 

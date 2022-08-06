@@ -14,8 +14,6 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 
 public class RemoveItemTransformer {
-    private static final String CONTAINER_UTIL_CLASS_NAME = NMSMappings.get().classNameContainerUtil;
-
     private static ResettableClassFileTransformer transformer;
 
     public static void install() {
@@ -23,7 +21,7 @@ public class RemoveItemTransformer {
         transformer = new AgentBuilder.Default()
             .disableClassFormatChanges()
             .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION) // Use retransformation strategy to modify existing NMS classes
-            .type(named(CONTAINER_UTIL_CLASS_NAME)) // Match the ItemStack class
+            .type(named(NMSMappings.get().classNameContainerUtil)) // Match the ContainerUtil class
             .transform(((builder, typeDescription, classLoader, module) ->
                 builder.visit(new AsmVisitorWrapper.ForDeclaredMethods()
                                   .method(named(NMSMappings.get().methodNameItemStackSplit)
@@ -33,7 +31,7 @@ public class RemoveItemTransformer {
                                               .and(returns(named(NMSMappings.get().classNameItemStack))),
                                           ((it, im, methodVisitor, ic, tp, wf, rf) ->
                                               new RemoveItemVisitor(Opcodes.ASM9, methodVisitor)))
-                                  .writerFlags(ClassWriter.COMPUTE_MAXS)))) // Inject SplitMethodVisitor into split() method
+                                  .writerFlags(ClassWriter.COMPUTE_MAXS)))) // Inject RemoveItemVisitor into removeItem() method
             .installOnByteBuddyAgent(); // Inject
     }
 
@@ -54,6 +52,7 @@ public class RemoveItemTransformer {
         @Override
         public void visitCode() {
             super.visitCode();
+            // Uncomment for debug message on visit code
 //            super.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
 //            super.visitLdcInsn("Test of removeItem method");
 //            super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
@@ -71,7 +70,7 @@ public class RemoveItemTransformer {
                 super.visitTypeInsn(Opcodes.CHECKCAST, ITEM_STACK_INTERNAL_NAME); // Cast from Object to ItemStack
                 super.visitVarInsn(Opcodes.ASTORE, 3); // Store this ItemStack to local index 3
 
-                // ItemStack itemstack = this.copy();
+                //// ItemStack itemstack = this.copy();
                 super.visitVarInsn(Opcodes.ALOAD, 3); // Load ItemStack
                 super.visitMethodInsn(
                     Opcodes.INVOKEVIRTUAL,
@@ -81,7 +80,7 @@ public class RemoveItemTransformer {
                     false); // ItemStack.copy()
                 super.visitVarInsn(Opcodes.ASTORE, 4); // Store this new ItemStack to local index 4
 
-                // itemstack.setCount(j);
+                //// itemstack.setCount(j);
                 super.visitVarInsn(Opcodes.ALOAD, 4); // Load new ItemStack
                 super.visitVarInsn(Opcodes.ILOAD, 2); // Load amount to remove
                 super.visitMethodInsn(
@@ -91,7 +90,7 @@ public class RemoveItemTransformer {
                     "(I)V",
                     false); // Set the count of the new ItemStack the count of the old
 
-                // this.shrink(j);
+                //// this.shrink(j);
                 super.visitVarInsn(Opcodes.ALOAD, 3); // Load ItemStack
                 super.visitVarInsn(Opcodes.ILOAD, 2); // Load amount to remove
                 super.visitMethodInsn(
@@ -101,7 +100,7 @@ public class RemoveItemTransformer {
                     "(I)V",
                     false); // Shrink the old ItemStack by the amount
 
-                // return itemstack;
+                //// return itemstack;
                 super.visitVarInsn(Opcodes.ALOAD, 4); // Load the new removed ItemStack
                 // Next instruction is the return instruction, we don't need to insert an additional one
                 return; // Return to not invoke ItemStack#split(I) method

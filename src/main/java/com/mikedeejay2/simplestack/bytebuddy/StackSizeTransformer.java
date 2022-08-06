@@ -132,7 +132,7 @@ public final class StackSizeTransformer {
          *         {@link org.bukkit.plugin.java.JavaPluginLoader})</i>.
          *     </li>
          *     <li>
-         *         Get the {@link ClassLoader} of SimpleStack. This will be a <code>PluginClassLoader</code> and its
+         *         Get the {@link ClassLoader} of SimpleStack. This will be a <code>PluginClassLoader</code> and it's
          *         needed to locate and use any of the plugin's classes.
          *     </li>
          *     <li>
