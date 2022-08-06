@@ -1,6 +1,10 @@
 package com.mikedeejay2.simplestack.bytebuddy;
 
+import com.mikedeejay2.simplestack.SimpleStack;
 import net.bytebuddy.agent.ByteBuddyAgent;
+import net.bytebuddy.agent.builder.AgentBuilder;
+import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
+
 import java.lang.instrument.Instrumentation;
 
 /**
@@ -10,6 +14,8 @@ import java.lang.instrument.Instrumentation;
  * @since 2.0.0
  */
 public class ByteBuddyHolder {
+    private static boolean markedProblem = false;
+
     /**
      * The stored {@link Instrumentation} of the Byte Buddy agent
      */
@@ -43,5 +49,20 @@ public class ByteBuddyHolder {
      */
     public static Instrumentation getInstrumentation() {
         return instrumentation;
+    }
+
+    public static void resetTransformer(ResettableClassFileTransformer transformer) {
+        if(transformer != null) {
+            try {
+                transformer.reset(ByteBuddyHolder.getInstrumentation(), AgentBuilder.RedefinitionStrategy.RETRANSFORMATION);
+            } catch(NoClassDefFoundError e) {
+                if(!markedProblem) {
+                    SimpleStack.getInstance().sendWarning("&eAn issue occurred while resetting a transformer, server reloaded?");
+                    SimpleStack.getInstance().sendWarning("&eIf Simple Stack begins acting abnormally, restart the server");
+                }
+                markedProblem = true;
+            }
+            ByteBuddyHolder.getInstrumentation().removeTransformer(transformer);
+        }
     }
 }

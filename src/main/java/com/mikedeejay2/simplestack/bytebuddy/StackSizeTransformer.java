@@ -89,10 +89,7 @@ public final class StackSizeTransformer {
     }
 
     public static void reset() {
-        if(transformer != null) {
-            transformer.reset(ByteBuddyHolder.getInstrumentation(), AgentBuilder.RedefinitionStrategy.RETRANSFORMATION);
-            ByteBuddyHolder.getInstrumentation().removeTransformer(transformer);
-        }
+        ByteBuddyHolder.resetTransformer(transformer);
     }
 
     /**

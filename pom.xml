@@ -49,6 +49,11 @@
                                         <exclude>META-INF/*.SF</exclude>
                                         <exclude>META-INF/*.DSA</exclude>
                                         <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
+                                    <artifact>net.bytebuddy:byte-buddy-agent</artifact>
+                                    <excludes>
                                         <exclude>win32-x86/*</exclude>
                                         <exclude>win32-x86-64/*</exclude>
                                     </excludes>

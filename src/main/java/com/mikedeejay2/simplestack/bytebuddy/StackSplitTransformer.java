@@ -31,10 +31,7 @@ public class StackSplitTransformer {
     }
 
     public static void reset() {
-        if(transformer != null) {
-            transformer.reset(ByteBuddyHolder.getInstrumentation(), AgentBuilder.RedefinitionStrategy.RETRANSFORMATION);
-            ByteBuddyHolder.getInstrumentation().removeTransformer(transformer);
-        }
+        ByteBuddyHolder.resetTransformer(transformer);
     }
 
     private static final class SplitMethodVisitor extends MethodVisitor {
@@ -45,24 +42,24 @@ public class StackSplitTransformer {
         @Override
         public void visitCode() {
             super.visitCode();
-            this.visitVarInsn(ALOAD, 0); // Load this ItemStack
+            appendClampToMaxStackSize();
+        }
 
+        private void appendClampToMaxStackSize() {
+            super.visitVarInsn(ALOAD, 0); // Load this ItemStack
             super.visitMethodInsn(
                 INVOKEVIRTUAL,
                 nms("ItemStack").internalName(),
                 lastNms().method("getMaxStackSize").name(),
                 lastNmsMethod().descriptor(),
                 false); // Invoke ItemStack#getMaxStackSize()
-
             super.visitVarInsn(ILOAD, 1); // Get split size request
-
             super.visitMethodInsn(
                 INVOKESTATIC,
                 "java/lang/Math",
                 "min",
                 "(II)I",
                 false); // Call Math.min() with the max stack size and the split size
-
             super.visitVarInsn(ISTORE, 1); // Store minimum to split request
         }
     }
