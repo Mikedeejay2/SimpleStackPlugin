@@ -8,6 +8,7 @@ import net.bytebuddy.jar.asm.*;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
+import static net.bytebuddy.jar.asm.Opcodes.*;
 
 public class StackSplitTransformer {
     private static ResettableClassFileTransformer transformer;
@@ -25,7 +26,7 @@ public class StackSplitTransformer {
                                               .and(takesArgument(0, int.class))
                                               .and(returns(named(lastNms().qualifiedName()))),
                                           ((it, im, methodVisitor, ic, tp, wf, rf) ->
-                                              new SplitMethodVisitor(Opcodes.ASM9, methodVisitor)))))) // Inject SplitMethodVisitor into split() method
+                                              new SplitMethodVisitor(ASM9, methodVisitor)))))) // Inject SplitMethodVisitor into split() method
             .installOnByteBuddyAgent(); // Inject
     }
 
@@ -44,25 +45,25 @@ public class StackSplitTransformer {
         @Override
         public void visitCode() {
             super.visitCode();
-            this.visitVarInsn(Opcodes.ALOAD, 0); // Load this ItemStack
+            this.visitVarInsn(ALOAD, 0); // Load this ItemStack
 
             super.visitMethodInsn(
-                Opcodes.INVOKEVIRTUAL,
+                INVOKEVIRTUAL,
                 nms("ItemStack").internalName(),
                 lastNms().method("getMaxStackSize").name(),
                 lastNmsMethod().descriptor(),
                 false); // Invoke ItemStack#getMaxStackSize()
 
-            super.visitVarInsn(Opcodes.ILOAD, 1); // Get split size request
+            super.visitVarInsn(ILOAD, 1); // Get split size request
 
             super.visitMethodInsn(
-                Opcodes.INVOKESTATIC,
+                INVOKESTATIC,
                 "java/lang/Math",
                 "min",
                 "(II)I",
                 false); // Call Math.min() with the max stack size and the split size
 
-            super.visitVarInsn(Opcodes.ISTORE, 1); // Store minimum to split request
+            super.visitVarInsn(ISTORE, 1); // Store minimum to split request
         }
     }
 }

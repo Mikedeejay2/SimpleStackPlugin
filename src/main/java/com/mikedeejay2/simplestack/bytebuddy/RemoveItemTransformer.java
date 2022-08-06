@@ -5,13 +5,13 @@ import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import net.bytebuddy.jar.asm.ClassWriter;
 import net.bytebuddy.jar.asm.MethodVisitor;
-import net.bytebuddy.jar.asm.Opcodes;
 
 import java.util.List;
 import java.util.Optional;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
+import static net.bytebuddy.jar.asm.Opcodes.*;
 
 public class RemoveItemTransformer {
     private static ResettableClassFileTransformer transformer;
@@ -30,7 +30,7 @@ public class RemoveItemTransformer {
                                               .and(takesArgument(2, int.class))
                                               .and(returns(named(nms("ItemStack").qualifiedName()))),
                                           ((it, im, methodVisitor, ic, tp, wf, rf) ->
-                                              new RemoveItemVisitor(Opcodes.ASM9, methodVisitor)))
+                                              new RemoveItemVisitor(ASM9, methodVisitor)))
                                   .writerFlags(ClassWriter.COMPUTE_MAXS)))) // Inject RemoveItemVisitor into removeItem() method
             .type(named(nms("Slot").qualifiedName())) // Match the Slot class
             .transform(((builder, typeDescription, classLoader, module) ->
@@ -40,7 +40,7 @@ public class RemoveItemTransformer {
                                               .and(takesArgument(1, int.class))
                                               .and(returns(Optional.class)),
                                           ((it, im, methodVisitor, ic, tp, wf, rf) ->
-                                              new TryRemoveVisitor(Opcodes.ASM9, methodVisitor)))
+                                              new TryRemoveVisitor(ASM9, methodVisitor)))
                                   .writerFlags(ClassWriter.COMPUTE_MAXS)))) // Inject RemoveItemVisitor into removeItem() method
             .installOnByteBuddyAgent(); // Inject
     }
@@ -61,9 +61,9 @@ public class RemoveItemTransformer {
         public void visitCode() {
             super.visitCode();
             // Uncomment for debug message on visit code
-//            super.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+//            super.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
 //            super.visitLdcInsn("Test of removeItem method");
-//            super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+//            super.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
         }
 
         @Override
@@ -72,44 +72,44 @@ public class RemoveItemTransformer {
                 name.equals(lastNms().method("split").name()) &&
                 descriptor.equals(lastNmsMethod().descriptor())) {
                 // Get the target ItemStack out of the list
-                super.visitVarInsn(Opcodes.ALOAD, 0); // Get list
-                super.visitVarInsn(Opcodes.ILOAD, 1); // Get slot int
-                super.visitMethodInsn(Opcodes.INVOKEINTERFACE, "java/util/List", "get", "(I)Ljava/lang/Object;", true); // Get ItemStack out of list
-                super.visitTypeInsn(Opcodes.CHECKCAST, lastNms().internalName()); // Cast from Object to ItemStack
-                super.visitVarInsn(Opcodes.ASTORE, 3); // Store this ItemStack to local index 3
+                super.visitVarInsn(ALOAD, 0); // Get list
+                super.visitVarInsn(ILOAD, 1); // Get slot int
+                super.visitMethodInsn(INVOKEINTERFACE, "java/util/List", "get", "(I)Ljava/lang/Object;", true); // Get ItemStack out of list
+                super.visitTypeInsn(CHECKCAST, lastNms().internalName()); // Cast from Object to ItemStack
+                super.visitVarInsn(ASTORE, 3); // Store this ItemStack to local index 3
 
                 //// ItemStack itemstack = this.copy();
-                super.visitVarInsn(Opcodes.ALOAD, 3); // Load ItemStack
+                super.visitVarInsn(ALOAD, 3); // Load ItemStack
                 super.visitMethodInsn(
-                    Opcodes.INVOKEVIRTUAL,
+                    INVOKEVIRTUAL,
                     lastNms().internalName(),
                     lastNms().method("copy").name(),
                     lastNmsMethod().descriptor(),
                     false); // ItemStack.copy()
-                super.visitVarInsn(Opcodes.ASTORE, 4); // Store this new ItemStack to local index 4
+                super.visitVarInsn(ASTORE, 4); // Store this new ItemStack to local index 4
 
                 //// itemstack.setCount(j);
-                super.visitVarInsn(Opcodes.ALOAD, 4); // Load new ItemStack
-                super.visitVarInsn(Opcodes.ILOAD, 2); // Load amount to remove
+                super.visitVarInsn(ALOAD, 4); // Load new ItemStack
+                super.visitVarInsn(ILOAD, 2); // Load amount to remove
                 super.visitMethodInsn(
-                    Opcodes.INVOKEVIRTUAL,
+                    INVOKEVIRTUAL,
                     lastNms().internalName(),
                     lastNms().method("setCount").name(),
                     lastNmsMethod().descriptor(),
                     false); // Set the count of the new ItemStack the count of the old
 
                 //// this.shrink(j);
-                super.visitVarInsn(Opcodes.ALOAD, 3); // Load ItemStack
-                super.visitVarInsn(Opcodes.ILOAD, 2); // Load amount to remove
+                super.visitVarInsn(ALOAD, 3); // Load ItemStack
+                super.visitVarInsn(ILOAD, 2); // Load amount to remove
                 super.visitMethodInsn(
-                    Opcodes.INVOKEVIRTUAL,
+                    INVOKEVIRTUAL,
                     lastNms().internalName(),
                     lastNms().method("shrink").name(),
                     lastNmsMethod().descriptor(),
                     false); // Shrink the old ItemStack by the amount
 
                 //// return itemstack;
-                super.visitVarInsn(Opcodes.ALOAD, 4); // Load the new removed ItemStack
+                super.visitVarInsn(ALOAD, 4); // Load the new removed ItemStack
                 // Next instruction is the return instruction, we don't need to insert an additional one
                 return; // Return to not invoke ItemStack#split(I) method
             }
@@ -127,30 +127,30 @@ public class RemoveItemTransformer {
         public void visitCode() {
             super.visitCode();
             // Uncomment for debug message on visit code
-//            super.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+//            super.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
 //            super.visitLdcInsn("Test of tryRemove method");
-//            super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+//            super.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
         }
 
         @Override
         public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
             super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
-            if(opcode == Opcodes.INVOKESTATIC && owner.equals("java/lang/Math") && name.equals("min")) {
-                super.visitVarInsn(Opcodes.ALOAD, 0); // Get this slot
+            if(opcode == INVOKESTATIC && owner.equals("java/lang/Math") && name.equals("min")) {
+                super.visitVarInsn(ALOAD, 0); // Get this slot
                 super.visitMethodInsn(
-                    Opcodes.INVOKEVIRTUAL,
+                    INVOKEVIRTUAL,
                     nms("Slot").internalName(),
                     lastNms().method("getItem").name(),
                     lastNmsMethod().descriptor(),
                     false); // Get the ItemStack currently in the slot
                 super.visitMethodInsn(
-                    Opcodes.INVOKEVIRTUAL,
+                    INVOKEVIRTUAL,
                     nms("ItemStack").internalName(),
                     lastNms().method("getMaxStackSize").name(),
                     lastNmsMethod().descriptor(),
                     false); // Get the max stack size of the ItemStack in the slot
                 super.visitMethodInsn(
-                    Opcodes.INVOKESTATIC,
+                    INVOKESTATIC,
                     "java/lang/Math",
                     "min",
                     "(II)I",
