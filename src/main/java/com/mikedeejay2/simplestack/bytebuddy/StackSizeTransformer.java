@@ -1,9 +1,7 @@
 package com.mikedeejay2.simplestack.bytebuddy;
 
-import com.mikedeejay2.simplestack.NMSMappings;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.config.DebugConfig;
-import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.asm.Advice;
@@ -16,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
+import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
 /**
  * <p>
@@ -48,11 +47,11 @@ public final class StackSizeTransformer {
     // Get all NMS classes and methods using NMSMappings
     static {
         try {
-            Class<?> itemStackClass = Class.forName(NMSMappings.get().classNameItemStack);
-            CLASS_CRAFT_ITEM_STACK = Class.forName(NMSMappings.get().classNameCraftItemStack);
+            Class<?> itemStackClass = nms("ItemStack").toClass();
+            CLASS_CRAFT_ITEM_STACK = nms("CraftItemStack").toClass();
             METHOD_AS_BUKKIT_COPY = CLASS_CRAFT_ITEM_STACK.getMethod(
-                NMSMappings.get().methodNameCraftItemStackAsBukkitCopy, itemStackClass);
-        } catch(ClassNotFoundException | NoSuchMethodException e) {
+                lastNms().method("asBukkitCopy").name(), itemStackClass);
+        } catch(NoSuchMethodException e) {
             Bukkit.getLogger().severe("SimpleStack cannot locate NMS classes");
             throw new RuntimeException(e);
         }
@@ -74,16 +73,16 @@ public final class StackSizeTransformer {
         transformer = new AgentBuilder.Default()
             .disableClassFormatChanges()
             .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION) // Use retransformation strategy to modify existing NMS classes
-            .type(named(NMSMappings.get().classNameItem)) // Match the Item class
+            .type(named(nms("Item").qualifiedName())) // Match the Item class
             .transform(((builder, typeDescription, classLoader, module) -> builder.visit(
                 Advice.to(ItemAdvice.class)
-                    .on(named(NMSMappings.get().methodNameItemGetMaxStackSize)
+                    .on(named(lastNms().method("getMaxStackSize").name())
                             .and(returns(int.class))
                             .and(takesNoArguments()))))) // Inject ItemAdvice into getMaxStackSize() method
-            .type(named(NMSMappings.get().classNameItem)) // Match the ItemStack class
+            .type(named(nms("ItemStack").qualifiedName())) // Match the ItemStack class
             .transform(((builder, typeDescription, classLoader, module) -> builder.visit(
                 Advice.to(ItemStackAdvice.class)
-                    .on(named(NMSMappings.get().methodNameItemStackGetMaxStackSize)
+                    .on(named(lastNms().method("getMaxStackSize").name())
                             .and(returns(int.class))
                             .and(takesNoArguments()))))) // Inject ItemStackAdvice into getMaxStackSize() method
             .installOnByteBuddyAgent(); // Inject

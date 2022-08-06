@@ -1,12 +1,13 @@
 package com.mikedeejay2.simplestack.bytebuddy;
 
-import com.mikedeejay2.simplestack.NMSMappings;
+import com.mikedeejay2.simplestack.MappingsLookup;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import net.bytebuddy.jar.asm.*;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
+import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
 public class StackSplitTransformer {
     private static ResettableClassFileTransformer transformer;
@@ -16,13 +17,13 @@ public class StackSplitTransformer {
         transformer = new AgentBuilder.Default()
             .disableClassFormatChanges()
             .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION) // Use retransformation strategy to modify existing NMS classes
-            .type(named(NMSMappings.get().classNameItemStack)) // Match the ItemStack class
+            .type(named(MappingsLookup.nms("ItemStack").qualifiedName())) // Match the ItemStack class
             .transform(((builder, typeDescription, classLoader, module) ->
                 builder.visit(new AsmVisitorWrapper.ForDeclaredMethods()
                                   .writerFlags(ClassWriter.COMPUTE_MAXS)
-                                  .method(named(NMSMappings.get().methodNameItemStackSplit)
+                                  .method(named(MappingsLookup.lastNms().method("split").name())
                                               .and(takesArgument(0, int.class))
-                                              .and(returns(named(NMSMappings.get().classNameItemStack))),
+                                              .and(returns(named(lastNms().qualifiedName()))),
                                           ((it, im, methodVisitor, ic, tp, wf, rf) ->
                                               new SplitMethodVisitor(Opcodes.ASM9, methodVisitor)))))) // Inject SplitMethodVisitor into split() method
             .installOnByteBuddyAgent(); // Inject
@@ -47,9 +48,9 @@ public class StackSplitTransformer {
 
             super.visitMethodInsn(
                 Opcodes.INVOKEVIRTUAL,
-                NMSMappings.get().classNameItemStack.replace('.', '/'),
-                NMSMappings.get().methodNameItemStackGetMaxStackSize,
-                "()I",
+                nms("ItemStack").internalName(),
+                lastNms().method("getMaxStackSize").name(),
+                lastNmsMethod().descriptor(),
                 false); // Invoke ItemStack#getMaxStackSize()
 
             super.visitVarInsn(Opcodes.ILOAD, 1); // Get split size request

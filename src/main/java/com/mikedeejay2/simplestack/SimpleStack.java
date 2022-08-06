@@ -98,7 +98,7 @@ public final class SimpleStack extends BukkitPlugin {
      * @return Whether the plugin has been disabled.
      */
     private boolean checkVersion() {
-        if(MinecraftVersion.getVersionShort() < MINIMUM_VERSION || !NMSMappings.hasMappings()) {
+        if(MinecraftVersion.getVersionShort() < MINIMUM_VERSION || !MappingsLookup.hasMappings()) {
             sendSevere(String.format(
                 "Simple Stack %s is not compatible Minecraft version %s!",
                 this.getDescription().getVersion(),
