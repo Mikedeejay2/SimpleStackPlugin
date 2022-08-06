@@ -8,6 +8,7 @@ import net.bytebuddy.jar.asm.MethodVisitor;
 import net.bytebuddy.jar.asm.Opcodes;
 
 import java.util.List;
+import java.util.Optional;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
@@ -30,6 +31,16 @@ public class RemoveItemTransformer {
                                               .and(returns(named(nms("ItemStack").qualifiedName()))),
                                           ((it, im, methodVisitor, ic, tp, wf, rf) ->
                                               new RemoveItemVisitor(Opcodes.ASM9, methodVisitor)))
+                                  .writerFlags(ClassWriter.COMPUTE_MAXS)))) // Inject RemoveItemVisitor into removeItem() method
+            .type(named(nms("Slot").qualifiedName())) // Match the Slot class
+            .transform(((builder, typeDescription, classLoader, module) ->
+                builder.visit(new AsmVisitorWrapper.ForDeclaredMethods()
+                                  .method(named(lastNms().method("tryRemove").name())
+                                              .and(takesArgument(0, int.class))
+                                              .and(takesArgument(1, int.class))
+                                              .and(returns(Optional.class)),
+                                          ((it, im, methodVisitor, ic, tp, wf, rf) ->
+                                              new TryRemoveVisitor(Opcodes.ASM9, methodVisitor)))
                                   .writerFlags(ClassWriter.COMPUTE_MAXS)))) // Inject RemoveItemVisitor into removeItem() method
             .installOnByteBuddyAgent(); // Inject
     }
@@ -104,6 +115,48 @@ public class RemoveItemTransformer {
             }
 
             super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
+        }
+    }
+
+    private static final class TryRemoveVisitor extends MethodVisitor {
+        private TryRemoveVisitor(int api, MethodVisitor methodVisitor) {
+            super(api, methodVisitor);
+        }
+
+        @Override
+        public void visitCode() {
+            super.visitCode();
+            // Uncomment for debug message on visit code
+//            super.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+//            super.visitLdcInsn("Test of tryRemove method");
+//            super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+        }
+
+        @Override
+        public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
+            super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
+            if(opcode == Opcodes.INVOKESTATIC && owner.equals("java/lang/Math") && name.equals("min")) {
+                super.visitVarInsn(Opcodes.ALOAD, 0); // Get this slot
+                super.visitMethodInsn(
+                    Opcodes.INVOKEVIRTUAL,
+                    nms("Slot").internalName(),
+                    lastNms().method("getItem").name(),
+                    lastNmsMethod().descriptor(),
+                    false); // Get the ItemStack currently in the slot
+                super.visitMethodInsn(
+                    Opcodes.INVOKEVIRTUAL,
+                    nms("ItemStack").internalName(),
+                    lastNms().method("getMaxStackSize").name(),
+                    lastNmsMethod().descriptor(),
+                    false); // Get the max stack size of the ItemStack in the slot
+                super.visitMethodInsn(
+                    Opcodes.INVOKESTATIC,
+                    "java/lang/Math",
+                    "min",
+                    "(II)I",
+                    false); // Call Math.min()
+                // Next instruction stores the result
+            }
         }
     }
 }

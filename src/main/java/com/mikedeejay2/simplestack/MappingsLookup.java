@@ -25,7 +25,11 @@ public class MappingsLookup {
             .add("CraftItemStack", ClassMappings.of("org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack")
                 .method("asBukkitCopy", MappingEntry.of("asBukkitCopy")))
             .add("ContainerUtil", ClassMappings.of("net.minecraft.world.ContainerUtil")
-                .method("removeItem", MappingEntry.of("a"))));
+                .method("removeItem", MappingEntry.of("a")))
+            .add("Slot", ClassMappings.of("net.minecraft.world.inventory.Slot")
+                .method("tryRemove", MappingEntry.of("a"))
+                .method("getItem", MappingEntry.of("e").descriptor("()L%s;", "ItemStack")))
+        );
     }
 
     private static void register(String version, MappingsHolder holder) {
