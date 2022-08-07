@@ -13,7 +13,7 @@ import java.lang.instrument.Instrumentation;
  * @author Mikedeejay2
  * @since 2.0.0
  */
-public class ByteBuddyHolder {
+public final class ByteBuddyHolder {
     private static boolean markedProblem = false;
 
     /**

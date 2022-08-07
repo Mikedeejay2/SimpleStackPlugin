@@ -8,25 +8,25 @@ import java.util.Map;
 
 public class MappingsLookup {
     private static MappingsHolder holder = null;
-    private static ClassMappings lastClass = null;
+    private static ClassMapping lastClass = null;
     private static MappingEntry lastMethod = null;
     private static MappingEntry lastField = null;
 
     static {
         register("1.19", new MappingsHolder()
-            .add("Item", ClassMappings.of("net.minecraft.world.item.Item")
+            .add("Item", ClassMapping.of("net.minecraft.world.item.Item")
                 .method("getMaxStackSize", MappingEntry.of("m")))
-            .add("ItemStack", ClassMappings.of("net.minecraft.world.item.ItemStack")
+            .add("ItemStack", ClassMapping.of("net.minecraft.world.item.ItemStack")
                 .method("getMaxStackSize", MappingEntry.of("f").descriptor("()I"))
                 .method("split", MappingEntry.of("a").descriptor("(I)L%s;", "ItemStack"))
                 .method("copy", MappingEntry.of("o").descriptor("()L%s;", "ItemStack"))
                 .method("setCount", MappingEntry.of("e").descriptor("(I)V"))
                 .method("shrink", MappingEntry.of("g").descriptor("(I)V")))
-            .add("CraftItemStack", ClassMappings.of("org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack")
+            .add("CraftItemStack", ClassMapping.of("org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack")
                 .method("asBukkitCopy", MappingEntry.of("asBukkitCopy")))
-            .add("ContainerUtil", ClassMappings.of("net.minecraft.world.ContainerUtil")
+            .add("ContainerUtil", ClassMapping.of("net.minecraft.world.ContainerUtil")
                 .method("removeItem", MappingEntry.of("a")))
-            .add("Slot", ClassMappings.of("net.minecraft.world.inventory.Slot")
+            .add("Slot", ClassMapping.of("net.minecraft.world.inventory.Slot")
                 .method("tryRemove", MappingEntry.of("a"))
                 .method("getItem", MappingEntry.of("e").descriptor("()L%s;", "ItemStack")))
         );
@@ -42,11 +42,11 @@ public class MappingsLookup {
         return holder != null;
     }
 
-    public static ClassMappings nms(String name) {
+    public static ClassMapping nms(String name) {
         return holder.clazz(name);
     }
 
-    public static ClassMappings lastNms() {
+    public static ClassMapping lastNms() {
         Validate.notNull(lastClass, "Tried to get last class, but was null");
         return lastClass;
     }
@@ -62,32 +62,32 @@ public class MappingsLookup {
     }
 
     public static final class MappingsHolder {
-        private final Map<String, ClassMappings> mappings;
+        private final Map<String, ClassMapping> mappings;
 
         private MappingsHolder() {
             this.mappings = new HashMap<>();
         }
 
-        private MappingsHolder add(String name, ClassMappings mappings) {
+        private MappingsHolder add(String name, ClassMapping mappings) {
             this.mappings.put(name, mappings);
             return this;
         }
 
-        public ClassMappings clazz(String name) {
+        public ClassMapping clazz(String name) {
             Validate.isTrue(mappings.containsKey(name),
                             String.format("Tried to get invalid class mapping \"%s\"", name));
             return (lastClass = mappings.get(name));
         }
     }
 
-    public static final class ClassMappings {
+    public static final class ClassMapping {
         private final String qualifiedName;
         private final String internalName;
         private final String descriptorName;
         private final Map<String, MappingEntry> methodMappings;
         private final Map<String, MappingEntry> fieldMappings;
 
-        private ClassMappings(String qualifiedName) {
+        private ClassMapping(String qualifiedName) {
             this.qualifiedName = qualifiedName;
             this.internalName = qualifiedName.replace('.', '/');
             this.descriptorName = "L" + internalName + ";";
@@ -95,12 +95,13 @@ public class MappingsLookup {
             this.fieldMappings = new HashMap<>();
         }
 
-        private ClassMappings method(String name, MappingEntry entry) {
+        private ClassMapping method(String name, MappingEntry entry) {
+            entry.owner(this);
             methodMappings.put(name, entry);
             return this;
         }
 
-        private ClassMappings field(String name, MappingEntry entry) {
+        private ClassMapping field(String name, MappingEntry entry) {
             fieldMappings.put(name, entry);
             return this;
         }
@@ -137,14 +138,14 @@ public class MappingsLookup {
             }
         }
 
-        private static ClassMappings of(String qualifiedName) {
-            return new ClassMappings(qualifiedName);
+        private static ClassMapping of(String qualifiedName) {
+            return new ClassMapping(qualifiedName);
         }
     }
 
     public static final class MappingEntry {
         private final String name;
-        private ClassMappings owner;
+        private ClassMapping owner;
         private String descriptor; // nullable
         private String[] descriptorLookups;
 
@@ -158,7 +159,7 @@ public class MappingsLookup {
             return this;
         }
 
-        private MappingEntry owner(ClassMappings owner) {
+        private MappingEntry owner(ClassMapping owner) {
             this.owner = owner;
             return this;
         }
@@ -167,7 +168,7 @@ public class MappingsLookup {
             return name;
         }
 
-        public ClassMappings owner() {
+        public ClassMapping owner() {
             return owner;
         }
 

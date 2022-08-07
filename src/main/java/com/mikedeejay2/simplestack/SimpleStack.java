@@ -7,6 +7,7 @@ import com.mikedeejay2.mikedeejay2lib.util.bstats.BStats;
 import com.mikedeejay2.mikedeejay2lib.util.update.UpdateChecker;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.bytebuddy.*;
+import com.mikedeejay2.simplestack.bytebuddy.transformers.*;
 import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.DebugConfig;
@@ -71,11 +72,18 @@ public final class SimpleStack extends BukkitPlugin {
         this.config = new Config(this);
         this.debugConfig = new DebugConfig();
 
-        sendInfo("&eInstalling ASM transformers...");
-        MaxStackSizeTransformer.install();
-        SplitStackTransformer.install();
-        RemoveItemTransformer.install();
-        sendInfo("&aAll ASM transformers have been installed.");
+//        sendInfo("&eInstalling ASM transformers...");
+//        MaxStackSizeTransformer.install();
+//        SplitStackTransformer.install();
+//        RemoveItemTransformer.install();
+//        sendInfo("&aAll ASM transformers have been installed.");
+
+        SimpleStackAgent.addVisitor(new TransformItemGetMaxStackSize());
+        SimpleStackAgent.addVisitor(new TransformItemStackGetMaxStackSize());
+        SimpleStackAgent.addVisitor(new TransformContainerUtilRemoveItem());
+        SimpleStackAgent.addVisitor(new TransformSlotTryRemove());
+        SimpleStackAgent.addVisitor(new TransformItemStackSplit());
+        SimpleStackAgent.install();
     }
 
     private boolean installByteBuddyAgent() {
@@ -116,9 +124,10 @@ public final class SimpleStack extends BukkitPlugin {
         }
 
         if(ByteBuddyHolder.getInstrumentation() != null) {
-            MaxStackSizeTransformer.reset();
-            SplitStackTransformer.reset();
-            RemoveItemTransformer.reset();
+//            MaxStackSizeTransformer.reset();
+//            SplitStackTransformer.reset();
+//            RemoveItemTransformer.reset();
+            SimpleStackAgent.reset();
         }
     }
 
