@@ -21,7 +21,8 @@ public class MappingsLookup {
                 .method("split", MappingEntry.of("a").descriptor("(I)L%s;", "ItemStack"))
                 .method("copy", MappingEntry.of("o").descriptor("()L%s;", "ItemStack"))
                 .method("setCount", MappingEntry.of("e").descriptor("(I)V"))
-                .method("shrink", MappingEntry.of("g").descriptor("(I)V")))
+                .method("shrink", MappingEntry.of("g").descriptor("(I)V"))
+                .method("getCount", MappingEntry.of("K").descriptor("()I")))
             .add("CraftItemStack", ClassMapping.of("org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack")
                 .method("asBukkitCopy", MappingEntry.of("asBukkitCopy")))
             .add("ContainerUtil", ClassMapping.of("net.minecraft.world.ContainerUtil")
@@ -29,6 +30,9 @@ public class MappingsLookup {
             .add("Slot", ClassMapping.of("net.minecraft.world.inventory.Slot")
                 .method("tryRemove", MappingEntry.of("a"))
                 .method("getItem", MappingEntry.of("e").descriptor("()L%s;", "ItemStack")))
+            .add("EntityPlayer", ClassMapping.of("net.minecraft.server.level.EntityPlayer")
+                .method("drop", MappingEntry.of("a").descriptor("(L%s;ZZ)L%s;", "ItemStack", "EntityItem")))
+            .add("EntityItem", ClassMapping.of("net.minecraft.world.entity.item.EntityItem"))
         );
     }
 
