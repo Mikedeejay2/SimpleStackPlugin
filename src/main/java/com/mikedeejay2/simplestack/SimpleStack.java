@@ -88,7 +88,6 @@ public final class SimpleStack extends BukkitPlugin {
     }
 
     private boolean installByteBuddyAgent() {
-        sendInfo("&eInstalling Simple Stack agent...");
         if(ByteBuddyHolder.install()) {
             sendSevere("SimpleStack is not compatible with this installation of Java!");
             sendSevere("Common solutions are to use Java 9 or greater OR use a Java 8 JDK that includes the required instrumentation toolkit");

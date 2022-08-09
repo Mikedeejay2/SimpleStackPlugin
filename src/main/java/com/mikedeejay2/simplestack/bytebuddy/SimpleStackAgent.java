@@ -32,7 +32,7 @@ public final class SimpleStackAgent {
             .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION) // Use retransformation strategy to modify existing NMS classes
             .type(typeMatcher) // Match only classes to be transformed
             .transform(MasterTransformer.INSTANCE) // Transform using MasterTransformer
-            .installOnByteBuddyAgent(); // Inject
+            .installOn(ByteBuddyHolder.getInstrumentation()); // Inject
     }
 
     public static void reset() {
