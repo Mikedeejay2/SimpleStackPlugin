@@ -6,7 +6,7 @@ import net.bytebuddy.jar.asm.MethodVisitor;
 
 import static net.bytebuddy.jar.asm.Opcodes.ASM9;
 
-public abstract class SimpleStackMethodVisitor extends MethodVisitor implements SimpleStackWrapper {
+public abstract class SimpleStackMethodVisitor extends MethodVisitor implements MethodVisitorInfo {
     public SimpleStackMethodVisitor() {
         super(ASM9);
     }

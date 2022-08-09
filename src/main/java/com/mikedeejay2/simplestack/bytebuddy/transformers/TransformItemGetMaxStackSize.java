@@ -2,7 +2,7 @@ package com.mikedeejay2.simplestack.bytebuddy.transformers;
 
 import com.mikedeejay2.simplestack.MappingsLookup;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.bytebuddy.SimpleStackWrapper;
+import com.mikedeejay2.simplestack.bytebuddy.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.config.DebugConfig;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
-public final class TransformItemGetMaxStackSize implements SimpleStackWrapper {
+public final class TransformItemGetMaxStackSize implements MethodVisitorInfo {
 
     @Override
     public AsmVisitorWrapper.ForDeclaredMethods.MethodVisitorWrapper getWrapper() {

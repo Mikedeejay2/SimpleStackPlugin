@@ -19,7 +19,7 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 
 public final class SimpleStackAgent {
     private static ResettableClassFileTransformer transformer;
-    private static final Map<String, Set<SimpleStackWrapper>> VISITORS = new HashMap<>();
+    private static final Map<String, Set<MethodVisitorInfo>> VISITORS = new HashMap<>();
 
     public static void install() {
         ElementMatcher.Junction<? super TypeDescription> typeMatcher = none();
@@ -39,7 +39,7 @@ public final class SimpleStackAgent {
         ByteBuddyHolder.resetTransformer(transformer);
     }
 
-    public static void addVisitor(SimpleStackWrapper visitor) {
+    public static void addVisitor(MethodVisitorInfo visitor) {
         String className = visitor.getMappingEntry().owner().qualifiedName();
         VISITORS.putIfAbsent(className, new HashSet<>());
         VISITORS.get(className).add(visitor);
@@ -52,12 +52,12 @@ public final class SimpleStackAgent {
         public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module) {
             AsmVisitorWrapper.ForDeclaredMethods wrapper = new AsmVisitorWrapper.ForDeclaredMethods();
             String className = typeDescription.getName();
-            Set<SimpleStackWrapper> wrappers = VISITORS.get(className);
+            Set<MethodVisitorInfo> wrappers = VISITORS.get(className);
             Validate.notNull(wrappers,
                              "No method visitors of name \"%s\" were found.", className);
             Validate.notEmpty(wrappers,
                               "Got empty set of method visitors for name \"%s\"", className);
-            for(SimpleStackWrapper current : wrappers) {
+            for(MethodVisitorInfo current : wrappers) {
                 wrapper = wrapper.method(current.getMatcher(), current.getWrapper());
             }
             wrapper = wrapper.writerFlags(ClassWriter.COMPUTE_MAXS);
