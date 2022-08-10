@@ -1,6 +1,8 @@
 package com.mikedeejay2.simplestack.commands;
 
 import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
+import com.mikedeejay2.mikedeejay2lib.gui.GUIConstructor;
+import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.manager.PlayerGUI;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.simplestack.SimpleStack;
@@ -30,7 +32,12 @@ public class ConfigCommand implements SubCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
-        GUICreator.createMainGUI(plugin, player).open(player);
+        GUIContainer gui = plugin.getGUIManager().getPlayer(player).getGUI();
+        if(gui != null && gui.containsModule(GUINavigatorModule.class)) {
+            gui.open(player);
+        } else {
+            GUICreator.createMainGUI(plugin, player).open(player);
+        }
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
     }
 
