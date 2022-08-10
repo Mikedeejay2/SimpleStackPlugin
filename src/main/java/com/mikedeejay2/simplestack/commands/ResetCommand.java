@@ -29,9 +29,10 @@ public class ResetCommand implements SubCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         plugin.config().resetFromJar(true);
-        plugin.sendMessage(sender,
-                           "&e&l" + plugin.getLibLangManager().getText(sender, "generic.success") +
-                               "&r &9" + plugin.getLangManager().getText(sender, "simplestack.reset.success"));
+        plugin.sendMessage(sender, String.format(
+            "&e&l%s&r &b%s",
+            plugin.getLibLangManager().getText(sender, "generic.success"),
+            plugin.getLangManager().getText(sender, "simplestack.reset.success")));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);

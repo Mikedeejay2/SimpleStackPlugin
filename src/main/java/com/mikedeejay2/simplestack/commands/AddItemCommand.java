@@ -39,9 +39,10 @@ public class AddItemCommand implements SubCommand {
         Config config = plugin.config();
         config.addUniqueItem(player, heldItem);
         config.saveToDisk(true);
-        plugin.sendMessage(sender,
-                           "&e&l" + plugin.getLibLangManager().getText(player, "generic.success") +
-                               "&r &9" + plugin.getLangManager().getText(player, "simplestack.commands.additem.success"));
+        plugin.sendMessage(sender, String.format(
+            "&e&l%s&r &b%s",
+            plugin.getLibLangManager().getText(player, "generic.success"),
+            plugin.getLangManager().getText(player, "simplestack.commands.additem.success")));
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
     }
 

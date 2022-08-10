@@ -55,8 +55,10 @@ public class SetAmountCommand implements SubCommand {
         if(amount > plugin.config().getMaxAmount()) {
             plugin.sendMessage(sender, "&e" + plugin.getLibLangManager().getText(sender, "warnings.big_number"));
         }
-        plugin.sendMessage(sender, "&e&l" + plugin.getLibLangManager().getText(sender, "generic.success") + "&r &9" +
-            plugin.getLangManager().getText(sender, "simplestack.commands.setamount.success"));
+        plugin.sendMessage(sender, String.format(
+            "&e&l%s&r &b%s",
+            plugin.getLibLangManager().getText(sender, "generic.success"),
+            plugin.getLangManager().getText(sender, "simplestack.commands.setamount.success")));
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.5f, 1f);
     }
 

@@ -37,15 +37,14 @@ public class HelpCommand implements SubCommand {
     public void onCommand(CommandSender sender, String[] args) {
         LangManager lang = plugin.getLangManager();
         String ver = plugin.getDescription().getVersion();
-        String[] ssArr = {"Simple", "Stack"};
         String version = lang.getText(sender, "simplestack.version", new String[]{"VERSION"}, new String[]{ver});
         CommandManager manager = plugin.getCommandManager();
         String[] commands = manager.getAllCommandStrings(false);
         ArrayList<BaseComponent[]> lines = new ArrayList<>();
         String lineString = "&b &m                                                                              ";
         String emptyString = "                                                                               \n";
-        String titleString = "\n                              &9&l" + ssArr[0] + " &d&l" + ssArr[1] + "&r                               \n";
-        String versionString = "  &7" + version + "\n";
+        String titleString = "\n                              &9&lSimple &d&lStack&r                               \n";
+        String versionString = String.format("  &7%s\n", version);
 
         BaseComponent[] lineComponents = ChatConverter.getBaseComponentArray(lineString);
         BaseComponent[] emptyComponents = ChatConverter.getBaseComponentArray(emptyString);
@@ -61,7 +60,7 @@ public class HelpCommand implements SubCommand {
             String commandInfo = manager.getSubcommand(command).getInfo(sender);
             String hoverText = "&d" + lang.getText(sender, "simplestack.commands.click_to_run", new String[]{"COMMAND"}, new String[]{"/simplestack " + command});
 
-            BaseComponent[] line = ChatConverter.getBaseComponentArray("  &b/simplestack " + command + " &d- &f" + commandInfo + "\n");
+            BaseComponent[] line = ChatConverter.getBaseComponentArray(String.format("  &b/simplestack %s &d- &f%s\n", command, commandInfo));
 
             ChatConverter.setClickEvent(line, ChatConverter.getClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/simplestack " + command));
             ChatConverter.setHoverEvent(line, ChatConverter.getHoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));

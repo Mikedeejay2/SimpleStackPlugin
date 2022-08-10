@@ -31,9 +31,10 @@ public class ReloadCommand implements SubCommand {
     public void onCommand(CommandSender sender, String[] args) {
         Config config = plugin.config();
         config.reload(true);
-        plugin.sendMessage(sender,
-                           "&e&l" + plugin.getLibLangManager().getText(sender, "generic.success") +
-                               "&r &9" + plugin.getLangManager().getText(sender, "simplestack.reload.success"));
+        plugin.sendMessage(sender, String.format(
+            "&e&l%s&r &b%s",
+            plugin.getLibLangManager().getText(sender, "generic.success"),
+            plugin.getLangManager().getText(sender, "simplestack.reload.success")));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);

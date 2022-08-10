@@ -47,7 +47,7 @@ public final class SimpleStack extends BukkitPlugin {
     public void onEnable() {
         super.onEnable();
         instance = this;
-        setPrefix("&b[&9" + this.getDescription().getName() + "&b]&r ");
+        setPrefix("&f[&b" + this.getDescription().getName() + "&f]&r ");
         this.langManager = new LangManager(this, "lang");
 
         if(checkVersion() || installByteBuddyAgent()) return;

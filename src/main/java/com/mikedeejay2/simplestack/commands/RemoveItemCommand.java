@@ -39,9 +39,10 @@ public class RemoveItemCommand implements SubCommand {
         Config config = plugin.config();
         config.removeUniqueItem(player, heldItem);
         config.saveToDisk(true);
-        plugin.sendMessage(sender,
-                           "&e&l" + plugin.getLibLangManager().getText(player, "generic.success") +
-                               "&r &9" + plugin.getLangManager().getText(player, "simplestack.commands.removeitem.success"));
+        plugin.sendMessage(sender, String.format(
+            "&e&l%s&r &b%s",
+            plugin.getLibLangManager().getText(player, "generic.success"),
+            plugin.getLangManager().getText(player, "simplestack.commands.removeitem.success")));
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
     }
 
