@@ -14,6 +14,8 @@ public final class TransformContainerDoClick extends SimpleStackMethodVisitor {
     private boolean visitedIsSameItemSameTags = false;
     private boolean appendedStackCheck1 = false;
     private boolean appendedStackCheck2 = false;
+    private boolean appendedHotbarSwap = false;
+    private int countGetMaxStackSize = 0;
 
     @Override
     public ElementMatcher.Junction<? super MethodDescription> getMatcher() {
@@ -33,18 +35,36 @@ public final class TransformContainerDoClick extends SimpleStackMethodVisitor {
     public void visitCode() {
         super.visitCode();
         // Uncomment for debug message on visit code
-        super.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-        super.visitLdcInsn("Test of doClick method");
-        super.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+//        super.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+//        super.visitLdcInsn("Test of doClick method");
+//        super.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
     }
 
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
-        if(!visitedIsSameItemSameTags && opcode == INVOKESTATIC &&
+        if(!visitedIsSameItemSameTags && opcode == INVOKESTATIC && // Check starting reference method isSameItemSameTags
             owner.equals(nms("ItemStack").internalName()) &&
             name.equals(lastNms().method("isSameItemSameTags").name()) &&
             descriptor.equals(lastNmsMethod().descriptor())) {
             this.visitedIsSameItemSameTags = true;
+        } else if(!appendedHotbarSwap && opcode == INVOKEVIRTUAL && // Hotbar swap point 1
+            owner.equals(nms("PlayerInventory").internalName()) &&
+            name.equals(lastNms().method("setItem").name()) &&
+            descriptor.equals(lastNmsMethod().descriptor())) {
+            appendHotbarSwap();
+            this.appendedHotbarSwap = true;
+            return;
+        } else if(appendedHotbarSwap && opcode == INVOKEVIRTUAL && // Count Slot#getMaxStackSize(ItemStack) methods as next reference point
+            owner.equals(nms("Slot").internalName()) &&
+            name.equals(lastNms().method("getMaxStackSize1").name()) &&
+            descriptor.equals(lastNmsMethod().descriptor())) {
+            ++countGetMaxStackSize;
+        } else if(countGetMaxStackSize == 2 && opcode == INVOKEVIRTUAL && // Hotbar swap point 2
+            owner.equals(nms("PlayerInventory").internalName()) &&
+            name.equals(lastNms().method("setItem").name()) &&
+            descriptor.equals(lastNmsMethod().descriptor())) {
+            appendHotbarSwap();
+            return;
         }
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
     }
@@ -73,5 +93,35 @@ public final class TransformContainerDoClick extends SimpleStackMethodVisitor {
         super.visitVarInsn(ALOAD, 7); // Get slot's ItemStack
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getMaxStackSize")); // Get ItemStack max stack size
         super.visitJumpInsn(IF_ICMPGT, label); // If count is less than or equal to getMaxStackSize, continue
+    }
+
+    /**
+     * Fixes swapping overstacked items into the hotbar. Injected on a PlayerInventory#setItem call.
+     */
+    public void appendHotbarSwap() {
+        // PlayerInventory, button, and ItemStack already exist on stack
+        super.visitFieldInsn(GETSTATIC, "java/lang/Integer", "MAX_VALUE", "I"); // Get int max value
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("split")); // Split the max off of the ItemStack
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("PlayerInventory").method("setItem")); // Set split item to button slot
+
+        super.visitVarInsn(ALOAD, 5); // Load PlayerInventory
+        super.visitVarInsn(ALOAD, 7); // Load ItemStack
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("PlayerInventory").method("add")); // Add leftover ItemStack to inventory
+
+        // If there are leftovers that won't fit into the inventory, throw them onto the ground
+        Label insideLabel = new Label();
+        Label exitLabel = new Label();
+
+        super.visitJumpInsn(IFNE, exitLabel);
+        super.visitLabel(insideLabel);
+        super.visitVarInsn(ALOAD, 4); // Load EntityHuman
+        super.visitVarInsn(ALOAD, 7); // Load ItemStack
+        super.visitInsn(ICONST_0); // Load false (don't throw randomly)
+        super.visitInsn(ICONST_1); // Load true (retain ownership of thrown item)
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("EntityHuman").method("drop")); // Drop the rest of the item
+        super.visitInsn(POP); // Pop the resulting EntityItem
+
+        super.visitLabel(exitLabel);
+        super.visitFrame(F_SAME, 0, null, 0, null);
     }
 }
