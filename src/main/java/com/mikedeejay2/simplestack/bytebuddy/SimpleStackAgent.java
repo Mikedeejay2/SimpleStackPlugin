@@ -50,19 +50,24 @@ public final class SimpleStackAgent {
 
         @Override
         public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module) {
-            AsmVisitorWrapper.ForDeclaredMethods wrapper = new AsmVisitorWrapper.ForDeclaredMethods();
-            String className = typeDescription.getName();
-            Set<MethodVisitorInfo> wrappers = VISITORS.get(className);
-            Validate.notNull(wrappers,
-                             "No method visitors of name \"%s\" were found.", className);
-            Validate.notEmpty(wrappers,
-                              "Got empty set of method visitors for name \"%s\"", className);
-            for(MethodVisitorInfo current : wrappers) {
-                wrapper = wrapper.method(current.getMatcher(), current.getWrapper());
-            }
-            wrapper = wrapper.writerFlags(ClassWriter.COMPUTE_MAXS);
+            try {
+                AsmVisitorWrapper.ForDeclaredMethods wrapper = new AsmVisitorWrapper.ForDeclaredMethods();
+                String className = typeDescription.getName();
+                Set<MethodVisitorInfo> wrappers = VISITORS.get(className);
+                Validate.notNull(wrappers,
+                                 "No method visitors of name \"%s\" were found.", className);
+                Validate.notEmpty(wrappers,
+                                  "Got empty set of method visitors for name \"%s\"", className);
+                for(MethodVisitorInfo current : wrappers) {
+                    wrapper = wrapper.method(current.getMatcher(), current.getWrapper());
+                }
+                wrapper = wrapper.writerFlags(ClassWriter.COMPUTE_MAXS);
 
-            return builder.visit(wrapper);
+                return builder.visit(wrapper);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            return builder;
         }
     }
 }
