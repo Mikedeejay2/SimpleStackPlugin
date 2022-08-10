@@ -37,9 +37,7 @@ public final class TransformSlotTryRemove extends SimpleStackMethodVisitor {
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
-        if(opcode == INVOKESTATIC &&
-            owner.equals("java/lang/Math") &&
-            name.equals("min")) { // Target Math.min() invocation
+        if(opcode == INVOKESTATIC && owner.equals("java/lang/Math") && name.equals("min")) { // Target Math.min() invocation
             appendClampToMaxStackSize();
         }
     }
@@ -47,23 +45,12 @@ public final class TransformSlotTryRemove extends SimpleStackMethodVisitor {
     private void appendClampToMaxStackSize() {
         super.visitVarInsn(ALOAD, 0); // Get this slot
         super.visitMethodInsn(
-            INVOKEVIRTUAL,
-            nms("Slot").internalName(),
-            lastNms().method("getItem").name(),
-            lastNmsMethod().descriptor(),
-            false); // Get the ItemStack currently in the slot
+            INVOKEVIRTUAL, nms("Slot").method("getItem")); // Get the ItemStack currently in the slot
         super.visitMethodInsn(
-            INVOKEVIRTUAL,
-            nms("ItemStack").internalName(),
-            lastNms().method("getMaxStackSize").name(),
-            lastNmsMethod().descriptor(),
-            false); // Get the max stack size of the ItemStack in the slot
+            INVOKEVIRTUAL, nms("ItemStack").method("getMaxStackSize")); // Get the max stack size of the ItemStack in the slot
         super.visitMethodInsn(
-            INVOKESTATIC,
-            "java/lang/Math",
-            "min",
-            "(II)I",
-            false); // Call Math.min()
+            INVOKESTATIC, "java/lang/Math", "min",
+            "(II)I", false); // Call Math.min()
         // Next instruction stores the result
     }
 }

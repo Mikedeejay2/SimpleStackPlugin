@@ -48,21 +48,15 @@ public final class TransformContainerDoClick extends SimpleStackMethodVisitor {
             descriptor.equals(lastNmsMethod().descriptor())) {
             this.visitedIsSameItemSameTags = true;
         } else if(!appendedHotbarSwap && opcode == INVOKEVIRTUAL && // Hotbar swap point 1
-            owner.equals(nms("PlayerInventory").internalName()) &&
-            name.equals(lastNms().method("setItem").name()) &&
-            descriptor.equals(lastNmsMethod().descriptor())) {
+            equalsMapping(owner, name, descriptor, nms("PlayerInventory").method("setItem"))) {
             appendHotbarSwap();
             this.appendedHotbarSwap = true;
             return;
         } else if(appendedHotbarSwap && opcode == INVOKEVIRTUAL && // Count Slot#getMaxStackSize(ItemStack) methods as next reference point
-            owner.equals(nms("Slot").internalName()) &&
-            name.equals(lastNms().method("getMaxStackSize1").name()) &&
-            descriptor.equals(lastNmsMethod().descriptor())) {
+            equalsMapping(owner, name, descriptor, nms("Slot").method("getMaxStackSize1"))) {
             ++countGetMaxStackSize;
         } else if(countGetMaxStackSize == 2 && opcode == INVOKEVIRTUAL && // Hotbar swap point 2
-            owner.equals(nms("PlayerInventory").internalName()) &&
-            name.equals(lastNms().method("setItem").name()) &&
-            descriptor.equals(lastNmsMethod().descriptor())) {
+            equalsMapping(owner, name, descriptor, nms("PlayerInventory").method("setItem"))) {
             appendHotbarSwap();
             return;
         }
