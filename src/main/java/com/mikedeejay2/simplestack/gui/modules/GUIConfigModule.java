@@ -194,6 +194,12 @@ public class GUIConfigModule implements GUIModule {
                 guiItem.setMovable(true);
                 listModule.addListItem(guiItem);
             }
+            listModule.addForward(6, 6);
+            listModule.addForward(6, 7);
+            listModule.addForward(6, 8);
+            listModule.addBack(6, 4);
+            listModule.addBack(6, 3);
+            listModule.addBack(6, 2);
             gui.addModule(listModule);
             GUIInteractHandler interaction = new GUIInteractHandlerList(64);
             interaction.resetExecutors();
@@ -231,6 +237,8 @@ public class GUIConfigModule implements GUIModule {
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
             gui.addModule(navi);
             GUIListModule langList = new GUIListModule(plugin, GUIListModule.ListViewMode.PAGED, 2, 5, 1, 9);
+            langList.addForward(6, 6);
+            langList.addBack(6, 4);
             gui.addModule(langList);
             langList.setGUIItems(GUICreator.getLanguageList(plugin, player));
             GUIAnimationModule animModule = new GUIAnimationModule(plugin, 10);
@@ -303,6 +311,12 @@ public class GUIConfigModule implements GUIModule {
                 guiItem.setMovable(true);
                 listModule.addListItem(guiItem);
             }
+            listModule.addForward(6, 6);
+            listModule.addForward(6, 7);
+            listModule.addForward(6, 8);
+            listModule.addBack(6, 4);
+            listModule.addBack(6, 3);
+            listModule.addBack(6, 2);
             gui.addModule(listModule);
             GUIInteractHandler interaction = new GUIInteractHandlerList(64);
             interaction.resetExecutors();
@@ -357,6 +371,12 @@ public class GUIConfigModule implements GUIModule {
                 guiItem.setMovable(true);
                 listModule.addListItem(guiItem);
             }
+            listModule.addForward(6, 6);
+            listModule.addForward(6, 7);
+            listModule.addForward(6, 8);
+            listModule.addBack(6, 4);
+            listModule.addBack(6, 3);
+            listModule.addBack(6, 2);
             gui.addModule(listModule);
             GUIInteractHandler interaction = new GUIInteractHandlerList(64);
             interaction.resetExecutors();
