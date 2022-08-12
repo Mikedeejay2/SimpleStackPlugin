@@ -35,9 +35,7 @@ public final class TransformContainerDoClick extends SimpleStackMethodVisitor {
     public void visitCode() {
         super.visitCode();
         // Uncomment for debug message on visit code
-//        super.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-//        super.visitLdcInsn("Test of doClick method");
-//        super.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+//        debugPrintObject(3); // Print InventoryClickType
     }
 
     @Override
