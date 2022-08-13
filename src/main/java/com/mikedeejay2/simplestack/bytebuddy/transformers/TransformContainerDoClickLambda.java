@@ -50,9 +50,4 @@ public class TransformContainerDoClickLambda extends SimpleStackMethodVisitor {
         super.visitLabel(exitLabel);
         super.visitFrame(F_SAME, 0, null, 0, null);
     }
-
-    @Override
-    public void visitMaxs(int maxStack, int maxLocals) {
-        super.visitMaxs(maxStack+2, maxLocals+1);
-    }
 }
