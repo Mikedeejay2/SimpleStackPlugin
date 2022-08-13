@@ -44,7 +44,7 @@ public class TransformContainerDoClickLambda extends SimpleStackMethodVisitor {
         super.visitVarInsn(ALOAD, 2); // Load EntityHuman
         super.visitVarInsn(ALOAD, 4); // Load ItemStack
         super.visitInsn(ICONST_0); // Load false (don't throw randomly)
-        super.visitInsn(ICONST_1); // Load true (retain ownership of thrown item)
+        super.visitInsn(ICONST_0); // Load false (don't retain ownership of thrown item, this is default behavior)
         super.visitMethodInsn(INVOKEVIRTUAL, nms("EntityHuman").method("drop")); // Drop the rest of the item
         super.visitInsn(POP); // Pop the resulting EntityItem
 
