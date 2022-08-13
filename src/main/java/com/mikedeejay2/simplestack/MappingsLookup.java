@@ -46,13 +46,10 @@ public class MappingsLookup {
             .add("InventoryClickType", ofClass("net.minecraft.world.inventory.InventoryClickType"))
             .add("EntityHuman", ofClass("net.minecraft.world.entity.player.EntityHuman")
                 .method("drop", ofEntry("a", "(LZZ)L", "ItemStack", "EntityItem"))
-                .method("drop2args", ofEntry("a", "(LZ)L", "ItemStack", "EntityItem")) //
                 .method("getInventory", ofEntry("fB", "()L", "PlayerInventory")))
             .add("PlayerInventory", ofClass("net.minecraft.world.entity.player.PlayerInventory")
                 .method("setItem", ofEntry("a", "(IL)V", "ItemStack"))
                 .method("add", ofEntry("e", "(L)Z", "ItemStack")))
-            .add("ContainerWorkbench", ofClass("net.minecraft.world.inventory.ContainerWorkbench")  //
-                .method("quickMoveStack", ofEntry("a", "(LI)L", "EntityHuman", "ItemStack")))  //
         );
     }
 
