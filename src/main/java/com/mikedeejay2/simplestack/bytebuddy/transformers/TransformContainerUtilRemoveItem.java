@@ -2,13 +2,8 @@ package com.mikedeejay2.simplestack.bytebuddy.transformers;
 
 import com.mikedeejay2.simplestack.MappingsLookup;
 import com.mikedeejay2.simplestack.bytebuddy.SimpleStackMethodVisitor;
-import net.bytebuddy.description.method.MethodDescription;
-import net.bytebuddy.matcher.ElementMatcher;
-
-import java.util.List;
 
 import static net.bytebuddy.jar.asm.Opcodes.*;
-import static net.bytebuddy.matcher.ElementMatchers.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
 public final class TransformContainerUtilRemoveItem extends SimpleStackMethodVisitor {

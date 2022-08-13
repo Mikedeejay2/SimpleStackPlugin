@@ -1,11 +1,8 @@
 package com.mikedeejay2.simplestack.bytebuddy.transformers;
 
 import com.mikedeejay2.simplestack.bytebuddy.SimpleStackMethodVisitor;
-import net.bytebuddy.description.method.MethodDescription;
-import net.bytebuddy.matcher.ElementMatcher;
 
 import static net.bytebuddy.jar.asm.Opcodes.*;
-import static net.bytebuddy.matcher.ElementMatchers.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
 public final class TransformItemStackSplit extends SimpleStackMethodVisitor {

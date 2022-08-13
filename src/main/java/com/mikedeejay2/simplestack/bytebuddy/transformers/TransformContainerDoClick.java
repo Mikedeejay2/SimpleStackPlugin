@@ -1,14 +1,11 @@
 package com.mikedeejay2.simplestack.bytebuddy.transformers;
 
 import com.mikedeejay2.simplestack.bytebuddy.SimpleStackMethodVisitor;
-import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.jar.asm.Label;
 import net.bytebuddy.jar.asm.Opcodes;
-import net.bytebuddy.matcher.ElementMatcher;
 
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 import static net.bytebuddy.jar.asm.Opcodes.*;
-import static net.bytebuddy.matcher.ElementMatchers.*;
 
 public final class TransformContainerDoClick extends SimpleStackMethodVisitor {
     private boolean visitedIsSameItemSameTags = false;

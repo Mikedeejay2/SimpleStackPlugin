@@ -1,6 +1,5 @@
 package com.mikedeejay2.simplestack.bytebuddy;
 
-import net.bytebuddy.NamingStrategy;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.asm.AsmVisitorWrapper;
@@ -16,7 +15,6 @@ import net.bytebuddy.jar.asm.ClassWriter;
 import net.bytebuddy.jar.asm.MethodVisitor;
 import net.bytebuddy.jar.asm.Opcodes;
 import net.bytebuddy.matcher.ElementMatcher;
-import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.pool.TypePool;
 import net.bytebuddy.utility.CompoundList;
 import net.bytebuddy.utility.JavaModule;
@@ -28,7 +26,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
-import static net.bytebuddy.matcher.ElementMatchers.nameStartsWith;
 
 public final class SimpleStackAgent {
     private static ResettableClassFileTransformer transformer;
@@ -65,20 +62,12 @@ public final class SimpleStackAgent {
         @Override
         public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module) {
             try {
-//                AsmVisitorWrapper.ForDeclaredMethods wrapper = new AsmVisitorWrapper.ForDeclaredMethods();
                 String className = typeDescription.getName();
                 Set<MethodVisitorInfo> wrappers = VISITORS.get(className);
                 Validate.notNull(wrappers,
                                  "No method visitors of name \"%s\" were found.", className);
                 Validate.notEmpty(wrappers,
                                   "Got empty set of method visitors for name \"%s\"", className);
-//                for(MethodVisitorInfo current : wrappers) {
-//                    wrapper = wrapper.method(current.getMatcher(), current.getWrapper());
-//                }
-//                wrapper = wrapper.writerFlags(ClassWriter.COMPUTE_MAXS);
-//
-//                return builder.visit(wrapper);
-
                 return builder.visit(new AgentAsmVisitor(wrappers));
             } catch(Exception e) {
                 e.printStackTrace();
@@ -162,11 +151,10 @@ public final class SimpleStackAgent {
             try {
                 MethodDescription description = methods.get(name + descriptor);
                 for(MethodVisitorInfo info : visitorInfos) {
-                    if(info.getMappingEntry().matches(name, descriptor)) {
-                        visitor = info.getWrapper().wrap(
-                            instrumentedType, description, visitor,
-                            implementationContext, typePool, writerFlags, readerFlags);
-                    }
+                    if(!info.getMappingEntry().matches(name, descriptor)) continue;
+                    visitor = info.getWrapper().wrap(
+                        instrumentedType, description, visitor,
+                        implementationContext, typePool, writerFlags, readerFlags);
                 }
             } catch(Exception e) {
                 e.printStackTrace();
