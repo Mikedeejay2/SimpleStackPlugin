@@ -25,13 +25,6 @@ public final class TransformItemGetMaxStackSize implements MethodVisitorInfo {
     }
 
     @Override
-    public ElementMatcher.Junction<? super MethodDescription> getMatcher() {
-        return named(getMappingEntry().name())
-            .and(returns(int.class))
-            .and(takesNoArguments());
-    }
-
-    @Override
     public MappingsLookup.MappingEntry getMappingEntry() {
         return nms("Item").method("getMaxStackSize");
     }

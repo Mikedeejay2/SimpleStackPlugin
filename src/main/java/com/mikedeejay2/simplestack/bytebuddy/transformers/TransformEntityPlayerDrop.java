@@ -11,15 +11,6 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 
 public final class TransformEntityPlayerDrop extends SimpleStackMethodVisitor {
     @Override
-    public ElementMatcher.Junction<? super MethodDescription> getMatcher() {
-        return named(getMappingEntry().name())
-            .and(takesArgument(0, named(nms("ItemStack").qualifiedName())))
-            .and(takesArgument(1, boolean.class))
-            .and(takesArgument(2, boolean.class))
-            .and(returns(named(nms("EntityItem").qualifiedName())));
-    }
-
-    @Override
     public MappingEntry getMappingEntry() {
         return nms("EntityPlayer").method("drop");
     }
@@ -27,6 +18,7 @@ public final class TransformEntityPlayerDrop extends SimpleStackMethodVisitor {
     @Override
     public void visitCode() {
         super.visitCode();
+//        System.out.println("Drop");
         // Uncomment for debug message on visit code
 //        super.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
 //        super.visitLdcInsn("Test of newer drop method");

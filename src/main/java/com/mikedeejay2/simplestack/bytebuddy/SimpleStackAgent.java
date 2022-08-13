@@ -159,13 +159,17 @@ public final class SimpleStackAgent {
         @Override
         public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
             MethodVisitor visitor = super.visitMethod(access, name, descriptor, signature, exceptions);
-            MethodDescription description = methods.get(name + descriptor);
-            for(MethodVisitorInfo info : visitorInfos) {
-                if(info.getMatcher().matches(description)) {
-                    visitor = info.getWrapper().wrap(
-                        instrumentedType, description, visitor,
-                        implementationContext, typePool, writerFlags, readerFlags);
+            try {
+                MethodDescription description = methods.get(name + descriptor);
+                for(MethodVisitorInfo info : visitorInfos) {
+                    if(info.getMappingEntry().matches(name, descriptor)) {
+                        visitor = info.getWrapper().wrap(
+                            instrumentedType, description, visitor,
+                            implementationContext, typePool, writerFlags, readerFlags);
+                    }
                 }
+            } catch(Exception e) {
+                e.printStackTrace();
             }
             return visitor;
         }

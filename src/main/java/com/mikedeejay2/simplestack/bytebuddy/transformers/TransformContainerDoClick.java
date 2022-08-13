@@ -18,15 +18,6 @@ public final class TransformContainerDoClick extends SimpleStackMethodVisitor {
     private int countGetMaxStackSize = 0;
 
     @Override
-    public ElementMatcher.Junction<? super MethodDescription> getMatcher() {
-        return named(getMappingEntry().name())
-            .and(takesArgument(0, int.class))
-            .and(takesArgument(1, int.class))
-            .and(takesArgument(2, named(nms("InventoryClickType").qualifiedName())))
-            .and(takesArgument(3, named(nms("EntityHuman").qualifiedName())));
-    }
-
-    @Override
     public MappingEntry getMappingEntry() {
         return nms("Container").method("doClick");
     }
@@ -34,6 +25,7 @@ public final class TransformContainerDoClick extends SimpleStackMethodVisitor {
     @Override
     public void visitCode() {
         super.visitCode();
+//        System.out.println("doClick");
         // Uncomment for debug message on visit code
 //        debugPrintObject(3); // Print InventoryClickType
     }

@@ -10,13 +10,6 @@ import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
 public final class TransformItemStackSplit extends SimpleStackMethodVisitor {
     @Override
-    public ElementMatcher.Junction<? super MethodDescription> getMatcher() {
-        return named(getMappingEntry().name())
-            .and(takesArgument(0, int.class))
-            .and(returns(named(lastNms().qualifiedName())));
-    }
-
-    @Override
     public MappingEntry getMappingEntry() {
         return nms("ItemStack").method("split");
     }
@@ -24,6 +17,7 @@ public final class TransformItemStackSplit extends SimpleStackMethodVisitor {
     @Override
     public void visitCode() {
         super.visitCode();
+//        System.out.println("Split");
         appendClampToMaxStackSize();
     }
 

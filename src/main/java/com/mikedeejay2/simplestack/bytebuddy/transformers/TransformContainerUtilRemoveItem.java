@@ -13,15 +13,6 @@ import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
 public final class TransformContainerUtilRemoveItem extends SimpleStackMethodVisitor {
     @Override
-    public ElementMatcher.Junction<? super MethodDescription> getMatcher() {
-        return named(getMappingEntry().name())
-            .and(takesArgument(0, List.class))
-            .and(takesArgument(1, int.class))
-            .and(takesArgument(2, int.class))
-            .and(returns(named(nms("ItemStack").qualifiedName())));
-    }
-
-    @Override
     public MappingsLookup.MappingEntry getMappingEntry() {
         return nms("ContainerUtil").method("removeItem");
     }
@@ -29,6 +20,7 @@ public final class TransformContainerUtilRemoveItem extends SimpleStackMethodVis
     @Override
     public void visitCode() {
         super.visitCode();
+//        System.out.println("RemoveItem");
         // Uncomment for debug message on visit code
 //            super.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
 //            super.visitLdcInsn("Test of removeItem method");

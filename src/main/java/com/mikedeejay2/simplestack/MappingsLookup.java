@@ -4,7 +4,9 @@ import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import org.apache.commons.lang3.Validate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class MappingsLookup {
     private static MappingsHolder holder = null;
@@ -14,37 +16,38 @@ public class MappingsLookup {
 
     static {
         register("1.19", new MappingsHolder()
-            .add("Item", ClassMapping.of("net.minecraft.world.item.Item")
-                .method("getMaxStackSize", MappingEntry.of("m")))
-            .add("ItemStack", ClassMapping.of("net.minecraft.world.item.ItemStack")
-                .method("getMaxStackSize", MappingEntry.of("f").descriptor("()I"))
-                .method("split", MappingEntry.of("a").descriptor("(I)L%s;", "ItemStack"))
-                .method("copy", MappingEntry.of("o").descriptor("()L%s;", "ItemStack"))
-                .method("setCount", MappingEntry.of("e").descriptor("(I)V"))
-                .method("shrink", MappingEntry.of("g").descriptor("(I)V"))
-                .method("getCount", MappingEntry.of("K").descriptor("()I"))
-                .method("isSameItemSameTags", MappingEntry.of("e").descriptor("(L%s;L%s;)Z", "ItemStack", "ItemStack"))
-                .method("isEmpty", MappingEntry.of("b").descriptor("()Z")))
-            .add("CraftItemStack", ClassMapping.of("org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack")
-                .method("asBukkitCopy", MappingEntry.of("asBukkitCopy")))
-            .add("ContainerUtil", ClassMapping.of("net.minecraft.world.ContainerUtil")
-                .method("removeItem", MappingEntry.of("a")))
-            .add("Slot", ClassMapping.of("net.minecraft.world.inventory.Slot")
-                .method("tryRemove", MappingEntry.of("a"))
-                .method("getItem", MappingEntry.of("e").descriptor("()L%s;", "ItemStack"))
-                .method("getMaxStackSize", MappingEntry.of("a").descriptor("()I"))
-                .method("getMaxStackSize1", MappingEntry.of("a_").descriptor("(L%s;)I", "ItemStack")))
-            .add("EntityPlayer", ClassMapping.of("net.minecraft.server.level.EntityPlayer")
-                .method("drop", MappingEntry.of("a").descriptor("(L%s;ZZ)L%s;", "ItemStack", "EntityItem")))
-            .add("EntityItem", ClassMapping.of("net.minecraft.world.entity.item.EntityItem"))
-            .add("Container", ClassMapping.of("net.minecraft.world.inventory.Container")
-                .method("doClick", MappingEntry.of("b")))
-            .add("InventoryClickType", ClassMapping.of("net.minecraft.world.inventory.InventoryClickType"))
-            .add("EntityHuman", ClassMapping.of("net.minecraft.world.entity.player.EntityHuman")
-                .method("drop", MappingEntry.of("a").descriptor("(L%s;ZZ)L%s;", "ItemStack", "EntityItem")))
-            .add("PlayerInventory", ClassMapping.of("net.minecraft.world.entity.player.PlayerInventory")
-                .method("setItem", MappingEntry.of("a").descriptor("(IL%s;)V", "ItemStack"))
-                .method("add", MappingEntry.of("e").descriptor("(L%s;)Z", "ItemStack")))
+            .add("Item", ofClass("net.minecraft.world.item.Item")
+                .method("getMaxStackSize", ofEntry("m", "()I")))
+            .add("ItemStack", ofClass("net.minecraft.world.item.ItemStack")
+                .method("getMaxStackSize", ofEntry("f", "()I"))
+                .method("split", ofEntry("a", "(I)L", "ItemStack"))
+                .method("copy", ofEntry("o", "()L", "ItemStack"))
+                .method("setCount", ofEntry("e", "(I)V"))
+                .method("shrink", ofEntry("g", "(I)V"))
+                .method("getCount", ofEntry("K", "()I"))
+                .method("isSameItemSameTags", ofEntry("e", "(LL)Z", "ItemStack", "ItemStack"))
+                .method("isEmpty", ofEntry("b", "()Z")))
+            .add("CraftItemStack", ofClass("org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack")
+                .method("asBukkitCopy", ofEntry("asBukkitCopy")))
+            .add("ContainerUtil", ofClass("net.minecraft.world.ContainerUtil")
+                .method("removeItem", ofEntry("a", "(LII)L", List.class, "ItemStack")))
+            .add("Slot", ofClass("net.minecraft.world.inventory.Slot")
+                .method("tryRemove", ofEntry("a", "(IIL)L", "EntityHuman", Optional.class))
+                .method("getItem", ofEntry("e", "()L", "ItemStack"))
+                .method("getMaxStackSize", ofEntry("a", "()I"))
+                .method("getMaxStackSize1", ofEntry("a_", "(L)I", "ItemStack")))
+            .add("EntityPlayer", ofClass("net.minecraft.server.level.EntityPlayer")
+                .method("drop", ofEntry("a", "(LZZ)L", "ItemStack", "EntityItem")))
+            .add("EntityItem", ofClass("net.minecraft.world.entity.item.EntityItem"))
+            .add("Container", ofClass("net.minecraft.world.inventory.Container")
+                .method("doClick", ofEntry("b", "(IILL)V", "InventoryClickType", "EntityHuman"))
+                .method("doClickLambda", ofEntry("lambda$doClick$3", "(LLL)V", "Slot", "EntityHuman", "ItemStack")))
+            .add("InventoryClickType", ofClass("net.minecraft.world.inventory.InventoryClickType"))
+            .add("EntityHuman", ofClass("net.minecraft.world.entity.player.EntityHuman")
+                .method("drop", ofEntry("a", "(LZZ)L", "ItemStack", "EntityItem")))
+            .add("PlayerInventory", ofClass("net.minecraft.world.entity.player.PlayerInventory")
+                .method("setItem", ofEntry("a", "(IL)V", "ItemStack"))
+                .method("add", ofEntry("e", "(L)Z", "ItemStack")))
         );
     }
 
@@ -75,6 +78,18 @@ public class MappingsLookup {
     public static MappingEntry lastNmsField() {
         Validate.notNull(lastClass, "Tried to get last field, but was null");
         return lastField;
+    }
+
+    private static ClassMapping ofClass(String qualifiedName) {
+        return new ClassMapping(qualifiedName);
+    }
+
+    private static MappingEntry ofEntry(String name) {
+        return new MappingEntry(name);
+    }
+
+    private static MappingEntry ofEntry(String name, String descriptor, Object... referenceClasses) {
+        return new MappingEntry(name).descriptor(descriptor, referenceClasses);
     }
 
     public static final class MappingsHolder {
@@ -113,6 +128,7 @@ public class MappingsLookup {
 
         private ClassMapping method(String name, MappingEntry entry) {
             entry.owner(this);
+            entry.referenceName(name);
             methodMappings.put(name, entry);
             return this;
         }
@@ -153,31 +169,44 @@ public class MappingsLookup {
                 throw new RuntimeException(String.format("Could not get class of name \"%s\"", qualifiedName), e);
             }
         }
-
-        private static ClassMapping of(String qualifiedName) {
-            return new ClassMapping(qualifiedName);
-        }
     }
 
     public static final class MappingEntry {
         private final String name;
+        private String referenceName;
         private ClassMapping owner;
+        private String descriptorFormat; // nullable
+        private String[] descriptorRefs;
         private String descriptor; // nullable
-        private String[] descriptorLookups;
 
         private MappingEntry(String name) {
             this.name = name;
         }
 
-        private MappingEntry descriptor(String descriptor, String... referenceClasses) {
-            this.descriptorLookups = referenceClasses;
-            this.descriptor = descriptor;
+        private MappingEntry descriptor(String descriptor, Object... references) {
+            if(references.length != 0)
+                this.descriptorRefs = new String[references.length];
+            for(int i = 0; i < references.length; ++i) {
+                Object obj = references[i];
+                if(obj instanceof String) {
+                    this.descriptorRefs[i] = "ref " + ((String) obj);
+                } else if(obj instanceof Class<?>) {
+                    this.descriptorRefs[i] = "class " + ((Class<?>) obj).getName().replace('.', '/');
+                } else {
+                    throw new UnsupportedOperationException(
+                        String.format("Unknown reference type for name \"%s\"", referenceName));
+                }
+            }
+            this.descriptorFormat = descriptor;
             return this;
         }
 
-        private MappingEntry owner(ClassMapping owner) {
+        private void owner(ClassMapping owner) {
             this.owner = owner;
-            return this;
+        }
+
+        private void referenceName(String referenceName) {
+            this.referenceName = referenceName;
         }
 
         public String name() {
@@ -189,20 +218,42 @@ public class MappingsLookup {
         }
 
         public String descriptor() {
-            Validate.notNull(descriptor,
-                            String.format("Tried to get invalid descriptor \"%s\"", name));
-            if(descriptorLookups != null) {
-                String[] classes = new String[descriptorLookups.length];
-                for(int i = 0; i < descriptorLookups.length; i++) {
-                    classes[i] = nms(descriptorLookups[i]).internalName();
+            Validate.notNull(descriptorFormat,
+                             String.format("Tried to get invalid descriptor \"%s\"", referenceName));
+            if(descriptor != null)
+                return descriptor;
+            if(descriptorRefs != null) {
+                Validate.isTrue(
+                    descriptorRefs.length == descriptorFormat.length() - descriptorFormat.replace("L", "").length(),
+                    "Mismatch between descriptor format and descriptor reference array in name \"%s\"", referenceName);
+
+                String[] classes = new String[descriptorRefs.length];
+                for(int i = 0; i < descriptorRefs.length; i++) {
+                    String reference = descriptorRefs[i];
+                    String type = reference.substring(0, reference.indexOf(' '));
+                    String value = reference.substring(reference.indexOf(' ') + 1);
+                    if(type.equals("ref")) {
+                        classes[i] = nms(value).internalName();
+                    } else if(type.equals("class")) {
+                        classes[i] = value;
+                    }
                 }
-                return String.format(descriptor, (Object[]) classes);
+
+                String resultStr = descriptorFormat;
+                int index = 0;
+                for(String classStr : classes) {
+                    resultStr =
+                        resultStr.substring(0, index) +
+                        resultStr.substring(index).replaceFirst("L", "L" + classStr + ";");
+                    index += classStr.length() + 2;
+                }
+                return (descriptor = resultStr);
             }
-            return descriptor;
+            return descriptorFormat;
         }
 
-        private static MappingEntry of(String name) {
-            return new MappingEntry(name);
+        public boolean matches(String name, String descriptor) {
+            return name.equals(name()) && descriptor.equals(descriptor());
         }
     }
 }
