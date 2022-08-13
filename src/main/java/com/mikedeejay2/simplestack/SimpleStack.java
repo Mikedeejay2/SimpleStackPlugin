@@ -73,12 +73,6 @@ public final class SimpleStack extends BukkitPlugin {
         this.config = new Config(this);
         this.debugConfig = new DebugConfig();
 
-//        sendInfo("&eInstalling ASM transformers...");
-//        MaxStackSizeTransformer.install();
-//        SplitStackTransformer.install();
-//        RemoveItemTransformer.install();
-//        sendInfo("&aAll ASM transformers have been installed.");
-
         SimpleStackAgent.addVisitor(new TransformItemGetMaxStackSize());
         SimpleStackAgent.addVisitor(new TransformItemStackGetMaxStackSize());
         SimpleStackAgent.addVisitor(new TransformContainerUtilRemoveItem());
@@ -86,6 +80,7 @@ public final class SimpleStack extends BukkitPlugin {
         SimpleStackAgent.addVisitor(new TransformItemStackSplit());
         SimpleStackAgent.addVisitor(new TransformEntityPlayerDrop());
         SimpleStackAgent.addVisitor(new TransformContainerDoClick());
+        SimpleStackAgent.addVisitor(new TransformContainerDoClickLambda());
         SimpleStackAgent.install();
     }
 
