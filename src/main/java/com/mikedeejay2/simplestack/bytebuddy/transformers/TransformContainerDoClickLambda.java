@@ -16,8 +16,9 @@ public class TransformContainerDoClickLambda extends SimpleStackMethodVisitor {
     @Override
     public void visitCode() {
         super.visitCode();
-//        System.out.println("doClickLambda");
         // Uncomment for debug message on visit code
+//        System.out.println("doClickLambda");
+//        debugPrintString("doClickLambda");
 
         appendOverstackCheck();
     }
