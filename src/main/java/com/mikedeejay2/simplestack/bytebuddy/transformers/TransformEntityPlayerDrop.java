@@ -17,10 +17,12 @@ public final class TransformEntityPlayerDrop extends SimpleStackMethodVisitor {
         super.visitCode();
 //        System.out.println("Drop");
         // Uncomment for debug message on visit code
-//        super.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-//        super.visitLdcInsn("Test of newer drop method");
-//        super.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+//        debugPrintString("Test of drop method");
 
+        fixDropOverstacking();
+    }
+
+    private void fixDropOverstacking() {
         Label whileLabel = new Label(); // If part of while loop
         Label insideLabel = new Label(); // Label for inside of while loop
         Label exitLabel = new Label(); // Label for the exit of the while loop

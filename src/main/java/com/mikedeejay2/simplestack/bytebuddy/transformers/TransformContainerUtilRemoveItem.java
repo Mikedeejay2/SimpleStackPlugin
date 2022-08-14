@@ -17,9 +17,7 @@ public final class TransformContainerUtilRemoveItem extends SimpleStackMethodVis
         super.visitCode();
 //        System.out.println("RemoveItem");
         // Uncomment for debug message on visit code
-//            super.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-//            super.visitLdcInsn("Test of removeItem method");
-//            super.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+//        debugPrintString("Test of removeItem method");
     }
 
     @Override
@@ -33,6 +31,8 @@ public final class TransformContainerUtilRemoveItem extends SimpleStackMethodVis
     }
 
     private void redirectSplit() {
+        super.visitInsn(POP); // Pop amount
+        super.visitInsn(POP); // Pop ItemStack
         // Get the target ItemStack out of the list
         super.visitVarInsn(ALOAD, 0); // Get list
         super.visitVarInsn(ILOAD, 1); // Get slot int

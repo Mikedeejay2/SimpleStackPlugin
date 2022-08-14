@@ -37,7 +37,7 @@ public class TransformItemBucketUse extends SimpleStackMethodVisitor {
      * Fixes stacked buckets from being deleted upon use.
      */
     private void appendStackedBucketsFix() {
-        Label emptyLabel = new Label();
+        Label emptyBucketLabel = new Label();
         super.visitVarInsn(ALOAD, 0); // Load ItemStack
 
         // Shrink ItemStack by one
@@ -45,7 +45,7 @@ public class TransformItemBucketUse extends SimpleStackMethodVisitor {
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("shrink")); // Shrink ItemStack by one
         super.visitVarInsn(ALOAD, 0); // Load ItemStack
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("isEmpty")); // Get whether ItemStack is empty
-        super.visitJumpInsn(IFNE, emptyLabel); // If it is empty, jump to empty bucket
+        super.visitJumpInsn(IFNE, emptyBucketLabel); // If it is empty, jump to empty bucket
         super.visitFrame(F_SAME, 0, null, 0, null);
 
         // Get PlayerInventory
@@ -61,8 +61,8 @@ public class TransformItemBucketUse extends SimpleStackMethodVisitor {
         // Add new bucket to inventory
         super.visitMethodInsn(INVOKEVIRTUAL, nms("PlayerInventory").method("add")); // Attempt to add bucket to inventory
         // If it failed, drop on ground
-        Label ifNotDrop = new Label();
-        super.visitJumpInsn(IFNE, ifNotDrop); // If no items need to be dropped, bypass drop method
+        Label ifNotDropLabel = new Label();
+        super.visitJumpInsn(IFNE, ifNotDropLabel); // If no items need to be dropped, bypass drop method
 
         super.visitVarInsn(ALOAD, 1); // Load EntityHuman
         super.visitVarInsn(ALOAD, 2); // Load the new ItemStack (empty bucket)
@@ -71,7 +71,7 @@ public class TransformItemBucketUse extends SimpleStackMethodVisitor {
         super.visitMethodInsn(INVOKEVIRTUAL, nms("EntityHuman").method("drop")); // Drop the rest of the item
         super.visitInsn(POP); // Pop the resulting EntityItem
 
-        super.visitLabel(ifNotDrop);
+        super.visitLabel(ifNotDropLabel);
         super.visitFrame(F_SAME, 0, null, 0, null);
 
         // Get ItemStack
@@ -79,7 +79,7 @@ public class TransformItemBucketUse extends SimpleStackMethodVisitor {
         // Goto the return label
         super.visitJumpInsn(GOTO, returnLabel); // Goto the return label to return the existing ItemStack
 
-        super.visitLabel(emptyLabel);
+        super.visitLabel(emptyBucketLabel);
         super.visitFrame(F_SAME, 0, null, 0, null);
     }
 

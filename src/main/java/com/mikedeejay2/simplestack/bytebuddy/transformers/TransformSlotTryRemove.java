@@ -17,9 +17,7 @@ public final class TransformSlotTryRemove extends SimpleStackMethodVisitor {
         super.visitCode();
 //        System.out.println("TryRemove");
         // Uncomment for debug message on visit code
-//            super.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-//            super.visitLdcInsn("Test of tryRemove method");
-//            super.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+//        debugPrintString("Test of tryRemove method");
     }
 
     @Override
@@ -32,13 +30,9 @@ public final class TransformSlotTryRemove extends SimpleStackMethodVisitor {
 
     private void appendClampToMaxStackSize() {
         super.visitVarInsn(ALOAD, 0); // Get this slot
-        super.visitMethodInsn(
-            INVOKEVIRTUAL, nms("Slot").method("getItem")); // Get the ItemStack currently in the slot
-        super.visitMethodInsn(
-            INVOKEVIRTUAL, nms("ItemStack").method("getMaxStackSize")); // Get the max stack size of the ItemStack in the slot
-        super.visitMethodInsn(
-            INVOKESTATIC, "java/lang/Math", "min",
-            "(II)I", false); // Call Math.min()
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("Slot").method("getItem")); // Get the ItemStack currently in the slot
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getMaxStackSize")); // Get the max stack size of the ItemStack in the slot
+        super.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "min", "(II)I", false); // Call Math.min()
         // Next instruction stores the result
     }
 }
