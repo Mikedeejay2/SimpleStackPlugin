@@ -82,6 +82,7 @@ public final class SimpleStack extends BukkitPlugin {
         SimpleStackAgent.addVisitor(new TransformContainerDoClick());
         SimpleStackAgent.addVisitor(new TransformContainerDoClickLambda());
         SimpleStackAgent.addVisitor(new TransformContainerMoveItemStackTo());
+        SimpleStackAgent.addVisitor(new TransformItemBucketUse());
         SimpleStackAgent.install();
     }
 

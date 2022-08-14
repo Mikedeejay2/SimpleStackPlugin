@@ -26,7 +26,8 @@ public class MappingsLookup {
                 .method("shrink", ofEntry("g", "(I)V"))
                 .method("getCount", ofEntry("K", "()I"))
                 .method("isSameItemSameTags", ofEntry("e", "(LL)Z", "ItemStack", "ItemStack"))
-                .method("isEmpty", ofEntry("b", "()Z")))
+                .method("isEmpty", ofEntry("b", "()Z"))
+                .method("<init>", ofEntry("<init>", "(L)V", "IMaterial")))
             .add("CraftItemStack", ofClass("org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack")
                 .method("asBukkitCopy", ofEntry("asBukkitCopy")))
             .add("ContainerUtil", ofClass("net.minecraft.world.ContainerUtil")
@@ -50,6 +51,11 @@ public class MappingsLookup {
             .add("PlayerInventory", ofClass("net.minecraft.world.entity.player.PlayerInventory")
                 .method("setItem", ofEntry("a", "(IL)V", "ItemStack"))
                 .method("add", ofEntry("e", "(L)Z", "ItemStack")))
+            .add("ItemBucket", ofClass("net.minecraft.world.item.ItemBucket")
+                .method("getEmptySuccessItem", ofEntry("a", "(LL)L", "ItemStack", "EntityHuman", "ItemStack")))
+            .add("Items", ofClass("net.minecraft.world.item.Items")
+                .field("BUCKET", ofEntry("oH", "L", "Item")))
+            .add("IMaterial", ofClass("net.minecraft.world.level.IMaterial"))
         );
     }
 
@@ -136,6 +142,8 @@ public class MappingsLookup {
         }
 
         private ClassMapping field(String name, MappingEntry entry) {
+            entry.owner(this);
+            entry.referenceName(name);
             fieldMappings.put(name, entry);
             return this;
         }
@@ -159,7 +167,7 @@ public class MappingsLookup {
         }
 
         public MappingEntry field(String name) {
-            Validate.isTrue(methodMappings.containsKey(name),
+            Validate.isTrue(fieldMappings.containsKey(name),
                             String.format("Tried to get invalid field mapping \"%s\"", name));
             return (lastField = fieldMappings.get(name));
         }

@@ -35,6 +35,14 @@ public abstract class SimpleStackMethodVisitor extends MethodVisitor implements 
         visitMethodInsn(opcode, method, false);
     }
 
+    public final void visitFieldInsn(int opcode, MappingsLookup.MappingEntry field) {
+        super.visitFieldInsn(
+            opcode,
+            field.owner().internalName(),
+            field.name(),
+            field.descriptor());
+    }
+
     protected final boolean equalsMapping(String owner, String name, String descriptor, MappingsLookup.MappingEntry mapping) {
         return owner.equals(mapping.owner().internalName()) &&
             name.equals(mapping.name()) &&
