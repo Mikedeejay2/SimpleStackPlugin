@@ -26,7 +26,7 @@ public class TransformItemBucketUse extends SimpleStackMethodVisitor {
 
     @Override
     public void visitTypeInsn(int opcode, String type) {
-        if(opcode == NEW) { // Target new ItemStack creation (new ItemStack(Items.BUCKET);)
+        if(opcode == NEW && type.equals(nms("ItemStack").internalName())) { // Target new ItemStack creation (new ItemStack(Items.BUCKET);)
             visitedNew = true;
             appendStackedBucketsFix();
         }
