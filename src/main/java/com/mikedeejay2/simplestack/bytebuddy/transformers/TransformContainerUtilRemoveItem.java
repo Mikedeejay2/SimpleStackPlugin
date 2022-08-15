@@ -6,7 +6,7 @@ import com.mikedeejay2.simplestack.bytebuddy.SimpleStackMethodVisitor;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
-public final class TransformContainerUtilRemoveItem extends SimpleStackMethodVisitor {
+public class TransformContainerUtilRemoveItem extends SimpleStackMethodVisitor {
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {
         return nms("ContainerUtil").method("removeItem");

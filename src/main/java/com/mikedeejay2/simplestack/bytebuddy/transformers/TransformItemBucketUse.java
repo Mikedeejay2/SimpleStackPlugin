@@ -8,10 +8,10 @@ import static com.mikedeejay2.simplestack.MappingsLookup.*;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 
 public class TransformItemBucketUse extends SimpleStackMethodVisitor {
-    private boolean visitedNew = false;
-    private final Label returnLabel = new Label();
-    private Label existingReturnLabel;
-    private boolean visitedReturnLabel = false;
+    protected boolean visitedNew = false;
+    protected final Label returnLabel = new Label();
+    protected Label existingReturnLabel;
+    protected boolean visitedReturnLabel = false;
 
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {

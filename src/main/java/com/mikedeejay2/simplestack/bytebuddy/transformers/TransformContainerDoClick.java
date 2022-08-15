@@ -7,12 +7,12 @@ import net.bytebuddy.jar.asm.Opcodes;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 
-public final class TransformContainerDoClick extends SimpleStackMethodVisitor {
-    private boolean visitedIsSameItemSameTags = false;
-    private boolean appendedStackCheck1 = false;
-    private boolean appendedStackCheck2 = false;
-    private boolean appendedHotbarSwap = false;
-    private int countGetMaxStackSize = 0;
+public class TransformContainerDoClick extends SimpleStackMethodVisitor {
+    protected boolean visitedIsSameItemSameTags = false;
+    protected boolean appendedStackCheck1 = false;
+    protected boolean appendedStackCheck2 = false;
+    protected boolean appendedHotbarSwap = false;
+    protected int countGetMaxStackSize = 0;
 
     @Override
     public MappingEntry getMappingEntry() {

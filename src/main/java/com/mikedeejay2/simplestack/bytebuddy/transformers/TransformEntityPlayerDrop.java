@@ -6,7 +6,7 @@ import net.bytebuddy.jar.asm.Label;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 
-public final class TransformEntityPlayerDrop extends SimpleStackMethodVisitor {
+public class TransformEntityPlayerDrop extends SimpleStackMethodVisitor {
     @Override
     public MappingEntry getMappingEntry() {
         return nms("EntityPlayer").method("drop");

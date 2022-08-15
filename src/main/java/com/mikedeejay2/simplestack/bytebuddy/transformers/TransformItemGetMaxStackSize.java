@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
-public final class TransformItemGetMaxStackSize implements MethodVisitorInfo {
+public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
 
     @Override
     public AsmVisitorWrapper.ForDeclaredMethods.MethodVisitorWrapper getWrapper() {

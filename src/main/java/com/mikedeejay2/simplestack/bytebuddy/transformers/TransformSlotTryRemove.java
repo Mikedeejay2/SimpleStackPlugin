@@ -6,7 +6,7 @@ import com.mikedeejay2.simplestack.bytebuddy.SimpleStackMethodVisitor;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
-public final class TransformSlotTryRemove extends SimpleStackMethodVisitor {
+public class TransformSlotTryRemove extends SimpleStackMethodVisitor {
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {
         return nms("Slot").method("tryRemove");
