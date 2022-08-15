@@ -32,8 +32,6 @@
   "simplestack.gui.config.item_type_description": "Set the max amounts of item types",
   "simplestack.gui.config.preview_list_more": "and {AMT} more...",
   "simplestack.gui.item_type_amts.title": "Item Type Amounts List",
-  "simplestack.gui.config.hopper_move_select": "Stack Hopper Movements",
-  "simplestack.gui.config.ground_stacking_select": "Stack Unstackable Ground Items",
   "simplestack.gui.config.language_select": "Default Language",
   "simplestack.gui.config.language_description": "Click to select a new language",
   "simplestack.gui.config.language_selected": "Currently selected: {LANG}",
@@ -62,8 +60,5 @@
   "simplestack.gui.about.desc_l6": "contributors on OneSky and Github",
   "simplestack.gui.about.desc_l7": "Bug reports submitted by",
   "simplestack.gui.about.desc_l8": "contributors on Github",
-  "simplestack.gui.config.creative_drag_select": "Creative Item Dragging Mode",
-  "simplestack.gui.config.creative_drag_duplicate": "Create full stacks",
-  "simplestack.gui.config.creative_drag_normal": "Normal dragging",
   "simplestack.gui.config.stackable_armor_select": "Stacked Armor Wearable"
 }

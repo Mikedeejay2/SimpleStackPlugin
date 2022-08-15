@@ -32,7 +32,6 @@
   "simplestack.gui.config.item_type_description": "设置此类物品的最大个数",
   "simplestack.gui.config.preview_list_more": "还有 {AMT} 个……",
   "simplestack.gui.item_type_amts.title": "物品列表数量表",
-  "simplestack.gui.config.hopper_move_select": "漏斗移动",
   "simplestack.gui.config.language_select": "默认语言",
   "simplestack.gui.config.language_description": "点击选择一个新的语言",
   "simplestack.gui.config.language_selected": "当前语言：{LANG}",

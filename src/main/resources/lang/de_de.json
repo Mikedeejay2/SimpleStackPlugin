@@ -32,7 +32,6 @@
     "simplestack.gui.config.item_type_description": "Setze den Maximalwert von Gegenstandstypen",
     "simplestack.gui.config.preview_list_more": "und  {AMT} mehr...",
     "simplestack.gui.item_type_amts.title": "Liste der Werte der Gegenstandstypen",
-    "simplestack.gui.config.hopper_move_select": "Trichterbewegungen in ganzen Stacks",
     "simplestack.gui.config.language_select": "Standardsprache",
     "simplestack.gui.config.language_description": "Klicke, um eine neue Sprache auszuwählen",
     "simplestack.gui.config.language_selected": "Aktuell gewählt: {LANG}",
