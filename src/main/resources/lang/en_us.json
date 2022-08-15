@@ -64,5 +64,6 @@
   "simplestack.gui.about.desc_l8": "contributors on Github",
   "simplestack.gui.config.creative_drag_select": "Creative Item Dragging Mode",
   "simplestack.gui.config.creative_drag_duplicate": "Create full stacks",
-  "simplestack.gui.config.creative_drag_normal": "Normal dragging"
+  "simplestack.gui.config.creative_drag_normal": "Normal dragging",
+  "simplestack.gui.config.stackable_armor_select": "Stacked Armor Wearable"
 }

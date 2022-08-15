@@ -63,6 +63,8 @@ public class MappingsLookup {
             .add("EntityLiving", ofClass("net.minecraft.world.entity.EntityLiving"))
             .add("ItemSuspiciousStew", ofClass("net.minecraft.world.item.ItemSuspiciousStew")
                 .method("finishUsingItem", ofEntry("a", "(LLL)L", "ItemStack", "World", "EntityLiving", "ItemStack")))
+            .add("ArmorSlot", ofClass("net.minecraft.world.inventory.ContainerPlayer$1")
+                .method("getMaxStackSize", ofEntry("a", "()I")))
         );
     }
 

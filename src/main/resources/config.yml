@@ -29,3 +29,10 @@ Language: en_us
 # Default Max Amount: Set the default max amount for ALL items in Minecraft
 # This setting could be dangerous, do proper testing before changing this value.
 Default Max Amount: 64
+
+# Stacked Armor Wearable: When true, players can wear stacked armor in an armor slot.
+# Keeping this value to false means that only one of an armor piece can be worn at a time.
+# Stacked armor does not add to how much armor a player has but instead increases the
+# overall durability of the stack. When one armor piece breaks, it just decreases the stack
+# by one.
+Stacked Armor Wearable: false

@@ -33,6 +33,8 @@ public class Config extends YamlFile {
     private List<ItemStack> uniqueItemList;
     // The max amount for all items in minecraft
     private int maxAmount;
+    // Whether stacked armor can be worn or not
+    private boolean stackedArmorWearable;
 
     // Internal config data
     // The unique items json file
@@ -65,8 +67,14 @@ public class Config extends YamlFile {
         loadMaterialList();
         loadItemList();
         loadItemAmounts();
+        loadStackedArmor();
 
         loaded = true;
+    }
+
+    private void loadStackedArmor()
+    {
+        stackedArmorWearable = accessor.getBoolean("Stacked Armor Wearable");
     }
 
     /**
@@ -250,6 +258,7 @@ public class Config extends YamlFile {
             accessor.setStringList("Item Types", materials);
             accessor.setString("Language", langLocale);
             accessor.setInt("Default Max Amount", maxAmount);
+            accessor.setBoolean("Stacked Armor Wearable", stackedArmorWearable);
 
             accessor.delete("Item Amounts");
             SectionAccessor<YamlFile, Object> itemAmtAccessor = accessor.getSection("Item Amounts");
@@ -619,6 +628,27 @@ public class Config extends YamlFile {
      */
     public void setItemAmounts(Map<Material, Integer> itemAmounts) {
         this.itemAmounts = itemAmounts;
+        setModified(true);
+    }
+
+    /**
+     * Get whether stacked armor can be worn or not
+     *
+     * @return Whether stacked armor can be worn or not
+     */
+    public boolean isStackedArmorWearable()
+    {
+        return stackedArmorWearable;
+    }
+
+    /**
+     * Set whether stacked armor can be worn or not
+     *
+     * @param stackedArmorWearable The new stackable armor state
+     */
+    public void setStackedArmorWearable(boolean stackedArmorWearable)
+    {
+        this.stackedArmorWearable = stackedArmorWearable;
         setModified(true);
     }
 }
