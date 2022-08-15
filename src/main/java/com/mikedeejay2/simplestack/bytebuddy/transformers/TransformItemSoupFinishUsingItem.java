@@ -2,15 +2,14 @@ package com.mikedeejay2.simplestack.bytebuddy.transformers;
 
 import com.mikedeejay2.simplestack.bytebuddy.SimpleStackMethodVisitor;
 import net.bytebuddy.jar.asm.Label;
-import org.checkerframework.checker.i18n.qual.LocalizableKey;
 
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 
 public class TransformItemSoupFinishUsingItem extends SimpleStackMethodVisitor {
-    private boolean visitedNew = false;
-    private boolean visitedReturn = false;
-    private boolean visitedFrame = false;
+    protected boolean visitedNew = false;
+    protected boolean visitedReturn = false;
+    protected boolean visitedFrame = false;
 
     @Override
     public MappingEntry getMappingEntry() {
@@ -20,7 +19,7 @@ public class TransformItemSoupFinishUsingItem extends SimpleStackMethodVisitor {
     @Override
     public void visitCode() {
         super.visitCode();
-        debugPrintString("Test of finishUsingItem method in ItemSoup");
+//        debugPrintString("Test of finishUsingItem method in ItemSoup");
     }
 
     @Override
