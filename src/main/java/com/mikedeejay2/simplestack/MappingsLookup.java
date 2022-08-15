@@ -54,8 +54,13 @@ public class MappingsLookup {
             .add("ItemBucket", ofClass("net.minecraft.world.item.ItemBucket")
                 .method("getEmptySuccessItem", ofEntry("a", "(LL)L", "ItemStack", "EntityHuman", "ItemStack")))
             .add("Items", ofClass("net.minecraft.world.item.Items")
-                .field("BUCKET", ofEntry("oH", "L", "Item")))
+                .field("BUCKET", ofEntry("oH", "L", "Item"))
+                .field("BOWL", ofEntry("nM", "L", "Item")))
             .add("IMaterial", ofClass("net.minecraft.world.level.IMaterial"))
+            .add("ItemSoup", ofClass("net.minecraft.world.item.ItemSoup")
+                .method("finishUsingItem", ofEntry("a", "(LLL)L", "ItemStack", "World", "EntityLiving", "ItemStack")))
+            .add("World", ofClass("net.minecraft.world.level.World"))
+            .add("EntityLiving", ofClass("net.minecraft.world.entity.EntityLiving"))
         );
     }
 
