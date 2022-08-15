@@ -61,6 +61,8 @@ public class MappingsLookup {
                 .method("finishUsingItem", ofEntry("a", "(LLL)L", "ItemStack", "World", "EntityLiving", "ItemStack")))
             .add("World", ofClass("net.minecraft.world.level.World"))
             .add("EntityLiving", ofClass("net.minecraft.world.entity.EntityLiving"))
+            .add("ItemSuspiciousStew", ofClass("net.minecraft.world.item.ItemSuspiciousStew")
+                .method("finishUsingItem", ofEntry("a", "(LLL)L", "ItemStack", "World", "EntityLiving", "ItemStack")))
         );
     }
 
