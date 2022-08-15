@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.bytebuddy.transformers;
 import com.mikedeejay2.simplestack.MappingsLookup;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.bytebuddy.MethodVisitorInfo;
+import com.mikedeejay2.simplestack.bytebuddy.debug.DebugUtil;
 import com.mikedeejay2.simplestack.config.DebugConfig;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
@@ -57,23 +58,9 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
         ItemStack itemStack = (ItemStack) METHOD_AS_BUKKIT_COPY.invoke(null, nmsItemStack);
         int maxStackSize = SimpleStack.getInstance().config().getAmount(itemStack);
         if(maxStackSize == -1) maxStackSize = currentReturnValue;
-        printTimings(startTime);
+        DebugUtil.printTimings(startTime, "ItemStack size redirect");
 
         return maxStackSize;
-    }
-
-    /**
-     * Given that {@link DebugConfig#isPrintTimings()} is true, print the amount of time that the full
-     * <code>getMaxStackSize()</code> method took to run in the server console.
-     *
-     * @param startTime The start time of the method
-     */
-    private static void printTimings(long startTime) {
-        if(!SimpleStack.getInstance().getDebugConfig().isPrintTimings()) return;
-        long endTime = System.nanoTime();
-        SimpleStack.getInstance().sendInfo(String.format(
-            "ItemStack size redirect took %.4f milliseconds to complete",
-            ((endTime - startTime) / 1000000.0)));
     }
 
     /**
