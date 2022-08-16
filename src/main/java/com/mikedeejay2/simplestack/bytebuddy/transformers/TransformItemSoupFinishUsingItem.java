@@ -1,12 +1,12 @@
 package com.mikedeejay2.simplestack.bytebuddy.transformers;
 
-import com.mikedeejay2.simplestack.bytebuddy.SimpleStackMethodVisitor;
+import com.mikedeejay2.simplestack.bytebuddy.MappedMethodVisitor;
 import net.bytebuddy.jar.asm.Label;
 
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 
-public class TransformItemSoupFinishUsingItem extends SimpleStackMethodVisitor {
+public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
     protected boolean visitedNew = false;
     protected boolean visitedReturn = false;
     protected boolean visitedFrame = false;

@@ -1,11 +1,11 @@
 package com.mikedeejay2.simplestack.bytebuddy.transformers;
 
-import com.mikedeejay2.simplestack.bytebuddy.SimpleStackMethodVisitor;
+import com.mikedeejay2.simplestack.bytebuddy.MappedMethodVisitor;
 
 import static net.bytebuddy.jar.asm.Opcodes.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
-public class TransformItemStackSplit extends SimpleStackMethodVisitor {
+public class TransformItemStackSplit extends MappedMethodVisitor {
     @Override
     public MappingEntry getMappingEntry() {
         return nms("ItemStack").method("split");

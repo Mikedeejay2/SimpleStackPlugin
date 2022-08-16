@@ -6,8 +6,8 @@ import net.bytebuddy.jar.asm.MethodVisitor;
 
 import static net.bytebuddy.jar.asm.Opcodes.*;
 
-public abstract class SimpleStackMethodVisitor extends MethodVisitor implements MethodVisitorInfo {
-    public SimpleStackMethodVisitor() {
+public abstract class MappedMethodVisitor extends MethodVisitor implements MethodVisitorInfo {
+    public MappedMethodVisitor() {
         super(ASM9);
     }
 
@@ -17,7 +17,7 @@ public abstract class SimpleStackMethodVisitor extends MethodVisitor implements 
             this.setMethodVisitor(methodVisitor);
     }
 
-    protected final SimpleStackMethodVisitor setMethodVisitor(MethodVisitor visitor) {
+    protected final MappedMethodVisitor setMethodVisitor(MethodVisitor visitor) {
         this.mv = visitor;
         return this;
     }

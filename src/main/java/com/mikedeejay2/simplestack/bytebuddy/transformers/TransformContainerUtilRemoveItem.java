@@ -1,12 +1,12 @@
 package com.mikedeejay2.simplestack.bytebuddy.transformers;
 
 import com.mikedeejay2.simplestack.MappingsLookup;
-import com.mikedeejay2.simplestack.bytebuddy.SimpleStackMethodVisitor;
+import com.mikedeejay2.simplestack.bytebuddy.MappedMethodVisitor;
 
 import static net.bytebuddy.jar.asm.Opcodes.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
-public class TransformContainerUtilRemoveItem extends SimpleStackMethodVisitor {
+public class TransformContainerUtilRemoveItem extends MappedMethodVisitor {
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {
         return nms("ContainerUtil").method("removeItem");
