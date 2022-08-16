@@ -1,10 +1,9 @@
-package com.mikedeejay2.simplestack.bytebuddy.transformers;
+package com.mikedeejay2.simplestack.bytebuddy.transformers.advice;
 
 import com.mikedeejay2.simplestack.MappingsLookup;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.bytebuddy.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytebuddy.debug.DebugUtil;
-import com.mikedeejay2.simplestack.config.DebugConfig;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
@@ -86,7 +85,7 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
         public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime, @Advice.This Object itemStack) throws Throwable {
             Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
             ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
-            Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.transformers.TransformItemStackGetMaxStackSize", false, pluginClassLoader);
+            Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformItemStackGetMaxStackSize", false, pluginClassLoader);
             Method maxStackSizeMethod = interceptClass.getMethod("getItemStackMaxStackSize", int.class, long.class, Object.class);
             returnValue = (int) maxStackSizeMethod.invoke(null, returnValue, startTime, itemStack);
         }

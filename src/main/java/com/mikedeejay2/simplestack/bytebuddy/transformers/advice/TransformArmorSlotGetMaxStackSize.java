@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.bytebuddy.transformers;
+package com.mikedeejay2.simplestack.bytebuddy.transformers.advice;
 
 import com.mikedeejay2.simplestack.MappingsLookup;
 import com.mikedeejay2.simplestack.SimpleStack;
@@ -42,7 +42,7 @@ public class TransformArmorSlotGetMaxStackSize implements MethodVisitorInfo {
         public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime) throws Throwable {
             Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
             ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
-            Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.transformers.TransformArmorSlotGetMaxStackSize", false, pluginClassLoader);
+            Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformArmorSlotGetMaxStackSize", false, pluginClassLoader);
             Method maxStackSizeMethod = interceptClass.getMethod("getArmorSlotMaxStackSize", int.class, long.class);
             returnValue = (int) maxStackSizeMethod.invoke(null, returnValue, startTime);
         }
