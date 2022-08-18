@@ -1,6 +1,5 @@
 package com.mikedeejay2.simplestack.gui.debug;
 
-import com.mikedeejay2.mikedeejay2lib.gui.GUIConstructor;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
 import com.mikedeejay2.mikedeejay2lib.gui.animation.GUIAnimPattern;
@@ -8,15 +7,11 @@ import com.mikedeejay2.mikedeejay2lib.gui.event.button.GUIButtonToggleableEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUIOpenNewEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.animation.GUIAnimationModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIAnimDecoratorModule;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIAnimOutlineModule;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIAnimStripsModule;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIDecoratorModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.util.GUIRuntimeModule;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.util.GUIAbstractRuntimeModule;
 import com.mikedeejay2.mikedeejay2lib.gui.util.SlotMatcher;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
@@ -25,13 +20,18 @@ import com.mikedeejay2.simplestack.debug.DebugSystem;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.function.Consumer;
 
-public class GUIDebugSettingsModule implements GUIModule {
+public class GUIDebugSettingsModule extends GUIAbstractRuntimeModule {
     private final SimpleStack plugin;
     private final DebugSystem debugSystem;
 
+    private GUIItem statisticsItem;
+
     public GUIDebugSettingsModule(SimpleStack plugin) {
+        super(plugin, 0, 20);
         this.plugin = plugin;
         this.debugSystem = plugin.getDebugSystem();
     }
@@ -40,7 +40,44 @@ public class GUIDebugSettingsModule implements GUIModule {
     public void onOpenHead(Player player, GUIContainer gui) {
         GUILayer layer = gui.getLayer("settings");
 
-        final ItemStack collectOn = ItemBuilder.of(Base64Head.CHECKMARK_GREEN.get())
+        GUIItem collectTimingsButton = getCollectTimingsButton();
+        GUIItem infoItem = getInfoItem();
+        GUIItem viewEntriesButton = getViewEntriesButton();
+        statisticsItem = new GUIItem(ItemBuilder.of(Base64Head.QUESTION_MARK_LIME.get()).get())
+            .setName("&bTimings Statistics");
+        layer.setItem(2, 2, infoItem);
+        layer.setItem(2, 4, collectTimingsButton);
+        layer.setItem(2, 6, viewEntriesButton);
+        layer.setItem(2, 8, statisticsItem);
+
+        super.onOpenHead(player, gui);
+    }
+
+    @Override
+    protected Consumer<RunInfo> getConsumer() {
+        return info -> {
+            if(statisticsItem == null) return;
+            List<String> oldLore = statisticsItem.getLore();
+            if(!debugSystem.isCollecting()) {
+                statisticsItem.setLore("",
+                                       "&7&oTimings aren't enabled.");
+            } else {
+                statisticsItem.setLore("",
+                                       "&fMs per tick (min/med/avg/95%ile/max ms):",
+                                       "&f5s:  " + debugSystem.getTimingString(100),
+                                       "&f10s: " + debugSystem.getTimingString(200),
+                                       "&f1m:  " + debugSystem.getTimingString(1200),
+                                       "&f5m:  " + debugSystem.getTimingString(6000),
+                                       "&f15m: " + debugSystem.getTimingString(18000));
+            }
+            if(oldLore == null || !oldLore.equals(statisticsItem.getLore())) {
+                info.getGui().update(info.getPlayer());
+            }
+        };
+    }
+
+    private GUIItem getCollectTimingsButton() {
+        final ItemStack collectOn = ItemBuilder.of(Base64Head.CHECKMARK_LIME.get())
                 .setName("&bCollect timings")
                 .setLore("",
                          "&a&l⊳ True",
@@ -53,7 +90,7 @@ public class GUIDebugSettingsModule implements GUIModule {
                          "&c&l⊳ False")
                 .get();
 
-        GUIItem collectTimingsButton = new GUIItem(debugSystem.isCollecting() ? collectOn : collectOff)
+        return new GUIItem(debugSystem.isCollecting() ? collectOn : collectOff)
             .addEvent(new GUIButtonToggleableEvent((info) -> {
                 info.getGUIItem().setItem(collectOn);
                 debugSystem.startCollecting();
@@ -61,7 +98,9 @@ public class GUIDebugSettingsModule implements GUIModule {
                 info.getGUIItem().setItem(collectOff);
                 debugSystem.stopCollecting();
             }, debugSystem.isCollecting()));
+    }
 
+    private static AnimatedGUIItem getInfoItem() {
         ItemBuilder infoBuilder = ItemBuilder.of(Base64Head.EXCLAMATION_MARK_RED.get())
             .setName("&a&lINFO")
             .setLore("",
@@ -75,12 +114,12 @@ public class GUIDebugSettingsModule implements GUIModule {
         AnimatedGUIItem infoItem = new AnimatedGUIItem(infoBuilder.get(), true);
         infoItem.addFrame(infoBuilder.get(), 20);
         infoItem.addFrame(infoBuilder.setHeadBase64(Base64Head.CONCRETE_RED.get()).get(), 20);
+        return infoItem;
+    }
 
-        layer.setItem(2, 2, infoItem);
-        layer.setItem(2, 3, collectTimingsButton);
-
+    private GUIItem getViewEntriesButton() {
         GUIItem viewEntriesButton = new GUIItem(
-            ItemBuilder.of(Base64Head.FOLDER.get())
+            ItemBuilder.of(Base64Head.QUESTION_MARK_LIME.get())
                 .setName("&bView timing entries")
                 .setLore("",
                          "&fOpens a list of every",
@@ -102,27 +141,32 @@ public class GUIDebugSettingsModule implements GUIModule {
                 SlotMatcher.inRange(1, 1, 1, 9),
                 GUIDebuggerConstructor.OUTLINE_ITEM, GUIAnimPattern.LEFT_RIGHT));
             newGui.addModule(new GUINavigatorModule(plugin, "config"));
-            newGui.addModule(new GUIGetEntriesModule(list, debugSystem));
+            newGui.addModule(new GUIGetEntriesModule(plugin, list, debugSystem));
             newGui.addModule(list);
 
             return newGui;
         }));
-
-        layer.setItem(2, 4, viewEntriesButton);
+        return viewEntriesButton;
     }
 
-    private static final class GUIGetEntriesModule implements GUIModule {
+    private static final class GUIGetEntriesModule extends GUIAbstractRuntimeModule {
         private final GUIListModule list;
         private final DebugSystem debugSystem;
 
-        public GUIGetEntriesModule(GUIListModule list, DebugSystem debugSystem) {
+        public GUIGetEntriesModule(SimpleStack plugin, GUIListModule list, DebugSystem debugSystem) {
+            super(plugin, 0, 100);
             this.list = list;
             this.debugSystem = debugSystem;
         }
 
         @Override
         public void onOpenHead(Player player, GUIContainer gui) {
+            super.onOpenHead(player, gui);
+        }
+
+        private void updateList(GUIContainer gui) {
             list.resetList();
+            List<DebugSystem.TimingEntry> detailedTimings;
             if(!this.debugSystem.isCollecting()) {
                 gui.setItem(3, 5, new GUIItem(
                     ItemBuilder.of(Base64Head.EXCLAMATION_MARK_RED.get())
@@ -133,7 +177,7 @@ public class GUIDebugSettingsModule implements GUIModule {
                                  "&7&othe previous GUI.")
                         .get()));
                 return;
-            } else if(this.debugSystem.getDetailedTimings().isEmpty()) {
+            } else if((detailedTimings = this.debugSystem.getDetailedTimings()).isEmpty()) {
                 gui.setItem(3, 5, new GUIItem(
                     ItemBuilder.of(Base64Head.EXCLAMATION_MARK_RED.get())
                         .setName("&cError!")
@@ -144,10 +188,18 @@ public class GUIDebugSettingsModule implements GUIModule {
                         .get()));
                 return;
             }
-
-            for(DebugSystem.TimingEntry entry : this.debugSystem.getDetailedTimings()) {
-                list.addListItem(new GUIItem(getItemStack(entry)));
+            gui.removeItem(3, 5);
+            for(int i = detailedTimings.size() - 1; i >= 0; --i) {
+                list.addListItem(new GUIItem(getItemStack(detailedTimings.get(i))));
             }
+        }
+
+        @Override
+        protected Consumer<RunInfo> getConsumer() {
+            return info -> {
+                updateList(info.getGui());
+                info.getGui().update(info.getPlayer());
+            };
         }
 
         private ItemStack getItemStack(DebugSystem.TimingEntry entry) {
@@ -160,7 +212,9 @@ public class GUIDebugSettingsModule implements GUIModule {
             }
             return ItemBuilder.of(base64Head)
                 .setName(entry.color + entry.name)
-                .setLore(String.format("%s%.4fms", entry.color, (entry.nanoTime / 1000000.0)))
+                .setLore(
+                    String.format("%s%.4fms", entry.color, (entry.nanoTime / 1000000.0)),
+                    "&7&o" + new SimpleDateFormat("HH:mm:ss.SSS").format(entry.msTime))
                 .get();
         }
     }

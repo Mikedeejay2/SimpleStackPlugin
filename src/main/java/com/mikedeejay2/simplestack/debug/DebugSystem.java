@@ -7,8 +7,8 @@ import com.mikedeejay2.mikedeejay2lib.runnable.EnhancedRunnable;
 import com.mikedeejay2.simplestack.SimpleStack;
 import org.bukkit.ChatColor;
 
-import java.util.List;
-import java.util.Set;
+import java.text.DecimalFormat;
+import java.util.*;
 
 public final class DebugSystem {
     private final SimpleStack plugin;
@@ -28,9 +28,10 @@ public final class DebugSystem {
     public void collect(long startTime, String name, boolean countTimings) {
         if(!shouldCollect) return;
         long endTime = System.nanoTime();
+        long msTime = System.currentTimeMillis();
         long nanoTime = endTime - startTime;
         if(countTimings) this.runnable.collect(nanoTime);
-        this.detailedTimings.add(new TimingEntry(name, nanoTime));
+        this.detailedTimings.add(new TimingEntry(name, nanoTime, msTime));
     }
 
     public void startCollecting() {
@@ -55,31 +56,80 @@ public final class DebugSystem {
         return shouldCollect;
     }
 
-    public Set<TimingEntry> getDetailedTimings() {
-        return ImmutableSet.copyOf(detailedTimings);
+    public List<TimingEntry> getDetailedTimings() {
+        return ImmutableList.copyOf(detailedTimings);
     }
 
     public List<Long> getTickTimings() {
         return ImmutableList.copyOf(tickTimings);
     }
 
+    public String getTimingString(int ticks) {
+        if(tickTimings.isEmpty()) return "N/A";
+        ticks = Math.min(tickTimings.size(), ticks);
+
+        Long[] arr = tickTimings.toArray(new Long[0]);
+        Long[] trimmed = Arrays.copyOfRange(arr, Math.max(arr.length - ticks, 0), arr.length);
+        List<Long> list = new ArrayList<>(Arrays.asList(trimmed));
+        Collections.sort(list);
+
+        double min = nsToMs(list.get(0));
+        double med = nsToMs(list.get(list.size() % 2 == 0 ? (list.size() / 2) - 1 : (list.size() / 2)));
+        long totalCount = 0;
+        for(Long value : list) {
+            totalCount += value;
+        }
+        double avg = nsToMs(totalCount) / (double) list.size();
+        long n95ileCount = 0;
+        for(int i = (int) (list.size() * 0.95); i < list.size(); ++i) {
+            n95ileCount += list.get(i);
+        }
+        double n95ile = nsToMs(n95ileCount) / (double) list.size();
+        double max = nsToMs(list.get(list.size() - 1));
+
+
+        DecimalFormat format = new DecimalFormat("0.0##");
+        return String.format("%s%s&f/%s%s&f/%s%s&f/%s%s&f/%s%s",
+                      getChatColor(min), format.format(min),
+                      getChatColor(med), format.format(med),
+                      getChatColor(avg), format.format(avg),
+                      getChatColor(n95ile), format.format(n95ile),
+                      getChatColor(max), format.format(max));
+    }
+
+    private static double nsToMs(long nanos) {
+        return (nanos / 1000000.0);
+    }
+
+    private static ChatColor getChatColor(long nanoTime) {
+        ChatColor color;
+        if(nanoTime < 10000) {
+            color = ChatColor.GREEN;
+        } else if(nanoTime < 50000) {
+            color = ChatColor.YELLOW;
+        } else if(nanoTime < 100000) {
+            color = ChatColor.RED;
+        } else {
+            color = ChatColor.DARK_RED;
+        }
+        return color;
+    }
+
+    private static ChatColor getChatColor(double ms) {
+        return getChatColor((long) ms * 1000000L);
+    }
+
     public static final class TimingEntry {
         public final String name;
         public final long nanoTime;
+        public final long msTime;
         public final ChatColor color;
 
-        public TimingEntry(String name, long nanoTime) {
+        public TimingEntry(String name, long nanoTime, long msTime) {
             this.name = name;
             this.nanoTime = nanoTime;
-            if(nanoTime < 100000) {
-                color = ChatColor.GREEN;
-            } else if(nanoTime < 200000) {
-                color = ChatColor.YELLOW;
-            } else if(nanoTime < 500000) {
-                color = ChatColor.RED;
-            } else {
-                color = ChatColor.DARK_RED;
-            }
+            this.msTime = msTime;
+            color = getChatColor(nanoTime);
         }
     }
 
