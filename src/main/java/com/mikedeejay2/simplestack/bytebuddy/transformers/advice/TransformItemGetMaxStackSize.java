@@ -3,7 +3,7 @@ package com.mikedeejay2.simplestack.bytebuddy.transformers.advice;
 import com.mikedeejay2.simplestack.MappingsLookup;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.bytebuddy.MethodVisitorInfo;
-import com.mikedeejay2.simplestack.bytebuddy.debug.DebugUtil;
+import com.mikedeejay2.simplestack.debug.DebugSystem;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
 public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
+    private static final DebugSystem DEBUG = SimpleStack.getInstance().getDebugSystem();
 
     @Override
     public AsmVisitorWrapper.ForDeclaredMethods.MethodVisitorWrapper getWrapper() {
@@ -48,7 +49,7 @@ public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
         }
         int maxStackSize = SimpleStack.getInstance().config().getAmount(material);
         if(maxStackSize == -1) maxStackSize = currentReturnValue;
-        DebugUtil.printTimings(startTime, "Item size redirect");
+        DEBUG.collect(startTime, "Item size redirect", false);
 
         return maxStackSize;
     }

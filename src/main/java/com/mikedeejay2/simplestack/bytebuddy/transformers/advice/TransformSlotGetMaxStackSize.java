@@ -1,6 +1,5 @@
 package com.mikedeejay2.simplestack.bytebuddy.transformers.advice;
 
-import com.mikedeejay2.simplestack.MappingsLookup;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.bytebuddy.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.debug.DebugSystem;
@@ -13,28 +12,27 @@ import java.lang.reflect.Method;
 
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
-public class TransformArmorSlotGetMaxStackSize implements MethodVisitorInfo {
+public class TransformSlotGetMaxStackSize implements MethodVisitorInfo {
     private static final DebugSystem DEBUG = SimpleStack.getInstance().getDebugSystem();
 
     @Override
     public AsmVisitorWrapper.ForDeclaredMethods.MethodVisitorWrapper getWrapper() {
-        return Advice.to(ArmorSlotAdvice.class);
+        return Advice.to(SlotAdvice.class);
     }
 
     @Override
-    public MappingsLookup.MappingEntry getMappingEntry() {
-        return nms("ArmorSlot").method("getMaxStackSize");
+    public MappingEntry getMappingEntry() {
+        return nms("Slot").method("getMaxStackSize");
     }
 
-    public static int getArmorSlotMaxStackSize(int currentReturnValue, long startTime) {
-        boolean shouldStackArmor = SimpleStack.getInstance().config().isStackedArmorWearable();
-        int armorStackAmount = shouldStackArmor ? SimpleStack.getInstance().config().getMaxAmount() : currentReturnValue;
-        DEBUG.collect(startTime, "Armor slot redirect", true);
+    public static int getSlotMaxStackSize(int currentReturnValue, long startTime) {
+        int slotStackAmount = currentReturnValue == 64 ? SimpleStack.getInstance().config().getMaxAmount() : currentReturnValue;
+        DEBUG.collect(startTime, "Slot redirect", true);
 
-        return armorStackAmount;
+        return slotStackAmount;
     }
 
-    public static class ArmorSlotAdvice {
+    public static class SlotAdvice {
         @Advice.OnMethodEnter
         public static long onMethodEnter() {
             return System.nanoTime();
@@ -44,8 +42,8 @@ public class TransformArmorSlotGetMaxStackSize implements MethodVisitorInfo {
         public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime) throws Throwable {
             Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
             ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
-            Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformArmorSlotGetMaxStackSize", false, pluginClassLoader);
-            Method maxStackSizeMethod = interceptClass.getMethod("getArmorSlotMaxStackSize", int.class, long.class);
+            Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformSlotGetMaxStackSize", false, pluginClassLoader);
+            Method maxStackSizeMethod = interceptClass.getMethod("getSlotMaxStackSize", int.class, long.class);
             returnValue = (int) maxStackSizeMethod.invoke(null, returnValue, startTime);
         }
     }

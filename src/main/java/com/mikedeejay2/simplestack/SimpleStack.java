@@ -10,10 +10,11 @@ import com.mikedeejay2.simplestack.bytebuddy.*;
 import com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformArmorSlotGetMaxStackSize;
 import com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformItemGetMaxStackSize;
 import com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformItemStackGetMaxStackSize;
+import com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformSlotGetMaxStackSize;
 import com.mikedeejay2.simplestack.bytebuddy.transformers.asm.*;
 import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.Config;
-import com.mikedeejay2.simplestack.config.DebugConfig;
+import com.mikedeejay2.simplestack.debug.DebugSystem;
 
 /**
  * Simple Stack v2.0 plugin for Minecraft TBD - 1.19
@@ -39,7 +40,7 @@ public final class SimpleStack extends BukkitPlugin {
 
     // The config of Simple Stack which stores all customizable data
     private Config config;
-    private DebugConfig debugConfig;
+    private DebugSystem debugSystem;
 
     private BStats bStats;
     private UpdateChecker updateChecker;
@@ -74,7 +75,7 @@ public final class SimpleStack extends BukkitPlugin {
         registerCommand(commandManager);
 
         this.config = new Config(this);
-        this.debugConfig = new DebugConfig();
+        this.debugSystem = new DebugSystem(this);
 
         SimpleStackAgent.addVisitor(new TransformItemGetMaxStackSize());
         SimpleStackAgent.addVisitor(new TransformItemStackGetMaxStackSize());
@@ -89,6 +90,7 @@ public final class SimpleStack extends BukkitPlugin {
         SimpleStackAgent.addVisitor(new TransformItemSoupFinishUsingItem());
         SimpleStackAgent.addVisitor(new TransformItemSuspiciousStewFinishUsingItem());
         SimpleStackAgent.addVisitor(new TransformArmorSlotGetMaxStackSize());
+        SimpleStackAgent.addVisitor(new TransformSlotGetMaxStackSize());
         SimpleStackAgent.install();
     }
 
@@ -162,8 +164,8 @@ public final class SimpleStack extends BukkitPlugin {
         return commandManager;
     }
 
-    public DebugConfig getDebugConfig() {
-        return debugConfig;
+    public DebugSystem getDebugSystem() {
+        return debugSystem;
     }
 
     public static SimpleStack getInstance() {

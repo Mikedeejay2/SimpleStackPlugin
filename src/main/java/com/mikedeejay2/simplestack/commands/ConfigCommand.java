@@ -5,6 +5,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.GUIConstructor;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.manager.PlayerGUI;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
+import com.mikedeejay2.mikedeejay2lib.util.structure.NavigationHolder;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.gui.GUICreator;
 import org.bukkit.Sound;
@@ -36,6 +37,9 @@ public class ConfigCommand implements SubCommand {
         if(gui != null && gui.containsModule(GUINavigatorModule.class)) {
             gui.open(player);
         } else {
+            NavigationHolder<GUIContainer> navigation = plugin.getGUIManager().getPlayer(player).getNavigation("config");
+            navigation.clearBack();
+            navigation.clearForward();
             GUICreator.createMainGUI(plugin, player).open(player);
         }
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);

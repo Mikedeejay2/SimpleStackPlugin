@@ -8,9 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class GUIDebugOpenerModule implements GUIModule {
     private final SimpleStack plugin;
     private static final int entranceAmt = 4;
+    private static final Set<Player> PLAYERS = new HashSet<>();
     private int clickAmt;
 
     public GUIDebugOpenerModule(SimpleStack plugin) {
@@ -27,7 +31,8 @@ public class GUIDebugOpenerModule implements GUIModule {
         Player player = (Player) event.getWhoClicked();
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1 + ((float) clickAmt / entranceAmt));
         ++clickAmt;
-        if(clickAmt < entranceAmt) return;
+        if(clickAmt < entranceAmt && !PLAYERS.contains(player)) return;
+        PLAYERS.add(player);
         GUIContainer newGUI = new GUIDebuggerConstructor(plugin).get();
         newGUI.open(player);
     }

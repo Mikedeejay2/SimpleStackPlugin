@@ -3,7 +3,7 @@ package com.mikedeejay2.simplestack.bytebuddy.transformers.advice;
 import com.mikedeejay2.simplestack.MappingsLookup;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.bytebuddy.MethodVisitorInfo;
-import com.mikedeejay2.simplestack.bytebuddy.debug.DebugUtil;
+import com.mikedeejay2.simplestack.debug.DebugSystem;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
@@ -17,6 +17,7 @@ import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
 public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
     private static final Method METHOD_AS_BUKKIT_COPY;      // org.bukkit.craftbukkit.inventory.CraftItemStack#asBukkitCopy()
+    private static final DebugSystem DEBUG = SimpleStack.getInstance().getDebugSystem();
 
     // Get all NMS classes and methods using NMSMappings
     static {
@@ -57,7 +58,7 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
         ItemStack itemStack = (ItemStack) METHOD_AS_BUKKIT_COPY.invoke(null, nmsItemStack);
         int maxStackSize = SimpleStack.getInstance().config().getAmount(itemStack);
         if(maxStackSize == -1) maxStackSize = currentReturnValue;
-        DebugUtil.printTimings(startTime, "ItemStack size redirect");
+        DEBUG.collect(startTime, "ItemStack size redirect", true);
 
         return maxStackSize;
     }
