@@ -26,7 +26,7 @@ public class TransformSlotGetMaxStackSize implements MethodVisitorInfo {
     }
 
     public static int getSlotMaxStackSize(int currentReturnValue, long startTime) {
-        int slotStackAmount = currentReturnValue == 64 ? SimpleStack.getInstance().config().getMaxAmount() : currentReturnValue;
+        int slotStackAmount = currentReturnValue;
         DEBUG.collect(startTime, "Slot redirect", true);
 
         return slotStackAmount;
