@@ -2,7 +2,6 @@ package com.mikedeejay2.simplestack.debug;
 
 import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.mikedeejay2.mikedeejay2lib.runnable.EnhancedRunnable;
 import com.mikedeejay2.simplestack.SimpleStack;
 import org.bukkit.ChatColor;
@@ -81,27 +80,29 @@ public final class DebugSystem {
         }
         double avg = nsToMs(totalCount) / (double) list.size();
         long n95ileCount = 0;
+        int n95size = 0;
         for(int i = (int) (list.size() * 0.95); i < list.size(); ++i) {
+            ++n95size;
             n95ileCount += list.get(i);
         }
-        double n95ile = nsToMs(n95ileCount) / (double) list.size();
+        double n95ile = nsToMs(n95ileCount) / n95size;
         double max = nsToMs(list.get(list.size() - 1));
 
 
         DecimalFormat format = new DecimalFormat("0.0##");
         return String.format("%s%s&f/%s%s&f/%s%s&f/%s%s&f/%s%s",
-                      getChatColor(min), format.format(min),
-                      getChatColor(med), format.format(med),
-                      getChatColor(avg), format.format(avg),
-                      getChatColor(n95ile), format.format(n95ile),
-                      getChatColor(max), format.format(max));
+                             getChatColorTotal(min), format.format(min),
+                             getChatColorTotal(med), format.format(med),
+                             getChatColorTotal(avg), format.format(avg),
+                             getChatColorTotal(n95ile), format.format(n95ile),
+                             getChatColorTotal(max), format.format(max));
     }
 
     private static double nsToMs(long nanos) {
         return (nanos / 1000000.0);
     }
 
-    private static ChatColor getChatColor(long nanoTime) {
+    private static ChatColor getChatColorSingle(long nanoTime) {
         ChatColor color;
         if(nanoTime < 10000) {
             color = ChatColor.GREEN;
@@ -115,8 +116,8 @@ public final class DebugSystem {
         return color;
     }
 
-    private static ChatColor getChatColor(double ms) {
-        return getChatColor((long) ms * 1000000L);
+    private static ChatColor getChatColorTotal(double ms) {
+        return getChatColorSingle((long) (ms * 100000.0));
     }
 
     public static final class TimingEntry {
@@ -129,7 +130,7 @@ public final class DebugSystem {
             this.name = name;
             this.nanoTime = nanoTime;
             this.msTime = msTime;
-            color = getChatColor(nanoTime);
+            color = getChatColorSingle(nanoTime);
         }
     }
 
