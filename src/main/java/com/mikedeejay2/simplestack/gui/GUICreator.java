@@ -180,13 +180,13 @@ public class GUICreator {
         newLore.add(Colors.format("&a" + plugin.getLibLangManager().getText(player, "generic.enabled")));
         newLore.add(Colors.format("&7" + curLocale));
         curItemMeta.setLore(newLore);
-        curItem.setItemMeta(curItemMeta);
+        newLangItem.setMeta(curItemMeta);
 
-        newLangItem.addFrame(curItem, 10);
         newLangItem.addFrame(ItemBuilder.of(Base64Head.CONCRETE_LIME.get())
                                  .setName(curItemMeta.getDisplayName())
                                  .setLore(curItemMeta.getLore())
                                  .get(), 10);
+        newLangItem.addFrame(newLangItem.get(), 10);
         items.remove(index);
         items.add(index, newLangItem);
         return items;

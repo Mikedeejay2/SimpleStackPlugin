@@ -240,8 +240,8 @@ public class GUIConfigModule implements GUIModule {
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
             gui.addModule(navi);
             GUIListModule langList = new GUIListModule(plugin, GUIListModule.ListViewMode.PAGED, 2, 5, 1, 9);
-            langList.addForward(6, 6);
-            langList.addBack(6, 4);
+            langList.addForward(5, 6);
+            langList.addBack(5, 4);
             gui.addModule(langList);
             langList.setGUIItems(GUICreator.getLanguageList(plugin, player));
             GUIAnimationModule animModule = new GUIAnimationModule(plugin, 10);
