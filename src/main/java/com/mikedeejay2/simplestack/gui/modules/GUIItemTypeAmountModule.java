@@ -39,8 +39,8 @@ public class GUIItemTypeAmountModule implements GUIModule {
         List<GUIItem> listItems = list.getList();
         Map<Material, Integer> newItems = new HashMap<>();
         for(GUIItem guiItem : listItems) {
-            if(guiItem == null || guiItem.getItemBase() == null) continue;
-            ItemStack item = guiItem.getItemBase();
+            if(guiItem == null || guiItem.get() == null) continue;
+            ItemStack item = guiItem.get();
             Material material = item.getType();
             int amount = item.getAmount();
             newItems.put(material, amount);

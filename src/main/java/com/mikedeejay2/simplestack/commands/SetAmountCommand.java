@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.commands;
 
 import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
+import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.Material;
@@ -32,33 +33,34 @@ public class SetAmountCommand implements SubCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if(args.length < 2) {
-            plugin.sendMessage(sender, "&c" + plugin.getLibLangManager().getText(sender, "errors.number_required") + "\n" +
-                plugin.getLangManager().getText("simplestack.commands.setamount.format"));
+            plugin.sendMessage(sender, Text.of("&c")
+                .concat("errors.number_required")
+                .concat("\n")
+                .concat("simplestack.commands.setamount.format"));
             return;
         }
         if(!NumberUtils.isCreatable(args[1])) {
-            plugin.sendMessage(sender, "&c" + plugin.getLibLangManager().getText(sender, "errors.not_a_number"));
+            plugin.sendMessage(sender, Text.of("&c").concat("errors.not_a_number"));
             return;
         }
         int amount = Integer.parseInt(args[1]);
         if(amount < 0) {
-            plugin.sendMessage(sender, "&c" + plugin.getLibLangManager().getText(sender, "errors.number_less_than_zero"));
+            plugin.sendMessage(sender, Text.of("&c").concat("errors.number_less_than_zero"));
             return;
         }
         Player player = (Player) sender;
         ItemStack item = player.getInventory().getItemInMainHand();
         if(item.getType() == Material.AIR) {
-            plugin.sendMessage(sender, "&c" + plugin.getLibLangManager().getText(sender, "errors.invalid_item_held"));
+            plugin.sendMessage(sender, Text.of("&c").concat("errors.invalid_item_held"));
             return;
         }
         item.setAmount(amount);
         if(amount > plugin.config().getMaxAmount()) {
-            plugin.sendMessage(sender, "&e" + plugin.getLibLangManager().getText(sender, "warnings.big_number"));
+            plugin.sendMessage(sender, Text.of("&e").concat("warnings.big_number"));
         }
-        plugin.sendMessage(sender, String.format(
-            "&e&l%s&r &b%s",
-            plugin.getLibLangManager().getText(sender, "generic.success"),
-            plugin.getLangManager().getText(sender, "simplestack.commands.setamount.success")));
+        plugin.sendMessage(sender, Text.of("&e&l%s&r &b%s").format(
+            Text.of("generic.success"),
+            Text.of("simplestack.commands.setamount.success")));
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.5f, 1f);
     }
 
@@ -69,7 +71,7 @@ public class SetAmountCommand implements SubCommand {
 
     @Override
     public String getInfo(CommandSender sender) {
-        return plugin.getLangManager().getText(sender, "simplestack.commands.setamount.info");
+        return Text.of("simplestack.commands.setamount.info").get(sender);
     }
 
     @Override

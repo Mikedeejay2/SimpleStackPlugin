@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.commands;
 
 import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
+import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.config.Config;
 import org.bukkit.Sound;
@@ -31,10 +32,9 @@ public class ReloadCommand implements SubCommand {
     public void onCommand(CommandSender sender, String[] args) {
         Config config = plugin.config();
         config.reload(true);
-        plugin.sendMessage(sender, String.format(
-            "&e&l%s&r &b%s",
-            plugin.getLibLangManager().getText(sender, "generic.success"),
-            plugin.getLangManager().getText(sender, "simplestack.reload.success")));
+        plugin.sendMessage(sender, Text.of("&e&l%s&r &b%s").format(
+            Text.of("generic.success"),
+            Text.of("simplestack.reload.success")));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
@@ -47,7 +47,7 @@ public class ReloadCommand implements SubCommand {
 
     @Override
     public String getInfo(CommandSender sender) {
-        return plugin.getLangManager().getText(sender, "simplestack.commands.reload.info");
+        return Text.of("simplestack.commands.reload.info").get(sender);
     }
 
     @Override

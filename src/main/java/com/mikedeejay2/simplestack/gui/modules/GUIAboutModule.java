@@ -8,6 +8,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
+import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.gui.GUICreator;
@@ -51,7 +52,7 @@ public class GUIAboutModule implements GUIModule {
 
         AnimatedGUIItem item = null;
 
-        item = new AnimatedGUIItem(null, false, 0);
+        item = new AnimatedGUIItem((ItemStack) null, false, 0);
         item.addFrame(ItemBuilder.of(Material.WHITE_STAINED_GLASS_PANE).setEmptyName().get(), 1);
         item.addFrame(ItemBuilder.of(Material.PINK_STAINED_GLASS_PANE).setEmptyName().get(), 1);
         item.addFrame(ItemBuilder.of(Material.LIGHT_BLUE_STAINED_GLASS_PANE).setEmptyName().get(), 1);
@@ -59,7 +60,7 @@ public class GUIAboutModule implements GUIModule {
         item.addFrame(null, 1);
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
 
-        item = new AnimatedGUIItem(null, false, 2);
+        item = new AnimatedGUIItem((ItemStack) null, false, 2);
         item.addFrame(ItemBuilder.of(Material.PINK_STAINED_GLASS_PANE).setEmptyName().get(), 1);
         item.addFrame(ItemBuilder.of(Material.LIGHT_BLUE_STAINED_GLASS_PANE).setEmptyName().get(), 1);
         item.addFrame(ItemBuilder.of(Material.MAGENTA_STAINED_GLASS_PANE).setEmptyName().get(), 1);
@@ -81,7 +82,7 @@ public class GUIAboutModule implements GUIModule {
         newCol = col - 1;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
 
-        item = new AnimatedGUIItem(null, false, 4);
+        item = new AnimatedGUIItem((ItemStack) null, false, 4);
         item.addFrame(ItemBuilder.of(Material.LIGHT_BLUE_STAINED_GLASS_PANE).setEmptyName().get(), 1);
         item.addFrame(ItemBuilder.of(Material.MAGENTA_STAINED_GLASS_PANE).setEmptyName().get(), 1);
         item.addFrame(null, 1);
@@ -110,7 +111,7 @@ public class GUIAboutModule implements GUIModule {
         newCol = col - 2; newRow = row + 1;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
 
-        item = new AnimatedGUIItem(null, false, 6);
+        item = new AnimatedGUIItem((ItemStack) null, false, 6);
         item.addFrame(ItemBuilder.of(Material.MAGENTA_STAINED_GLASS_PANE).setEmptyName().get(), 1);
         item.addFrame(null, 1);
         newRow = row;
@@ -196,11 +197,12 @@ public class GUIAboutModule implements GUIModule {
      * @param textLayer The text <tt>GUILayer</tt> that will be used
      */
     private void genBackButton(Player player, GUILayer textLayer) {
-        AnimatedGUIItem backItem = new AnimatedGUIItem(null, false, 60);
+        AnimatedGUIItem backItem = new AnimatedGUIItem((ItemStack) null, false, 60);
         backItem.addFrame(ItemBuilder.of(Base64Head.ARROW_BACKWARD_WHITE.get())
-                              .setName("&f" + plugin.getLibLangManager().getText(player, "gui.modules.navigator.backward"))
-                              .get(), 1);
-        backItem.addEvent(new GUIOpenNewEvent(plugin, () -> GUICreator.createMainGUI(plugin, player)));
+                              .setName(Text.of("&f").concat(
+                                  Text.of("gui.modules.navigator.backward")))
+                              .get(player), 1);
+        backItem.addEvent(new GUIOpenNewEvent(plugin, new GUICreator(plugin)));
         textLayer.setItem(6, 5, backItem);
     }
 
@@ -213,32 +215,32 @@ public class GUIAboutModule implements GUIModule {
      */
     private void genAbout(GUILayer textLayer, GUILayer aboutLayer, Player player) {
         int start = 40;
-        AnimatedGUIItem item1 = new AnimatedGUIItem(null, false, start);
+        AnimatedGUIItem item1 = new AnimatedGUIItem((ItemStack) null, false, start);
         item1.addFrame(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get(), 0, 1, MovementType.OVERRIDE_ITEM, true, 2);
         item1.addFrame(0, 1, MovementType.OVERRIDE_ITEM, true, 2);
         item1.addFrame(0, 1, MovementType.OVERRIDE_ITEM, true, 2);
         item1.addFrame(0, 1, MovementType.OVERRIDE_ITEM, true, 2);
-        AnimatedGUIItem item2 = new AnimatedGUIItem(null, false, start);
+        AnimatedGUIItem item2 = new AnimatedGUIItem((ItemStack) null, false, start);
         item2.addFrame(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get(), 0, -1, MovementType.OVERRIDE_ITEM, true, 2);
         item2.addFrame(0, -1, MovementType.OVERRIDE_ITEM, true, 2);
         item2.addFrame(0, -1, MovementType.OVERRIDE_ITEM, true, 2);
         item2.addFrame(0, -1, MovementType.OVERRIDE_ITEM, true, 2);
         textLayer.setItem(5, 1, item1);
         textLayer.setItem(5, 9, item2);
-        AnimatedGUIItem aboutItem = new AnimatedGUIItem(null, false, start + 10);
+        AnimatedGUIItem aboutItem = new AnimatedGUIItem((ItemStack) null, false, start + 10);
         aboutItem.addFrame(
             ItemBuilder.of(Material.DRAGON_EGG)
                 .setName("&b&lSimple Stack v" + plugin.getDescription().getVersion())
                 .setLore(
-                    "&5" + plugin.getLangManager().getText(player, "simplestack.gui.about.desc_l1"),
-                    "&5" + plugin.getLangManager().getText(player, "simplestack.gui.about.desc_l2"),
-                    "",
-                    "&9" + plugin.getLangManager().getText(player, "simplestack.gui.about.desc_l3"),
-                    "&5• " + plugin.getLangManager().getText(player, "simplestack.gui.about.desc_l4"),
-                    "&5• " + plugin.getLangManager().getText(player, "simplestack.gui.about.desc_l5"),
-                    "&5  " + plugin.getLangManager().getText(player, "simplestack.gui.about.desc_l6"),
-                    "&5• " + plugin.getLangManager().getText(player, "simplestack.gui.about.desc_l7"),
-                    "&5  " + plugin.getLangManager().getText(player, "simplestack.gui.about.desc_l8"))
+                    Text.of("&5").concat(Text.of("simplestack.gui.about.desc_l1")),
+                    Text.of("&5").concat(Text.of("simplestack.gui.about.desc_l2")),
+                    Text.of(""),
+                    Text.of("&9").concat(Text.of("simplestack.gui.about.desc_l3")),
+                    Text.of("&5• ").concat(Text.of("simplestack.gui.about.desc_l4")),
+                    Text.of("&5• ").concat(Text.of("simplestack.gui.about.desc_l5")),
+                    Text.of("&5  ").concat(Text.of("simplestack.gui.about.desc_l6")),
+                    Text.of("&5• ").concat(Text.of("simplestack.gui.about.desc_l7")),
+                    Text.of("&5  ").concat(Text.of("simplestack.gui.about.desc_l8")))
                 .get(), 1);
         aboutLayer.setItem(5, 5, aboutItem);
     }
@@ -249,7 +251,7 @@ public class GUIAboutModule implements GUIModule {
      * @param textLayer The text <tt>GUILayer</tt> that will be used
      */
     private void genText(GUILayer textLayer) {
-        AnimatedGUIItem item1 = new AnimatedGUIItem(null, false, 10);
+        AnimatedGUIItem item1 = new AnimatedGUIItem((ItemStack) null, false, 10);
         item1.addFrame(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get(), 5);
         item1.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
         item1.addFrame(ItemBuilder.of(Base64Head.S_WHITE.get()).setEmptyName().get(), 5);
@@ -257,7 +259,7 @@ public class GUIAboutModule implements GUIModule {
         item1.addFrame(ItemBuilder.of(Base64Head.S_ORANGE.get()).setEmptyName().get(), 1);
         item1.addFrame(ItemBuilder.of(Base64Head.S_YELLOW.get()).setEmptyName().get(), 1);
 
-        AnimatedGUIItem item2 = new AnimatedGUIItem(null, false, 11);
+        AnimatedGUIItem item2 = new AnimatedGUIItem((ItemStack) null, false, 11);
         item2.addFrame(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get(), 5);
         item2.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
         item2.addFrame(ItemBuilder.of(Base64Head.I_WHITE.get()).setEmptyName().get(), 5);
@@ -265,7 +267,7 @@ public class GUIAboutModule implements GUIModule {
         item2.addFrame(ItemBuilder.of(Base64Head.I_ORANGE.get()).setEmptyName().get(), 1);
         item2.addFrame(ItemBuilder.of(Base64Head.I_YELLOW.get()).setEmptyName().get(), 1);
 
-        AnimatedGUIItem item3 = new AnimatedGUIItem(null, false, 12);
+        AnimatedGUIItem item3 = new AnimatedGUIItem((ItemStack) null, false, 12);
         item3.addFrame(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get(), 5);
         item3.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
         item3.addFrame(ItemBuilder.of(Base64Head.M_WHITE.get()).setEmptyName().get(), 5);
@@ -273,7 +275,7 @@ public class GUIAboutModule implements GUIModule {
         item3.addFrame(ItemBuilder.of(Base64Head.M_ORANGE.get()).setEmptyName().get(), 1);
         item3.addFrame(ItemBuilder.of(Base64Head.M_YELLOW.get()).setEmptyName().get(), 1);
 
-        AnimatedGUIItem item4 = new AnimatedGUIItem(null, false, 13);
+        AnimatedGUIItem item4 = new AnimatedGUIItem((ItemStack) null, false, 13);
         item4.addFrame(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get(), 5);
         item4.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
         item4.addFrame(ItemBuilder.of(Base64Head.P_WHITE.get()).setEmptyName().get(), 5);
@@ -281,7 +283,7 @@ public class GUIAboutModule implements GUIModule {
         item4.addFrame(ItemBuilder.of(Base64Head.P_ORANGE.get()).setEmptyName().get(), 1);
         item4.addFrame(ItemBuilder.of(Base64Head.P_YELLOW.get()).setEmptyName().get(), 1);
 
-        AnimatedGUIItem item5 = new AnimatedGUIItem(null, false, 14);
+        AnimatedGUIItem item5 = new AnimatedGUIItem((ItemStack) null, false, 14);
         item5.addFrame(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get(), 5);
         item5.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
         item5.addFrame(ItemBuilder.of(Base64Head.L_WHITE.get()).setEmptyName().get(), 5);
@@ -289,7 +291,7 @@ public class GUIAboutModule implements GUIModule {
         item5.addFrame(ItemBuilder.of(Base64Head.L_ORANGE.get()).setEmptyName().get(), 1);
         item5.addFrame(ItemBuilder.of(Base64Head.L_YELLOW.get()).setEmptyName().get(), 1);
 
-        AnimatedGUIItem item6 = new AnimatedGUIItem(null, false, 15);
+        AnimatedGUIItem item6 = new AnimatedGUIItem((ItemStack) null, false, 15);
         item6.addFrame(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get(), 5);
         item6.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
         item6.addFrame(ItemBuilder.of(Base64Head.E_WHITE.get()).setEmptyName().get(), 5);
@@ -298,7 +300,7 @@ public class GUIAboutModule implements GUIModule {
         item6.addFrame(ItemBuilder.of(Base64Head.E_YELLOW.get()).setEmptyName().get(), 1);
 
 
-        AnimatedGUIItem item7 = new AnimatedGUIItem(null, false, 20);
+        AnimatedGUIItem item7 = new AnimatedGUIItem((ItemStack) null, false, 20);
         item7.addFrame(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get(), 5);
         item7.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
         item7.addFrame(ItemBuilder.of(Base64Head.S_WHITE.get()).setEmptyName().get(), 5);
@@ -306,7 +308,7 @@ public class GUIAboutModule implements GUIModule {
         item7.addFrame(ItemBuilder.of(Base64Head.S_RED.get()).setEmptyName().get(), 1);
         item7.addFrame(ItemBuilder.of(Base64Head.S_ORANGE.get()).setEmptyName().get(), 1);
 
-        AnimatedGUIItem item8 = new AnimatedGUIItem(null, false, 19);
+        AnimatedGUIItem item8 = new AnimatedGUIItem((ItemStack) null, false, 19);
         item8.addFrame(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get(), 5);
         item8.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
         item8.addFrame(ItemBuilder.of(Base64Head.T_WHITE.get()).setEmptyName().get(), 5);
@@ -314,7 +316,7 @@ public class GUIAboutModule implements GUIModule {
         item8.addFrame(ItemBuilder.of(Base64Head.T_RED.get()).setEmptyName().get(), 1);
         item8.addFrame(ItemBuilder.of(Base64Head.T_ORANGE.get()).setEmptyName().get(), 1);
 
-        AnimatedGUIItem item9 = new AnimatedGUIItem(null, false, 18);
+        AnimatedGUIItem item9 = new AnimatedGUIItem((ItemStack) null, false, 18);
         item9.addFrame(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get(), 5);
         item9.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
         item9.addFrame(ItemBuilder.of(Base64Head.A_WHITE.get()).setEmptyName().get(), 5);
@@ -322,7 +324,7 @@ public class GUIAboutModule implements GUIModule {
         item9.addFrame(ItemBuilder.of(Base64Head.A_RED.get()).setEmptyName().get(), 1);
         item9.addFrame(ItemBuilder.of(Base64Head.A_ORANGE.get()).setEmptyName().get(), 1);
 
-        AnimatedGUIItem item10 = new AnimatedGUIItem(null, false, 17);
+        AnimatedGUIItem item10 = new AnimatedGUIItem((ItemStack) null, false, 17);
         item10.addFrame(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get(), 5);
         item10.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
         item10.addFrame(ItemBuilder.of(Base64Head.C_WHITE.get()).setEmptyName().get(), 5);
@@ -330,7 +332,7 @@ public class GUIAboutModule implements GUIModule {
         item10.addFrame(ItemBuilder.of(Base64Head.C_RED.get()).setEmptyName().get(), 1);
         item10.addFrame(ItemBuilder.of(Base64Head.C_ORANGE.get()).setEmptyName().get(), 1);
 
-        AnimatedGUIItem item11 = new AnimatedGUIItem(null, false, 16);
+        AnimatedGUIItem item11 = new AnimatedGUIItem((ItemStack) null, false, 16);
         item11.addFrame(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get(), 5);
         item11.addFrame(-1, 0, MovementType.OVERRIDE_ITEM, true, 5);
         item11.addFrame(ItemBuilder.of(Base64Head.K_WHITE.get()).setEmptyName().get(), 5);
@@ -409,7 +411,7 @@ public class GUIAboutModule implements GUIModule {
      * @return The new background item
      */
     private AnimatedGUIItem getBackgroundItem(int delay) {
-        AnimatedGUIItem item = new AnimatedGUIItem(null, false, delay);
+        AnimatedGUIItem item = new AnimatedGUIItem((ItemStack) null, false, delay);
         item.addFrame(ItemBuilder.of(Material.PINK_STAINED_GLASS_PANE).setEmptyName().get(), 1);
         item.addFrame(ItemBuilder.of(Material.MAGENTA_STAINED_GLASS_PANE).setEmptyName().get(), 1);
         item.addFrame(ItemBuilder.of(Material.PURPLE_STAINED_GLASS_PANE).setEmptyName().get(), 1);
@@ -424,7 +426,7 @@ public class GUIAboutModule implements GUIModule {
      */
     private AnimatedGUIItem getFlyItem(int column) {
         Random random = new Random();
-        AnimatedGUIItem item = new AnimatedGUIItem(null, true, random.nextInt(50) + 50);
+        AnimatedGUIItem item = new AnimatedGUIItem((ItemStack) null, true, random.nextInt(50) + 50);
         String str = null;
         int randNum = random.nextInt(4);
         switch(randNum) {

@@ -2,7 +2,9 @@ package com.mikedeejay2.simplestack.gui.debug;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
-import com.mikedeejay2.mikedeejay2lib.gui.animation.GUIAnimPattern;
+import com.mikedeejay2.mikedeejay2lib.gui.animation.AnimationSpecification;
+import com.mikedeejay2.mikedeejay2lib.gui.animation.AnimationSpecification.Position;
+import com.mikedeejay2.mikedeejay2lib.gui.animation.AnimationSpecification.Style;
 import com.mikedeejay2.mikedeejay2lib.gui.event.button.GUIButtonToggleableEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUIOpenNewEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
@@ -93,10 +95,10 @@ public class GUIDebugSettingsModule extends GUIAbstractRuntimeModule {
 
         return new GUIItem(debugSystem.isCollecting() ? collectOn : collectOff)
             .addEvent(new GUIButtonToggleableEvent((info) -> {
-                info.getGUIItem().setItem(collectOn);
+                info.getGUIItem().set(collectOn);
                 debugSystem.startCollecting();
             }, (info) -> {
-                info.getGUIItem().setItem(collectOff);
+                info.getGUIItem().set(collectOff);
                 debugSystem.stopCollecting();
             }, debugSystem.isCollecting()));
     }
@@ -140,7 +142,7 @@ public class GUIDebugSettingsModule extends GUIAbstractRuntimeModule {
             newGui.addModule(new GUIAnimationModule(plugin, 1));
             newGui.addModule(new GUIAnimDecoratorModule(
                 SlotMatcher.inRange(1, 1, 1, 9),
-                GUIDebuggerConstructor.OUTLINE_ITEM, GUIAnimPattern.LEFT_RIGHT));
+                GUIDebuggerConstructor.OUTLINE_ITEM, new AnimationSpecification(Position.TOP_LEFT, Style.COL)));
             newGui.addModule(new GUINavigatorModule(plugin, "config"));
             newGui.addModule(new GUIGetEntriesModule(plugin, list, debugSystem));
             newGui.addModule(list);

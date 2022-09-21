@@ -1,6 +1,6 @@
 {
-  "simplestack.version": "버전: {VERSION}",
-  "simplestack.commands.click_to_run": "{COMMAND}를 클릭하여 실행하기",
+  "simplestack.version": "버전: %version%",
+  "simplestack.commands.click_to_run": "%command%를 클릭하여 실행하기",
   "simplestack.commands.help.info": "심플스택 명령어에 대한 도움말",
   "simplestack.commands.reload.info": "게임에서 구성 설정 업데이트",
   "simplestack.reload.success": "구성을 불러왔습니다.",
@@ -9,7 +9,7 @@
   "simplestack.commands.setamount.info": "들고 있는 아이템의 스택량 설정",
   "simplestack.commands.setamount.success": "스택량이 성공적으로 설정되었습니다.",
   "simplestack.commands.setamount.format": "명령어 형식: /simplestack setamount <숫자>",
-  "simplestack.warnings.number_outside_of_range": "{MAT}은 지정된 기본값을 초과했습니다. 기본값은 64입니다.",
-  "simplestack.warnings.invalid_material": "구성 항목에 {MAT} 아이템이 존재하지 않습니다.",
-  "simplestack.warnings.invalid_list_mode": "{MODE}는 유효한 목록 모드가 아닙니다. 기본값은 블랙리스트 모드입니다."
+  "simplestack.warnings.number_outside_of_range": "%mat%은 지정된 기본값을 초과했습니다. 기본값은 64입니다.",
+  "simplestack.warnings.invalid_material": "구성 항목에 %mat% 아이템이 존재하지 않습니다.",
+  "simplestack.warnings.invalid_list_mode": "%mode%는 유효한 목록 모드가 아닙니다. 기본값은 블랙리스트 모드입니다."
 }

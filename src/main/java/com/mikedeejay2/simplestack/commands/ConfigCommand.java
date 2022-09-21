@@ -1,10 +1,9 @@
 package com.mikedeejay2.simplestack.commands;
 
 import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
-import com.mikedeejay2.mikedeejay2lib.gui.GUIConstructor;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
-import com.mikedeejay2.mikedeejay2lib.gui.manager.PlayerGUI;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
+import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.structure.NavigationHolder;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.gui.GUICreator;
@@ -40,7 +39,7 @@ public class ConfigCommand implements SubCommand {
             NavigationHolder<GUIContainer> navigation = plugin.getGUIManager().getPlayer(player).getNavigation("config");
             navigation.clearBack();
             navigation.clearForward();
-            GUICreator.createMainGUI(plugin, player).open(player);
+            new GUICreator(plugin).get().open(player);
         }
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
     }
@@ -52,7 +51,7 @@ public class ConfigCommand implements SubCommand {
 
     @Override
     public String getInfo(CommandSender sender) {
-        return plugin.getLangManager().getText(sender, "simplestack.commands.config.info");
+        return Text.of("simplestack.commands.config.info").get(sender);
     }
 
     @Override

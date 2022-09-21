@@ -38,7 +38,7 @@ public class GUIItemTypeListModule implements GUIModule {
         List<GUIItem> listItems = list.getList();
         List<Material> newItems = new ArrayList<>();
         for(GUIItem guiItem : listItems) {
-            newItems.add(guiItem.getItemBase().getType());
+            newItems.add(guiItem.get().getType());
         }
         plugin.config().setMaterialList(newItems);
     }

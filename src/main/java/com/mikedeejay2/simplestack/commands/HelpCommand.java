@@ -2,7 +2,8 @@ package com.mikedeejay2.simplestack.commands;
 
 import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
 import com.mikedeejay2.mikedeejay2lib.commands.CommandManager;
-import com.mikedeejay2.mikedeejay2lib.text.language.LangManager;
+import com.mikedeejay2.mikedeejay2lib.text.PlaceholderFormatter;
+import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.chat.ChatConverter;
 import com.mikedeejay2.simplestack.SimpleStack;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -35,16 +36,17 @@ public class HelpCommand implements SubCommand {
      */
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        LangManager lang = plugin.getLangManager();
-        String ver = plugin.getDescription().getVersion();
-        String version = lang.getText(sender, "simplestack.version", new String[]{"VERSION"}, new String[]{ver});
+        String version = plugin.getDescription().getVersion();
         CommandManager manager = plugin.getCommandManager();
         String[] commands = manager.getAllCommandStrings(false);
         ArrayList<BaseComponent[]> lines = new ArrayList<>();
         String lineString = "&b &m                                                                              ";
         String emptyString = "                                                                               \n";
         String titleString = "\n                              &9&lSimple &d&lStack&r                               \n";
-        String versionString = String.format("  &7%s\n", version);
+        String versionString = Text.of("  &7").concat(
+            Text.of("simplestack.version")
+                .placeholder(PlaceholderFormatter.of("version", version)))
+            .concat("\n").get(sender);
 
         BaseComponent[] lineComponents = ChatConverter.getBaseComponentArray(lineString);
         BaseComponent[] emptyComponents = ChatConverter.getBaseComponentArray(emptyString);
@@ -58,7 +60,10 @@ public class HelpCommand implements SubCommand {
         for(int i = 1; i < commands.length; i++) {
             String command = commands[i];
             String commandInfo = manager.getSubcommand(command).getInfo(sender);
-            String hoverText = "&d" + lang.getText(sender, "simplestack.commands.click_to_run", new String[]{"COMMAND"}, new String[]{"/simplestack " + command});
+            String hoverText = Text.of("&d").concat(
+                Text.of("simplestack.commands.click_to_run")
+                    .placeholder(PlaceholderFormatter.of("command", "/simplestack " + command)))
+                .get(sender);
 
             BaseComponent[] line = ChatConverter.getBaseComponentArray(String.format("  &b/simplestack %s &d- &f%s\n", command, commandInfo));
 
@@ -87,7 +92,7 @@ public class HelpCommand implements SubCommand {
 
     @Override
     public String getInfo(CommandSender sender) {
-        return plugin.getLangManager().getText(sender, "simplestack.commands.help.info");
+        return Text.of("simplestack.commands.help.info").get(sender);
     }
 
     @Override

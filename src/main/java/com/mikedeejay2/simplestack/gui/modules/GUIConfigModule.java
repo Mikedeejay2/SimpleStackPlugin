@@ -14,10 +14,12 @@ import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.animation.GUIAnimationModule;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIBorderModule;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIDecoratorModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
+import com.mikedeejay2.mikedeejay2lib.text.PlaceholderFormatter;
+import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.config.Config;
@@ -32,6 +34,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static com.mikedeejay2.mikedeejay2lib.gui.util.SlotMatcher.*;
 
 /**
  * The <tt>GUIModule</tt> for the main configuration GUI screen
@@ -88,26 +92,26 @@ public class GUIConfigModule implements GUIModule {
      * @return The switch list mode item
      */
     private GUIItem getGUIItemSwitchListMode(Player player) {
-        GUIItem switchListMode = new GUIItem(null);
+        GUIItem switchListMode = new GUIItem((ItemStack) null);
         if(plugin.config().getListMode() == ListMode.BLACKLIST) {
-            switchListMode.setItem(
+            switchListMode.set(
                 ItemBuilder.of(Base64Head.X_BLACK.get())
-                    .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.list_type.blacklist"))
+                    .setName(Text.of("&b&l").concat("simplestack.list_type.blacklist"))
                     .setLore(
-                        "&7" + plugin.getLangManager().getText(player, "simplestack.gui.item_types.change_mode_whitelist"),
-                        "",
-                        "&a&l⊳ " + plugin.getLangManager().getText(player, "simplestack.list_type.blacklist"),
-                        "&7  " + plugin.getLangManager().getText(player, "simplestack.list_type.whitelist"))
+                        Text.of("&7").concat("simplestack.gui.item_types.change_mode_whitelist"),
+                        Text.of(""),
+                        Text.of("&a&l⊳ ").concat("simplestack.list_type.blacklist"),
+                        Text.of("&7  ").concat("simplestack.list_type.whitelist"))
                     .get());
         } else {
-            switchListMode.setItem(
+            switchListMode.set(
                 ItemBuilder.of(Base64Head.CHECKMARK_WHITE.get())
-                    .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.list_type.whitelist"))
+                    .setName(Text.of("&b&l").concat("simplestack.list_type.whitelist"))
                     .setLore(
-                        "&7" + plugin.getLangManager().getText(player, "simplestack.gui.item_types.change_mode_blacklist"),
-                        "",
-                        "&7  " + plugin.getLangManager().getText(player, "simplestack.list_type.blacklist"),
-                        "&a&l⊳ " + plugin.getLangManager().getText(player, "simplestack.list_type.whitelist"))
+                        Text.of("&7").concat("simplestack.gui.item_types.change_mode_blacklist"),
+                        Text.of(""),
+                        Text.of("&7  ").concat("simplestack.list_type.blacklist"),
+                        Text.of("&a&l⊳ ").concat("simplestack.list_type.whitelist"))
                     .get());
         }
         switchListMode.addEvent(new GUISwitchListModeEvent(plugin));
@@ -121,10 +125,10 @@ public class GUIConfigModule implements GUIModule {
      * @return The about item
      */
     private GUIItem getGUIItemAboutItem(Player player) {
-        String name = plugin.getLangManager().getText(player, "simplestack.gui.config.about_select");
-        AnimatedGUIItem aboutItem = new AnimatedGUIItem(ItemBuilder.of(Material.BOOK).setName("&f" + name).get(), true);
-        aboutItem.addFrame(ItemBuilder.of(Material.WRITABLE_BOOK).setName("&f" + name).get(), 10);
-        aboutItem.addFrame(ItemBuilder.of(Material.WRITABLE_BOOK).setName("&f&o" + name).get(), 10);
+        Text name = Text.of("simplestack.gui.config.about_select");
+        AnimatedGUIItem aboutItem = new AnimatedGUIItem(ItemBuilder.of(Material.BOOK).setName(Text.of("&f").concat(name)).get(), true);
+        aboutItem.addFrame(ItemBuilder.of(Material.WRITABLE_BOOK).setName(Text.of("&f").concat(name)).get(), 10);
+        aboutItem.addFrame(ItemBuilder.of(Material.WRITABLE_BOOK).setName(Text.of("&f&o").concat(name)).get(), 10);
         aboutItem.addEvent(new GUIOpenNewEvent(plugin, () -> {
             GUIContainer gui = new GUIContainer(plugin, name, 6);
             GUIAnimationModule animModule = new GUIAnimationModule(plugin, 1);
@@ -145,7 +149,7 @@ public class GUIConfigModule implements GUIModule {
     private GUIItem getGUIItemCloseItem(Player player) {
         GUIItem closeItem = new GUIItem(
             ItemBuilder.of(Base64Head.X_RED.get())
-                .setName("&c&o" + plugin.getLangManager().getText(player, "simplestack.gui.config.close_select"))
+                .setName(Text.of("&c&o").concat("simplestack.gui.config.close_select"))
                 .get());
         closeItem.addEvent(new GUICloseEvent(plugin));
         return closeItem;
@@ -160,9 +164,9 @@ public class GUIConfigModule implements GUIModule {
     private GUIItem getGUIItemItemTypeAmountList(Player player) {
         AnimatedGUIItem itemTypeAmountList = new AnimatedGUIItem(
             ItemBuilder.of(Material.BARRIER)
-                .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.item_type_amts.title"))
+                .setName(Text.of("&b&l").concat("simplestack.gui.item_type_amts.title"))
                 .setLore(
-                    "&f" + plugin.getLangManager().getText(player, "simplestack.gui.config.item_type_description"))
+                    Text.of("&f").concat("simplestack.gui.config.item_type_description"))
                 .get(), true);
         final Map<Material, Integer> itemAmounts = plugin.config().getItemAmounts();
         Iterator<Map.Entry<Material, Integer>> iter2 = itemAmounts.entrySet().iterator();
@@ -179,13 +183,15 @@ public class GUIConfigModule implements GUIModule {
             itemTypeAmountList.addFrame(item, 20);
         }
         itemTypeAmountList.addEvent(new GUIOpenNewEvent(plugin, () -> {
-            GUIContainer gui = new GUIContainer(plugin, plugin.getLangManager().getText(player, "simplestack.gui.item_type_amts.title"), 6);
-            GUIBorderModule border = new GUIBorderModule(new GUIItem(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get()));
+            GUIContainer gui = new GUIContainer(plugin, Text.of("simplestack.gui.item_type_amts.title"), 6);
+            GUIDecoratorModule border = new GUIDecoratorModule(
+                inRange(1, 1, 1, 9).or(inRange(6, 1, 6, 9)),
+                new GUIItem(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get()));
             gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
             gui.addModule(navi);
             GUIListModule listModule = new GUIListModule(plugin, GUIListModule.ListViewMode.PAGED, 2, 5, 1, 9);
-            GUIItem padItem = new GUIItem(null);
+            GUIItem padItem = new GUIItem((ItemStack) null);
             padItem.setMovable(true);
             listModule.addEndItem(padItem);
             for(Map.Entry<Material, Integer> entry : itemAmounts.entrySet()) {
@@ -197,12 +203,8 @@ public class GUIConfigModule implements GUIModule {
                 guiItem.setMovable(true);
                 listModule.addListItem(guiItem);
             }
-            listModule.addForward(6, 6);
-            listModule.addForward(6, 7);
-            listModule.addForward(6, 8);
-            listModule.addBack(6, 4);
-            listModule.addBack(6, 3);
-            listModule.addBack(6, 2);
+            listModule.addForward(6, 6).addForward(6, 7).addForward(6, 8);
+            listModule.addBack(6, 4).addBack(6, 3).addBack(6, 2);
             gui.addModule(listModule);
             GUIInteractHandler interaction = new GUIInteractHandlerList(64);
             interaction.resetExecutors();
@@ -226,16 +228,18 @@ public class GUIConfigModule implements GUIModule {
     private GUIItem getGUIItemLanguage(Player player) {
         GUIItem language = new GUIItem(
             ItemBuilder.of(Base64Head.GLOBE.get())
-                .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.language_select"))
+                .setName(Text.of("&b&l").concat("simplestack.gui.config.language_select"))
                 .setLore(
-                    "&f" + plugin.getLangManager().getText(player, "simplestack.gui.config.language_description"),
-                    "&7Currently selected: " + plugin.getLangManager().getText(player, "simplestack.gui.config.language_selected",
-                                                                               new String[]{"LANG"},
-                                                                               new String[]{plugin.config().getLangLocale()}))
+                    Text.of("&f").concat("simplestack.gui.config.language_description"),
+                    Text.of("&7").concat(
+                        Text.of("simplestack.gui.config.language_selected")
+                            .placeholder(PlaceholderFormatter.of("lang", plugin.config().getLangLocale()))))
                 .get());
         language.addEvent(new GUIOpenNewEvent(plugin, () -> {
-            GUIContainer gui = new GUIContainer(plugin, plugin.getLangManager().getText(player, "simplestack.gui.language.title"), 5);
-            GUIBorderModule border = new GUIBorderModule(new GUIItem(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get()));
+            GUIContainer gui = new GUIContainer(plugin, Text.of("simplestack.gui.language.title"), 5);
+            GUIDecoratorModule border = new GUIDecoratorModule(
+                inRange(1, 1, 1, 9).or(inRange(6, 1, 6, 9)),
+                new GUIItem(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get()));
             gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
             gui.addModule(navi);
@@ -243,7 +247,7 @@ public class GUIConfigModule implements GUIModule {
             langList.addForward(5, 6);
             langList.addBack(5, 4);
             gui.addModule(langList);
-            langList.setGUIItems(GUICreator.getLanguageList(plugin, player));
+            langList.setGUIItems(GUICreator.getLanguageList(plugin));
             GUIAnimationModule animModule = new GUIAnimationModule(plugin, 10);
             gui.addModule(animModule);
             return gui;
@@ -262,12 +266,12 @@ public class GUIConfigModule implements GUIModule {
         GUIItem defaultMaxAmount = new GUIItem(
             ItemBuilder.of(Material.BOOK)
                 .setAmount(config.getMaxAmount())
-                .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.default_max_select"))
+                .setName(Text.of("&b&l").concat("simplestack.gui.config.default_max_select"))
                 .setLore(
-                    "&f" + plugin.getLangManager().getText(player, "simplestack.gui.config.default_max_desc_l1"),
-                    "&f" + plugin.getLangManager().getText(player, "simplestack.gui.config.default_max_desc_l2"),
-                    "&7" + plugin.getLangManager().getText(player, "simplestack.gui.config.default_max_desc_l3"),
-                    "&7" + plugin.getLangManager().getText(player, "simplestack.gui.config.default_max_desc_l4")
+                    Text.of("&f").concat("simplestack.gui.config.default_max_desc_l1"),
+                    Text.of("&f").concat("simplestack.gui.config.default_max_desc_l2"),
+                    Text.of("&7").concat("simplestack.gui.config.default_max_desc_l3"),
+                    Text.of("&7").concat("simplestack.gui.config.default_max_desc_l4")
                 ).get());
         GUIMaxStackEvent maxAmountEvent = new GUIMaxStackEvent(plugin);
         defaultMaxAmount.addEvent(maxAmountEvent);
@@ -283,11 +287,11 @@ public class GUIConfigModule implements GUIModule {
     private GUIItem getGUIItemUniqueItemList(Player player) {
         AnimatedGUIItem uniqueItemList = new AnimatedGUIItem(
             ItemBuilder.of(Material.BARRIER)
-                .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.unique_items.title"))
+                .setName(Text.of("&b&l").concat("simplestack.gui.unique_items.title"))
                 .setLore(
-                    "&f" + plugin.getLangManager().getText(player, "simplestack.gui.config.unique_item_desc_l1"),
-                    "&7" + plugin.getLangManager().getText(player, "simplestack.gui.config.unique_item_desc_l2"),
-                    "&7" + plugin.getLangManager().getText(player, "simplestack.gui.config.unique_item_desc_l3")
+                    Text.of("&f").concat("simplestack.gui.config.unique_item_desc_l1"),
+                    Text.of("&7").concat("simplestack.gui.config.unique_item_desc_l2"),
+                    Text.of("&7").concat("simplestack.gui.config.unique_item_desc_l3")
                 ).get(), true);
         final List<ItemStack> uniqueItems = plugin.config().getUniqueItemList();
         for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, uniqueItems.size()); ++i) {
@@ -300,13 +304,15 @@ public class GUIConfigModule implements GUIModule {
             uniqueItemList.addFrame(newItem, 20);
         }
         uniqueItemList.addEvent(new GUIOpenNewEvent(plugin, () -> {
-            GUIContainer gui = new GUIContainer(plugin, plugin.getLangManager().getText(player, "simplestack.gui.unique_items.title"), 6);
-            GUIBorderModule border = new GUIBorderModule(new GUIItem(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get()));
+            GUIContainer gui = new GUIContainer(plugin, Text.of("simplestack.gui.unique_items.title"), 6);
+            GUIDecoratorModule border = new GUIDecoratorModule(
+                inRange(1, 1, 1, 9).or(inRange(6, 1, 6, 9)),
+                new GUIItem(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get()));
             gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
             gui.addModule(navi);
             GUIListModule listModule = new GUIListModule(plugin, GUIListModule.ListViewMode.PAGED, 2, 5, 1, 9);
-            GUIItem padItem = new GUIItem(null);
+            GUIItem padItem = new GUIItem((ItemStack) null);
             padItem.setMovable(true);
             listModule.addEndItem(padItem);
             for(ItemStack item : uniqueItems) {
@@ -314,12 +320,8 @@ public class GUIConfigModule implements GUIModule {
                 guiItem.setMovable(true);
                 listModule.addListItem(guiItem);
             }
-            listModule.addForward(6, 6);
-            listModule.addForward(6, 7);
-            listModule.addForward(6, 8);
-            listModule.addBack(6, 4);
-            listModule.addBack(6, 3);
-            listModule.addBack(6, 2);
+            listModule.addForward(6, 6).addForward(6, 7).addForward(6, 8);
+            listModule.addBack(6, 4).addBack(6, 3).addBack(6, 2);
             gui.addModule(listModule);
             GUIInteractHandler interaction = new GUIInteractHandlerList(64);
             interaction.resetExecutors();
@@ -343,11 +345,11 @@ public class GUIConfigModule implements GUIModule {
     private GUIItem getGUIItemItemTypeList(Player player) {
         AnimatedGUIItem itemTypeList = new AnimatedGUIItem(
             ItemBuilder.of(Material.BARRIER)
-                .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.item_types.title"))
+                .setName(Text.of("&b&l").concat("simplestack.gui.item_types.title"))
                 .setLore(
-                    "&f" + plugin.getLangManager().getText(player, "simplestack.gui.config.item_type_desc_l1"),
-                    "&7" + plugin.getLangManager().getText(player, "simplestack.gui.config.item_type_desc_l2"),
-                    "&7" + plugin.getLangManager().getText(player, "simplestack.gui.config.item_type_desc_l3"))
+                    Text.of("&f").concat("simplestack.gui.config.item_type_desc_l1"),
+                    Text.of("&7").concat("simplestack.gui.config.item_type_desc_l2"),
+                    Text.of("&7").concat("simplestack.gui.config.item_type_desc_l3"))
                 .get(), true);
         final List<Material> materialItems = plugin.config().getMaterialList();
         for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, materialItems.size()); ++i) {
@@ -360,13 +362,15 @@ public class GUIConfigModule implements GUIModule {
             itemTypeList.addFrame(item, 20);
         }
         itemTypeList.addEvent(new GUIOpenNewEvent(plugin, () -> {
-            GUIContainer gui = new GUIContainer(plugin, plugin.getLangManager().getText(player, "simplestack.gui.item_types.title"), 6);
-            GUIBorderModule border = new GUIBorderModule(new GUIItem(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get()));
+            GUIContainer gui = new GUIContainer(plugin, Text.of("simplestack.gui.item_types.title"), 6);
+            GUIDecoratorModule border = new GUIDecoratorModule(
+                inRange(1, 1, 1, 9).or(inRange(6, 1, 6, 9)),
+                new GUIItem(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get()));
             gui.addModule(border);
             GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
             gui.addModule(navi);
             GUIListModule listModule = new GUIListModule(plugin, GUIListModule.ListViewMode.PAGED, 2, 5, 1, 9);
-            GUIItem padItem = new GUIItem(null);
+            GUIItem padItem = new GUIItem((ItemStack) null);
             padItem.setMovable(true);
             listModule.addEndItem(padItem);
             for(Material material : materialItems) {
@@ -374,12 +378,8 @@ public class GUIConfigModule implements GUIModule {
                 guiItem.setMovable(true);
                 listModule.addListItem(guiItem);
             }
-            listModule.addForward(6, 6);
-            listModule.addForward(6, 7);
-            listModule.addForward(6, 8);
-            listModule.addBack(6, 4);
-            listModule.addBack(6, 3);
-            listModule.addBack(6, 2);
+            listModule.addForward(6, 6).addForward(6, 7).addForward(6, 8);
+            listModule.addBack(6, 4).addBack(6, 3).addBack(6, 2);
             gui.addModule(listModule);
             GUIInteractHandler interaction = new GUIInteractHandlerList(64);
             interaction.resetExecutors();
@@ -404,29 +404,29 @@ public class GUIConfigModule implements GUIModule {
     {
         final ItemStack onItem =
             ItemBuilder.of(Base64Head.GREEN.get())
-                .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.stackable_armor_select"))
+                .setName(Text.of("&b&l").concat("simplestack.gui.config.stackable_armor_select"))
                 .setLore(
-                    "",
-                    "&a&l⊳ " + plugin.getLibLangManager().getText(player, "generic.enabled"),
-                    "&7  " + plugin.getLibLangManager().getText(player, "generic.disabled"))
+                    Text.of(""),
+                    Text.of("&a&l⊳ ").concat("generic.enabled"),
+                    Text.of("&7  ").concat("generic.disabled"))
                 .get();
 
         final ItemStack offItem =
             ItemBuilder.of(Base64Head.RED.get())
-                .setName("&b&l" + plugin.getLangManager().getText(player, "simplestack.gui.config.stackable_armor_select"))
+                .setName(Text.of("&b&l").concat("simplestack.gui.config.stackable_armor_select"))
                 .setLore(
-                    "",
-                    "&7  " + plugin.getLibLangManager().getText(player, "generic.enabled"),
-                    "&c&l⊳ " + plugin.getLibLangManager().getText(player, "generic.disabled"))
+                    Text.of(""),
+                    Text.of("&7  ").concat("generic.enabled"),
+                    Text.of("&c&l⊳ ").concat("generic.disabled"))
                 .get();
 
         boolean buttonState = plugin.config().isStackedArmorWearable();
         final GUIItem guiItem = new GUIItem(buttonState ? onItem : offItem);
         guiItem.addEvent(new GUIButtonToggleableEvent(info -> {
-            info.getGUIItem().setItem(onItem);
+            info.getGUIItem().set(onItem);
             plugin.config().setStackedArmorWearable(true);
         }, info -> {
-            info.getGUIItem().setItem(offItem);
+            info.getGUIItem().set(offItem);
             plugin.config().setStackedArmorWearable(false);
         }, buttonState));
 

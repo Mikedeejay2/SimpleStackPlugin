@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.commands;
 
 import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
+import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.config.Config;
 import org.bukkit.Material;
@@ -33,16 +34,16 @@ public class RemoveItemCommand implements SubCommand {
         Player player = (Player) sender;
         ItemStack heldItem = player.getInventory().getItemInMainHand();
         if(heldItem.getType() == Material.AIR) {
-            plugin.sendMessage(player, "&c" + plugin.getLangManager().getText(player, "simplestack.warnings.held_item_required"));
+            plugin.sendMessage(player, Text.of("&c")
+                .concat(Text.of("simplestack.warnings.held_item_required")));
             return;
         }
         Config config = plugin.config();
         config.removeUniqueItem(player, heldItem);
         config.saveToDisk(true);
-        plugin.sendMessage(sender, String.format(
-            "&e&l%s&r &b%s",
-            plugin.getLibLangManager().getText(player, "generic.success"),
-            plugin.getLangManager().getText(player, "simplestack.commands.removeitem.success")));
+        plugin.sendMessage(sender, Text.of("&e&l%s&r &b%s").format(
+            Text.of("generic.success"),
+            Text.of("simplestack.commands.removeitem.success")));
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
     }
 
@@ -53,7 +54,7 @@ public class RemoveItemCommand implements SubCommand {
 
     @Override
     public String getInfo(CommandSender sender) {
-        return plugin.getLangManager().getText(sender, "simplestack.commands.removeitem.info");
+        return Text.of("simplestack.commands.removeitem.info").get(sender);
     }
 
     @Override

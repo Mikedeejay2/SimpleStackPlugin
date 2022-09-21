@@ -2,7 +2,7 @@ package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.mikedeejay2lib.BukkitPlugin;
 import com.mikedeejay2.mikedeejay2lib.commands.CommandManager;
-import com.mikedeejay2.mikedeejay2lib.text.language.LangManager;
+import com.mikedeejay2.mikedeejay2lib.text.language.TranslationManager;
 import com.mikedeejay2.mikedeejay2lib.util.bstats.BStats;
 import com.mikedeejay2.mikedeejay2lib.util.update.UpdateChecker;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
@@ -21,14 +21,11 @@ import com.mikedeejay2.simplestack.debug.DebugSystem;
  * <p>
  * The source code for Simple Stack can be found here:
  * <a href="https://github.com/Mikedeejay2/SimpleStackPlugin">https://github.com/Mikedeejay2/SimpleStackPlugin</a>
- * </p>
  * <p>
  * Simple Stack is powered by Mikedeejay2Lib.
- * </p>
  * <p>
  * The source code for Mikedeejay2Lib can be found here:
  * <a href="https://github.com/Mikedeejay2/Mikedeejay2Lib">https://github.com/Mikedeejay2/Mikedeejay2Lib</a>
- * </p>
  *
  * @author Mikedeejay2
  */
@@ -44,7 +41,6 @@ public final class SimpleStack extends BukkitPlugin {
 
     private BStats bStats;
     private UpdateChecker updateChecker;
-    private LangManager langManager;
     private CommandManager commandManager;
 
     @Override
@@ -52,7 +48,7 @@ public final class SimpleStack extends BukkitPlugin {
         super.onEnable();
         instance = this;
         setPrefix("&f[&b" + this.getDescription().getName() + "&f]&r ");
-        this.langManager = new LangManager(this, "lang");
+        TranslationManager.GLOBAL.registerDirectory("lang/simplestack", true);
 
         if(checkVersion() || installByteBuddyAgent()) return;
 
@@ -154,10 +150,6 @@ public final class SimpleStack extends BukkitPlugin {
      */
     public Config config() {
         return config;
-    }
-
-    public LangManager getLangManager() {
-        return langManager;
     }
 
     public CommandManager getCommandManager() {

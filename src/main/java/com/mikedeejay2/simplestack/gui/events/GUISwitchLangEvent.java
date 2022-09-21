@@ -28,11 +28,10 @@ public class GUISwitchLangEvent implements GUIEvent {
 
     @Override
     public void execute(GUIEventInfo event) {
-        Player player = event.getWhoClicked();
         Config config = plugin.config();
         config.setLangLocale(locale);
         GUIListModule listModule = event.getGUI().getModule(GUIListModule.class);
-        List<GUIItem> langItems = GUICreator.getLanguageList(plugin, player);
+        List<GUIItem> langItems = GUICreator.getLanguageList(plugin);
         listModule.setGUIItems(langItems);
     }
 

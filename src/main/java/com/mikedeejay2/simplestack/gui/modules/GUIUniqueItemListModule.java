@@ -37,7 +37,7 @@ public class GUIUniqueItemListModule implements GUIModule {
         List<GUIItem> listItems = list.getList();
         List<ItemStack> newItems = new ArrayList<>();
         for(GUIItem guiItem : listItems) {
-            newItems.add(guiItem.getItemBase());
+            newItems.add(guiItem.get());
         }
         plugin.config().setUniqueItemList(newItems);
     }
