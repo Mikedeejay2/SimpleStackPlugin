@@ -28,7 +28,7 @@
   "ContainerUtil": {
     "class_name": "net.minecraft.world.ContainerUtil",
     "methods": {
-      "removeItem": "a(Ljava/lang/List;II)LItemStack;"
+      "removeItem": "a(Ljava/util/List;II)LItemStack;"
     }
   },
   "Slot": {
