@@ -16,7 +16,9 @@
       "getCount": "K()I",
       "isSameItemSameTags": "e(LItemStack;LItemStack;)Z",
       "isEmpty": "b()Z",
-      "<init>": "<init>(LIMaterial;)V"
+      "<init>": "<init>(LIMaterial;)V",
+      "isDamaged": "i()Z",
+      "isStackable": "g()Z"
     }
   },
   "CraftItemStack": {
@@ -105,6 +107,12 @@
     "class_name": "net.minecraft.world.inventory.ContainerPlayer$1",
     "methods": {
       "getMaxStackSize": "a()I"
+    }
+  },
+  "ItemTrident": {
+    "class_name": "net.minecraft.world.item.ItemTrident",
+    "methods": {
+      "releaseUsing": "a(LItemStack;LWorld;LEntityLiving;I)V"
     }
   }
 }

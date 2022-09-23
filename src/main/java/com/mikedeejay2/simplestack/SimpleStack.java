@@ -87,6 +87,8 @@ public final class SimpleStack extends BukkitPlugin {
         SimpleStackAgent.addVisitor(new TransformItemSuspiciousStewFinishUsingItem());
         SimpleStackAgent.addVisitor(new TransformArmorSlotGetMaxStackSize());
         SimpleStackAgent.addVisitor(new TransformSlotGetMaxStackSize());
+        SimpleStackAgent.addVisitor(new TransformItemTridentReleaseUsing());
+        SimpleStackAgent.addVisitor(new TransformPlayerInventoryAdd());
         SimpleStackAgent.install();
     }
 
