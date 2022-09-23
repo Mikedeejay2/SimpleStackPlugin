@@ -7,6 +7,11 @@ import net.bytebuddy.jar.asm.Label;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 
+/**
+ * Fixes being able to overstack the cursor when picking up items from a result slot
+ *
+ * @author Mikedeejay2
+ */
 public class TransformContainerDoClickLambda extends MappedMethodVisitor {
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {
@@ -23,6 +28,9 @@ public class TransformContainerDoClickLambda extends MappedMethodVisitor {
         appendOverstackCheck();
     }
 
+    /**
+     * Fixes being able to overstack the cursor when picking up items from a result slot
+     */
     public void appendOverstackCheck() {
         super.visitVarInsn(ALOAD, 3); // Load ItemStack
         super.visitVarInsn(ASTORE, 4); // Save it to new local index

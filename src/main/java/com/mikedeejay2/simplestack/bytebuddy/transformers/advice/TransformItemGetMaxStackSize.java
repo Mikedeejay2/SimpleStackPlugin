@@ -14,6 +14,10 @@ import java.lang.reflect.Method;
 
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
+/**
+ * Advice for changing the max stack size of an Item. This is a general item, not an ItemStack, similar to Material in
+ * Bukkit. This is the max stack size used for the properties of an item.
+ */
 public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
     private static final DebugSystem DEBUG = SimpleStack.getInstance().getDebugSystem();
 

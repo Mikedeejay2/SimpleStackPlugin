@@ -7,6 +7,11 @@ import net.bytebuddy.jar.asm.Label;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 
+/**
+ * Fixes stacked buckets from being replaced by a bucket upon use.
+ *
+ * @author Mikedeejay2
+ */
 public class TransformItemBucketUse extends MappedMethodVisitor {
     protected boolean visitedNew = false;
     protected final Label returnLabel = new Label();
@@ -34,7 +39,7 @@ public class TransformItemBucketUse extends MappedMethodVisitor {
     }
 
     /**
-     * Fixes stacked buckets from being deleted upon use.
+     * Fixes stacked buckets from being replaced by a bucket upon use.
      */
     private void appendStackedBucketsFix() {
         Label emptyBucketLabel = new Label();

@@ -5,6 +5,12 @@ import com.mikedeejay2.simplestack.bytebuddy.MappedMethodVisitor;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
+/**
+ * Used in a multitude of places. Covered by many other transportations, but fixes left-clicking a result slot to
+ * prevent overstacking, and, without other patches, left-clicking in general.
+ *
+ * @author Mikedeejay2
+ */
 public class TransformItemStackSplit extends MappedMethodVisitor {
     @Override
     public MappingEntry getMappingEntry() {
@@ -18,10 +24,13 @@ public class TransformItemStackSplit extends MappedMethodVisitor {
         appendClampToMaxStackSize();
     }
 
+    /**
+     * Used in a multitude of places. Covered by many other transportations, but fixes left-clicking a result slot to
+     * prevent overstacking, and, without other patches, left-clicking in general.
+     */
     private void appendClampToMaxStackSize() {
         super.visitVarInsn(ALOAD, 0); // Load this ItemStack
-        super.visitMethodInsn(
-            INVOKEVIRTUAL, nms("ItemStack").method("getMaxStackSize")); // Invoke ItemStack#getMaxStackSize()
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getMaxStackSize")); // Invoke ItemStack#getMaxStackSize()
         super.visitVarInsn(ILOAD, 1); // Get split size request
         super.visitMethodInsn(
             INVOKESTATIC, "java/lang/Math", "min",

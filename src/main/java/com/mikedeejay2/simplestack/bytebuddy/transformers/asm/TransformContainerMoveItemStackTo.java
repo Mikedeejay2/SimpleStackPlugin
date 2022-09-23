@@ -7,6 +7,11 @@ import net.bytebuddy.jar.asm.Label;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
+/**
+ * Fixes shift clicking overstacked items out of a result slot
+ *
+ * @author Mikedeejay2
+ */
 public class TransformContainerMoveItemStackTo extends MappedMethodVisitor {
     private boolean visitedGetMaxStackSize = false;
     private boolean visitedIStoreFlag = false;

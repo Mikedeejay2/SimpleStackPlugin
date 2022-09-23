@@ -12,6 +12,11 @@ import java.lang.reflect.Method;
 
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
+/**
+ * Advice for changing specific slots of a container.
+ *
+ * @author Mikedeejay2
+ */
 public class TransformSlotGetMaxStackSize implements MethodVisitorInfo {
     private static final DebugSystem DEBUG = SimpleStack.getInstance().getDebugSystem();
 
@@ -25,6 +30,7 @@ public class TransformSlotGetMaxStackSize implements MethodVisitorInfo {
         return nms("Slot").method("getMaxStackSize");
     }
 
+    // TODO: Implement this
     public static int getSlotMaxStackSize(int currentReturnValue, long startTime) {
         int slotStackAmount = currentReturnValue;
         DEBUG.collect(startTime, "Slot redirect", true);

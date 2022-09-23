@@ -6,6 +6,11 @@ import net.bytebuddy.jar.asm.Label;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 
+/**
+ * Fixes stacked soups from being replaced by a bowl upon use.
+ *
+ * @author Mikedeejay2
+ */
 public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
     protected boolean visitedNew = false;
     protected boolean visitedReturn = false;
@@ -51,6 +56,9 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
         super.visitTypeInsn(opcode, type);
     }
 
+    /**
+     * Fixes stacked soups from being replaced by a bowl upon use.
+     */
     private void appendStackedSoupFix() {
         final Label emptyBowlLabel = new Label();
 

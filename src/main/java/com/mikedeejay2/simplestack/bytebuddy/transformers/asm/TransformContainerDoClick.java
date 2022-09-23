@@ -7,6 +7,11 @@ import net.bytebuddy.jar.asm.Opcodes;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 
+/**
+ * Fixes swapping cursor items with items of different types and swapping overstacked items into the hotbar.
+ *
+ * @author Mikedeejay2
+ */
 public class TransformContainerDoClick extends MappedMethodVisitor {
     protected boolean visitedIsSameItemSameTags = false;
     protected boolean appendedStackCheck1 = false;

@@ -6,6 +6,11 @@ import com.mikedeejay2.simplestack.bytebuddy.MappedMethodVisitor;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
+/**
+ * Make sure max of max stack size is removed from trying to remove from a slot.
+ *
+ * @author Mikedeejay2
+ */
 public class TransformSlotTryRemove extends MappedMethodVisitor {
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {
@@ -28,6 +33,9 @@ public class TransformSlotTryRemove extends MappedMethodVisitor {
         }
     }
 
+    /**
+     * Make sure max of max stack size is removed from trying to remove from a slot.
+     */
     private void appendClampToMaxStackSize() {
         super.visitVarInsn(ALOAD, 0); // Get this slot
         super.visitMethodInsn(INVOKEVIRTUAL, nms("Slot").method("getItem")); // Get the ItemStack currently in the slot

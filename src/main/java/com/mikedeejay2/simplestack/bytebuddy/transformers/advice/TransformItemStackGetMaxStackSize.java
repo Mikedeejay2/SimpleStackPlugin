@@ -15,6 +15,11 @@ import java.lang.reflect.Method;
 
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
+/**
+ * Advice for changing the max stack size of an ItemStack.
+ *
+ * @author Mikedeejay2
+ */
 public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
     private static final Method METHOD_AS_BUKKIT_COPY;      // org.bukkit.craftbukkit.inventory.CraftItemStack#asBukkitCopy()
     private static final DebugSystem DEBUG = SimpleStack.getInstance().getDebugSystem();

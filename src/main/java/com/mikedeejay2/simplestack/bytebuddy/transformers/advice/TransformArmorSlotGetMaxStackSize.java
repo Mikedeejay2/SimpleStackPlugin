@@ -13,6 +13,10 @@ import java.lang.reflect.Method;
 
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
+/**
+ * Advice for changing the maximum stack size of armor slots. Used to specify whether armor is stackable or not when
+ * worn.
+ */
 public class TransformArmorSlotGetMaxStackSize implements MethodVisitorInfo {
     private static final DebugSystem DEBUG = SimpleStack.getInstance().getDebugSystem();
 

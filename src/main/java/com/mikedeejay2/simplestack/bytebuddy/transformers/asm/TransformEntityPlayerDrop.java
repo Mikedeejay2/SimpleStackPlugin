@@ -6,6 +6,11 @@ import net.bytebuddy.jar.asm.Label;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 
+/**
+ * Fixes player dropping overstacked items. This ensures that items are split down to their max stack size.
+ *
+ * @author Mikedeejay2
+ */
 public class TransformEntityPlayerDrop extends MappedMethodVisitor {
     @Override
     public MappingEntry getMappingEntry() {
@@ -22,6 +27,9 @@ public class TransformEntityPlayerDrop extends MappedMethodVisitor {
         fixDropOverstacking();
     }
 
+    /**
+     * Fixes player dropping overstacked items. This ensures that items are split down to their max stack size.
+     */
     private void fixDropOverstacking() {
         Label whileLabel = new Label(); // If part of while loop
         Label insideLabel = new Label(); // Label for inside of while loop

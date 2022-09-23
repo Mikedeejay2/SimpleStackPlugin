@@ -6,6 +6,12 @@ import com.mikedeejay2.simplestack.bytebuddy.MappedMethodVisitor;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
+/**
+ * Used in multiple places, most common is dropping overstacked items onto the ground. This transformation should ensure
+ * that all are dropped, not just 1.
+ *
+ * @author Mikedeejay2
+ */
 public class TransformContainerUtilRemoveItem extends MappedMethodVisitor {
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {
@@ -30,6 +36,10 @@ public class TransformContainerUtilRemoveItem extends MappedMethodVisitor {
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
     }
 
+    /**
+     * Used in multiple places, most common is dropping overstacked items onto the ground. This method should ensure
+     * that all are dropped, not just 1.
+     */
     private void redirectSplit() {
         super.visitInsn(POP); // Pop amount
         super.visitInsn(POP); // Pop ItemStack

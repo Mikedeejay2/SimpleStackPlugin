@@ -5,6 +5,11 @@ import com.mikedeejay2.simplestack.MappingsLookup;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 import static net.bytebuddy.jar.asm.Opcodes.*;
 
+/**
+ * Fixes stacked suspicious stews from being replaced by a bowl upon use.
+ *
+ * @author Mikedeejay2
+ */
 public class TransformItemSuspiciousStewFinishUsingItem extends TransformItemSoupFinishUsingItem {
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {
