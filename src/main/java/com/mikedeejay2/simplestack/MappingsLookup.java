@@ -115,6 +115,16 @@ public class MappingsLookup {
                 }
             }
         }
+
+        // Generate descriptors
+        for(ClassMapping classMapping : holder.mappings.values()) {
+            for(MappingEntry methodEntry : classMapping.methodMappings.values()) {
+                methodEntry.generateDescriptor();
+            }
+            for(MappingEntry fieldEntry : classMapping.fieldMappings.values()) {
+                fieldEntry.generateDescriptor();
+            }
+        }
         return true;
     }
 
@@ -252,7 +262,7 @@ public class MappingsLookup {
 
         private MappingEntry(String value) {
             Validate.isTrue(value.contains(":") || value.contains("("),
-                            "Method mapping doesn't have method descriptor, \"%s\"", value);
+                            "Mapping doesn't have descriptor, \"%s\"", value);
             value = value.replaceFirst("\\(", ":("); // Add a separator between method name and descriptor
             this.name = value.substring(0, value.indexOf(':'));
             this.descriptor(value.substring(value.indexOf(':') + 1));
@@ -284,6 +294,10 @@ public class MappingsLookup {
                              String.format("Tried to get invalid descriptor \"%s\"", referenceName));
             if(descriptor != null)
                 return descriptor;
+            return generateDescriptor();
+        }
+
+        private String generateDescriptor() {
             String newDescriptor = descriptorFormat;
             int index = newDescriptor.indexOf('L');
             while(index != -1) {
@@ -297,6 +311,7 @@ public class MappingsLookup {
                     newDescriptor = newDescriptor.substring(0, index + 1) + qualifiedName + newDescriptor.substring(endIndex);
                 }
                 endIndex = newDescriptor.indexOf(';', index); // Update end index
+                Validate.isTrue(endIndex != -1); // No ending to the class reference
                 index = newDescriptor.indexOf('L', endIndex); // Navigate to the start of the next class reference
             }
 //            System.out.println("Descriptor: " + name + " " + newDescriptor);
