@@ -8,7 +8,8 @@ import static net.bytebuddy.jar.asm.Opcodes.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
 /**
- * Fixes stacked damaged items not stacking together upon add
+ * Fixes stacked damaged items not stacking together upon addThis fixes picking up multiple damaged items from the
+ * ground that are duplicates of each other, ensures that they stack properly in the inventory.
  *
  * @author Mikedeejay2
  */
@@ -18,7 +19,7 @@ public class TransformPlayerInventoryAdd extends MappedMethodVisitor {
 
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {
-        return nms("PlayerInventory").method("add");
+        return nms("PlayerInventory").method("add2");
     }
 
     @Override
@@ -33,6 +34,7 @@ public class TransformPlayerInventoryAdd extends MappedMethodVisitor {
     public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
         if(opcode == INVOKEVIRTUAL &&
             equalsMapping(owner, name, descriptor, nms("ItemStack").method("isDamaged"))) {
+            System.out.println("1");
             visitedIsDamaged = true;
         }
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
@@ -43,7 +45,10 @@ public class TransformPlayerInventoryAdd extends MappedMethodVisitor {
         super.visitJumpInsn(opcode, label);
         if(visitedIsDamaged && !visitedIfStatement) {
             visitedIfStatement = true;
-            super.visitJumpInsn(GOTO, label);
+            super.visitVarInsn(ALOAD, 2); // Load ItemStack
+            super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getMaxStackSize")); // Get max stack size
+            super.visitInsn(ICONST_1); // Get int of 1
+            super.visitJumpInsn(IF_ICMPNE, label); // If damaged item doesn't have a max stack size of 1, treat as a normal item
         }
     }
 }

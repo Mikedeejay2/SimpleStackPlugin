@@ -72,7 +72,8 @@
     "class_name": "net.minecraft.world.entity.player.PlayerInventory",
     "methods": {
       "setItem": "a(ILItemStack;)V",
-      "add": "e(LItemStack;)Z"
+      "add": "e(LItemStack;)Z",
+      "add2": "c(ILItemStack;)Z"
     }
   },
   "ItemBucket": {
