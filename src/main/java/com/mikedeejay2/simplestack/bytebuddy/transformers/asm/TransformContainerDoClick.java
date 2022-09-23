@@ -80,6 +80,18 @@ public class TransformContainerDoClick extends MappedMethodVisitor {
      * Fixes swapping overstacked items into the hotbar. Injected on a PlayerInventory#setItem call.
      */
     public void appendHotbarSwap() {
+        Label exitLabel = new Label();
+        super.visitInsn(POP); // Pop ItemStack
+        super.visitInsn(POP); // Pop button
+        super.visitInsn(POP); // Pop PlayerInventory
+
+        super.visitVarInsn(ALOAD, 7); // Load itemstack
+        super.visitVarInsn(ALOAD, 9); // Load itemstack1
+        super.visitJumpInsn(IF_ACMPEQ, exitLabel); // If they're the same, don't do this
+        super.visitFrame(F_SAME, 0, null, 0, null);
+        super.visitVarInsn(ALOAD, 5); // Load PlayerInventory
+        super.visitVarInsn(ILOAD, 2); // Load button
+        super.visitVarInsn(ALOAD, 7); // Load ItemStack
         // PlayerInventory, button, and ItemStack already exist on stack
         super.visitFieldInsn(GETSTATIC, "java/lang/Integer", "MAX_VALUE", "I"); // Get int max value
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("split")); // Split the max off of the ItemStack
@@ -91,7 +103,6 @@ public class TransformContainerDoClick extends MappedMethodVisitor {
 
         // If there are leftovers that won't fit into the inventory, throw them onto the ground
         Label insideLabel = new Label();
-        Label exitLabel = new Label();
 
         super.visitJumpInsn(IFNE, exitLabel);
         super.visitLabel(insideLabel);
