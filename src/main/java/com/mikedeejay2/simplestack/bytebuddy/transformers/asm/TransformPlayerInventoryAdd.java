@@ -26,15 +26,14 @@ public class TransformPlayerInventoryAdd extends MappedMethodVisitor {
     public void visitCode() {
         super.visitCode();
 
-        System.out.println("PlayerInventory add");
-        debugPrintString("PlayerInventory add");
+//        System.out.println("PlayerInventory add");
+//        debugPrintString("PlayerInventory add");
     }
 
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
         if(opcode == INVOKEVIRTUAL &&
             equalsMapping(owner, name, descriptor, nms("ItemStack").method("isDamaged"))) {
-            System.out.println("1");
             visitedIsDamaged = true;
         }
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);

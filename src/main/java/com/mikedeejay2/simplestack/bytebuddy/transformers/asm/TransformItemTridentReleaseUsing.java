@@ -23,8 +23,8 @@ public class TransformItemTridentReleaseUsing extends MappedMethodVisitor {
     public void visitCode() {
         super.visitCode();
 
-        System.out.println("Trident");
-        debugPrintString("Threw trident");
+//        System.out.println("Trident");
+//        debugPrintString("Threw trident");
     }
 
     @Override
@@ -41,6 +41,5 @@ public class TransformItemTridentReleaseUsing extends MappedMethodVisitor {
         super.visitInsn(ICONST_1); // Load int 1
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("split"));
         super.visitVarInsn(ASTORE, 1); // Store split ItemStack
-        debugPrintObject(1);
     }
 }
