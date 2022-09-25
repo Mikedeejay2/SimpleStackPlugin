@@ -11,7 +11,7 @@ import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.gui.GUICreator;
+import com.mikedeejay2.simplestack.gui.constructors.GUIConfigConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -57,14 +57,14 @@ public class GUIAboutModule implements GUIModule {
         item.addFrame(ItemBuilder.of(Material.PINK_STAINED_GLASS_PANE).setEmptyName().get(), 1);
         item.addFrame(ItemBuilder.of(Material.LIGHT_BLUE_STAINED_GLASS_PANE).setEmptyName().get(), 1);
         item.addFrame(ItemBuilder.of(Material.MAGENTA_STAINED_GLASS_PANE).setEmptyName().get(), 1);
-        item.addFrame(null, 1);
+        item.addFrame((ItemStack) null, 1);
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
 
         item = new AnimatedGUIItem((ItemStack) null, false, 2);
         item.addFrame(ItemBuilder.of(Material.PINK_STAINED_GLASS_PANE).setEmptyName().get(), 1);
         item.addFrame(ItemBuilder.of(Material.LIGHT_BLUE_STAINED_GLASS_PANE).setEmptyName().get(), 1);
         item.addFrame(ItemBuilder.of(Material.MAGENTA_STAINED_GLASS_PANE).setEmptyName().get(), 1);
-        item.addFrame(null, 1);
+        item.addFrame((ItemStack) null, 1);
         newCol = col - 1;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
         newRow = row - 1;
@@ -85,7 +85,7 @@ public class GUIAboutModule implements GUIModule {
         item = new AnimatedGUIItem((ItemStack) null, false, 4);
         item.addFrame(ItemBuilder.of(Material.LIGHT_BLUE_STAINED_GLASS_PANE).setEmptyName().get(), 1);
         item.addFrame(ItemBuilder.of(Material.MAGENTA_STAINED_GLASS_PANE).setEmptyName().get(), 1);
-        item.addFrame(null, 1);
+        item.addFrame((ItemStack) null, 1);
         newRow = row; newCol = col - 2;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
         newRow = row - 1;
@@ -113,7 +113,7 @@ public class GUIAboutModule implements GUIModule {
 
         item = new AnimatedGUIItem((ItemStack) null, false, 6);
         item.addFrame(ItemBuilder.of(Material.MAGENTA_STAINED_GLASS_PANE).setEmptyName().get(), 1);
-        item.addFrame(null, 1);
+        item.addFrame((ItemStack) null, 1);
         newRow = row;
         newCol = col - 3;
         if(validCheck(rows, cols, newRow, newCol)) clickLayer.setItem(newRow, newCol, item);
@@ -202,7 +202,7 @@ public class GUIAboutModule implements GUIModule {
                               .setName(Text.of("&f").concat(
                                   Text.of("gui.modules.navigator.backward")))
                               .get(player), 1);
-        backItem.addEvent(new GUIOpenNewEvent(plugin, new GUICreator(plugin)));
+        backItem.addEvent(new GUIOpenNewEvent(plugin, GUIConfigConstructor.INSTANCE));
         textLayer.setItem(6, 5, backItem);
     }
 
@@ -451,7 +451,7 @@ public class GUIAboutModule implements GUIModule {
         for(int row = 2; row <= 6; ++row) {
             item.addFrame(row, column, MovementType.OVERRIDE_ITEM, false, 1);
         }
-        item.addFrame(null, random.nextInt(50) + 25);
+        item.addFrame((ItemStack) null, random.nextInt(50) + 25);
         return item;
     }
 }

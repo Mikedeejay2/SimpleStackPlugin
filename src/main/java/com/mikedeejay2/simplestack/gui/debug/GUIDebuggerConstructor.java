@@ -31,7 +31,7 @@ public class GUIDebuggerConstructor implements GUIConstructor {
         GUIContainer gui = new GUIContainer(plugin, "&cDebug Menu", 3);
         gui.addModule(new GUIAnimationModule(plugin, 1));
         gui.addModule(new GUIAnimOutlineModule(
-            OUTLINE_ITEM, new AnimationSpecification(Position.TOP_LEFT, Style.LINEAR)));
+            OUTLINE_ITEM, new AnimationSpecification(Position.TOP_LEFT, Style.COL)));
         gui.addModule(new GUINavigatorModule(plugin, "config"));
         gui.addModule(new GUIDebugSettingsModule(plugin));
 

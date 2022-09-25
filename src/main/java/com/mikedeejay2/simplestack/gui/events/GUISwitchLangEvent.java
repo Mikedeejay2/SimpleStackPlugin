@@ -6,8 +6,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.config.Config;
-import com.mikedeejay2.simplestack.gui.GUICreator;
-import org.bukkit.entity.Player;
+import com.mikedeejay2.simplestack.gui.constructors.GUILanguageConstructor;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ import java.util.List;
  */
 public class GUISwitchLangEvent implements GUIEvent {
     private final SimpleStack plugin;
-    private String locale;
+    private final String locale;
 
     public GUISwitchLangEvent(SimpleStack plugin, String locale) {
         this.plugin = plugin;
@@ -31,7 +30,7 @@ public class GUISwitchLangEvent implements GUIEvent {
         Config config = plugin.config();
         config.setLangLocale(locale);
         GUIListModule listModule = event.getGUI().getModule(GUIListModule.class);
-        List<GUIItem> langItems = GUICreator.getLanguageList(plugin);
+        List<GUIItem> langItems = GUILanguageConstructor.INSTANCE.getLanguageList(plugin);
         listModule.setGUIItems(langItems);
     }
 
