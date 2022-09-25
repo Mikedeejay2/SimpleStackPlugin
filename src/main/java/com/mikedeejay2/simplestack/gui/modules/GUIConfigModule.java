@@ -25,8 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static com.mikedeejay2.mikedeejay2lib.gui.util.SlotMatcher.*;
-
 /**
  * The <tt>GUIModule</tt> for the main configuration GUI screen
  *
@@ -216,7 +214,7 @@ public class GUIConfigModule implements GUIModule {
             if(info.isShiftClick()) {
                 if(info.isLeftClick()) {
                     item.setAmount(1);
-                } else if(info.isLeftClick()) {
+                } else if(info.isRightClick()) {
                     item.setAmount(64);
                 }
             } else if(info.isLeftClick()) {
@@ -278,15 +276,14 @@ public class GUIConfigModule implements GUIModule {
      *
      * @return The creative drag mode item
      */
-    private GUIItem getGUIItemStackedArmor()
-    {
+    private GUIItem getGUIItemStackedArmor() {
         boolean buttonState = plugin.config().isStackedArmorWearable();
-        final GUIItem guiItem = new GUIItem(buttonState ? STACKED_ARMOR_ON : STACKED_ARMOR_OFF);
-        guiItem.addEvent(new GUIButtonToggleableEvent(info -> {
-            plugin.config().setStackedArmorWearable(true);
-        }, info -> {
-            plugin.config().setStackedArmorWearable(false);
-        }, buttonState).setOnItem(STACKED_ARMOR_ON).setOffItem(STACKED_ARMOR_OFF));
+        final GUIItem guiItem = new GUIItem(
+            buttonState ? STACKED_ARMOR_ON : STACKED_ARMOR_OFF).addEvent(
+                new GUIButtonToggleableEvent(
+                    info -> plugin.config().setStackedArmorWearable(true),
+                    info -> plugin.config().setStackedArmorWearable(false), buttonState)
+                    .setOnItem(STACKED_ARMOR_ON).setOffItem(STACKED_ARMOR_OFF));
 
         return guiItem;
     }
