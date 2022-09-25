@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.gui.modules;
+package com.mikedeejay2.simplestack.gui.debug;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
@@ -31,14 +31,6 @@ public class GUIAboutModule implements GUIModule {
         this.plugin = plugin;
     }
 
-    /**
-     * Overridden <tt>onClickedHead</tt> that creates a click effect on screen.
-     * Why? Because I was bored and wanted to show off what my GUI library can
-     * do.
-     *
-     * @param event The original <tt>InventoryClickEvent</tt>
-     * @param gui   The <tt>GUIContainer</tt> that was clicked
-     */
     @Override
     public void onClickedHead(InventoryClickEvent event, GUIContainer gui) {
         GUILayer clickLayer = gui.getLayer("click");
@@ -232,15 +224,15 @@ public class GUIAboutModule implements GUIModule {
             ItemBuilder.of(Material.DRAGON_EGG)
                 .setName("&b&lSimple Stack v" + plugin.getDescription().getVersion())
                 .setLore(
-                    Text.of("&5").concat(Text.of("simplestack.gui.about.desc_l1")),
-                    Text.of("&5").concat(Text.of("simplestack.gui.about.desc_l2")),
+                    Text.of("&5").concat(Text.of("Simple Stack is a plugin")),
+                    Text.of("&5").concat(Text.of("that makes unstackable items stack.")),
                     Text.of(""),
-                    Text.of("&9").concat(Text.of("simplestack.gui.about.desc_l3")),
-                    Text.of("&5• ").concat(Text.of("simplestack.gui.about.desc_l4")),
-                    Text.of("&5• ").concat(Text.of("simplestack.gui.about.desc_l5")),
-                    Text.of("&5  ").concat(Text.of("simplestack.gui.about.desc_l6")),
-                    Text.of("&5• ").concat(Text.of("simplestack.gui.about.desc_l7")),
-                    Text.of("&5  ").concat(Text.of("simplestack.gui.about.desc_l8")))
+                    Text.of("&9").concat(Text.of("Credits:")),
+                    Text.of("&5• ").concat(Text.of("Code by Mikedeejay2")),
+                    Text.of("&5• ").concat(Text.of("Translations provided by")),
+                    Text.of("&5  ").concat(Text.of("contributors on OneSky and Github")),
+                    Text.of("&5• ").concat(Text.of("Bug reports submitted by")),
+                    Text.of("&5  ").concat(Text.of("contributors on Github")))
                 .get(), 1);
         aboutLayer.setItem(5, 5, aboutItem);
     }
@@ -428,7 +420,7 @@ public class GUIAboutModule implements GUIModule {
         Random random = new Random();
         AnimatedGUIItem item = new AnimatedGUIItem((ItemStack) null, true, random.nextInt(50) + 50);
         String str = null;
-        int randNum = random.nextInt(4);
+        int randNum = random.nextInt(5);
         switch(randNum) {
             case 0:
                 str = Base64Head.BLUE.get();

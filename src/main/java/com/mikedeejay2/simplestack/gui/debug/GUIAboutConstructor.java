@@ -1,11 +1,10 @@
-package com.mikedeejay2.simplestack.gui.constructors;
+package com.mikedeejay2.simplestack.gui.debug;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIConstructor;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.animation.GUIAnimationModule;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.gui.modules.GUIAboutModule;
 
 public class GUIAboutConstructor implements GUIConstructor {
     public static final GUIAboutConstructor INSTANCE = new GUIAboutConstructor(SimpleStack.getInstance());
@@ -18,7 +17,7 @@ public class GUIAboutConstructor implements GUIConstructor {
 
     @Override
     public GUIContainer get() {
-        GUIContainer gui = new GUIContainer(plugin, Text.of("simplestack.gui.config.about_select"), 6);
+        GUIContainer gui = new GUIContainer(plugin, Text.of("About Simple Stack"), 6);
         GUIAnimationModule animModule = new GUIAnimationModule(plugin, 1);
         gui.addModule(animModule);
         GUIAboutModule aboutModule = new GUIAboutModule(plugin);

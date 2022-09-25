@@ -8,9 +8,11 @@ import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.util.GUIAbstractRuntimeModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
+import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.debug.DebugSystem;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -68,10 +70,12 @@ public class GUIDebugSettingsModule extends GUIAbstractRuntimeModule {
         GUIItem viewEntriesButton = getViewEntriesButton();
         statisticsItem = new GUIItem(ItemBuilder.of(Base64Head.QUESTION_MARK_LIME.get()).get())
             .setName("&bTimings Statistics");
+        GUIItem aboutItem = getGUIItemAboutItem();
         layer.setItem(2, 2, infoItem);
-        layer.setItem(2, 4, collectTimingsButton);
-        layer.setItem(2, 6, viewEntriesButton);
-        layer.setItem(2, 8, statisticsItem);
+        layer.setItem(2, 3, collectTimingsButton);
+        layer.setItem(2, 4, viewEntriesButton);
+        layer.setItem(2, 5, statisticsItem);
+        layer.setItem(2, 8, aboutItem);
 
         super.onOpenHead(player, gui);
     }
@@ -122,5 +126,19 @@ public class GUIDebugSettingsModule extends GUIAbstractRuntimeModule {
         GUIItem viewEntriesButton = new GUIItem(VIEW_ENTRIES_ITEM);
         viewEntriesButton.addEvent(new GUIOpenNewEvent(plugin, GUIDebugEntriesConstructor.INSTANCE));
         return viewEntriesButton;
+    }
+
+    /**
+     * Get the <tt>GUIItem</tt> for the "about" button
+     *
+     * @return The about item
+     */
+    private GUIItem getGUIItemAboutItem() {
+        Text name = Text.of("Old about screen");
+        AnimatedGUIItem aboutItem = new AnimatedGUIItem(ItemBuilder.of(Material.WRITABLE_BOOK).setName(Text.of("&8").concat(name)), true);
+        aboutItem.addFrame(ItemBuilder.of(Material.WRITABLE_BOOK).setName(Text.of("&8").concat(name)), 10);
+        aboutItem.addFrame(ItemBuilder.of(Material.WRITABLE_BOOK).setName(Text.of("&8&o").concat(name)), 10);
+        aboutItem.addEvent(new GUIOpenNewEvent(plugin, GUIAboutConstructor.INSTANCE));
+        return aboutItem;
     }
 }

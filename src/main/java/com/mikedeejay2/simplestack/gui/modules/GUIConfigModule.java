@@ -14,10 +14,8 @@ import com.mikedeejay2.mikedeejay2lib.text.PlaceholderFormatter;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
 import com.mikedeejay2.simplestack.gui.constructors.*;
-import com.mikedeejay2.simplestack.gui.events.*;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -51,7 +49,7 @@ public class GUIConfigModule implements GUIModule {
             Text.of("&7  ").concat("simplestack.list_type.blacklist"),
             Text.of("&a&l⊳ ").concat("simplestack.list_type.whitelist"));
 
-    private static final ItemBuilder CLOSE_ITEM = ItemBuilder.of(Base64Head.X_RED.get())
+    private static final ItemBuilder CLOSE_ITEM = ItemBuilder.of(Material.REDSTONE)
         .setName(Text.of("&c&o").concat("simplestack.gui.config.close_select"));
 
     private static final ItemBuilder ITEM_TYPE_AMOUNT_ITEM = ItemBuilder.of(Material.BARRIER)
@@ -122,9 +120,6 @@ public class GUIConfigModule implements GUIModule {
 
         GUIItem closeItem = getGUIItemCloseItem();
         layer.setItem(5, 5, closeItem);
-
-        GUIItem aboutItem = getGUIItemAboutItem();
-        layer.setItem(1, 5, aboutItem);
     }
 
     /**
@@ -133,7 +128,7 @@ public class GUIConfigModule implements GUIModule {
      * @return The switch list mode item
      */
     private GUIItem getGUIItemSwitchListMode() {
-        GUIItem switchListMode = new GUIItem((ItemStack) null);
+        GUIItem switchListMode = new GUIItem(plugin.config().getListMode() == ListMode.WHITELIST ? WHITELIST_ITEM : BLACKLIST_ITEM);
         GUIButtonToggleableEvent button = new GUIButtonToggleableEvent(
             (info) -> plugin.config().setListMode(ListMode.WHITELIST),
             (info) -> plugin.config().setListMode(ListMode.BLACKLIST),
@@ -142,20 +137,6 @@ public class GUIConfigModule implements GUIModule {
             .setOffItem(BLACKLIST_ITEM);
         switchListMode.addEvent(button);
         return switchListMode;
-    }
-
-    /**
-     * Get the <tt>GUIItem</tt> for the "about" button
-     *
-     * @return The about item
-     */
-    private GUIItem getGUIItemAboutItem() {
-        Text name = Text.of("simplestack.gui.config.about_select");
-        AnimatedGUIItem aboutItem = new AnimatedGUIItem(ItemBuilder.of(Material.BOOK).setName(Text.of("&f").concat(name)), true);
-        aboutItem.addFrame(ItemBuilder.of(Material.WRITABLE_BOOK).setName(Text.of("&f").concat(name)), 10);
-        aboutItem.addFrame(ItemBuilder.of(Material.WRITABLE_BOOK).setName(Text.of("&f&o").concat(name)), 10);
-        aboutItem.addEvent(new GUIOpenNewEvent(plugin, GUIAboutConstructor.INSTANCE));
-        return aboutItem;
     }
 
     /**

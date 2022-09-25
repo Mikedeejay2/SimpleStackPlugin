@@ -27,7 +27,6 @@
     "simplestack.list_type.blacklist": "Blacklist",
     "simplestack.list_type.whitelist": "Whitelist",
     "simplestack.gui.config.title": "Konfigurationsansicht",
-    "simplestack.gui.config.about_select": "Über...",
     "simplestack.gui.config.close_select": "Schließe dieses Fenster",
     "simplestack.gui.config.item_type_description": "Setze den Maximalwert von Gegenstandstypen",
     "simplestack.gui.config.preview_list_more": "und  %amt% mehr...",
@@ -51,13 +50,5 @@
     "simplestack.gui.item_types.change_mode_whitelist": "Klicke um zur Whitelist umzuschalten",
     "simplestack.gui.config.item_type_desc_l1": "Eine Liste aller Gegenstandstypen",
     "simplestack.gui.config.item_type_desc_l2": "Gegenstände in dieser Liste können entweder sein",
-    "simplestack.gui.config.item_type_desc_l3": "Blacklist oder Whitelist",
-    "simplestack.gui.about.desc_l1": "Simple Stacks ist ein Plugin",
-    "simplestack.gui.about.desc_l2": "Das sorgt dafür, das nicht stapelbare Gegenstände zu Stapeln werden können.",
-    "simplestack.gui.about.desc_l3": "Credits:",
-    "simplestack.gui.about.desc_l4": "Code geschrieben von Mikedeejay2",
-    "simplestack.gui.about.desc_l5": "Übersetzungen zur Verfügung gestellt von",
-    "simplestack.gui.about.desc_l6": "Mitwirkenden auf OneSky und Github",
-    "simplestack.gui.about.desc_l7": "Bugs gemeldet von",
-    "simplestack.gui.about.desc_l8": "Mitwirkenden auf Github"
+    "simplestack.gui.config.item_type_desc_l3": "Blacklist oder Whitelist"
 }

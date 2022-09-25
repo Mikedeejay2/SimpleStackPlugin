@@ -8,6 +8,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.interact.normal.GUIInteractHandlerDefa
 import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.animation.GUIAnimationModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIAnimDecoratorModule;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIAnimOutlineModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
@@ -30,12 +31,12 @@ public class GUIConfigConstructor implements GUIConstructor {
 
     private static final AnimatedGUIItem ANIMATED_GUI_ITEM =
         new AnimatedGUIItem(ItemBuilder.of(Material.BLUE_STAINED_GLASS_PANE).setEmptyName().get(), true)
-            .addFrame(ItemBuilder.of(Material.BLUE_STAINED_GLASS_PANE).setEmptyName().get(), 10)
-            .addFrame(ItemBuilder.of(Material.PURPLE_STAINED_GLASS_PANE).setEmptyName().get(), 10)
-            .addFrame(ItemBuilder.of(Material.MAGENTA_STAINED_GLASS_PANE).setEmptyName().get(), 10)
-            .addFrame(ItemBuilder.of(Material.LIGHT_BLUE_STAINED_GLASS_PANE).setEmptyName().get(), 10)
-            .addFrame(ItemBuilder.of(Material.CYAN_STAINED_GLASS_PANE).setEmptyName().get(), 10)
-            .addFrame(ItemBuilder.of(Material.PURPLE_STAINED_GLASS_PANE).setEmptyName().get(), 10);
+            .addFrame(ItemBuilder.of(Material.BLUE_STAINED_GLASS_PANE).setEmptyName().get(), 1)
+            .addFrame(ItemBuilder.of(Material.PURPLE_STAINED_GLASS_PANE).setEmptyName().get(), 1)
+            .addFrame(ItemBuilder.of(Material.MAGENTA_STAINED_GLASS_PANE).setEmptyName().get(), 1)
+            .addFrame(ItemBuilder.of(Material.LIGHT_BLUE_STAINED_GLASS_PANE).setEmptyName().get(), 1)
+            .addFrame(ItemBuilder.of(Material.CYAN_STAINED_GLASS_PANE).setEmptyName().get(), 1)
+            .addFrame(ItemBuilder.of(Material.PURPLE_STAINED_GLASS_PANE).setEmptyName().get(), 100);
 
     private final SimpleStack plugin;
 
@@ -47,9 +48,8 @@ public class GUIConfigConstructor implements GUIConstructor {
     public GUIContainer get() {
         GUIContainer gui = new GUIContainer(plugin, Text.of("simplestack.gui.config.title"), 5);
         GUIAnimationModule animation = new GUIAnimationModule(plugin, 1);
-        GUIAnimDecoratorModule outlineModule = new GUIAnimDecoratorModule(
-            inRange(1, 1, 5, 1).or(inRange(1, 9, 5, 9)),
-            ANIMATED_GUI_ITEM, new AnimationSpecification(Position.TOP_LEFT, Style.ROW));
+        GUIAnimDecoratorModule outlineModule = new GUIAnimOutlineModule(
+            ANIMATED_GUI_ITEM, new AnimationSpecification(Position.of(3, 5), Style.CIRCULAR));
         GUINavigatorModule naviModule = new GUINavigatorModule(plugin, "config");
         GUIConfigModule configModule = new GUIConfigModule(plugin);
         GUIDebugOpenerModule debugModule = new GUIDebugOpenerModule(plugin);
