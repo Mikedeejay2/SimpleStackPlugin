@@ -31,7 +31,7 @@ public class ResetCommand implements SubCommand {
     public void onCommand(CommandSender sender, String[] args) {
         plugin.config().resetFromJar(true);
         plugin.sendMessage(sender, Text.of("&e&l%s&r &b%s").format(
-            Text.of("generic.success"),
+            Text.of("simplestack.generic.success"),
             Text.of("simplestack.reset.success")));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;

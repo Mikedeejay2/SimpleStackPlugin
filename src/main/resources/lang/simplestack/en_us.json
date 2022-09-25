@@ -51,5 +51,11 @@
   "simplestack.gui.config.item_type_desc_l1": "A list of item types",
   "simplestack.gui.config.item_type_desc_l2": "Items in this list can either be",
   "simplestack.gui.config.item_type_desc_l3": "Blacklist or whitelist.",
-  "simplestack.gui.config.stackable_armor_select": "Stacked Armor Wearable"
+  "simplestack.gui.config.stackable_armor_select": "Stacked Armor Wearable",
+  "simplestack.generic.success": "Success!",
+  "warnings.big_number": "Warning: The number you entered is above the recommended limit and might act oddly.",
+  "errors.number_required": "Error: A number is required to run this subcommand.",
+  "errors.number_less_than_zero": "Error: The number entered was less than 0. Please enter a number greater than 0.",
+  "errors.not_a_number": "Error: The data entered is not a number. Please enter a number.",
+  "errors.invalid_item_held": "The item that is being held is invalid. Please hold a valid item."
 }

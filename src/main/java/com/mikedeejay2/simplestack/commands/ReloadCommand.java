@@ -33,7 +33,7 @@ public class ReloadCommand implements SubCommand {
         Config config = plugin.config();
         config.reload(true);
         plugin.sendMessage(sender, Text.of("&e&l%s&r &b%s").format(
-            Text.of("generic.success"),
+            Text.of("simplestack.generic.success"),
             Text.of("simplestack.reload.success")));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;

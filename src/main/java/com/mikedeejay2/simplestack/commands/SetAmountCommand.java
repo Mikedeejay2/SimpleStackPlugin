@@ -59,7 +59,7 @@ public class SetAmountCommand implements SubCommand {
             plugin.sendMessage(sender, Text.of("&e").concat("warnings.big_number"));
         }
         plugin.sendMessage(sender, Text.of("&e&l%s&r &b%s").format(
-            Text.of("generic.success"),
+            Text.of("simplestack.generic.success"),
             Text.of("simplestack.commands.setamount.success")));
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.5f, 1f);
     }

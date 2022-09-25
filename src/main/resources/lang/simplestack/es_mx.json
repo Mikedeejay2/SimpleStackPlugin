@@ -9,5 +9,11 @@
     "simplestack.commands.setamount.success": "Monto de items correctamente establecido.",
     "simplestack.commands.setamount.format": "Formato valido: /simplestack setamount <numero>",
     "simplestack.warnings.number_outside_of_range": "El monto establecido para %mat% esta fuera del alcance valido. Por defecto es 64",
-    "simplestack.warnings.invalid_material": "El material %mat% no existe en la configuracion."
+    "simplestack.warnings.invalid_material": "El material %mat% no existe en la configuracion.",
+    "simplestack.generic.success": "Correctamente establecido",
+    "warnings.big_number": "Advertencia: El numero que usted a puesto esta por encima de lo recomendado y podrían suceder errores",
+    "errors.number_required": "Error: Se necesita un numero para ejecutar este comando correctamente ",
+    "errors.number_less_than_zero": "Error: El numero establecido es menor a 0. Por favor establezca un numero mayor a este",
+    "errors.not_a_number": "Error: El carácter establecido no es un numero, Por favor ponga un numero",
+    "errors.invalid_item_held": "El item el cual esta sosteniendo, no es valido, porfavor intenta con un item valido"
 }
