@@ -54,6 +54,7 @@ public class Config extends YamlFile {
         this.loaded = false;
         if(!fileExists()) {
             loadFromJar(true);
+            setLangLocale(TranslationManager.SYSTEM_LOCALE);
             super.saveToDisk(true);
         } else loadFromDisk(true);
     }

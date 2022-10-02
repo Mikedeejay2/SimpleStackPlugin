@@ -2,6 +2,8 @@ package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.mikedeejay2lib.BukkitPlugin;
 import com.mikedeejay2.mikedeejay2lib.commands.CommandManager;
+import com.mikedeejay2.mikedeejay2lib.text.PlaceholderFormatter;
+import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.text.language.TranslationManager;
 import com.mikedeejay2.mikedeejay2lib.util.bstats.BStats;
 import com.mikedeejay2.mikedeejay2lib.util.update.UpdateChecker;
@@ -43,36 +45,7 @@ public final class SimpleStack extends BukkitPlugin {
     private UpdateChecker updateChecker;
     private CommandManager commandManager;
 
-    @Override
-    public void onEnable() {
-        super.onEnable();
-        instance = this;
-        setPrefix("&f[&b" + this.getDescription().getName() + "&f]&r ");
-        TranslationManager.GLOBAL.registerDirectory("lang/simplestack", true);
-
-        if(checkVersion() || installByteBuddyAgent()) return;
-
-        this.bStats = new BStats(this);
-        this.bStats.init(9379);
-        this.updateChecker = new UpdateChecker(this);
-        this.updateChecker.init("Mikedeejay2", "SimpleStackPlugin");
-        this.updateChecker.checkForUpdates(10);
-
-        this.commandManager = new CommandManager(this, "simplestack");
-
-        this.commandManager.addSubcommand(new HelpCommand(this));
-        this.commandManager.addSubcommand(new ReloadCommand(this));
-        this.commandManager.addSubcommand(new ResetCommand(this));
-        this.commandManager.addSubcommand(new SetAmountCommand(this));
-        this.commandManager.addSubcommand(new ConfigCommand(this));
-        this.commandManager.addSubcommand(new AddItemCommand(this));
-        this.commandManager.addSubcommand(new RemoveItemCommand(this));
-        commandManager.setDefaultSubCommand("help");
-        registerCommand(commandManager);
-
-        this.config = new Config(this);
-        this.debugSystem = new DebugSystem(this);
-
+    private static void registerVisitors() {
         SimpleStackAgent.addVisitor(new TransformItemGetMaxStackSize());
         SimpleStackAgent.addVisitor(new TransformItemStackGetMaxStackSize());
         SimpleStackAgent.addVisitor(new TransformContainerUtilRemoveItem());
@@ -90,10 +63,54 @@ public final class SimpleStack extends BukkitPlugin {
         SimpleStackAgent.addVisitor(new TransformItemTridentReleaseUsing());
         SimpleStackAgent.addVisitor(new TransformPlayerInventoryAdd());
         SimpleStackAgent.addVisitor(new TransformItemStackIsStackable());
+    }
 
-        sendInfo("Installing Simple Stack transformer, this may take a moment...");
-        SimpleStackAgent.install();
+    private void registerCommands() {
+        this.commandManager.addSubcommand(new HelpCommand(this));
+        this.commandManager.addSubcommand(new ReloadCommand(this));
+        this.commandManager.addSubcommand(new ResetCommand(this));
+        this.commandManager.addSubcommand(new SetAmountCommand(this));
+        this.commandManager.addSubcommand(new ConfigCommand(this));
+        this.commandManager.addSubcommand(new AddItemCommand(this));
+        this.commandManager.addSubcommand(new RemoveItemCommand(this));
+    }
+
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        instance = this;
+        setPrefix("&f[&b" + this.getDescription().getName() + "&f]&r ");
+        TranslationManager.GLOBAL.registerDirectory("lang/simplestack", true);
+
+        if(checkVersion() || installByteBuddyAgent()) return;
+
+        this.bStats = new BStats(this);
+        this.bStats.init(9379);
+        this.updateChecker = new UpdateChecker(this);
+        this.updateChecker.init("Mikedeejay2", "SimpleStackPlugin");
+        this.updateChecker.checkForUpdates(10);
+
+        this.commandManager = new CommandManager(this, "simplestack");
+        registerCommands();
+        commandManager.setDefaultSubCommand("help");
+        registerCommand(commandManager);
+
+        this.config = new Config(this);
+        this.debugSystem = new DebugSystem(this);
+
+        registerVisitors();
+        if(installAgent()) return;
+
         sendInfo("Finished initialization.");
+    }
+
+    private boolean installAgent() {
+        sendInfo("Installing Simple Stack transformer, this may take a moment...");
+        if(SimpleStackAgent.install()) {
+            disablePlugin(this);
+            return true;
+        }
+        return false;
     }
 
     private boolean installByteBuddyAgent() {

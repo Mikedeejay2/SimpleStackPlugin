@@ -1,8 +1,9 @@
 package com.mikedeejay2.simplestack.bytebuddy;
 
+import com.mikedeejay2.mikedeejay2lib.text.PlaceholderFormatter;
+import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReport;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReportSection;
-import com.mikedeejay2.mikedeejay2lib.util.debug.ReportedException;
 import com.mikedeejay2.simplestack.SimpleStack;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
@@ -13,7 +14,6 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
-import net.bytebuddy.dynamic.scaffold.TypeWriter;
 import net.bytebuddy.implementation.Implementation;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
@@ -32,14 +32,22 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
 public final class SimpleStackAgent {
     private static ResettableClassFileTransformer transformer;
     private static final Map<String, Set<MethodVisitorInfo>> VISITORS = new HashMap<>();
+    private static final AtomicBoolean crashed = new AtomicBoolean(false);
 
-    public static void install() {
+    private static final Text CRASH_INFO_1 = Text.of("&c").concat("simplestack.crash.info_message_l1");
+    private static final Text CRASH_INFO_2 = Text.of("&c").concat("simplestack.crash.info_message_l2").placeholder(
+        PlaceholderFormatter.of("url", "&bhttps://github.com/Mikedeejay2/SimpleStackPlugin/issues&c"));
+    private static final Text CRASH_INFO_3 = Text.of("&c").concat("simplestack.crash.info_message_l3").placeholder(
+        PlaceholderFormatter.of("path", "plugins/SimpleStack/crash-reports"));
+
+    public static boolean install() {
         ElementMatcher.Junction<? super TypeDescription> typeMatcher = none();
         for(String className : VISITORS.keySet()) {
             typeMatcher = typeMatcher.or(named(className));
@@ -54,6 +62,8 @@ public final class SimpleStackAgent {
             .with(ExceptionListener.INSTANCE)
             .with(InstallationExceptionListener.INSTANCE)
             .installOn(ByteBuddyHolder.getInstrumentation()); // Inject
+
+        return crashed.get();
     }
 
     public static void reset() {
@@ -71,13 +81,14 @@ public final class SimpleStackAgent {
 
         @Override
         public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain) {
-                String className = typeDescription.getName();
-                Set<MethodVisitorInfo> wrappers = VISITORS.get(className);
-                Validate.notNull(wrappers,
-                                 "No method visitors of name \"%s\" were found.", className);
-                Validate.notEmpty(wrappers,
-                                  "Got empty set of method visitors for name \"%s\"", className);
-                return builder.visit(new AgentAsmVisitor(wrappers));
+            if(crashed.get()) return builder;
+            String className = typeDescription.getName();
+            Set<MethodVisitorInfo> wrappers = VISITORS.get(className);
+            Validate.notNull(wrappers,
+                             "No method visitors of name \"%s\" were found.", className);
+            Validate.notEmpty(wrappers,
+                              "Got empty set of method visitors for name \"%s\"", className);
+            return builder.visit(new AgentAsmVisitor(wrappers));
         }
     }
 
@@ -108,6 +119,7 @@ public final class SimpleStackAgent {
             MethodList<?> methods,
             int writerFlags,
             int readerFlags) {
+            if(crashed.get()) return classVisitor;
             // Referenced from ASMVisitorWrapper line 491
             Map<String, MethodDescription> mapped = new HashMap<>();
             for (MethodDescription methodDescription : CompoundList.of(
@@ -154,6 +166,7 @@ public final class SimpleStackAgent {
         @Override
         public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
             MethodVisitor visitor = super.visitMethod(access, name, descriptor, signature, exceptions);
+            if(crashed.get()) return visitor;
             MethodDescription description = methods.get(name + descriptor);
             for(MethodVisitorInfo info : visitorInfos) {
                 if(!info.getMappingEntry().matches(name, descriptor)) continue;
@@ -170,7 +183,7 @@ public final class SimpleStackAgent {
 
         @Override
         public void onError(String typeName, ClassLoader classLoader, JavaModule module, boolean loaded, Throwable throwable) {
-            CrashReport crashReport = new CrashReport(SimpleStack.getInstance(), "Exception while transforming classes", true);
+            CrashReport crashReport = new CrashReport(SimpleStack.getInstance(), "Exception while transforming classes", true, true);
             crashReport.setThrowable(throwable);
 
             CrashReportSection section = crashReport.addSection("Transform Details");
@@ -178,7 +191,10 @@ public final class SimpleStackAgent {
             section.addDetail("Class Loader", classLoader != null ? classLoader.getName() : null);
             section.addDetail("Loaded", String.valueOf(loaded));
 
+            crashReport.addInfo(CRASH_INFO_1).addInfo(CRASH_INFO_2).addInfo(CRASH_INFO_3);
+
             crashReport.execute();
+            crashed.compareAndSet(false, true);
         }
 
         @Override public void onComplete(String typeName, ClassLoader classLoader, JavaModule module, boolean loaded) {}
@@ -192,14 +208,17 @@ public final class SimpleStackAgent {
 
         @Override
         public Throwable onError(Instrumentation instrumentation, ResettableClassFileTransformer classFileTransformer, Throwable throwable) {
-            CrashReport crashReport = new CrashReport(SimpleStack.getInstance(), "Exception while transforming classes", true);
+            CrashReport crashReport = new CrashReport(SimpleStack.getInstance(), "Exception while transforming classes", true, true);
             crashReport.setThrowable(throwable);
 
             CrashReportSection section = crashReport.addSection("Install Details");
             section.addDetail("Class File Transformer", classFileTransformer.getClass().getCanonicalName());
 
+            crashReport.addInfo(CRASH_INFO_1).addInfo(CRASH_INFO_2).addInfo(CRASH_INFO_3);
+
             crashReport.execute();
-            return new ReportedException(crashReport);
+            crashed.compareAndSet(false, true);
+            return null;
         }
 
         @Override public void onBeforeInstall(Instrumentation instrumentation, ResettableClassFileTransformer classFileTransformer) {}
