@@ -90,13 +90,17 @@ public final class SimpleStack extends BukkitPlugin {
         SimpleStackAgent.addVisitor(new TransformItemTridentReleaseUsing());
         SimpleStackAgent.addVisitor(new TransformPlayerInventoryAdd());
         SimpleStackAgent.addVisitor(new TransformItemStackIsStackable());
+
+        sendInfo("Installing Simple Stack transformer, this may take a moment...");
         SimpleStackAgent.install();
+        sendInfo("Finished initialization.");
     }
 
     private boolean installByteBuddyAgent() {
+        sendInfo("Creating Simple Stack transformer, this may take a moment...");
         if(ByteBuddyHolder.install()) {
-            sendSevere("SimpleStack is not compatible with this installation of Java!");
-            sendSevere("Common solutions are to use Java 9 or greater OR use a Java 8 JDK that includes the required instrumentation toolkit");
+            sendSevere("&cSimpleStack is not compatible with this installation of Java!");
+            sendSevere("&cCommon solutions are to use Java 9 or greater OR use a Java 8 JDK.");
             disablePlugin(this);
             return true;
         }
@@ -113,7 +117,7 @@ public final class SimpleStack extends BukkitPlugin {
     private boolean checkVersion() {
         if(!MappingsLookup.loadMappings(this)) {
             sendSevere(String.format(
-                "Simple Stack %s is not compatible Minecraft version %s!",
+                "Simple Stack %s is not compatible with Minecraft version %s!",
                 this.getDescription().getVersion(),
                 MinecraftVersion.getVersionString()));
             disablePlugin(this);

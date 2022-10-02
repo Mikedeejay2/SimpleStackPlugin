@@ -52,9 +52,9 @@
   "simplestack.gui.config.item_type_desc_l2": "在此列表中的物品可以是",
   "simplestack.gui.config.item_type_desc_l3": "黑名单或者是白名单",
   "simplestack.generic.success": "成功！",
-  "warnings.big_number": "警告：你输入的值超出了建议限制，可能产生不正常的表现。",
-  "errors.number_required": "错误：此子命令需要的是一个数字。",
-  "errors.number_less_than_zero": "错误：输入的数字小于零。请输入一个比零大的数字。",
-  "errors.not_a_number": "错误：输入数据不是数字。请输入一个数字。",
-  "errors.invalid_item_held": "所持的物品不合法。请持有一个合法的物品。"
+  "simplestack.warnings.big_number": "警告：你输入的值超出了建议限制，可能产生不正常的表现。",
+  "simplestack.errors.number_required": "错误：此子命令需要的是一个数字。",
+  "simplestack.errors.number_less_than_zero": "错误：输入的数字小于零。请输入一个比零大的数字。",
+  "simplestack.errors.not_a_number": "错误：输入数据不是数字。请输入一个数字。",
+  "simplestack.errors.invalid_item_held": "所持的物品不合法。请持有一个合法的物品。"
 }

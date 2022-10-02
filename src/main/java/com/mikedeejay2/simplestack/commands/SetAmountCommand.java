@@ -34,29 +34,29 @@ public class SetAmountCommand implements SubCommand {
     public void onCommand(CommandSender sender, String[] args) {
         if(args.length < 2) {
             plugin.sendMessage(sender, Text.of("&c")
-                .concat("errors.number_required")
+                .concat("simplestack.errors.number_required")
                 .concat("\n")
                 .concat("simplestack.commands.setamount.format"));
             return;
         }
         if(!NumberUtils.isCreatable(args[1])) {
-            plugin.sendMessage(sender, Text.of("&c").concat("errors.not_a_number"));
+            plugin.sendMessage(sender, Text.of("&c").concat("simplestack.errors.not_a_number"));
             return;
         }
         int amount = Integer.parseInt(args[1]);
         if(amount < 0) {
-            plugin.sendMessage(sender, Text.of("&c").concat("errors.number_less_than_zero"));
+            plugin.sendMessage(sender, Text.of("&c").concat("simplestack.errors.number_less_than_zero"));
             return;
         }
         Player player = (Player) sender;
         ItemStack item = player.getInventory().getItemInMainHand();
         if(item.getType() == Material.AIR) {
-            plugin.sendMessage(sender, Text.of("&c").concat("errors.invalid_item_held"));
+            plugin.sendMessage(sender, Text.of("&c").concat("simplestack.errors.invalid_item_held"));
             return;
         }
         item.setAmount(amount);
         if(amount > plugin.config().getMaxAmount()) {
-            plugin.sendMessage(sender, Text.of("&e").concat("warnings.big_number"));
+            plugin.sendMessage(sender, Text.of("&e").concat("simplestack.warnings.big_number"));
         }
         plugin.sendMessage(sender, Text.of("&e&l%s&r &b%s").format(
             Text.of("simplestack.generic.success"),

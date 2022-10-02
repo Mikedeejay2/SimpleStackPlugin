@@ -52,9 +52,9 @@
     "simplestack.gui.config.item_type_desc_l2": "Gegenstände in dieser Liste können entweder sein",
     "simplestack.gui.config.item_type_desc_l3": "Blacklist oder Whitelist",
     "simplestack.generic.success": "Erfolg!",
-    "warnings.big_number": "Warnung: Die von dir eingegebene Zahl ist über dem empfohlenen Limit und führt vielleicht zu komischem Verhalten.",
-    "errors.number_required": "Fehler: Um diesen Unterbefehl auszuführen wird ein Zahlenwert benötigt.",
-    "errors.number_less_than_zero": "Fehler: Die eingegebene Zahl ist kleiner als 0. Bitte gib eine Zahl größer als 0 an.",
-    "errors.not_a_number": "Fehler: Der eingegebene Wert ist keine Zahl. Bitte gib eine Zahl an.",
-    "errors.invalid_item_held": "Der von dir gehaltene Gegenstand ist unzulässig. Bitte halte einen zulässigen Gegenstand."
+    "simplestack.warnings.big_number": "Warnung: Die von dir eingegebene Zahl ist über dem empfohlenen Limit und führt vielleicht zu komischem Verhalten.",
+    "simplestack.errors.number_required": "Fehler: Um diesen Unterbefehl auszuführen wird ein Zahlenwert benötigt.",
+    "simplestack.errors.number_less_than_zero": "Fehler: Die eingegebene Zahl ist kleiner als 0. Bitte gib eine Zahl größer als 0 an.",
+    "simplestack.errors.not_a_number": "Fehler: Der eingegebene Wert ist keine Zahl. Bitte gib eine Zahl an.",
+    "simplestack.errors.invalid_item_held": "Der von dir gehaltene Gegenstand ist unzulässig. Bitte halte einen zulässigen Gegenstand."
 }
