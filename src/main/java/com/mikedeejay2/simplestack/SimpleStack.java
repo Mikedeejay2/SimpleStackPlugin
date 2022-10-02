@@ -130,9 +130,6 @@ public final class SimpleStack extends BukkitPlugin {
         }
 
         if(ByteBuddyHolder.getInstrumentation() != null) {
-//            MaxStackSizeTransformer.reset();
-//            SplitStackTransformer.reset();
-//            RemoveItemTransformer.reset();
             SimpleStackAgent.reset();
         }
     }

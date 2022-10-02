@@ -2,9 +2,9 @@ package com.mikedeejay2.simplestack.bytebuddy.transformers.asm;
 
 import com.mikedeejay2.simplestack.MappingsLookup;
 import com.mikedeejay2.simplestack.bytebuddy.MappedMethodVisitor;
-import net.bytebuddy.jar.asm.Label;
+import org.objectweb.asm.Label;
 
-import static net.bytebuddy.jar.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
 
 /**

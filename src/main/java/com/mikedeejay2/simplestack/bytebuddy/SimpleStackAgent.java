@@ -1,5 +1,9 @@
 package com.mikedeejay2.simplestack.bytebuddy;
 
+import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReport;
+import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReportSection;
+import com.mikedeejay2.mikedeejay2lib.util.debug.ReportedException;
+import com.mikedeejay2.simplestack.SimpleStack;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.asm.AsmVisitorWrapper;
@@ -9,17 +13,21 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.scaffold.TypeWriter;
 import net.bytebuddy.implementation.Implementation;
-import net.bytebuddy.jar.asm.ClassVisitor;
-import net.bytebuddy.jar.asm.ClassWriter;
-import net.bytebuddy.jar.asm.MethodVisitor;
-import net.bytebuddy.jar.asm.Opcodes;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.pool.TypePool;
 import net.bytebuddy.utility.CompoundList;
 import net.bytebuddy.utility.JavaModule;
 import org.apache.commons.lang3.Validate;
+import org.objectweb.asm.util.CheckClassAdapter;
 
+import java.lang.instrument.Instrumentation;
+import java.security.ProtectionDomain;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -43,6 +51,8 @@ public final class SimpleStackAgent {
             .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION) // Use retransformation strategy to modify existing NMS classes
             .type(typeMatcher) // Match only classes to be transformed
             .transform(MasterTransformer.INSTANCE) // Transform using MasterTransformer
+            .with(ExceptionListener.INSTANCE)
+            .with(InstallationExceptionListener.INSTANCE)
             .installOn(ByteBuddyHolder.getInstrumentation()); // Inject
     }
 
@@ -60,8 +70,7 @@ public final class SimpleStackAgent {
         INSTANCE;
 
         @Override
-        public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module) {
-            try {
+        public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain) {
                 String className = typeDescription.getName();
                 Set<MethodVisitorInfo> wrappers = VISITORS.get(className);
                 Validate.notNull(wrappers,
@@ -69,10 +78,6 @@ public final class SimpleStackAgent {
                 Validate.notEmpty(wrappers,
                                   "Got empty set of method visitors for name \"%s\"", className);
                 return builder.visit(new AgentAsmVisitor(wrappers));
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-            return builder;
         }
     }
 
@@ -110,6 +115,7 @@ public final class SimpleStackAgent {
                 new MethodDescription.Latent.TypeInitializer(instrumentedType))) {
                 mapped.put(methodDescription.getInternalName() + methodDescription.getDescriptor(), methodDescription);
             }
+            classVisitor = new CheckClassAdapter(classVisitor);
             return new AgentClassVisitor(
                 classVisitor, visitorInfos, mapped, instrumentedType,
                 implementationContext, typePool, writerFlags, readerFlags);
@@ -148,18 +154,59 @@ public final class SimpleStackAgent {
         @Override
         public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
             MethodVisitor visitor = super.visitMethod(access, name, descriptor, signature, exceptions);
-            try {
-                MethodDescription description = methods.get(name + descriptor);
-                for(MethodVisitorInfo info : visitorInfos) {
-                    if(!info.getMappingEntry().matches(name, descriptor)) continue;
-                    visitor = info.getWrapper().wrap(
-                        instrumentedType, description, visitor,
-                        implementationContext, typePool, writerFlags, readerFlags);
-                }
-            } catch(Exception e) {
-                e.printStackTrace();
+            MethodDescription description = methods.get(name + descriptor);
+            for(MethodVisitorInfo info : visitorInfos) {
+                if(!info.getMappingEntry().matches(name, descriptor)) continue;
+                visitor = info.getWrapper().wrap(
+                    instrumentedType, description, visitor,
+                    implementationContext, typePool, writerFlags, readerFlags);
             }
             return visitor;
         }
+    }
+
+    private enum ExceptionListener implements AgentBuilder.Listener {
+        INSTANCE;
+
+        @Override
+        public void onError(String typeName, ClassLoader classLoader, JavaModule module, boolean loaded, Throwable throwable) {
+            CrashReport crashReport = new CrashReport(SimpleStack.getInstance(), "Exception while transforming classes", true);
+            crashReport.setThrowable(throwable);
+
+            CrashReportSection section = crashReport.addSection("Transform Details");
+            section.addDetail("Type Name", typeName);
+            section.addDetail("Class Loader", classLoader != null ? classLoader.getName() : null);
+            section.addDetail("Loaded", String.valueOf(loaded));
+
+            crashReport.execute();
+        }
+
+        @Override public void onComplete(String typeName, ClassLoader classLoader, JavaModule module, boolean loaded) {}
+        @Override public void onDiscovery(String typeName, ClassLoader classLoader, JavaModule module, boolean loaded) {}
+        @Override public void onTransformation(TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, boolean loaded, DynamicType dynamicType) {}
+        @Override public void onIgnored(TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, boolean loaded) {}
+    }
+
+    private enum InstallationExceptionListener implements AgentBuilder.InstallationListener {
+        INSTANCE;
+
+        @Override
+        public Throwable onError(Instrumentation instrumentation, ResettableClassFileTransformer classFileTransformer, Throwable throwable) {
+            CrashReport crashReport = new CrashReport(SimpleStack.getInstance(), "Exception while transforming classes", true);
+            crashReport.setThrowable(throwable);
+
+            CrashReportSection section = crashReport.addSection("Install Details");
+            section.addDetail("Class File Transformer", classFileTransformer.getClass().getCanonicalName());
+
+            crashReport.execute();
+            return new ReportedException(crashReport);
+        }
+
+        @Override public void onBeforeInstall(Instrumentation instrumentation, ResettableClassFileTransformer classFileTransformer) {}
+        @Override public void onInstall(Instrumentation instrumentation, ResettableClassFileTransformer classFileTransformer) {}
+        @Override public void onReset(Instrumentation instrumentation, ResettableClassFileTransformer classFileTransformer) {}
+        @Override public void onBeforeWarmUp(Set<Class<?>> types, ResettableClassFileTransformer classFileTransformer) {}
+        @Override public void onWarmUpError(Class<?> type, ResettableClassFileTransformer classFileTransformer, Throwable throwable) {}
+        @Override public void onAfterWarmUp(Map<Class<?>, byte[]> types, ResettableClassFileTransformer classFileTransformer, boolean transformed) {}
     }
 }

@@ -2,9 +2,9 @@ package com.mikedeejay2.simplestack.bytebuddy;
 
 import com.mikedeejay2.simplestack.MappingsLookup;
 import net.bytebuddy.asm.AsmVisitorWrapper;
-import net.bytebuddy.jar.asm.MethodVisitor;
+import org.objectweb.asm.MethodVisitor;
 
-import static net.bytebuddy.jar.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.*;
 
 public abstract class MappedMethodVisitor extends MethodVisitor implements MethodVisitorInfo {
     public MappedMethodVisitor() {

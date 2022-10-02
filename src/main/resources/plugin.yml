@@ -2,6 +2,8 @@ name: SimpleStack
 version: ${project.version}
 main: com.mikedeejay2.simplestack.SimpleStack
 api-version: 1.13
+authors:
+  - Mikedeejay2
 
 commands:
   simplestack:
