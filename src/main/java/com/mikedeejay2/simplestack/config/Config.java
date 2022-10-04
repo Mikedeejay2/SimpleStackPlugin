@@ -9,6 +9,8 @@ import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.text.language.TranslationManager;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.SimpleStack;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -390,6 +392,19 @@ public class Config extends YamlFile {
      */
     public Map<Material, Integer> getItemAmounts() {
         return itemAmounts;
+    }
+
+    /**
+     * Get material to item amounts as a set
+     *
+     * @return Material to item amounts as a set
+     */
+    public Set<Pair<Material, Integer>> getItemAmountsSet() {
+        final Set<Pair<Material, Integer>> set = new LinkedHashSet<>();
+        for(Material material : itemAmounts.keySet()) {
+            set.add(new ImmutablePair<>(material, itemAmounts.get(material)));
+        }
+        return set;
     }
 
     /**

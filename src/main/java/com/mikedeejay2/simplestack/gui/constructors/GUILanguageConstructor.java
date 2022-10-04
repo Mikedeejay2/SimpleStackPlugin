@@ -1,14 +1,9 @@
 package com.mikedeejay2.simplestack.gui.constructors;
 
 import com.google.common.collect.ImmutableList;
-import com.mikedeejay2.mikedeejay2lib.gui.GUIConstructor;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.animation.GUIAnimationModule;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIDecoratorModule;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
@@ -17,18 +12,18 @@ import com.mikedeejay2.simplestack.gui.events.GUISwitchLangEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
-import static com.mikedeejay2.mikedeejay2lib.gui.util.SlotMatcher.inRange;
-
-public class GUILanguageConstructor implements GUIConstructor {
+public class GUILanguageConstructor extends GUIAbstractListConstructor<GUIItem> {
+    private static final Function<GUIItem, GUIItem> MAPPER = (item) -> item;
     public static final GUILanguageConstructor INSTANCE = new GUILanguageConstructor(SimpleStack.getInstance());
 
-    private final SimpleStack plugin;
     private final List<GUIItem> languageItems;
 
     private GUILanguageConstructor(SimpleStack plugin) {
-        this.plugin = plugin;
+        super(plugin, Text.of("simplestack.gui.language.title"), 5, MAPPER);
 
         Text clickMessage = Text.of("&f").concat(Text.of("simplestack.gui.language.language_select"));
         this.languageItems = ImmutableList.of(
@@ -63,21 +58,12 @@ public class GUILanguageConstructor implements GUIConstructor {
 
     @Override
     public GUIContainer get() {
-        GUIContainer gui = new GUIContainer(plugin, Text.of("simplestack.gui.language.title"), 5);
-        GUIDecoratorModule border = new GUIDecoratorModule(
-            inRange(1, 1, 1, 9).or(inRange(6, 1, 6, 9)),
-            new GUIItem(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName()));
-        gui.addModule(border);
-        GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
-        gui.addModule(navi);
-        GUIListModule langList = new GUIListModule(plugin, GUIListModule.ListViewMode.PAGED, 2, 5, 1, 9);
-        langList.addForward(5, 6);
-        langList.addBack(5, 4);
-        gui.addModule(langList);
-        langList.setGUIItems(getLanguageList(plugin));
-        GUIAnimationModule animModule = new GUIAnimationModule(plugin, 10);
-        gui.addModule(animModule);
-        return gui;
+        return super.get();
+    }
+
+    @Override
+    protected Collection<GUIItem> getUnmappedList() {
+        return getLanguageList(plugin);
     }
 
     /**
