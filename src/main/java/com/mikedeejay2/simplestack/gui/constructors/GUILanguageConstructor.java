@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.animation.GUIAnimationModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
@@ -58,7 +59,10 @@ public class GUILanguageConstructor extends GUIAbstractListConstructor<GUIItem> 
 
     @Override
     public GUIContainer get() {
-        return super.get();
+        GUIContainer gui = super.get();
+        GUIAnimationModule animModule = new GUIAnimationModule(plugin, 1);
+        gui.addModule(animModule);
+        return gui;
     }
 
     @Override
