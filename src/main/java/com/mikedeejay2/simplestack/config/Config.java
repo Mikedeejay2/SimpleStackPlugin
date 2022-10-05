@@ -9,8 +9,6 @@ import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.text.language.TranslationManager;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.SimpleStack;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -29,13 +27,13 @@ public class Config extends YamlFile {
     // List mode of the material list. Either Blacklist of Whitelist.
     private ListMode listMode;
     // Material list of the config (Item Type list in config)
-    private List<Material> materialList;
+    private final List<Material> materialList;
     // Localization code specified in the config
     private String langLocale;
     // Item amounts based on the item's material (Item Type amounts list in config)
-    private Map<Material, Integer> itemAmounts;
+    private final Map<Material, Integer> itemAmounts;
     // Unique items list from the unique_items.json
-    private List<ItemStack> uniqueItemList;
+    private final List<ItemStack> uniqueItemList;
     // The max amount for all items in minecraft
     private int maxAmount;
     // Whether stacked armor can be worn or not
@@ -54,6 +52,9 @@ public class Config extends YamlFile {
         this.plugin = plugin;
         this.modified = false;
         this.loaded = false;
+        this.materialList = new ArrayList<>();
+        this.itemAmounts = new LinkedHashMap<>();
+        this.uniqueItemList = new ArrayList<>();
         if(!fileExists()) {
             loadFromJar(true);
             setLangLocale(TranslationManager.SYSTEM_LOCALE);
@@ -98,7 +99,7 @@ public class Config extends YamlFile {
      * Load item amounts into the <tt>itemAmounts</tt> map for this config
      */
     private void loadItemAmounts() {
-        itemAmounts = new HashMap<>();
+        itemAmounts.clear();
         SectionAccessor<YamlFile, Object> section = accessor.getSection("Item Amounts");
         Set<String> materialList = section.getKeys(false);
         for(String mat : materialList) {
@@ -138,7 +139,7 @@ public class Config extends YamlFile {
      */
     private void loadMaterialList() {
         List<String> matList = accessor.getStringList("Item Types");
-        materialList = new ArrayList<>();
+        materialList.clear();
 
         for(String mat : matList) {
             Material material = Material.matchMaterial(mat);
@@ -160,7 +161,7 @@ public class Config extends YamlFile {
         if(!uniqueItems.fileExists()) uniqueItems.saveToDisk(true);
         uniqueItems.loadFromDisk(true);
         List<ItemStack> itemList = uniqueItems.getAccessor().getItemStackList("items");
-        uniqueItemList = new ArrayList<>();
+        uniqueItemList.clear();
         if(itemList == null) return;
 
         for(ItemStack item : itemList) {
@@ -399,12 +400,8 @@ public class Config extends YamlFile {
      *
      * @return Material to item amounts as a set
      */
-    public Set<Pair<Material, Integer>> getItemAmountsSet() {
-        final Set<Pair<Material, Integer>> set = new LinkedHashSet<>();
-        for(Material material : itemAmounts.keySet()) {
-            set.add(new ImmutablePair<>(material, itemAmounts.get(material)));
-        }
-        return set;
+    public Set<Map.Entry<Material, Integer>> getItemAmountsSet() {
+        return itemAmounts.entrySet();
     }
 
     /**
@@ -617,40 +614,6 @@ public class Config extends YamlFile {
      */
     public List<ItemStack> getUniqueItemList() {
         return uniqueItemList;
-    }
-
-    /**
-     * Set a new material list for the config
-     *
-     * @param materialList The new list of materials to use
-     */
-    public void setMaterialList(List<Material> materialList) {
-        this.materialList.clear();
-        for(Material material : materialList) {
-            if(material == null) continue;
-            this.materialList.add(material);
-        }
-        setModified(true);
-    }
-
-    /**
-     * Set the unique items list of the config to a new list
-     *
-     * @param uniqueItemList The new items list to use
-     */
-    public void setUniqueItemList(List<ItemStack> uniqueItemList) {
-        this.uniqueItemList = uniqueItemList;
-        setModified(true);
-    }
-
-    /**
-     * Set a new item amounts list for the config
-     *
-     * @param itemAmounts The new item amounts list
-     */
-    public void setItemAmounts(Map<Material, Integer> itemAmounts) {
-        this.itemAmounts = itemAmounts;
-        setModified(true);
     }
 
     /**

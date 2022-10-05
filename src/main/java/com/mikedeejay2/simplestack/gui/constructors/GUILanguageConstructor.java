@@ -24,7 +24,7 @@ public class GUILanguageConstructor extends GUIAbstractListConstructor<GUIItem> 
     private final List<GUIItem> languageItems;
 
     private GUILanguageConstructor(SimpleStack plugin) {
-        super(plugin, Text.of("simplestack.gui.language.title"), 5, MAPPER);
+        super(plugin, Text.of("simplestack.gui.language.title"), 5, MAPPER, MAPPER);
 
         Text clickMessage = Text.of("&f").concat(Text.of("simplestack.gui.language.language_select"));
         this.languageItems = ImmutableList.of(

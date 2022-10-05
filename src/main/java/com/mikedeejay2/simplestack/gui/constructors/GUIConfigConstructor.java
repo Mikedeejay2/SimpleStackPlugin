@@ -17,7 +17,6 @@ import com.mikedeejay2.simplestack.gui.debug.GUIDebugOpenerModule;
 import com.mikedeejay2.simplestack.gui.modules.GUIConfigModule;
 import org.bukkit.Material;
 
-import static com.mikedeejay2.mikedeejay2lib.gui.util.SlotMatcher.*;
 import com.mikedeejay2.mikedeejay2lib.gui.animation.AnimationSpecification.Position;
 import com.mikedeejay2.mikedeejay2lib.gui.animation.AnimationSpecification.Style;
 

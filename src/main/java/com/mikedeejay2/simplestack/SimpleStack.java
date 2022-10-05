@@ -145,13 +145,14 @@ public final class SimpleStack extends BukkitPlugin {
 
     @Override
     public void onDisable() {
-        super.onDisable();
-        if(config != null && config.isModified()) {
-            config.saveToDisk(true);
-        }
-
         if(ByteBuddyHolder.getInstrumentation() != null) {
             SimpleStackAgent.reset();
+        }
+
+        super.onDisable();
+
+        if(config != null && config.isModified()) {
+            config.saveToDisk(true);
         }
     }
 

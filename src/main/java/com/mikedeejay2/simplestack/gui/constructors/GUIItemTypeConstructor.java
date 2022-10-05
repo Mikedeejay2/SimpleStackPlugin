@@ -9,7 +9,6 @@ import com.mikedeejay2.mikedeejay2lib.gui.interact.normal.GUIInteractExecutorDef
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.gui.modules.GUIItemTypeListModule;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,11 +17,18 @@ import java.util.function.Function;
 
 public class GUIItemTypeConstructor extends GUIAbstractListConstructor<Material> {
     private static final Function<Material, GUIItem> MAPPER =
-        (material) -> new GUIItem(new ItemStack(material)).setMovable(true);
+        (material) -> {
+        System.out.println("MAP");
+        return new GUIItem(new ItemStack(material)).setMovable(true);
+    };
+    private static final Function<GUIItem, Material> UNMAPPER = (item) -> {
+        System.out.println("UNMAP");
+        return item.getType();
+    };
     public static final GUIItemTypeConstructor INSTANCE = new GUIItemTypeConstructor(SimpleStack.getInstance());
 
-    public GUIItemTypeConstructor(SimpleStack plugin) {
-        super(plugin, Text.of("simplestack.gui.item_types.title"), 6, MAPPER);
+    private GUIItemTypeConstructor(SimpleStack plugin) {
+        super(plugin, Text.of("simplestack.gui.item_types.title"), 6, MAPPER, UNMAPPER);
     }
 
     @Override
@@ -35,8 +41,6 @@ public class GUIItemTypeConstructor extends GUIAbstractListConstructor<Material>
         gui.setDefaultMoveState(true);
         gui.setInteractionHandler(interaction);
 
-        GUIItemTypeListModule uniqueItemModule = new GUIItemTypeListModule(plugin);
-        gui.addModule(uniqueItemModule);
         return gui;
     }
 

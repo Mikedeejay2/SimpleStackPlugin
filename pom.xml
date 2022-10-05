@@ -42,8 +42,6 @@
                             <finalName>${project.name}-${project.version}</finalName>
                             <filters>
                                 <filter>
-                                </filter>
-                                <filter>
                                     <artifact>*:*</artifact>
                                     <excludes>
                                         <exclude>META-INF/*.SF</exclude>
