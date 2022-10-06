@@ -41,7 +41,7 @@ public class ConfigCommand implements SubCommand {
             navigation.clearForward();
             GUIConfigConstructor.INSTANCE.get().open(player);
         }
-        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
+        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.3f, 1f);
     }
 
     @Override

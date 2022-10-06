@@ -37,7 +37,7 @@ public class ReloadCommand implements SubCommand {
             Text.of("simplestack.reload.success")));
         if(!(sender instanceof Player)) return;
         Player player = (Player) sender;
-        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
+        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.3f, 1f);
     }
 
     @Override

@@ -28,7 +28,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.animation.AnimationSpecification.Style
 public class GUIConfigConstructor implements GUIConstructor {
     public static final GUIConfigConstructor INSTANCE = new GUIConfigConstructor(SimpleStack.getInstance());
 
-    private static final AnimatedGUIItem ANIMATED_GUI_ITEM =
+    public static final AnimatedGUIItem ANIMATED_GUI_ITEM =
         new AnimatedGUIItem(ItemBuilder.of(Material.BLUE_STAINED_GLASS_PANE).setEmptyName().get(), true)
             .addFrame(ItemBuilder.of(Material.BLUE_STAINED_GLASS_PANE).setEmptyName().get(), 1)
             .addFrame(ItemBuilder.of(Material.PURPLE_STAINED_GLASS_PANE).setEmptyName().get(), 1)
@@ -52,11 +52,11 @@ public class GUIConfigConstructor implements GUIConstructor {
         GUINavigatorModule naviModule = new GUINavigatorModule(plugin, "config");
         GUIConfigModule configModule = new GUIConfigModule(plugin);
         GUIDebugOpenerModule debugModule = new GUIDebugOpenerModule(plugin);
-        gui.addModule(animation);
         gui.addModule(outlineModule);
         gui.addModule(naviModule);
         gui.addModule(configModule);
         gui.addModule(debugModule);
+        gui.addModule(animation);
         GUIInteractHandler handler = new GUIInteractHandlerDefault(64);
         gui.setInteractionHandler(handler);
 

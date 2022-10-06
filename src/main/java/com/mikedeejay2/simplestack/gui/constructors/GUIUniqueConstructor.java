@@ -11,7 +11,7 @@ import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 
 public class GUIUniqueConstructor extends GUIAbstractListConstructor<ItemStack> {
@@ -38,7 +38,7 @@ public class GUIUniqueConstructor extends GUIAbstractListConstructor<ItemStack> 
     }
 
     @Override
-    protected Collection<ItemStack> getUnmappedList() {
+    protected List<ItemStack> getUnmappedList() {
         return plugin.config().getUniqueItemList();
     }
 }

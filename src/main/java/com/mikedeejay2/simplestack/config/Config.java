@@ -10,7 +10,6 @@ import com.mikedeejay2.mikedeejay2lib.text.language.TranslationManager;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.SimpleStack;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -31,7 +30,7 @@ public class Config extends YamlFile {
     // Localization code specified in the config
     private String langLocale;
     // Item amounts based on the item's material (Item Type amounts list in config)
-    private final Map<Material, Integer> itemAmounts;
+    private final List<MaterialAndAmount> itemAmounts;
     // Unique items list from the unique_items.json
     private final List<ItemStack> uniqueItemList;
     // The max amount for all items in minecraft
@@ -53,7 +52,7 @@ public class Config extends YamlFile {
         this.modified = false;
         this.loaded = false;
         this.materialList = new ArrayList<>();
-        this.itemAmounts = new LinkedHashMap<>();
+        this.itemAmounts = new ArrayList<>();
         this.uniqueItemList = new ArrayList<>();
         if(!fileExists()) {
             loadFromJar(true);
@@ -79,8 +78,7 @@ public class Config extends YamlFile {
         loaded = true;
     }
 
-    private void loadStackedArmor()
-    {
+    private void loadStackedArmor() {
         stackedArmorWearable = accessor.getBoolean("Stacked Armor Wearable");
     }
 
@@ -105,17 +103,17 @@ public class Config extends YamlFile {
         for(String mat : materialList) {
             Material material = Material.matchMaterial(mat);
             if(material == null && !mat.equals("Example Item")) {
-                plugin.sendWarning(Text.of("simplestack.warnings.invalid_material")
-                                       .placeholder(PlaceholderFormatter.of("mat", mat)));
+                plugin.sendWarning(Text.of("simplestack.warnings.invalid_material").placeholder(
+                    PlaceholderFormatter.of("mat", mat)));
                 continue;
             }
             int amount = section.getInt(mat);
             if(amount == 0 || amount > 64) {
-                plugin.sendWarning(Text.of("simplestack.warnings.number_outside_of_range")
-                                       .placeholder(PlaceholderFormatter.of("mat", mat)));
+                plugin.sendWarning(Text.of("simplestack.warnings.number_outside_of_range").placeholder(
+                    PlaceholderFormatter.of("mat", mat)));
                 continue;
             }
-            if(material != null) itemAmounts.put(material, amount);
+            if(material != null) itemAmounts.add(new MaterialAndAmount(material, amount));
         }
     }
 
@@ -127,9 +125,8 @@ public class Config extends YamlFile {
         try {
             this.listMode = ListMode.valueOf(listMode.toUpperCase().replaceAll(" ", "_"));
         } catch(Exception e) {
-            plugin.sendWarning(
-                Text.of("simplestack.warnings.invalid_list_mode")
-                    .placeholder(PlaceholderFormatter.of("mode", listMode)));
+            plugin.sendWarning(Text.of("simplestack.warnings.invalid_list_mode").placeholder(
+                PlaceholderFormatter.of("mode", listMode)));
             this.listMode = ListMode.BLACKLIST;
         }
     }
@@ -144,8 +141,8 @@ public class Config extends YamlFile {
         for(String mat : matList) {
             Material material = Material.matchMaterial(mat);
             if(material == null && !mat.equals("Example Item")) {
-                plugin.sendWarning(Text.of("simplestack.warnings.invalid_material")
-                                       .placeholder(PlaceholderFormatter.of("mat", mat)));
+                plugin.sendWarning(Text.of("simplestack.warnings.invalid_material").placeholder(
+                    PlaceholderFormatter.of("mat", mat)));
                 continue;
             }
             if(material == null) continue;
@@ -180,7 +177,7 @@ public class Config extends YamlFile {
      * @return If this item has a custom amount set or not
      */
     public boolean hasCustomAmount(Material material) {
-        return itemAmounts.containsKey(material);
+        return itemAmounts.contains(new MaterialAndAmount(material, 0));
     }
 
     /**
@@ -198,11 +195,10 @@ public class Config extends YamlFile {
     }
 
     public int getAmount(Material type) {
-        boolean containsMaterial = containsMaterial(type);
-        boolean hasCustomAmount = hasCustomAmount(type);
-        if(hasCustomAmount) {
-            return itemAmounts.get(type);
-        } else if((getListMode() == ListMode.WHITELIST) == containsMaterial) {
+        if(hasCustomAmount(type)) {
+            return itemAmounts.get(itemAmounts.indexOf(new MaterialAndAmount(type, 0))).getAmount();
+        }
+        if((getListMode() == ListMode.WHITELIST) == containsMaterial(type)) {
             return getMaxAmount();
         }
         return -1;
@@ -272,10 +268,10 @@ public class Config extends YamlFile {
 
             accessor.delete("Item Amounts");
             SectionAccessor<YamlFile, Object> itemAmtAccessor = accessor.getSection("Item Amounts");
-            for(Map.Entry<Material, Integer> entry : itemAmounts.entrySet()) {
-                Material material = entry.getKey();
+            for(MaterialAndAmount mata : itemAmounts) {
+                Material material = mata.getMaterial();
                 if(material == null || material == Material.AIR) continue;
-                int amount = entry.getValue();
+                int amount = mata.getAmount();
                 String materialStr = material.toString();
                 itemAmtAccessor.setInt(materialStr, amount);
             }
@@ -391,17 +387,8 @@ public class Config extends YamlFile {
      *
      * @return A map of material to item amount
      */
-    public Map<Material, Integer> getItemAmounts() {
+    public List<MaterialAndAmount> getItemAmounts() {
         return itemAmounts;
-    }
-
-    /**
-     * Get material to item amounts as a set
-     *
-     * @return Material to item amounts as a set
-     */
-    public Set<Map.Entry<Material, Integer>> getItemAmountsSet() {
-        return itemAmounts.entrySet();
     }
 
     /**
@@ -443,16 +430,6 @@ public class Config extends YamlFile {
     }
 
     /**
-     * Return whether the item amounts list contains a custom amount for a material or not
-     *
-     * @param material The material to search for
-     * @return Whether a custom amount for the material was found or not
-     */
-    public boolean containsItemAmount(Material material) {
-        return itemAmounts.containsKey(material);
-    }
-
-    /**
      * Get the default max amount for items
      *
      * @return The default max amount for items
@@ -465,11 +442,10 @@ public class Config extends YamlFile {
      * Add a unique item to the config at the player's request. <p>
      * This method does not save the config, only modifies it.
      *
-     * @param player The player that requested the action
      * @param item   The item to add to the config
      */
-    public void addUniqueItem(Player player, ItemStack item) {
-        removeUniqueItem(player, item);
+    public void addUniqueItem(ItemStack item) {
+        removeUniqueItem(item);
         uniqueItemList.add(item);
         setModified(true);
     }
@@ -478,15 +454,11 @@ public class Config extends YamlFile {
      * Add a material to the config at the player's request. <p>
      * This method does not save the config, only modifies it.
      *
-     * @param player   The player that requested the action
      * @param material The material to add to the config
      * @return Whether the action was successful or not
      */
-    public boolean addMaterial(Player player, Material material) {
-        if(containsMaterial(material)) {
-            plugin.sendMessage(player, Text.of("simplestack.warnings.material_already_exists"));
-            return false;
-        }
+    public boolean addMaterial(Material material) {
+        if(containsMaterial(material)) return false;
         materialList.add(material);
         setModified(true);
         return true;
@@ -496,11 +468,10 @@ public class Config extends YamlFile {
      * Removes a unique item from the config at the player's request. <p>
      * This method does not save the config, only modifies it.
      *
-     * @param player The player that requested the action
-     * @param item   The item to from from the config
+     * @param item   The item to from the config
      * @return Whether the action was successful or not
      */
-    public boolean removeUniqueItem(Player player, ItemStack item) {
+    public boolean removeUniqueItem(ItemStack item) {
         for(ItemStack curItem : uniqueItemList) {
             if(!ItemComparison.equalsEachOther(item, curItem)) continue;
             uniqueItemList.remove(curItem);
@@ -514,11 +485,10 @@ public class Config extends YamlFile {
      * Removes a material from the config at the player's request. <p>
      * This method does not save the config, only modifies it.
      *
-     * @param player   The player that requested the action
      * @param material The material to remove from the config
      * @return Whether the action was successful or not
      */
-    public boolean removeMaterial(Player player, Material material) {
+    public boolean removeMaterial(Material material) {
         materialList.remove(material);
         setModified(true);
         return true;
@@ -541,7 +511,7 @@ public class Config extends YamlFile {
      * <p>
      * This method does not save the config, only modifies it.
      *
-     * @param newLocale
+     * @param newLocale The new locale
      */
     public void setLangLocale(String newLocale) {
         this.langLocale = newLocale;
@@ -553,13 +523,12 @@ public class Config extends YamlFile {
      * Add a material and custom amount to the config at the player's request. <p>
      * This method does not save the config, only modifies it.
      *
-     * @param player   The player that requested the action
      * @param material The material to add to the config
      * @param amount   The new max amount of the item
      */
-    public void addCustomAmount(Player player, Material material, int amount) {
-        if(hasCustomAmount(material)) removeCustomAmount(player, material);
-        itemAmounts.put(material, amount);
+    public void addCustomAmount(Material material, int amount) {
+        if(hasCustomAmount(material)) removeCustomAmount(material);
+        itemAmounts.add(new MaterialAndAmount(material, amount));
         setModified(true);
     }
 
@@ -567,15 +536,10 @@ public class Config extends YamlFile {
      * Removes a material from the custom amount list at the player's request. <p>
      * This method does not save the config, only modifies it.
      *
-     * @param player   The player that requested the action
      * @param material The material to remove from the config
      */
-    public void removeCustomAmount(Player player, Material material) {
-        if(!hasCustomAmount(material)) {
-            plugin.sendMessage(player, Text.of("simplestack.warnings.custom_amount_does_not_exist"));
-            return;
-        }
-        itemAmounts.remove(material);
+    public void removeCustomAmount(Material material) {
+        itemAmounts.remove(new MaterialAndAmount(material, 0));
         setModified(true);
     }
 
@@ -635,5 +599,37 @@ public class Config extends YamlFile {
     {
         this.stackedArmorWearable = stackedArmorWearable;
         setModified(true);
+    }
+
+    public static final class MaterialAndAmount {
+        private final Material material;
+        private final int amount;
+
+        public MaterialAndAmount(Material material, int amount) {
+            this.material = material;
+            this.amount = amount;
+        }
+
+        public Material getMaterial() {
+            return material;
+        }
+
+        public int getAmount() {
+            return amount;
+        }
+
+        @Override
+        public int hashCode() {
+            return material.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            Object material = obj;
+            if(obj.getClass() == MaterialAndAmount.class) {
+                material = ((MaterialAndAmount) obj).getMaterial();
+            }
+            return this.material == material;
+        }
     }
 }

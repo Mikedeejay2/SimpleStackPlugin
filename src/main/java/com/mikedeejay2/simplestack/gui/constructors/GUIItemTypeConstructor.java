@@ -12,19 +12,13 @@ import com.mikedeejay2.simplestack.SimpleStack;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 
 public class GUIItemTypeConstructor extends GUIAbstractListConstructor<Material> {
     private static final Function<Material, GUIItem> MAPPER =
-        (material) -> {
-        System.out.println("MAP");
-        return new GUIItem(new ItemStack(material)).setMovable(true);
-    };
-    private static final Function<GUIItem, Material> UNMAPPER = (item) -> {
-        System.out.println("UNMAP");
-        return item.getType();
-    };
+        (material) -> new GUIItem(new ItemStack(material)).setMovable(true);
+    private static final Function<GUIItem, Material> UNMAPPER = GUIItem::getType;
     public static final GUIItemTypeConstructor INSTANCE = new GUIItemTypeConstructor(SimpleStack.getInstance());
 
     private GUIItemTypeConstructor(SimpleStack plugin) {
@@ -45,7 +39,7 @@ public class GUIItemTypeConstructor extends GUIAbstractListConstructor<Material>
     }
 
     @Override
-    protected Collection<Material> getUnmappedList() {
+    protected List<Material> getUnmappedList() {
         return plugin.config().getMaterialList();
     }
 }

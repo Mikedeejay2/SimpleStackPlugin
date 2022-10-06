@@ -2,11 +2,6 @@ package com.mikedeejay2.simplestack.gui.constructors;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIConstructor;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
-import com.mikedeejay2.mikedeejay2lib.gui.interact.GUIInteractHandler;
-import com.mikedeejay2.mikedeejay2lib.gui.interact.GUIInteractType;
-import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractExecutorList;
-import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractHandlerList;
-import com.mikedeejay2.mikedeejay2lib.gui.interact.normal.GUIInteractExecutorDefaultInv;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIDecoratorModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
@@ -20,7 +15,7 @@ import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.gui.modules.GUIModifiedConfigModule;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 
 import static com.mikedeejay2.mikedeejay2lib.gui.util.SlotMatcher.inRange;
@@ -74,5 +69,5 @@ public abstract class GUIAbstractListConstructor<T> implements GUIConstructor {
         return gui;
     }
 
-    protected abstract Collection<T> getUnmappedList();
+    protected abstract List<T> getUnmappedList();
 }

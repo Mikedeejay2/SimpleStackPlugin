@@ -39,12 +39,12 @@ public class RemoveItemCommand implements SubCommand {
             return;
         }
         Config config = plugin.config();
-        config.removeUniqueItem(player, heldItem);
+        config.removeUniqueItem(heldItem);
         config.saveToDisk(true);
         plugin.sendMessage(sender, Text.of("&e&l%s&r &b%s").format(
             Text.of("simplestack.generic.success"),
             Text.of("simplestack.commands.removeitem.success")));
-        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1f);
+        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.3f, 1f);
     }
 
     @Override

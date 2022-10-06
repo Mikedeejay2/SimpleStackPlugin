@@ -6,6 +6,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.event.button.GUIButtonEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.button.GUIButtonToggleableEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUICloseEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUIOpenNewEvent;
+import com.mikedeejay2.mikedeejay2lib.gui.event.sound.GUIPlaySoundEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
@@ -13,17 +14,21 @@ import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.PlaceholderFormatter;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
+import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.Pair;
 import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
 import com.mikedeejay2.simplestack.gui.constructors.*;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static com.mikedeejay2.simplestack.config.Config.*;
 
 /**
  * The <tt>GUIModule</tt> for the main configuration GUI screen
@@ -131,8 +136,8 @@ public class GUIConfigModule implements GUIModule {
             (info) -> plugin.config().setListMode(ListMode.WHITELIST),
             (info) -> plugin.config().setListMode(ListMode.BLACKLIST),
             plugin.config().getListMode() == ListMode.WHITELIST)
-            .setOnItem(WHITELIST_ITEM)
-            .setOffItem(BLACKLIST_ITEM);
+            .setOnItem(WHITELIST_ITEM).setOffItem(BLACKLIST_ITEM);
+        button.setSound(Sound.UI_BUTTON_CLICK).setVolume(0.3f);
         switchListMode.addEvent(button);
         return switchListMode;
     }
@@ -145,6 +150,7 @@ public class GUIConfigModule implements GUIModule {
     private GUIItem getGUIItemCloseItem() {
         GUIItem closeItem = new GUIItem(CLOSE_ITEM);
         closeItem.addEvent(new GUICloseEvent(plugin));
+        closeItem.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
         return closeItem;
     }
 
@@ -155,15 +161,16 @@ public class GUIConfigModule implements GUIModule {
      */
     private GUIItem getGUIItemItemTypeAmountList() {
         AnimatedGUIItem itemTypeAmountList = new AnimatedGUIItem(ITEM_TYPE_AMOUNT_ITEM, true);
-        final Map<Material, Integer> itemAmounts = plugin.config().getItemAmounts();
-        Iterator<Map.Entry<Material, Integer>> iter2 = itemAmounts.entrySet().iterator();
+        final List<MaterialAndAmount> itemAmounts = plugin.config().getItemAmounts();
+        Iterator<MaterialAndAmount> iter2 = itemAmounts.iterator();
         for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, itemAmounts.size()); ++i) {
-            Map.Entry<Material, Integer> entry = iter2.next();
-            Material material = entry.getKey();
+            MaterialAndAmount mata = iter2.next();
+            Material material = mata.getMaterial();
             if(material == null) continue;
             itemTypeAmountList.addFrame(ItemBuilder.of(ITEM_TYPE_AMOUNT_ITEM).setType(material), 20);
         }
         itemTypeAmountList.addEvent(new GUIOpenNewEvent(plugin, GUIItemTypeAmountConstructor.INSTANCE));
+        itemTypeAmountList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
         return itemTypeAmountList;
     }
 
@@ -183,6 +190,7 @@ public class GUIConfigModule implements GUIModule {
                             .placeholder(PlaceholderFormatter.of("lang", plugin.config().getLangLocale())))));
 
         language.addEvent(new GUIOpenNewEvent(plugin, GUILanguageConstructor.INSTANCE));
+        language.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
         return language;
     }
 
@@ -219,6 +227,7 @@ public class GUIConfigModule implements GUIModule {
             int amount = item.getAmount();
             plugin.config().setMaxAmount(amount);
         });
+        button.setSound(Sound.UI_BUTTON_CLICK).setVolume(0.3f);
         defaultMaxAmount.addEvent(button);
         return defaultMaxAmount;
     }
@@ -235,6 +244,7 @@ public class GUIConfigModule implements GUIModule {
             uniqueItemList.addFrame(ItemBuilder.of(UNIQUE_ITEM_LIST_ITEM).setType(uniqueItems.get(i).getType()), 20);
         }
         uniqueItemList.addEvent(new GUIOpenNewEvent(plugin, GUIUniqueConstructor.INSTANCE));
+        uniqueItemList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
         return uniqueItemList;
     }
 
@@ -250,6 +260,7 @@ public class GUIConfigModule implements GUIModule {
             itemTypeList.addFrame(ItemBuilder.of(ITEM_TYPE_ITEM).setType(materialItems.get(i)), 20);
         }
         itemTypeList.addEvent(new GUIOpenNewEvent(plugin, GUIItemTypeConstructor.INSTANCE));
+        itemTypeList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
         return itemTypeList;
     }
 
@@ -261,11 +272,13 @@ public class GUIConfigModule implements GUIModule {
     private GUIItem getGUIItemStackedArmor() {
         boolean buttonState = plugin.config().isStackedArmorWearable();
         final GUIItem guiItem = new GUIItem(
-            buttonState ? STACKED_ARMOR_ON : STACKED_ARMOR_OFF).addEvent(
-                new GUIButtonToggleableEvent(
-                    info -> plugin.config().setStackedArmorWearable(true),
-                    info -> plugin.config().setStackedArmorWearable(false), buttonState)
-                    .setOnItem(STACKED_ARMOR_ON).setOffItem(STACKED_ARMOR_OFF));
+            buttonState ? STACKED_ARMOR_ON : STACKED_ARMOR_OFF);
+        guiItem.addEvent(
+            new GUIButtonToggleableEvent(
+                info -> plugin.config().setStackedArmorWearable(true),
+                info -> plugin.config().setStackedArmorWearable(false), buttonState)
+                .setOnItem(STACKED_ARMOR_ON).setOffItem(STACKED_ARMOR_OFF)
+                .setSound(Sound.UI_BUTTON_CLICK).setVolume(0.3f));
 
         return guiItem;
     }
