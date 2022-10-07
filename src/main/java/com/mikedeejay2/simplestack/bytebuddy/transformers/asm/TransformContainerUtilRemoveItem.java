@@ -2,6 +2,7 @@ package com.mikedeejay2.simplestack.bytebuddy.transformers.asm;
 
 import com.mikedeejay2.simplestack.MappingsLookup;
 import com.mikedeejay2.simplestack.bytebuddy.MappedMethodVisitor;
+import com.mikedeejay2.simplestack.bytebuddy.Transformer;
 
 import static org.objectweb.asm.Opcodes.*;
 import static com.mikedeejay2.simplestack.MappingsLookup.*;
@@ -12,6 +13,7 @@ import static com.mikedeejay2.simplestack.MappingsLookup.*;
  *
  * @author Mikedeejay2
  */
+@Transformer({"1.19"})
 public class TransformContainerUtilRemoveItem extends MappedMethodVisitor {
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {

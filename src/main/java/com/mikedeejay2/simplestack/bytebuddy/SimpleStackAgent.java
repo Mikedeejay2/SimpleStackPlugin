@@ -1,9 +1,11 @@
 package com.mikedeejay2.simplestack.bytebuddy;
 
+import com.mikedeejay2.mikedeejay2lib.reflect.*;
 import com.mikedeejay2.mikedeejay2lib.text.PlaceholderFormatter;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReport;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReportSection;
+import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.SimpleStack;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
@@ -28,10 +30,7 @@ import org.objectweb.asm.util.CheckClassAdapter;
 
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
@@ -47,7 +46,31 @@ public final class SimpleStackAgent {
     private static final Text CRASH_INFO_3 = Text.of("&c").concat("simplestack.crash.info_message_l3").placeholder(
         PlaceholderFormatter.of("path", "plugins/SimpleStack/crash-reports"));
 
+    // Static operation for locating transformers in com.mikedeejay2.simplestack.bytebuddy.transformers
+    static {
+        final String mcVersion = MinecraftVersion.getVersionString();
+        new AnnotationCollector<>(
+            new ClassCollector<>(
+                SimpleStack.getInstance().classLoader(), // Use the plugin class loader
+                SimpleStackAgent.class.getPackageName() + ".transformers", // Traverse in the transformers package
+                true, // Traverse sub-packages
+                MethodVisitorInfo.class), // Only locate classes that are subclasses of MethodVisitorInfo
+            Transformer.class) // Locate the Transformer annotation
+            .collect()
+            .stream()
+            .filter(pair -> Arrays.asList(pair.getValue().value()).contains(mcVersion)) // If current Minecraft version not found, don't use the transformer
+            .map(pair -> Reflector.of(pair.getKey()).constructor().newInstance()) // Create a new instance (no arg) of the transformer
+            .forEach(SimpleStackAgent::addVisitor); // Add the new visitor
+    }
+
+    private static void addVisitor(MethodVisitorInfo visitor) {
+        String className = visitor.getMappingEntry().owner().qualifiedName();
+        VISITORS.putIfAbsent(className, new HashSet<>());
+        VISITORS.get(className).add(visitor);
+    }
+
     public static boolean install() {
+        Validate.isTrue(VISITORS.size() != 0, "No transformers found for installation");
         ElementMatcher.Junction<? super TypeDescription> typeMatcher = none();
         for(String className : VISITORS.keySet()) {
             typeMatcher = typeMatcher.or(named(className));
@@ -68,12 +91,6 @@ public final class SimpleStackAgent {
 
     public static void reset() {
         ByteBuddyHolder.resetTransformer(transformer);
-    }
-
-    public static void addVisitor(MethodVisitorInfo visitor) {
-        String className = visitor.getMappingEntry().owner().qualifiedName();
-        VISITORS.putIfAbsent(className, new HashSet<>());
-        VISITORS.get(className).add(visitor);
     }
 
     private enum MasterTransformer implements AgentBuilder.Transformer {

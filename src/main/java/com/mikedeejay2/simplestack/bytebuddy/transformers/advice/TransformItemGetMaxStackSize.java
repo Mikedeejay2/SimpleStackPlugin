@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.bytebuddy.transformers.advice;
 import com.mikedeejay2.simplestack.MappingsLookup;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.bytebuddy.MethodVisitorInfo;
+import com.mikedeejay2.simplestack.bytebuddy.Transformer;
 import com.mikedeejay2.simplestack.debug.DebugSystem;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
@@ -17,7 +18,10 @@ import static com.mikedeejay2.simplestack.MappingsLookup.*;
 /**
  * Advice for changing the max stack size of an Item. This is a general item, not an ItemStack, similar to Material in
  * Bukkit. This is the max stack size used for the properties of an item.
+ *
+ * @author Mikedeejay2
  */
+@Transformer({"1.19"})
 public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
     private static final DebugSystem DEBUG = SimpleStack.getInstance().getDebugSystem();
 
@@ -127,12 +131,16 @@ public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
          * @throws Throwable  Any possible errors caused during reflective calls.
          */
         @Advice.OnMethodExit
-        public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime, @Advice.This Object item) throws Throwable {
-            Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
-            ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
-            Class<?> transformerClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformItemGetMaxStackSize", false, pluginClassLoader);
-            Method maxStackSizeMethod = transformerClass.getMethod("getItemMaxStackSize", int.class, long.class, Object.class);
-            returnValue = (int) maxStackSizeMethod.invoke(null, returnValue, startTime, item);
+        public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime, @Advice.This Object item) {
+            try {
+                Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
+                ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
+                Class<?> transformerClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformItemGetMaxStackSize", false, pluginClassLoader);
+                Method maxStackSizeMethod = transformerClass.getMethod("getItemMaxStackSize", int.class, long.class, Object.class);
+                returnValue = (int) maxStackSizeMethod.invoke(null, returnValue, startTime, item);
+            } catch(Throwable throwable) {
+                throwable.printStackTrace();
+            }
         }
     }
 }

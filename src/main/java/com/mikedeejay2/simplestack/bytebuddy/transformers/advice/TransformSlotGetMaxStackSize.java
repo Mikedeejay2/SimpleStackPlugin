@@ -2,6 +2,7 @@ package com.mikedeejay2.simplestack.bytebuddy.transformers.advice;
 
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.bytebuddy.MethodVisitorInfo;
+import com.mikedeejay2.simplestack.bytebuddy.Transformer;
 import com.mikedeejay2.simplestack.debug.DebugSystem;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
@@ -17,6 +18,7 @@ import static com.mikedeejay2.simplestack.MappingsLookup.*;
  *
  * @author Mikedeejay2
  */
+@Transformer({"1.19"})
 public class TransformSlotGetMaxStackSize implements MethodVisitorInfo {
     private static final DebugSystem DEBUG = SimpleStack.getInstance().getDebugSystem();
 

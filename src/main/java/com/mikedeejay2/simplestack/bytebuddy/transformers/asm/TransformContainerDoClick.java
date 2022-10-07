@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.bytebuddy.transformers.asm;
 
 import com.mikedeejay2.simplestack.bytebuddy.MappedMethodVisitor;
+import com.mikedeejay2.simplestack.bytebuddy.Transformer;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 
@@ -12,6 +13,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
+@Transformer({"1.19"})
 public class TransformContainerDoClick extends MappedMethodVisitor {
     protected boolean visitedIsSameItemSameTags = false;
     protected boolean appendedStackCheck1 = false;

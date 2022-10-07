@@ -45,26 +45,6 @@ public final class SimpleStack extends BukkitPlugin {
     private UpdateChecker updateChecker;
     private CommandManager commandManager;
 
-    private static void registerVisitors() {
-        SimpleStackAgent.addVisitor(new TransformItemGetMaxStackSize());
-        SimpleStackAgent.addVisitor(new TransformItemStackGetMaxStackSize());
-        SimpleStackAgent.addVisitor(new TransformContainerUtilRemoveItem());
-        SimpleStackAgent.addVisitor(new TransformSlotTryRemove());
-        SimpleStackAgent.addVisitor(new TransformItemStackSplit());
-        SimpleStackAgent.addVisitor(new TransformEntityPlayerDrop());
-        SimpleStackAgent.addVisitor(new TransformContainerDoClick());
-        SimpleStackAgent.addVisitor(new TransformContainerDoClickLambda());
-        SimpleStackAgent.addVisitor(new TransformContainerMoveItemStackTo());
-        SimpleStackAgent.addVisitor(new TransformItemBucketUse());
-        SimpleStackAgent.addVisitor(new TransformItemSoupFinishUsingItem());
-        SimpleStackAgent.addVisitor(new TransformItemSuspiciousStewFinishUsingItem());
-        SimpleStackAgent.addVisitor(new TransformArmorSlotGetMaxStackSize());
-        SimpleStackAgent.addVisitor(new TransformSlotGetMaxStackSize());
-        SimpleStackAgent.addVisitor(new TransformItemTridentReleaseUsing());
-        SimpleStackAgent.addVisitor(new TransformPlayerInventoryAdd());
-        SimpleStackAgent.addVisitor(new TransformItemStackIsStackable());
-    }
-
     private void registerCommands() {
         this.commandManager.addSubcommand(new HelpCommand(this));
         this.commandManager.addSubcommand(new ReloadCommand(this));
@@ -81,8 +61,9 @@ public final class SimpleStack extends BukkitPlugin {
         instance = this;
         setPrefix("&f[&b" + this.getDescription().getName() + "&f]&r ");
         TranslationManager.GLOBAL.registerDirectory("lang/simplestack", true);
+        this.debugSystem = new DebugSystem(this);
 
-        if(checkVersion() || installByteBuddyAgent()) return;
+        if(checkVersion() || installByteBuddyAgent() || installAgent()) return;
 
         this.bStats = new BStats(this);
         this.bStats.init(9379);
@@ -96,10 +77,6 @@ public final class SimpleStack extends BukkitPlugin {
         registerCommand(commandManager);
 
         this.config = new Config(this);
-        this.debugSystem = new DebugSystem(this);
-
-        registerVisitors();
-        if(installAgent()) return;
 
         sendInfo("Finished initialization.");
     }
