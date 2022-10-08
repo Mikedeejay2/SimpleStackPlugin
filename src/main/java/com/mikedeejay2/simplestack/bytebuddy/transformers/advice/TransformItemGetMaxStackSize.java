@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.bytebuddy.transformers.advice;
 
-import com.mikedeejay2.simplestack.MappingsLookup;
+import com.mikedeejay2.simplestack.api.event.MaterialMaxAmountEvent;
+import com.mikedeejay2.simplestack.bytebuddy.MappingsLookup;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.bytebuddy.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytebuddy.Transformer;
@@ -13,7 +14,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Method;
 
-import static com.mikedeejay2.simplestack.MappingsLookup.*;
+import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.*;
 
 /**
  * Advice for changing the max stack size of an Item. This is a general item, not an ItemStack, similar to Material in
@@ -47,19 +48,13 @@ public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
      * @return The new stack size
      */
     public static int getItemMaxStackSize(int currentReturnValue, long startTime, Object nmsItem) {
-        String key = nmsItem.toString();
-        key = key.toUpperCase(java.util.Locale.ENGLISH);
-        Material material;
-        try {
-            material = Material.valueOf(key);
-        } catch(IllegalArgumentException e) {
-            throw new IllegalStateException(String.format("SimpleStack could not find material of ID \"%s\"", key));
-        }
-        int maxStackSize = SimpleStack.getInstance().config().getAmount(material);
-        if(maxStackSize == -1) maxStackSize = currentReturnValue;
+        final Material material = NmsConverters.itemToMaterial(nmsItem);
+        final MaterialMaxAmountEvent event = new MaterialMaxAmountEvent(material, currentReturnValue);
+        Bukkit.getPluginManager().callEvent(event);
+//        maxStackSize = SimpleStack.getInstance().config().getAmount(material);
+//        if(maxStackSize < 0) maxStackSize = currentReturnValue;
         DEBUG.collect(startTime, "Item size redirect", false);
-
-        return maxStackSize;
+        return event.getAmount();
     }
 
     /**

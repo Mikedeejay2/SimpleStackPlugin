@@ -2,20 +2,15 @@ package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.mikedeejay2lib.BukkitPlugin;
 import com.mikedeejay2.mikedeejay2lib.commands.CommandManager;
-import com.mikedeejay2.mikedeejay2lib.text.PlaceholderFormatter;
-import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.text.language.TranslationManager;
 import com.mikedeejay2.mikedeejay2lib.util.bstats.BStats;
 import com.mikedeejay2.mikedeejay2lib.util.update.UpdateChecker;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
+import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.bytebuddy.*;
-import com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformArmorSlotGetMaxStackSize;
-import com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformItemGetMaxStackSize;
-import com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformItemStackGetMaxStackSize;
-import com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformSlotGetMaxStackSize;
-import com.mikedeejay2.simplestack.bytebuddy.transformers.asm.*;
 import com.mikedeejay2.simplestack.commands.*;
-import com.mikedeejay2.simplestack.config.Config;
+import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
+import com.mikedeejay2.simplestack.config.ConfigListener;
 import com.mikedeejay2.simplestack.debug.DebugSystem;
 
 /**
@@ -34,11 +29,8 @@ import com.mikedeejay2.simplestack.debug.DebugSystem;
 public final class SimpleStack extends BukkitPlugin {
     private static SimpleStack instance;
 
-    // Permission for general Simple Stack use
-    private final String permission = "simplestack.use";
-
     // The config of Simple Stack which stores all customizable data
-    private Config config;
+    private SimpleStackConfigImpl config;
     private DebugSystem debugSystem;
 
     private BStats bStats;
@@ -76,7 +68,9 @@ public final class SimpleStack extends BukkitPlugin {
         commandManager.setDefaultSubCommand("help");
         registerCommand(commandManager);
 
-        this.config = new Config(this);
+        this.config = new SimpleStackConfigImpl(this);
+        registerEvent(new ConfigListener(config));
+        SimpleStackAPI.setConfig(config);
 
         sendInfo("Finished initialization.");
     }
@@ -134,20 +128,11 @@ public final class SimpleStack extends BukkitPlugin {
     }
 
     /**
-     * Get the simplestack.use permission as a string
-     *
-     * @return simplestack.use String permission
-     */
-    public String getPermission() {
-        return permission;
-    }
-
-    /**
      * Get the Config file for Simple Stack
      *
      * @return The config of Simple Stack
      */
-    public Config config() {
+    public SimpleStackConfigImpl config() {
         return config;
     }
 

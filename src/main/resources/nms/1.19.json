@@ -42,7 +42,8 @@
       "getMaxStackSize1": "a_(LItemStack;)I"
     },
     "fields": {
-      "slot": "a:I"
+      "slot": "a:I",
+      "container": "d:LIInventory;"
     }
   },
   "EntityPlayer": {
@@ -115,5 +116,7 @@
     "methods": {
       "releaseUsing": "a(LItemStack;LWorld;LEntityLiving;I)V"
     }
-  }
+  },
+  "IInventory": "net.minecraft.world.IInventory",
+  "CraftInventory": "org.bukkit.craftbukkit.v1_19_R1.inventory.CraftInventory"
 }

@@ -39,6 +39,6 @@ public class GUIUniqueConstructor extends GUIAbstractListConstructor<ItemStack> 
 
     @Override
     protected List<ItemStack> getUnmappedList() {
-        return plugin.config().getUniqueItemList();
+        return plugin.config().getUniqueItemsRef();
     }
 }

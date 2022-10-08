@@ -1,17 +1,19 @@
 package com.mikedeejay2.simplestack.bytebuddy.transformers.advice;
 
 import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.api.event.ArmorSlotMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytebuddy.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytebuddy.Transformer;
 import com.mikedeejay2.simplestack.debug.DebugSystem;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Method;
 
-import static com.mikedeejay2.simplestack.MappingsLookup.*;
+import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.*;
 
 /**
  * Advice for changing specific slots of a container.
@@ -32,12 +34,13 @@ public class TransformSlotGetMaxStackSize implements MethodVisitorInfo {
         return nms("Slot").method("getMaxStackSize");
     }
 
-    // TODO: Implement this
-    public static int getSlotMaxStackSize(int currentReturnValue, long startTime) {
-        int slotStackAmount = currentReturnValue;
+    public static int getSlotMaxStackSize(int currentReturnValue, long startTime, Object nmsSlot) {
+        final Inventory inventory = NmsConverters.slotToInventory(nmsSlot);
+        final int slot = NmsConverters.slotToSlot(nmsSlot);
+        final ArmorSlotMaxAmountEvent event = new ArmorSlotMaxAmountEvent(inventory, slot, currentReturnValue);
+        Bukkit.getPluginManager().callEvent(event);
         DEBUG.collect(startTime, "Slot redirect", true);
-
-        return slotStackAmount;
+        return event.getAmount();
     }
 
     public static class SlotAdvice {
@@ -47,12 +50,12 @@ public class TransformSlotGetMaxStackSize implements MethodVisitorInfo {
         }
 
         @Advice.OnMethodExit
-        public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime) throws Throwable {
+        public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime, @Advice.This Object nmsSlot) throws Throwable {
             Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
             ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
             Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformSlotGetMaxStackSize", false, pluginClassLoader);
-            Method maxStackSizeMethod = interceptClass.getMethod("getSlotMaxStackSize", int.class, long.class);
-            returnValue = (int) maxStackSizeMethod.invoke(null, returnValue, startTime);
+            Method maxStackSizeMethod = interceptClass.getMethod("getSlotMaxStackSize", int.class, long.class, Object.class);
+            returnValue = (int) maxStackSizeMethod.invoke(null, returnValue, startTime, nmsSlot);
         }
     }
 }

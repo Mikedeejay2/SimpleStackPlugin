@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.bytebuddy.transformers.advice;
 
-import com.mikedeejay2.simplestack.MappingsLookup;
+import com.mikedeejay2.simplestack.api.event.ItemStackMaxAmountEvent;
+import com.mikedeejay2.simplestack.bytebuddy.MappingsLookup;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.bytebuddy.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytebuddy.Transformer;
@@ -14,7 +15,7 @@ import org.bukkit.plugin.Plugin;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import static com.mikedeejay2.simplestack.MappingsLookup.*;
+import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.*;
 
 /**
  * Advice for changing the max stack size of an ItemStack.
@@ -23,21 +24,7 @@ import static com.mikedeejay2.simplestack.MappingsLookup.*;
  */
 @Transformer({"1.19"})
 public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
-    private static final Method METHOD_AS_BUKKIT_COPY;      // org.bukkit.craftbukkit.inventory.CraftItemStack#asBukkitCopy()
     private static final DebugSystem DEBUG = SimpleStack.getInstance().getDebugSystem();
-
-    // Get all NMS classes and methods using NMSMappings
-    static {
-        try {
-            Class<?> itemStackClass = nms("ItemStack").toClass();
-            Class<?> craftItemStackClass = nms("CraftItemStack").toClass();
-            METHOD_AS_BUKKIT_COPY = craftItemStackClass.getMethod(
-                lastNms().method("asBukkitCopy").name(), itemStackClass);
-        } catch(NoSuchMethodException e) {
-            Bukkit.getLogger().severe("SimpleStack cannot locate NMS classes");
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public AsmVisitorWrapper.ForDeclaredMethods.MethodVisitorWrapper getWrapper() {
@@ -61,13 +48,14 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
      * @param nmsItemStack The NMS <code>Item</code>
      * @return The new stack size
      */
-    public static int getItemStackMaxStackSize(int currentReturnValue, long startTime, Object nmsItemStack) throws InvocationTargetException, IllegalAccessException {
-        ItemStack itemStack = (ItemStack) METHOD_AS_BUKKIT_COPY.invoke(null, nmsItemStack);
-        int maxStackSize = SimpleStack.getInstance().config().getAmount(itemStack);
-        if(maxStackSize == -1) maxStackSize = currentReturnValue;
+    public static int getItemStackMaxStackSize(int currentReturnValue, long startTime, Object nmsItemStack) {
+        final ItemStack itemStack = NmsConverters.itemStackToItemStack(nmsItemStack);
+        final ItemStackMaxAmountEvent event = new ItemStackMaxAmountEvent(itemStack, currentReturnValue);
+        Bukkit.getPluginManager().callEvent(event);
+//        int maxStackSize = SimpleStack.getInstance().config().getAmount(itemStack);
+//        if(maxStackSize == -1) maxStackSize = currentReturnValue;
         DEBUG.collect(startTime, "ItemStack size redirect", true);
-
-        return maxStackSize;
+        return event.getAmount();
     }
 
     /**

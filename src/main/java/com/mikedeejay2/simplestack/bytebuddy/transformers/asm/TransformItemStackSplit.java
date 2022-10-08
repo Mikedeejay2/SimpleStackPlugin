@@ -4,7 +4,7 @@ import com.mikedeejay2.simplestack.bytebuddy.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytebuddy.Transformer;
 
 import static org.objectweb.asm.Opcodes.*;
-import static com.mikedeejay2.simplestack.MappingsLookup.*;
+import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.*;
 
 /**
  * Used in a multitude of places. Covered by many other transportations, but fixes left-clicking a result slot to

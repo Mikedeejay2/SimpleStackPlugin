@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 import java.util.function.Function;
 
-import static com.mikedeejay2.simplestack.config.Config.*;
+import static com.mikedeejay2.simplestack.config.SimpleStackConfigImpl.*;
 
 public class GUIItemTypeAmountConstructor extends GUIAbstractListConstructor<MaterialAndAmount> {
     private static final Function<MaterialAndAmount, GUIItem> MAPPER =
@@ -42,6 +42,6 @@ public class GUIItemTypeAmountConstructor extends GUIAbstractListConstructor<Mat
 
     @Override
     protected List<MaterialAndAmount> getUnmappedList() {
-        return plugin.config().getItemAmounts();
+        return plugin.config().getItemAmountsRef();
     }
 }

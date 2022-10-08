@@ -14,9 +14,7 @@ import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.PlaceholderFormatter;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
-import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.Pair;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.config.Config;
 import com.mikedeejay2.simplestack.config.ListMode;
 import com.mikedeejay2.simplestack.gui.constructors.*;
 import org.bukkit.Material;
@@ -26,9 +24,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import static com.mikedeejay2.simplestack.config.Config.*;
+import static com.mikedeejay2.simplestack.config.SimpleStackConfigImpl.*;
 
 /**
  * The <tt>GUIModule</tt> for the main configuration GUI screen
@@ -131,11 +128,11 @@ public class GUIConfigModule implements GUIModule {
      * @return The switch list mode item
      */
     private GUIItem getGUIItemSwitchListMode() {
-        GUIItem switchListMode = new GUIItem(plugin.config().getListMode() == ListMode.WHITELIST ? WHITELIST_ITEM : BLACKLIST_ITEM);
+        GUIItem switchListMode = new GUIItem(plugin.config().isWhitelist() ? WHITELIST_ITEM : BLACKLIST_ITEM);
         GUIButtonToggleableEvent button = new GUIButtonToggleableEvent(
-            (info) -> plugin.config().setListMode(ListMode.WHITELIST),
-            (info) -> plugin.config().setListMode(ListMode.BLACKLIST),
-            plugin.config().getListMode() == ListMode.WHITELIST)
+            (info) -> plugin.config().setListMode(true),
+            (info) -> plugin.config().setListMode(false),
+            plugin.config().isWhitelist())
             .setOnItem(WHITELIST_ITEM).setOffItem(BLACKLIST_ITEM);
         button.setSound(Sound.UI_BUTTON_CLICK).setVolume(0.3f);
         switchListMode.addEvent(button);
@@ -161,7 +158,7 @@ public class GUIConfigModule implements GUIModule {
      */
     private GUIItem getGUIItemItemTypeAmountList() {
         AnimatedGUIItem itemTypeAmountList = new AnimatedGUIItem(ITEM_TYPE_AMOUNT_ITEM, true);
-        final List<MaterialAndAmount> itemAmounts = plugin.config().getItemAmounts();
+        final List<MaterialAndAmount> itemAmounts = plugin.config().getItemAmountsRef();
         Iterator<MaterialAndAmount> iter2 = itemAmounts.iterator();
         for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, itemAmounts.size()); ++i) {
             MaterialAndAmount mata = iter2.next();
@@ -187,7 +184,7 @@ public class GUIConfigModule implements GUIModule {
                     Text.of("&f").concat("simplestack.gui.config.language_description"),
                     Text.of("&7").concat(
                         Text.of("simplestack.gui.config.language_selected")
-                            .placeholder(PlaceholderFormatter.of("lang", plugin.config().getLangLocale())))));
+                            .placeholder(PlaceholderFormatter.of("lang", plugin.config().getLocale())))));
 
         language.addEvent(new GUIOpenNewEvent(plugin, GUILanguageConstructor.INSTANCE));
         language.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
@@ -239,7 +236,7 @@ public class GUIConfigModule implements GUIModule {
      */
     private GUIItem getGUIItemUniqueItemList() {
         AnimatedGUIItem uniqueItemList = new AnimatedGUIItem(UNIQUE_ITEM_LIST_ITEM, true);
-        final List<ItemStack> uniqueItems = plugin.config().getUniqueItemList();
+        final List<ItemStack> uniqueItems = plugin.config().getUniqueItemsRef();
         for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, uniqueItems.size()); ++i) {
             uniqueItemList.addFrame(ItemBuilder.of(UNIQUE_ITEM_LIST_ITEM).setType(uniqueItems.get(i).getType()), 20);
         }
@@ -255,7 +252,7 @@ public class GUIConfigModule implements GUIModule {
      */
     private GUIItem getGUIItemItemTypeList() {
         AnimatedGUIItem itemTypeList = new AnimatedGUIItem(ITEM_TYPE_ITEM, true);
-        final List<Material> materialItems = plugin.config().getMaterialList();
+        final List<Material> materialItems = plugin.config().getMaterialsRef();
         for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, materialItems.size()); ++i) {
             itemTypeList.addFrame(ItemBuilder.of(ITEM_TYPE_ITEM).setType(materialItems.get(i)), 20);
         }

@@ -1,5 +1,7 @@
 package com.mikedeejay2.simplestack.config;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonElement;
 import com.mikedeejay2.mikedeejay2lib.data.json.JsonFile;
 import com.mikedeejay2.mikedeejay2lib.data.section.SectionAccessor;
@@ -9,6 +11,7 @@ import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.text.language.TranslationManager;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.api.SimpleStackConfig;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,11 +23,11 @@ import java.util.*;
  *
  * @author Mikedeejay2
  */
-public class Config extends YamlFile {
+public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig {
     private final SimpleStack plugin;
     //Variables
     // List mode of the material list. Either Blacklist of Whitelist.
-    private ListMode listMode;
+    private boolean whitelist;
     // Material list of the config (Item Type list in config)
     private final List<Material> materialList;
     // Localization code specified in the config
@@ -46,7 +49,7 @@ public class Config extends YamlFile {
     // Whether this config has been loaded or not
     private boolean loaded;
 
-    public Config(SimpleStack plugin) {
+    public SimpleStackConfigImpl(SimpleStack plugin) {
         super(plugin, "config.yml");
         this.plugin = plugin;
         this.modified = false;
@@ -56,7 +59,7 @@ public class Config extends YamlFile {
         this.uniqueItemList = new ArrayList<>();
         if(!fileExists()) {
             loadFromJar(true);
-            setLangLocale(TranslationManager.SYSTEM_LOCALE);
+            setLocale(TranslationManager.SYSTEM_LOCALE);
             super.saveToDisk(true);
         } else loadFromDisk(true);
     }
@@ -65,7 +68,7 @@ public class Config extends YamlFile {
      * Load all data from the config files into this class.
      */
     private void loadData() {
-        langLocale = getDefaultLang();
+        langLocale = getDefaultLocale();
         TranslationManager.GLOBAL.setGlobalLocale(langLocale);
 
         loadDefaultAmount();
@@ -123,11 +126,11 @@ public class Config extends YamlFile {
     private void loadListMode() {
         String listMode = accessor.getString("List Mode");
         try {
-            this.listMode = ListMode.valueOf(listMode.toUpperCase().replaceAll(" ", "_"));
+            whitelist = listMode.trim().equalsIgnoreCase("whitelist");
         } catch(Exception e) {
             plugin.sendWarning(Text.of("simplestack.warnings.invalid_list_mode").placeholder(
                 PlaceholderFormatter.of("mode", listMode)));
-            this.listMode = ListMode.BLACKLIST;
+            this.whitelist = false;
         }
     }
 
@@ -171,46 +174,12 @@ public class Config extends YamlFile {
     }
 
     /**
-     * Returns whether a material has a custom amount set in the config or not.
-     *
-     * @param material The material to search for
-     * @return If this item has a custom amount set or not
-     */
-    public boolean hasCustomAmount(Material material) {
-        return itemAmounts.contains(new MaterialAndAmount(material, 0));
-    }
-
-    /**
-     * Get the custom amount of an item that has been set in the config.
-     * A check is required before running this commands, see hasCustomAmount.
-     *
-     * @param item The item to get the custom amount for
-     * @return The custom amount for this item.
-     */
-    public int getAmount(ItemStack item) {
-        if(containsUniqueItem(item)) {
-            return getUniqueItem(item).getAmount();
-        }
-        return getAmount(item.getType());
-    }
-
-    public int getAmount(Material type) {
-        if(hasCustomAmount(type)) {
-            return itemAmounts.get(itemAmounts.indexOf(new MaterialAndAmount(type, 0))).getAmount();
-        }
-        if((getListMode() == ListMode.WHITELIST) == containsMaterial(type)) {
-            return getMaxAmount();
-        }
-        return -1;
-    }
-
-    /**
      * Get the default lang from the config. This is primarily for
      * the LangManager to use without reflection
      *
      * @return The default lang
      */
-    public String getDefaultLang() {
+    public String getDefaultLocale() {
         return accessor.getString("Language");
     }
 
@@ -255,7 +224,7 @@ public class Config extends YamlFile {
     @Override
     public boolean saveToDisk(boolean throwErrors) {
         if(loaded) {
-            accessor.setString("List Mode", listMode == ListMode.BLACKLIST ? "Blacklist" : "Whitelist");
+            accessor.setString("List Mode", whitelist ? "Whitelist" : "Blacklist");
             List<String> materials = new ArrayList<>();
             for(Material material : materialList) {
                 if(material == null) continue;
@@ -350,53 +319,61 @@ public class Config extends YamlFile {
         return loadFromJar(true) && super.saveToDisk(true);
     }
 
-    /**
-     * Get the Material list's <tt>ListMode</tt>.
-     * The list mode is either:
-     * <ul>
-     *     <li>Whitelist</li>
-     *     <li>Blacklist</li>
-     * </ul>
-     *
-     * @return The current <tt>ListMode</tt>
-     */
-    public ListMode getListMode() {
-        return listMode;
-    }
-
-    /**
-     * Get a list of the materials from the config
-     *
-     * @return The list of materials
-     */
-    public List<Material> getMaterialList() {
+    public List<Material> getMaterialsRef() {
         return materialList;
     }
 
-    /**
-     * Get the default lang locale specified in the config.
-     *
-     * @return The lang locale
-     */
-    public String getLangLocale() {
-        return langLocale;
-    }
-
-    /**
-     * Get a map of material to item amount
-     *
-     * @return A map of material to item amount
-     */
-    public List<MaterialAndAmount> getItemAmounts() {
+    public List<MaterialAndAmount> getItemAmountsRef() {
         return itemAmounts;
     }
 
-    /**
-     * Return whether the config contains a unique item that matches the item specified
-     *
-     * @param item The <tt>ItemStack</tt> to search for
-     * @return Whether the item was found in the config
-     */
+    public List<ItemStack> getUniqueItemsRef() {
+        return uniqueItemList;
+    }
+
+    /////////////////////////////////////
+    // API methods below this point
+    /////////////////////////////////////
+
+    @Override
+    public int getAmount(ItemStack item) {
+        if(containsUniqueItem(item)) {
+            return getUniqueItemAmount(item);
+        }
+        return getAmount(item.getType());
+    }
+
+    @Override
+    public int getAmount(Material type) {
+        if(containsCustomAmount(type)) {
+            return itemAmounts.get(itemAmounts.indexOf(new MaterialAndAmount(type, 0))).getAmount();
+        }
+        if(isWhitelist() == containsMaterial(type)) {
+            return getMaxAmount();
+        }
+        return -1;
+    }
+
+    @Override
+    public int getUniqueItemAmount(ItemStack item) {
+        for(ItemStack curItem : uniqueItemList) {
+            if(!ItemComparison.equalsEachOther(curItem, item)) continue;
+            return curItem.getAmount();
+        }
+        return -1;
+    }
+
+    @Override
+    public boolean containsMaterial(Material material) {
+        return materialList.contains(material);
+    }
+
+    @Override
+    public boolean containsCustomAmount(Material material) {
+        return itemAmounts.contains(new MaterialAndAmount(material, 0));
+    }
+
+    @Override
     public boolean containsUniqueItem(ItemStack item) {
         for(ItemStack curItem : uniqueItemList) {
             if(!ItemComparison.equalsEachOther(curItem, item)) continue;
@@ -405,200 +382,121 @@ public class Config extends YamlFile {
         return false;
     }
 
-    /**
-     * Get a unique item from the config based off of a reference item of the same properties
-     *
-     * @param item The <tt>ItemStack</tt> to find in the config
-     * @return The <tt>ItemStack</tt> found with the same properties in the config
-     */
-    public ItemStack getUniqueItem(ItemStack item) {
-        for(ItemStack curItem : uniqueItemList) {
-            if(!ItemComparison.equalsEachOther(curItem, item)) continue;
-            return curItem;
+    @Override
+    public Set<Material> getMaterials() {
+        return ImmutableSet.copyOf(materialList);
+    }
+
+    @Override
+    public Map<Material, Integer> getItemAmounts() {
+        ImmutableMap.Builder<Material, Integer> builder = ImmutableMap.builder();
+        for(MaterialAndAmount entry : itemAmounts) {
+            builder.put(entry.getMaterial(), entry.getAmount());
         }
-        return null;
+        return builder.build();
     }
 
-    /**
-     * Return whether the material list contains a specific material or not
-     *
-     * @param material The material to search for
-     * @return Whether the material was found or not
-     */
-    public boolean containsMaterial(Material material) {
-        return materialList.contains(material);
+    @Override
+    public Set<ItemStack> getUniqueItems() {
+        return ImmutableSet.copyOf(uniqueItemList);
     }
 
-    /**
-     * Get the default max amount for items
-     *
-     * @return The default max amount for items
-     */
-    public int getMaxAmount() {
-        return maxAmount;
+    @Override
+    public void addMaterial(Material material) {
+        if(containsMaterial(material)) return;
+        materialList.add(material);
+        setModified(true);
     }
 
-    /**
-     * Add a unique item to the config at the player's request. <p>
-     * This method does not save the config, only modifies it.
-     *
-     * @param item   The item to add to the config
-     */
+    @Override
+    public void addCustomAmount(Material material, int amount) {
+        if(containsCustomAmount(material)) removeCustomAmount(material);
+        itemAmounts.add(new MaterialAndAmount(material, amount));
+        setModified(true);
+    }
+
+    @Override
     public void addUniqueItem(ItemStack item) {
         removeUniqueItem(item);
         uniqueItemList.add(item);
         setModified(true);
     }
 
-    /**
-     * Add a material to the config at the player's request. <p>
-     * This method does not save the config, only modifies it.
-     *
-     * @param material The material to add to the config
-     * @return Whether the action was successful or not
-     */
-    public boolean addMaterial(Material material) {
-        if(containsMaterial(material)) return false;
-        materialList.add(material);
+    @Override
+    public void removeMaterial(Material material) {
+        materialList.remove(material);
         setModified(true);
-        return true;
     }
 
-    /**
-     * Removes a unique item from the config at the player's request. <p>
-     * This method does not save the config, only modifies it.
-     *
-     * @param item   The item to from the config
-     * @return Whether the action was successful or not
-     */
-    public boolean removeUniqueItem(ItemStack item) {
+    @Override
+    public void removeCustomAmount(Material material) {
+        itemAmounts.remove(new MaterialAndAmount(material, 0));
+        setModified(true);
+    }
+
+    @Override
+    public void removeUniqueItem(ItemStack item) {
         for(ItemStack curItem : uniqueItemList) {
             if(!ItemComparison.equalsEachOther(item, curItem)) continue;
             uniqueItemList.remove(curItem);
             setModified(true);
             break;
         }
-        return true;
     }
 
-    /**
-     * Removes a material from the config at the player's request. <p>
-     * This method does not save the config, only modifies it.
-     *
-     * @param material The material to remove from the config
-     * @return Whether the action was successful or not
-     */
-    public boolean removeMaterial(Material material) {
-        materialList.remove(material);
-        setModified(true);
-        return true;
+    @Override
+    public boolean isWhitelist() {
+        return whitelist;
     }
 
-    /**
-     * Set the <tt>ListMode</tt> of the config. <p>
-     * This method does not save the config, only modifies it.
-     *
-     * @param newMode The new <tt>ListMode</tt> to use in the config
-     */
-    public void setListMode(ListMode newMode) {
-        this.listMode = newMode;
+    @Override
+    public void setListMode(boolean whitelist) {
+        this.whitelist = whitelist;
         setModified(true);
     }
 
-    /**
-     * Set the lang locale of the config. This automatically updates the <tt>LangManager</tt>
-     * as well.
-     * <p>
-     * This method does not save the config, only modifies it.
-     *
-     * @param newLocale The new locale
-     */
-    public void setLangLocale(String newLocale) {
-        this.langLocale = newLocale;
-        TranslationManager.GLOBAL.setGlobalLocale(newLocale);
+    @Override
+    public boolean isStackedArmorWearable() {
+        return stackedArmorWearable;
+    }
+
+    @Override
+    public void setStackedArmorWearable(boolean stackedArmorWearable) {
+        this.stackedArmorWearable = stackedArmorWearable;
         setModified(true);
     }
 
-    /**
-     * Add a material and custom amount to the config at the player's request. <p>
-     * This method does not save the config, only modifies it.
-     *
-     * @param material The material to add to the config
-     * @param amount   The new max amount of the item
-     */
-    public void addCustomAmount(Material material, int amount) {
-        if(hasCustomAmount(material)) removeCustomAmount(material);
-        itemAmounts.add(new MaterialAndAmount(material, amount));
-        setModified(true);
+    @Override
+    public int getMaxAmount() {
+        return maxAmount;
     }
 
-    /**
-     * Removes a material from the custom amount list at the player's request. <p>
-     * This method does not save the config, only modifies it.
-     *
-     * @param material The material to remove from the config
-     */
-    public void removeCustomAmount(Material material) {
-        itemAmounts.remove(new MaterialAndAmount(material, 0));
-        setModified(true);
-    }
-
-    /**
-     * Get whether this file has been modified or not
-     *
-     * @return Whether this files has been modified
-     */
-    public boolean isModified() {
-        return modified;
-    }
-
-    /**
-     * Set whether this file has been modified or not
-     *
-     * @param modified The new modified state of this file
-     */
-    public void setModified(boolean modified) {
-        this.modified = modified;
-    }
-
-    /**
-     * Set a new max stack amount for items
-     *
-     * @param maxAmount The new max stack amount
-     */
+    @Override
     public void setMaxAmount(int maxAmount) {
         this.maxAmount = maxAmount;
         setModified(true);
     }
 
-    /**
-     * Get the list of unique items from the config
-     *
-     * @return The list of unique items
-     */
-    public List<ItemStack> getUniqueItemList() {
-        return uniqueItemList;
+    @Override
+    public String getLocale() {
+        return langLocale;
     }
 
-    /**
-     * Get whether stacked armor can be worn or not
-     *
-     * @return Whether stacked armor can be worn or not
-     */
-    public boolean isStackedArmorWearable()
-    {
-        return stackedArmorWearable;
-    }
-
-    /**
-     * Set whether stacked armor can be worn or not
-     *
-     * @param stackedArmorWearable The new stackable armor state
-     */
-    public void setStackedArmorWearable(boolean stackedArmorWearable)
-    {
-        this.stackedArmorWearable = stackedArmorWearable;
+    @Override
+    public void setLocale(String newLocale) {
+        this.langLocale = newLocale;
+        TranslationManager.GLOBAL.setGlobalLocale(newLocale);
         setModified(true);
+    }
+
+    @Override
+    public boolean isModified() {
+        return modified;
+    }
+
+    @Override
+    public void setModified(boolean modified) {
+        this.modified = modified;
     }
 
     public static final class MaterialAndAmount {

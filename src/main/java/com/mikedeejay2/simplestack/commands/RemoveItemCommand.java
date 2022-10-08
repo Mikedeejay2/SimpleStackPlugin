@@ -3,7 +3,7 @@ package com.mikedeejay2.simplestack.commands;
 import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.config.Config;
+import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -38,7 +38,7 @@ public class RemoveItemCommand implements SubCommand {
                 .concat(Text.of("simplestack.warnings.held_item_required")));
             return;
         }
-        Config config = plugin.config();
+        SimpleStackConfigImpl config = plugin.config();
         config.removeUniqueItem(heldItem);
         config.saveToDisk(true);
         plugin.sendMessage(sender, Text.of("&e&l%s&r &b%s").format(

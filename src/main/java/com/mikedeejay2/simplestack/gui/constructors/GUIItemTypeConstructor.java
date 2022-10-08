@@ -40,6 +40,6 @@ public class GUIItemTypeConstructor extends GUIAbstractListConstructor<Material>
 
     @Override
     protected List<Material> getUnmappedList() {
-        return plugin.config().getMaterialList();
+        return plugin.config().getMaterialsRef();
     }
 }

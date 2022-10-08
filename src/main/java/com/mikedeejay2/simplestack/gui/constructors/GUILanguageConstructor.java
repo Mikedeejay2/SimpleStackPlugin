@@ -12,7 +12,7 @@ import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.config.Config;
+import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 
@@ -79,7 +79,7 @@ public class GUILanguageConstructor extends GUIAbstractListConstructor<GUIItem> 
     public List<GUIItem> getLanguageList() {
         List<GUIItem> items = new ArrayList<>(languageItems);
 
-        String currentLocale = plugin.config().getLangLocale();
+        String currentLocale = plugin.config().getLocale();
         int index = 0;
         GUIItem curLangItem = null;
         String curLocale = null;
@@ -138,8 +138,8 @@ public class GUILanguageConstructor extends GUIAbstractListConstructor<GUIItem> 
 
         @Override
         protected void executeClick(GUIEventInfo info) {
-            Config config = SimpleStack.getInstance().config();
-            config.setLangLocale(locale);
+            SimpleStackConfigImpl config = SimpleStack.getInstance().config();
+            config.setLocale(locale);
             GUIListModule listModule = info.getGUI().getModule(GUIListModule.class);
             List<GUIItem> langItems = GUILanguageConstructor.INSTANCE.getLanguageList();
             listModule.setGUIItems(langItems);

@@ -1,10 +1,11 @@
-package com.mikedeejay2.simplestack;
+package com.mikedeejay2.simplestack.bytebuddy;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mikedeejay2.mikedeejay2lib.data.json.JsonAccessor;
 import com.mikedeejay2.mikedeejay2lib.data.json.JsonFile;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
+import com.mikedeejay2.simplestack.SimpleStack;
 import org.apache.commons.lang3.Validate;
 
 import java.util.HashMap;
@@ -15,67 +16,6 @@ public class MappingsLookup {
     private static ClassMapping lastClass = null;
     private static MappingEntry lastMethod = null;
     private static MappingEntry lastField = null;
-//
-//    static {
-//        register("1.19", new MappingsHolder()
-//            .add("Item", ofClass("net.minecraft.world.item.Item")
-//                .method("getMaxStackSize", ofEntry("m", "()I")))
-//            .add("ItemStack", ofClass("net.minecraft.world.item.ItemStack")
-//                .method("getMaxStackSize", ofEntry("f", "()I"))
-//                .method("split", ofEntry("a", "(I)L", "ItemStack"))
-//                .method("copy", ofEntry("o", "()L", "ItemStack"))
-//                .method("setCount", ofEntry("e", "(I)V"))
-//                .method("shrink", ofEntry("g", "(I)V"))
-//                .method("getCount", ofEntry("K", "()I"))
-//                .method("isSameItemSameTags", ofEntry("e", "(LL)Z", "ItemStack", "ItemStack"))
-//                .method("isEmpty", ofEntry("b", "()Z"))
-//                .method("<init>", ofEntry("<init>", "(L)V", "IMaterial")))
-//            .add("CraftItemStack", ofClass("org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack")
-//                .method("asBukkitCopy", ofEntry("asBukkitCopy")))
-//            .add("ContainerUtil", ofClass("net.minecraft.world.ContainerUtil")
-//                .method("removeItem", ofEntry("a", "(LII)L", List.class, "ItemStack")))
-//            .add("Slot", ofClass("net.minecraft.world.inventory.Slot")
-//                .method("tryRemove", ofEntry("a", "(IIL)L", "EntityHuman", Optional.class))
-//                .method("getItem", ofEntry("e", "()L", "ItemStack"))
-//                .method("getMaxStackSize", ofEntry("a", "()I"))
-//                .method("getMaxStackSize1", ofEntry("a_", "(L)I", "ItemStack"))
-//                .field("slot", ofEntry("a", "I")))
-//            .add("EntityPlayer", ofClass("net.minecraft.server.level.EntityPlayer")
-//                .method("drop", ofEntry("a", "(LZZ)L", "ItemStack", "EntityItem")))
-//            .add("EntityItem", ofClass("net.minecraft.world.entity.item.EntityItem"))
-//            .add("Container", ofClass("net.minecraft.world.inventory.Container")
-//                .method("doClick", ofEntry("b", "(IILL)V", "InventoryClickType", "EntityHuman"))
-//                .method("doClickLambda", ofEntry("lambda$doClick$3", "(LLL)V", "Slot", "EntityHuman", "ItemStack"))
-//                .method("moveItemStackTo", ofEntry("moveItemStackTo", "(LIIZZ)Z", "ItemStack")))
-//            .add("InventoryClickType", ofClass("net.minecraft.world.inventory.InventoryClickType"))
-//            .add("EntityHuman", ofClass("net.minecraft.world.entity.player.EntityHuman")
-//                .method("drop", ofEntry("a", "(LZZ)L", "ItemStack", "EntityItem"))
-//                .method("getInventory", ofEntry("fB", "()L", "PlayerInventory")))
-//            .add("PlayerInventory", ofClass("net.minecraft.world.entity.player.PlayerInventory")
-//                .method("setItem", ofEntry("a", "(IL)V", "ItemStack"))
-//                .method("add", ofEntry("e", "(L)Z", "ItemStack")))
-//            .add("ItemBucket", ofClass("net.minecraft.world.item.ItemBucket")
-//                .method("getEmptySuccessItem", ofEntry("a", "(LL)L", "ItemStack", "EntityHuman", "ItemStack")))
-//            .add("Items", ofClass("net.minecraft.world.item.Items")
-//                .field("BUCKET", ofEntry("oH", "L", "Item"))
-//                .field("BOWL", ofEntry("nM", "L", "Item")))
-//            .add("IMaterial", ofClass("net.minecraft.world.level.IMaterial"))
-//            .add("ItemSoup", ofClass("net.minecraft.world.item.ItemSoup")
-//                .method("finishUsingItem", ofEntry("a", "(LLL)L", "ItemStack", "World", "EntityLiving", "ItemStack")))
-//            .add("World", ofClass("net.minecraft.world.level.World"))
-//            .add("EntityLiving", ofClass("net.minecraft.world.entity.EntityLiving"))
-//            .add("ItemSuspiciousStew", ofClass("net.minecraft.world.item.ItemSuspiciousStew")
-//                .method("finishUsingItem", ofEntry("a", "(LLL)L", "ItemStack", "World", "EntityLiving", "ItemStack")))
-//            .add("ArmorSlot", ofClass("net.minecraft.world.inventory.ContainerPlayer$1")
-//                .method("getMaxStackSize", ofEntry("a", "()I")))
-//        );
-//    }
-//
-//    private static void register(String version, MappingsHolder holder) {
-//        if(version.equals(MinecraftVersion.getVersionString())) {
-//            MappingsLookup.holder = holder;
-//        }
-//    }
 
     public static boolean loadMappings(SimpleStack plugin) {
         final JsonFile jsonFile = new JsonFile(plugin, String.format("nms/%s.json", MinecraftVersion.getVersionString()));
@@ -150,18 +90,6 @@ public class MappingsLookup {
         Validate.notNull(lastClass, "Tried to get last field, but was null");
         return lastField;
     }
-
-//    private static ClassMapping ofClass(String qualifiedName) {
-//        return new ClassMapping(qualifiedName);
-//    }
-//
-//    private static MappingEntry ofEntry(String name) {
-//        return new MappingEntry(name);
-//    }
-//
-//    private static MappingEntry ofEntry(String name, String descriptor, Object... referenceClasses) {
-//        return new MappingEntry(name).descriptor(descriptor, referenceClasses);
-//    }
 
     public static final class MappingsHolder {
         private final Map<String, ClassMapping> mappings;

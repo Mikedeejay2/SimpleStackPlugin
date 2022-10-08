@@ -4,7 +4,7 @@ import com.mikedeejay2.simplestack.bytebuddy.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytebuddy.Transformer;
 import org.objectweb.asm.Label;
 
-import static com.mikedeejay2.simplestack.MappingsLookup.*;
+import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.*;
 import static org.objectweb.asm.Opcodes.*;
 
 /**
