@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.commands;
 import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -55,7 +56,7 @@ public class SetAmountCommand implements SubCommand {
             return;
         }
         item.setAmount(amount);
-        if(amount > plugin.config().getMaxAmount()) {
+        if(amount > SimpleStackAPI.getConfig().getMaxAmount()) {
             plugin.sendMessage(sender, Text.of("&e").concat("simplestack.warnings.big_number"));
         }
         plugin.sendMessage(sender, Text.of("&e&l%s&r &b%s").format(

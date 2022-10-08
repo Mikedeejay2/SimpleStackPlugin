@@ -4,6 +4,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
 import com.mikedeejay2.mikedeejay2lib.gui.event.button.GUIButtonToggleableEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUIOpenNewEvent;
+import com.mikedeejay2.mikedeejay2lib.gui.event.sound.GUIPlaySoundEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.util.GUIAbstractRuntimeModule;
@@ -11,8 +12,10 @@ import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.debug.DebugSystem;
+import com.mikedeejay2.simplestack.api.SimpleStackAPI;
+import com.mikedeejay2.simplestack.api.SimpleStackTimings;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -51,14 +54,14 @@ public class GUIDebugSettingsModule extends GUIAbstractRuntimeModule {
 
 
     private final SimpleStack plugin;
-    private final DebugSystem debugSystem;
+    private final SimpleStackTimings timings;
 
     private GUIItem statisticsItem;
 
     public GUIDebugSettingsModule(SimpleStack plugin) {
         super(plugin, 0, 20);
         this.plugin = plugin;
-        this.debugSystem = plugin.getDebugSystem();
+        this.timings = SimpleStackAPI.getTimings();
     }
 
     @Override
@@ -85,19 +88,15 @@ public class GUIDebugSettingsModule extends GUIAbstractRuntimeModule {
         return info -> {
             if(statisticsItem == null) return;
             List<String> oldLore = statisticsItem.getLore();
-            if(!debugSystem.isCollecting()) {
+            if(!timings.isCollecting()) {
                 statisticsItem.setLore(
                     "",
                     "&7&oTimings aren't enabled.");
             } else {
-                statisticsItem.setLore(
-                    "",
-                    "&fMs per tick (min/med/avg/95%ile/max ms):",
-                    "&f5s:  " + debugSystem.getTimingString(100),
-                    "&f10s: " + debugSystem.getTimingString(200),
-                    "&f1m:  " + debugSystem.getTimingString(1200),
-                    "&f5m:  " + debugSystem.getTimingString(6000),
-                    "&f15m: " + debugSystem.getTimingString(18000));
+                statisticsItem.setLore("");
+                for(String line : timings.getTimings()) {
+                    statisticsItem.addLore("&f" + line);
+                }
             }
             if(oldLore == null || !oldLore.equals(statisticsItem.getLore())) {
                 info.getGui().update(info.getPlayer());
@@ -106,25 +105,28 @@ public class GUIDebugSettingsModule extends GUIAbstractRuntimeModule {
     }
 
     private GUIItem getCollectTimingsButton() {
-        return new GUIItem(debugSystem.isCollecting() ? COLLECT_ON_ITEM : COLLECT_OFF_ITEM).addEvent(
+        return new GUIItem(timings.isCollecting() ? COLLECT_ON_ITEM : COLLECT_OFF_ITEM).addEvent(
             new GUIButtonToggleableEvent(
-                (info) -> debugSystem.startCollecting(),
-                (info) -> debugSystem.stopCollecting(),
-                debugSystem.isCollecting())
+                (info) -> timings.startCollecting(),
+                (info) -> timings.stopCollecting(),
+                timings.isCollecting())
                 .setOnItem(COLLECT_ON_ITEM)
-                .setOffItem(COLLECT_OFF_ITEM));
+                .setOffItem(COLLECT_OFF_ITEM)
+                .setSound(Sound.UI_BUTTON_CLICK)
+                .setVolume(0.3f));
     }
 
     private static AnimatedGUIItem getInfoItem() {
         AnimatedGUIItem infoItem = new AnimatedGUIItem(INFO_ITEM, true);
         infoItem.addFrame(INFO_ITEM.get(), 20);
-        infoItem.addFrame(INFO_ITEM.setHeadBase64(Base64Head.CONCRETE_RED.get()).get(), 20);
+        infoItem.addFrame(INFO_ITEM.clone().setHeadBase64(Base64Head.CONCRETE_RED.get()).get(), 20);
         return infoItem;
     }
 
     private GUIItem getViewEntriesButton() {
         GUIItem viewEntriesButton = new GUIItem(VIEW_ENTRIES_ITEM);
         viewEntriesButton.addEvent(new GUIOpenNewEvent(plugin, GUIDebugEntriesConstructor.INSTANCE));
+        viewEntriesButton.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
         return viewEntriesButton;
     }
 
@@ -139,6 +141,7 @@ public class GUIDebugSettingsModule extends GUIAbstractRuntimeModule {
         aboutItem.addFrame(ItemBuilder.of(Material.WRITABLE_BOOK).setName(Text.of("&8").concat(name)), 10);
         aboutItem.addFrame(ItemBuilder.of(Material.WRITABLE_BOOK).setName(Text.of("&8&o").concat(name)), 10);
         aboutItem.addEvent(new GUIOpenNewEvent(plugin, GUIAboutConstructor.INSTANCE));
+        aboutItem.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
         return aboutItem;
     }
 }

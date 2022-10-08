@@ -9,6 +9,8 @@ import com.mikedeejay2.mikedeejay2lib.gui.interact.normal.GUIInteractExecutorDef
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.api.SimpleStackAPI;
+import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -42,6 +44,6 @@ public class GUIItemTypeAmountConstructor extends GUIAbstractListConstructor<Mat
 
     @Override
     protected List<MaterialAndAmount> getUnmappedList() {
-        return plugin.config().getItemAmountsRef();
+        return ((SimpleStackConfigImpl) SimpleStackAPI.getConfig()).getItemAmountsRef();
     }
 }

@@ -3,7 +3,6 @@ package com.mikedeejay2.simplestack.api.event;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 public class SlotMaxAmountEvent extends SimpleStackEvent {
     private static final HandlerList handlers = new HandlerList();

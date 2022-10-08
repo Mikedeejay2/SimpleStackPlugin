@@ -2,16 +2,20 @@ package com.mikedeejay2.simplestack;
 
 import com.mikedeejay2.mikedeejay2lib.BukkitPlugin;
 import com.mikedeejay2.mikedeejay2lib.commands.CommandManager;
+import com.mikedeejay2.mikedeejay2lib.reflect.Reflector;
+import com.mikedeejay2.mikedeejay2lib.reflect.ReflectorClass;
 import com.mikedeejay2.mikedeejay2lib.text.language.TranslationManager;
 import com.mikedeejay2.mikedeejay2lib.util.bstats.BStats;
 import com.mikedeejay2.mikedeejay2lib.util.update.UpdateChecker;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
+import com.mikedeejay2.simplestack.api.SimpleStackConfig;
+import com.mikedeejay2.simplestack.api.SimpleStackTimings;
 import com.mikedeejay2.simplestack.bytebuddy.*;
 import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
 import com.mikedeejay2.simplestack.config.ConfigListener;
-import com.mikedeejay2.simplestack.debug.DebugSystem;
+import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
 
 /**
  * Simple Stack v2.0 plugin for Minecraft TBD - 1.19
@@ -31,7 +35,7 @@ public final class SimpleStack extends BukkitPlugin {
 
     // The config of Simple Stack which stores all customizable data
     private SimpleStackConfigImpl config;
-    private DebugSystem debugSystem;
+    private SimpleStackTimingsImpl timings;
 
     private BStats bStats;
     private UpdateChecker updateChecker;
@@ -53,7 +57,11 @@ public final class SimpleStack extends BukkitPlugin {
         instance = this;
         setPrefix("&f[&b" + this.getDescription().getName() + "&f]&r ");
         TranslationManager.GLOBAL.registerDirectory("lang/simplestack", true);
-        this.debugSystem = new DebugSystem(this);
+
+        this.timings = new SimpleStackTimingsImpl(this);
+        this.config = new SimpleStackConfigImpl(this);
+        registerEvent(new ConfigListener(config));
+        setupApi();
 
         if(checkVersion() || installByteBuddyAgent() || installAgent()) return;
 
@@ -68,11 +76,13 @@ public final class SimpleStack extends BukkitPlugin {
         commandManager.setDefaultSubCommand("help");
         registerCommand(commandManager);
 
-        this.config = new SimpleStackConfigImpl(this);
-        registerEvent(new ConfigListener(config));
-        SimpleStackAPI.setConfig(config);
-
         sendInfo("Finished initialization.");
+    }
+
+    private void setupApi() {
+        ReflectorClass<SimpleStackAPI> apiClass = Reflector.of(SimpleStackAPI.class);
+        apiClass.field("config").set(null, config);
+        apiClass.field("timings").set(null, timings);
     }
 
     private boolean installAgent() {
@@ -127,21 +137,8 @@ public final class SimpleStack extends BukkitPlugin {
         }
     }
 
-    /**
-     * Get the Config file for Simple Stack
-     *
-     * @return The config of Simple Stack
-     */
-    public SimpleStackConfigImpl config() {
-        return config;
-    }
-
     public CommandManager getCommandManager() {
         return commandManager;
-    }
-
-    public DebugSystem getDebugSystem() {
-        return debugSystem;
     }
 
     public static SimpleStack getInstance() {

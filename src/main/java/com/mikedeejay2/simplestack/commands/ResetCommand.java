@@ -3,6 +3,8 @@ package com.mikedeejay2.simplestack.commands;
 import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.api.SimpleStackAPI;
+import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -29,7 +31,7 @@ public class ResetCommand implements SubCommand {
      */
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        plugin.config().resetFromJar(true);
+        ((SimpleStackConfigImpl) SimpleStackAPI.getConfig()).resetFromJar(true);
         plugin.sendMessage(sender, Text.of("&e&l%s&r &b%s").format(
             Text.of("simplestack.generic.success"),
             Text.of("simplestack.reset.success")));

@@ -9,6 +9,10 @@ import com.mikedeejay2.mikedeejay2lib.gui.interact.normal.GUIInteractExecutorDef
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.api.SimpleStackAPI;
+import com.mikedeejay2.simplestack.api.SimpleStackConfig;
+import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
+import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -39,6 +43,6 @@ public class GUIUniqueConstructor extends GUIAbstractListConstructor<ItemStack> 
 
     @Override
     protected List<ItemStack> getUnmappedList() {
-        return plugin.config().getUniqueItemsRef();
+        return ((SimpleStackConfigImpl) SimpleStackAPI.getConfig()).getUniqueItemsRef();
     }
 }

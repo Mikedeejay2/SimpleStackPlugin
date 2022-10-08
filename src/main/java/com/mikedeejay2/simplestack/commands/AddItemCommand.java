@@ -3,6 +3,8 @@ package com.mikedeejay2.simplestack.commands;
 import com.mikedeejay2.mikedeejay2lib.commands.SubCommand;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.api.SimpleStackAPI;
+import com.mikedeejay2.simplestack.api.SimpleStackConfig;
 import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -37,9 +39,8 @@ public class AddItemCommand implements SubCommand {
             plugin.sendMessage(player, Text.of("&c").concat("simplestack.warnings.held_item_required"));
             return;
         }
-        SimpleStackConfigImpl config = plugin.config();
+        SimpleStackConfig config = SimpleStackAPI.getConfig();
         config.addUniqueItem(heldItem);
-        config.saveToDisk(true);
         plugin.sendMessage(sender, Text.of("&e&l%s&r &b%s").format(
             Text.of("simplestack.generic.success"),
             Text.of("simplestack.commands.additem.success")));

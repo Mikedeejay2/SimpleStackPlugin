@@ -1,10 +1,11 @@
 package com.mikedeejay2.simplestack.bytebuddy.transformers.advice;
 
 import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.event.ArmorSlotMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytebuddy.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytebuddy.Transformer;
-import com.mikedeejay2.simplestack.debug.DebugSystem;
+import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
@@ -22,7 +23,7 @@ import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.*;
  */
 @Transformer({"1.19"})
 public class TransformSlotGetMaxStackSize implements MethodVisitorInfo {
-    private static final DebugSystem DEBUG = SimpleStack.getInstance().getDebugSystem();
+    private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 
     @Override
     public AsmVisitorWrapper.ForDeclaredMethods.MethodVisitorWrapper getWrapper() {
@@ -39,7 +40,7 @@ public class TransformSlotGetMaxStackSize implements MethodVisitorInfo {
         final int slot = NmsConverters.slotToSlot(nmsSlot);
         final ArmorSlotMaxAmountEvent event = new ArmorSlotMaxAmountEvent(inventory, slot, currentReturnValue);
         Bukkit.getPluginManager().callEvent(event);
-        DEBUG.collect(startTime, "Slot redirect", true);
+        TIMINGS.collect(startTime, "Slot redirect", true);
         return event.getAmount();
     }
 

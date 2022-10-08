@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.config;
 
+import com.mikedeejay2.simplestack.api.SimpleStackConfig;
 import com.mikedeejay2.simplestack.api.event.ArmorSlotMaxAmountEvent;
 import com.mikedeejay2.simplestack.api.event.ItemStackMaxAmountEvent;
 import com.mikedeejay2.simplestack.api.event.MaterialMaxAmountEvent;
@@ -7,9 +8,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class ConfigListener implements Listener {
-    private final SimpleStackConfigImpl config;
+    private final SimpleStackConfig config;
 
-    public ConfigListener(SimpleStackConfigImpl config) {
+    public ConfigListener(SimpleStackConfig config) {
         this.config = config;
     }
 

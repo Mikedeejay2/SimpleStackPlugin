@@ -13,7 +13,9 @@ import com.mikedeejay2.mikedeejay2lib.gui.util.SlotMatcher;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.debug.DebugSystem;
+import com.mikedeejay2.simplestack.api.SimpleStackAPI;
+import com.mikedeejay2.simplestack.api.SimpleStackTimings;
+import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,14 +25,14 @@ import java.util.function.Consumer;
 
 public class GUIDebugEntriesConstructor implements GUIConstructor {
     public static final GUIDebugEntriesConstructor INSTANCE = new GUIDebugEntriesConstructor(
-        SimpleStack.getInstance(), SimpleStack.getInstance().getDebugSystem());
+        SimpleStack.getInstance(), SimpleStackAPI.getTimings());
 
     private final SimpleStack plugin;
-    private final DebugSystem debugSystem;
+    private final SimpleStackTimings timings;
 
-    private GUIDebugEntriesConstructor(SimpleStack plugin, DebugSystem debugSystem) {
+    private GUIDebugEntriesConstructor(SimpleStack plugin, SimpleStackTimings timings) {
         this.plugin = plugin;
-        this.debugSystem = debugSystem;
+        this.timings = timings;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class GUIDebugEntriesConstructor implements GUIConstructor {
             GUIDebuggerConstructor.OUTLINE_ITEM, new AnimationSpecification(
                 AnimationSpecification.Position.TOP_LEFT, AnimationSpecification.Style.COL)));
         newGui.addModule(new GUINavigatorModule(plugin, "config"));
-        newGui.addModule(new GUIGetEntriesModule(plugin, list, debugSystem));
+        newGui.addModule(new GUIGetEntriesModule(plugin, list, timings));
         newGui.addModule(list);
 
         return newGui;
@@ -57,12 +59,12 @@ public class GUIDebugEntriesConstructor implements GUIConstructor {
 
     private static final class GUIGetEntriesModule extends GUIAbstractRuntimeModule {
         private final GUIListModule list;
-        private final DebugSystem debugSystem;
+        private final SimpleStackTimings timings;
 
-        public GUIGetEntriesModule(SimpleStack plugin, GUIListModule list, DebugSystem debugSystem) {
+        public GUIGetEntriesModule(SimpleStack plugin, GUIListModule list, SimpleStackTimings timings) {
             super(plugin, 0, 100);
             this.list = list;
-            this.debugSystem = debugSystem;
+            this.timings = timings;
         }
 
         @Override
@@ -72,8 +74,8 @@ public class GUIDebugEntriesConstructor implements GUIConstructor {
 
         private void updateList(GUIContainer gui) {
             list.resetList();
-            List<DebugSystem.TimingEntry> detailedTimings;
-            if(!this.debugSystem.isCollecting()) {
+            List<SimpleStackTimingsImpl.TimingEntry> detailedTimings;
+            if(!this.timings.isCollecting()) {
                 gui.setItem(3, 5, new GUIItem(
                     ItemBuilder.of(Base64Head.EXCLAMATION_MARK_RED.get())
                         .setName("&cError!")
@@ -84,7 +86,7 @@ public class GUIDebugEntriesConstructor implements GUIConstructor {
                             "&7&othe previous GUI.")
                         .get()));
                 return;
-            } else if((detailedTimings = this.debugSystem.getDetailedTimings()).isEmpty()) {
+            } else if((detailedTimings = this.timings.getDetailedTimings()).isEmpty()) {
                 gui.setItem(3, 5, new GUIItem(
                     ItemBuilder.of(Base64Head.EXCLAMATION_MARK_RED.get())
                         .setName("&cError!")
@@ -110,7 +112,7 @@ public class GUIDebugEntriesConstructor implements GUIConstructor {
             };
         }
 
-        private ItemStack getItemStack(DebugSystem.TimingEntry entry) {
+        private ItemStack getItemStack(SimpleStackTimingsImpl.TimingEntry entry) {
             String base64Head;
             switch(entry.color) {
                 case GREEN: base64Head = Base64Head.LIME.get();break;

@@ -1,18 +1,18 @@
 package com.mikedeejay2.simplestack.bytebuddy.transformers.advice;
 
+import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.event.ItemStackMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytebuddy.MappingsLookup;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.bytebuddy.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytebuddy.Transformer;
-import com.mikedeejay2.simplestack.debug.DebugSystem;
+import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.*;
@@ -24,7 +24,7 @@ import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.*;
  */
 @Transformer({"1.19"})
 public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
-    private static final DebugSystem DEBUG = SimpleStack.getInstance().getDebugSystem();
+    private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 
     @Override
     public AsmVisitorWrapper.ForDeclaredMethods.MethodVisitorWrapper getWrapper() {
@@ -54,7 +54,7 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
         Bukkit.getPluginManager().callEvent(event);
 //        int maxStackSize = SimpleStack.getInstance().config().getAmount(itemStack);
 //        if(maxStackSize == -1) maxStackSize = currentReturnValue;
-        DEBUG.collect(startTime, "ItemStack size redirect", true);
+        TIMINGS.collect(startTime, "ItemStack size redirect", true);
         return event.getAmount();
     }
 

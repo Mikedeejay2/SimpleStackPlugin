@@ -4,12 +4,12 @@ import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.ImmutableList;
 import com.mikedeejay2.mikedeejay2lib.runnable.EnhancedRunnable;
 import com.mikedeejay2.simplestack.SimpleStack;
-import org.bukkit.ChatColor;
+import com.mikedeejay2.simplestack.api.SimpleStackTimings;
 
 import java.text.DecimalFormat;
 import java.util.*;
 
-public final class DebugSystem {
+public final class SimpleStackTimingsImpl implements SimpleStackTimings {
     private final SimpleStack plugin;
 
     private boolean shouldCollect;
@@ -17,7 +17,7 @@ public final class DebugSystem {
     private EvictingQueue<Long> tickTimings;
     private DebugRunnable runnable;
 
-    public DebugSystem(SimpleStack plugin) {
+    public SimpleStackTimingsImpl(SimpleStack plugin) {
         this.plugin = plugin;
         this.shouldCollect = false;
         this.runnable = null;
@@ -33,6 +33,7 @@ public final class DebugSystem {
         this.detailedTimings.add(new TimingEntry(name, nanoTime, msTime));
     }
 
+    @Override
     public void startCollecting() {
         this.detailedTimings = EvictingQueue.create(500);
         this.tickTimings = EvictingQueue.create(18000); // 15 minutes
@@ -41,6 +42,7 @@ public final class DebugSystem {
         this.shouldCollect = true;
     }
 
+    @Override
     public void stopCollecting() {
         this.shouldCollect = false;
         this.detailedTimings.clear();
@@ -51,18 +53,22 @@ public final class DebugSystem {
         this.runnable = null;
     }
 
+    @Override
     public boolean isCollecting() {
         return shouldCollect;
     }
 
+    @Override
     public List<TimingEntry> getDetailedTimings() {
         return ImmutableList.copyOf(detailedTimings);
     }
 
+    @Override
     public List<Long> getTickTimings() {
         return ImmutableList.copyOf(tickTimings);
     }
 
+    @Override
     public String getTimingString(int ticks) {
         if(tickTimings.isEmpty()) return "N/A";
         ticks = Math.min(tickTimings.size(), ticks);
@@ -91,55 +97,34 @@ public final class DebugSystem {
 
         DecimalFormat format = new DecimalFormat("0.0##");
         return String.format("%s%s&f/%s%s&f/%s%s&f/%s%s&f/%s%s",
-                             getChatColorTotal(min), format.format(min),
-                             getChatColorTotal(med), format.format(med),
-                             getChatColorTotal(avg), format.format(avg),
-                             getChatColorTotal(n95ile), format.format(n95ile),
-                             getChatColorTotal(max), format.format(max));
+                             SimpleStackTimings.getChatColorTotal(min), format.format(min),
+                             SimpleStackTimings.getChatColorTotal(med), format.format(med),
+                             SimpleStackTimings.getChatColorTotal(avg), format.format(avg),
+                             SimpleStackTimings.getChatColorTotal(n95ile), format.format(n95ile),
+                             SimpleStackTimings.getChatColorTotal(max), format.format(max));
+    }
+
+    @Override
+    public List<String> getTimings() {
+        return ImmutableList.of(
+            "Ms per tick (min/med/avg/95%ile/max ms):",
+            "5s:  " + getTimingString(100),
+            "10s: " + getTimingString(200),
+            "1m:  " + getTimingString(1200),
+            "5m:  " + getTimingString(6000),
+            "15m: " + getTimingString(18000));
     }
 
     private static double nsToMs(long nanos) {
         return (nanos / 1000000.0);
     }
 
-    private static ChatColor getChatColorSingle(long nanoTime) {
-        ChatColor color;
-        if(nanoTime < 10000) {
-            color = ChatColor.GREEN;
-        } else if(nanoTime < 50000) {
-            color = ChatColor.YELLOW;
-        } else if(nanoTime < 100000) {
-            color = ChatColor.RED;
-        } else {
-            color = ChatColor.DARK_RED;
-        }
-        return color;
-    }
-
-    private static ChatColor getChatColorTotal(double ms) {
-        return getChatColorSingle((long) (ms * 100000.0));
-    }
-
-    public static final class TimingEntry {
-        public final String name;
-        public final long nanoTime;
-        public final long msTime;
-        public final ChatColor color;
-
-        public TimingEntry(String name, long nanoTime, long msTime) {
-            this.name = name;
-            this.nanoTime = nanoTime;
-            this.msTime = msTime;
-            color = getChatColorSingle(nanoTime);
-        }
-    }
-
     private static final class DebugRunnable extends EnhancedRunnable {
-        private final DebugSystem system;
+        private final SimpleStackTimingsImpl system;
 
         private long currentTick = 0;
 
-        public DebugRunnable(DebugSystem system) {
+        public DebugRunnable(SimpleStackTimingsImpl system) {
             this.system = system;
         }
 

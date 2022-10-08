@@ -15,7 +15,8 @@ import com.mikedeejay2.mikedeejay2lib.text.PlaceholderFormatter;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.config.ListMode;
+import com.mikedeejay2.simplestack.api.SimpleStackAPI;
+import com.mikedeejay2.simplestack.api.SimpleStackConfig;
 import com.mikedeejay2.simplestack.gui.constructors.*;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -23,9 +24,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Iterator;
-import java.util.List;
-
-import static com.mikedeejay2.simplestack.config.SimpleStackConfigImpl.*;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * The <tt>GUIModule</tt> for the main configuration GUI screen
@@ -128,11 +128,12 @@ public class GUIConfigModule implements GUIModule {
      * @return The switch list mode item
      */
     private GUIItem getGUIItemSwitchListMode() {
-        GUIItem switchListMode = new GUIItem(plugin.config().isWhitelist() ? WHITELIST_ITEM : BLACKLIST_ITEM);
+        SimpleStackConfig config = SimpleStackAPI.getConfig();
+        GUIItem switchListMode = new GUIItem(config.isWhitelist() ? WHITELIST_ITEM : BLACKLIST_ITEM);
         GUIButtonToggleableEvent button = new GUIButtonToggleableEvent(
-            (info) -> plugin.config().setListMode(true),
-            (info) -> plugin.config().setListMode(false),
-            plugin.config().isWhitelist())
+            (info) -> config.setListMode(true),
+            (info) -> config.setListMode(false),
+            config.isWhitelist())
             .setOnItem(WHITELIST_ITEM).setOffItem(BLACKLIST_ITEM);
         button.setSound(Sound.UI_BUTTON_CLICK).setVolume(0.3f);
         switchListMode.addEvent(button);
@@ -158,11 +159,11 @@ public class GUIConfigModule implements GUIModule {
      */
     private GUIItem getGUIItemItemTypeAmountList() {
         AnimatedGUIItem itemTypeAmountList = new AnimatedGUIItem(ITEM_TYPE_AMOUNT_ITEM, true);
-        final List<MaterialAndAmount> itemAmounts = plugin.config().getItemAmountsRef();
-        Iterator<MaterialAndAmount> iter2 = itemAmounts.iterator();
+        final Map<Material, Integer> itemAmounts = SimpleStackAPI.getConfig().getItemAmounts();
+        final Iterator<Map.Entry<Material, Integer>> iterator = itemAmounts.entrySet().iterator();
         for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, itemAmounts.size()); ++i) {
-            MaterialAndAmount mata = iter2.next();
-            Material material = mata.getMaterial();
+            Map.Entry<Material, Integer> entry = iterator.next();
+            Material material = entry.getKey();
             if(material == null) continue;
             itemTypeAmountList.addFrame(ItemBuilder.of(ITEM_TYPE_AMOUNT_ITEM).setType(material), 20);
         }
@@ -184,7 +185,7 @@ public class GUIConfigModule implements GUIModule {
                     Text.of("&f").concat("simplestack.gui.config.language_description"),
                     Text.of("&7").concat(
                         Text.of("simplestack.gui.config.language_selected")
-                            .placeholder(PlaceholderFormatter.of("lang", plugin.config().getLocale())))));
+                            .placeholder(PlaceholderFormatter.of("lang", SimpleStackAPI.getConfig().getLocale())))));
 
         language.addEvent(new GUIOpenNewEvent(plugin, GUILanguageConstructor.INSTANCE));
         language.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
@@ -199,7 +200,7 @@ public class GUIConfigModule implements GUIModule {
     private GUIItem getGUIItemDefaultMaxAmount() {
         GUIItem defaultMaxAmount = new GUIItem(
             ItemBuilder.of(Material.BOOK)
-                .setAmount(plugin.config().getMaxAmount())
+                .setAmount(SimpleStackAPI.getConfig().getMaxAmount())
                 .setName(Text.of("&b&l").concat("simplestack.gui.config.default_max_select"))
                 .setLore(
                     Text.of("&f").concat("simplestack.gui.config.default_max_desc_l1"),
@@ -222,7 +223,7 @@ public class GUIConfigModule implements GUIModule {
                 item.setAmount(item.getAmount() < 64 ? item.getAmount() + 1 : 64);
             }
             int amount = item.getAmount();
-            plugin.config().setMaxAmount(amount);
+            SimpleStackAPI.getConfig().setMaxAmount(amount);
         });
         button.setSound(Sound.UI_BUTTON_CLICK).setVolume(0.3f);
         defaultMaxAmount.addEvent(button);
@@ -236,9 +237,10 @@ public class GUIConfigModule implements GUIModule {
      */
     private GUIItem getGUIItemUniqueItemList() {
         AnimatedGUIItem uniqueItemList = new AnimatedGUIItem(UNIQUE_ITEM_LIST_ITEM, true);
-        final List<ItemStack> uniqueItems = plugin.config().getUniqueItemsRef();
+        final Set<ItemStack> uniqueItems = SimpleStackAPI.getConfig().getUniqueItems();
+        final Iterator<ItemStack> iterator = uniqueItems.iterator();
         for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, uniqueItems.size()); ++i) {
-            uniqueItemList.addFrame(ItemBuilder.of(UNIQUE_ITEM_LIST_ITEM).setType(uniqueItems.get(i).getType()), 20);
+            uniqueItemList.addFrame(ItemBuilder.of(UNIQUE_ITEM_LIST_ITEM).setType(iterator.next().getType()), 20);
         }
         uniqueItemList.addEvent(new GUIOpenNewEvent(plugin, GUIUniqueConstructor.INSTANCE));
         uniqueItemList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
@@ -252,9 +254,10 @@ public class GUIConfigModule implements GUIModule {
      */
     private GUIItem getGUIItemItemTypeList() {
         AnimatedGUIItem itemTypeList = new AnimatedGUIItem(ITEM_TYPE_ITEM, true);
-        final List<Material> materialItems = plugin.config().getMaterialsRef();
+        final Set<Material> materialItems = SimpleStackAPI.getConfig().getMaterials();
+        final Iterator<Material> iterator = materialItems.iterator();
         for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, materialItems.size()); ++i) {
-            itemTypeList.addFrame(ItemBuilder.of(ITEM_TYPE_ITEM).setType(materialItems.get(i)), 20);
+            itemTypeList.addFrame(ItemBuilder.of(ITEM_TYPE_ITEM).setType(iterator.next()), 20);
         }
         itemTypeList.addEvent(new GUIOpenNewEvent(plugin, GUIItemTypeConstructor.INSTANCE));
         itemTypeList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
@@ -267,13 +270,13 @@ public class GUIConfigModule implements GUIModule {
      * @return The creative drag mode item
      */
     private GUIItem getGUIItemStackedArmor() {
-        boolean buttonState = plugin.config().isStackedArmorWearable();
+        boolean buttonState = SimpleStackAPI.getConfig().isStackedArmorWearable();
         final GUIItem guiItem = new GUIItem(
             buttonState ? STACKED_ARMOR_ON : STACKED_ARMOR_OFF);
         guiItem.addEvent(
             new GUIButtonToggleableEvent(
-                info -> plugin.config().setStackedArmorWearable(true),
-                info -> plugin.config().setStackedArmorWearable(false), buttonState)
+                info -> SimpleStackAPI.getConfig().setStackedArmorWearable(true),
+                info -> SimpleStackAPI.getConfig().setStackedArmorWearable(false), buttonState)
                 .setOnItem(STACKED_ARMOR_ON).setOffItem(STACKED_ARMOR_OFF)
                 .setSound(Sound.UI_BUTTON_CLICK).setVolume(0.3f));
 

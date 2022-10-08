@@ -2,20 +2,14 @@ package com.mikedeejay2.simplestack.gui.modules;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
-import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class GUIModifiedConfigModule implements GUIModule {
-    public static final GUIModifiedConfigModule INSTANCE = new GUIModifiedConfigModule(SimpleStack.getInstance());
-
-    private final SimpleStack plugin;
-
-    private GUIModifiedConfigModule(SimpleStack plugin) {
-        this.plugin = plugin;
-    }
+    public static final GUIModifiedConfigModule INSTANCE = new GUIModifiedConfigModule();
 
     @Override
     public void onClickedHead(InventoryClickEvent event, GUIContainer gui) {
-        plugin.config().setModified(true);
+        SimpleStackAPI.getConfig().setModified(true);
     }
 }
