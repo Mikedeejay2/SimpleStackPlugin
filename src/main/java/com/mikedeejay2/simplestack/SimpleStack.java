@@ -9,8 +9,6 @@ import com.mikedeejay2.mikedeejay2lib.util.bstats.BStats;
 import com.mikedeejay2.mikedeejay2lib.util.update.UpdateChecker;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
-import com.mikedeejay2.simplestack.api.SimpleStackConfig;
-import com.mikedeejay2.simplestack.api.SimpleStackTimings;
 import com.mikedeejay2.simplestack.bytebuddy.*;
 import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
@@ -47,8 +45,6 @@ public final class SimpleStack extends BukkitPlugin {
         this.commandManager.addSubcommand(new ResetCommand(this));
         this.commandManager.addSubcommand(new SetAmountCommand(this));
         this.commandManager.addSubcommand(new ConfigCommand(this));
-        this.commandManager.addSubcommand(new AddItemCommand(this));
-        this.commandManager.addSubcommand(new RemoveItemCommand(this));
     }
 
     @Override
