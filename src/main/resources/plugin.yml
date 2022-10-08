@@ -14,20 +14,15 @@ commands:
       - sstack
 
 permissions:
-  simplestack.use:
-    description: Allow a player to stack normally unstackable items to 64
-    default: true
   simplestack.reload:
-    description: Allow a player to reload the simplestack config
+    description: Allow a player to reload the SimpleStack config
   simplestack.help:
     description: Allow a player to access the help command help screen (admin commands)
   simplestack.reset:
-    description: Allow a player to reset the simplestack config to default values
+    description: Allow a player to reset the SimpleStack config to default values
   simplestack.setamount:
     description: Allow a player to set the item currently held in their hand to any amount
-  simplestack.additem:
-    description: Allow a player to add a unique item to the unique items list
-  simplestack.removeitem:
-    description: Allow a player to remove a unique item from the unique items list
   simplestack.config:
     description: Allow a player to open and modify the configuration from a GUI
+  simplestack.report:
+    description: Allow a player to generate a Simple Stack report, includes important information when submitting a bug report

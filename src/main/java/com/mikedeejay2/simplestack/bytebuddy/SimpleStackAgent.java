@@ -40,12 +40,6 @@ public final class SimpleStackAgent {
     private static final Map<String, Set<MethodVisitorInfo>> VISITORS = new HashMap<>();
     private static final AtomicBoolean crashed = new AtomicBoolean(false);
 
-    private static final Text CRASH_INFO_1 = Text.of("&c").concat("simplestack.crash.info_message_l1");
-    private static final Text CRASH_INFO_2 = Text.of("&c").concat("simplestack.crash.info_message_l2").placeholder(
-        PlaceholderFormatter.of("url", "&bhttps://github.com/Mikedeejay2/SimpleStackPlugin/issues&c"));
-    private static final Text CRASH_INFO_3 = Text.of("&c").concat("simplestack.crash.info_message_l3").placeholder(
-        PlaceholderFormatter.of("path", "plugins/SimpleStack/crash-reports"));
-
     // Static operation for locating transformers in com.mikedeejay2.simplestack.bytebuddy.transformers
     static {
         final String mcVersion = MinecraftVersion.getVersionString();
@@ -91,6 +85,29 @@ public final class SimpleStackAgent {
 
     public static void reset() {
         ByteBuddyHolder.resetTransformer(transformer);
+    }
+
+    public static void fillCrashReportSection(CrashReportSection section) {
+        section.addDetail("Transformers", getTransformersString());
+    }
+
+    private static String getTransformersString() {
+        StringBuilder builder = new StringBuilder();
+        for(String className : VISITORS.keySet()) {
+            builder.append("\n    ").append(className).append(":");
+            for(MethodVisitorInfo info : VISITORS.get(className)) {
+                builder.append("\n      ")
+                    .append(info.getClass().getSimpleName())
+                    .append(" [")
+                    .append(info.getMappingEntry().owner().qualifiedName())
+                    .append("#")
+                    .append(info.getMappingEntry().name())
+                    .append(":")
+                    .append(info.getMappingEntry().descriptor())
+                    .append("]");
+            }
+        }
+        return builder.toString();
     }
 
     private enum MasterTransformer implements AgentBuilder.Transformer {
@@ -207,8 +224,11 @@ public final class SimpleStackAgent {
             section.addDetail("Type Name", typeName);
             section.addDetail("Class Loader", classLoader != null ? classLoader.getName() : null);
             section.addDetail("Loaded", String.valueOf(loaded));
+            SimpleStack.getInstance().fillCrashReport(crashReport);
 
-            crashReport.addInfo(CRASH_INFO_1).addInfo(CRASH_INFO_2).addInfo(CRASH_INFO_3);
+            crashReport.addInfo(SimpleStack.CRASH_INFO_1)
+                .addInfo(SimpleStack.CRASH_INFO_2)
+                .addInfo(SimpleStack.CRASH_INFO_3);
 
             crashReport.execute();
             crashed.compareAndSet(false, true);
@@ -230,8 +250,11 @@ public final class SimpleStackAgent {
 
             CrashReportSection section = crashReport.addSection("Install Details");
             section.addDetail("Class File Transformer", classFileTransformer.getClass().getCanonicalName());
+            SimpleStack.getInstance().fillCrashReport(crashReport);
 
-            crashReport.addInfo(CRASH_INFO_1).addInfo(CRASH_INFO_2).addInfo(CRASH_INFO_3);
+            crashReport.addInfo(SimpleStack.CRASH_INFO_1)
+                .addInfo(SimpleStack.CRASH_INFO_2)
+                .addInfo(SimpleStack.CRASH_INFO_3);
 
             crashReport.execute();
             crashed.compareAndSet(false, true);

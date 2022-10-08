@@ -4,8 +4,11 @@ import com.mikedeejay2.mikedeejay2lib.BukkitPlugin;
 import com.mikedeejay2.mikedeejay2lib.commands.CommandManager;
 import com.mikedeejay2.mikedeejay2lib.reflect.Reflector;
 import com.mikedeejay2.mikedeejay2lib.reflect.ReflectorClass;
+import com.mikedeejay2.mikedeejay2lib.text.PlaceholderFormatter;
+import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.text.language.TranslationManager;
 import com.mikedeejay2.mikedeejay2lib.util.bstats.BStats;
+import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReport;
 import com.mikedeejay2.mikedeejay2lib.util.update.UpdateChecker;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
@@ -29,6 +32,12 @@ import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
  * @author Mikedeejay2
  */
 public final class SimpleStack extends BukkitPlugin {
+    public static final Text CRASH_INFO_1 = Text.literal("&c").concat(Text.translatable("simplestack.crash.info_message_l1"));
+    public static final Text CRASH_INFO_2 = Text.literal("&c").concat(Text.translatable("simplestack.crash.info_message_l2")).placeholder(
+        PlaceholderFormatter.of("url", Text.literal("&bhttps://github.com/Mikedeejay2/SimpleStackPlugin/issues&c")));
+    public static final Text CRASH_INFO_3 = Text.literal("&c").concat(Text.translatable("simplestack.crash.info_message_l3")).placeholder(
+        PlaceholderFormatter.of("path", Text.literal("plugins/SimpleStack/crash-reports")));
+
     private static SimpleStack instance;
 
     // The config of Simple Stack which stores all customizable data
@@ -41,10 +50,11 @@ public final class SimpleStack extends BukkitPlugin {
 
     private void registerCommands() {
         this.commandManager.addSubcommand(new HelpCommand(this));
+        this.commandManager.addSubcommand(new ConfigCommand(this));
         this.commandManager.addSubcommand(new ReloadCommand(this));
+        this.commandManager.addSubcommand(new ReportCommand(this));
         this.commandManager.addSubcommand(new ResetCommand(this));
         this.commandManager.addSubcommand(new SetAmountCommand(this));
-        this.commandManager.addSubcommand(new ConfigCommand(this));
     }
 
     @Override
@@ -139,5 +149,10 @@ public final class SimpleStack extends BukkitPlugin {
 
     public static SimpleStack getInstance() {
         return instance;
+    }
+
+    public void fillCrashReport(CrashReport crashReport) {
+        config.fillCrashReportSection(crashReport.addSection("Simple Stack Configuration"));
+        SimpleStackAgent.fillCrashReportSection(crashReport.addSection("Simple Stack Agent"));
     }
 }

@@ -10,6 +10,8 @@
   "simplestack.commands.setamount.success": "Amount set successfully.",
   "simplestack.commands.setamount.format": "Command format: /simplestack setamount <number>",
   "simplestack.commands.config.info": "Open the configuration GUI",
+  "simplestack.commands.report.info": "Generate a Simple Stack report",
+  "simplestack.command.report.click_here": "Click here to copy the generated report.",
   "simplestack.warnings.number_outside_of_range": "The amount specified for %mat% is outside of the valid range. Defaulting to 64.",
   "simplestack.warnings.invalid_material": "The material %mat% in the config does not exist.",
   "simplestack.warnings.invalid_unique_item": "An item listed in the unique items list could not be loaded.",

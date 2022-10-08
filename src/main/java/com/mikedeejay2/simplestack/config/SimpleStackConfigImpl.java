@@ -9,6 +9,7 @@ import com.mikedeejay2.mikedeejay2lib.data.yaml.YamlFile;
 import com.mikedeejay2.mikedeejay2lib.text.PlaceholderFormatter;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.text.language.TranslationManager;
+import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReportSection;
 import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.SimpleStackConfig;
@@ -497,6 +498,17 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     @Override
     public void setModified(boolean modified) {
         this.modified = modified;
+    }
+
+    public void fillCrashReportSection(CrashReportSection section) {
+        section.addDetail("Materials", getMaterials().toString());
+        section.addDetail("Item Amounts", getItemAmounts().toString());
+        section.addDetail("Unique Items", getUniqueItems().toString());
+        section.addDetail("Is Whitelist Mode", String.valueOf(isWhitelist()));
+        section.addDetail("Is Stacked Armor Wearable", String.valueOf(isStackedArmorWearable()));
+        section.addDetail("Max Amount", String.valueOf(getMaxAmount()));
+        section.addDetail("Locale", getLocale());
+        section.addDetail("Is Config Modified", String.valueOf(isModified()));
     }
 
     public static final class MaterialAndAmount {
