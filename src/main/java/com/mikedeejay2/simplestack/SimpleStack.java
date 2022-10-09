@@ -89,6 +89,7 @@ public final class SimpleStack extends BukkitPlugin {
         ReflectorClass<SimpleStackAPI> apiClass = Reflector.of(SimpleStackAPI.class);
         apiClass.field("config").set(null, config);
         apiClass.field("timings").set(null, timings);
+        apiClass.field("initialized").set(null, true);
     }
 
     private boolean installAgent() {
