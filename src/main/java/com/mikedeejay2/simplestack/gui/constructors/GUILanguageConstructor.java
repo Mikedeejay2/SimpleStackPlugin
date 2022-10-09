@@ -14,7 +14,6 @@ import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.SimpleStackConfig;
-import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 

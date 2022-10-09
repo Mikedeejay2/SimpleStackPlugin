@@ -1,8 +1,6 @@
 package com.mikedeejay2.simplestack.bytebuddy;
 
 import com.mikedeejay2.mikedeejay2lib.reflect.*;
-import com.mikedeejay2.mikedeejay2lib.text.PlaceholderFormatter;
-import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReport;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReportSection;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
