@@ -63,6 +63,7 @@ public class GUILanguageConstructor extends GUIAbstractListConstructor<GUIItem> 
     @Override
     public GUIContainer get() {
         GUIContainer gui = super.get();
+        gui.getModule(GUIListModule.class).resetEndItems();
         GUIAnimationModule animModule = new GUIAnimationModule(plugin, 1);
         gui.addModule(animModule);
         return gui;
