@@ -55,5 +55,11 @@
   "simplestack.errors.invalid_item_held": "The item that is being held is invalid. Please hold a valid item.",
   "simplestack.crash.info_message_l1": "A critical error has occurred and Simple Stack could not be loaded.",
   "simplestack.crash.info_message_l2": "Please copy the above crash report and submit a new issue to %url%",
-  "simplestack.crash.info_message_l3": "Alternatively, the crash report file can be found at %path%"
+  "simplestack.crash.info_message_l3": "Alternatively, the crash report file can be found at %path%",
+  "simplestack.errors.incompatible_version": "Simple Stack %ssver% is not compatible with Minecraft version %mcver%.",
+  "simplestack.info.create_transformer": "Creating Simple Stack transformer, this may take a moment...",
+  "simplestack.info.install_transformer": "Installing Simple Stack transformer, this may take a moment...",
+  "simplestack.info.finish_init": "Finished initialization.",
+  "simplestack.errors.incompatible_java_l1": "SimpleStack is not compatible with this installation of Java.",
+  "simplestack.errors.incompatible_java_l2": "Common solutions are to use Java 9 or greater OR use a Java 8 JDK."
 }

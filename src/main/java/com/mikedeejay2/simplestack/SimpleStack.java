@@ -82,7 +82,7 @@ public final class SimpleStack extends BukkitPlugin {
         commandManager.setDefaultSubCommand("help");
         registerCommand(commandManager);
 
-        sendInfo("Finished initialization.");
+        sendInfo(Text.of("simplestack.info.finish_init"));
     }
 
     private void setupApi() {
@@ -93,7 +93,7 @@ public final class SimpleStack extends BukkitPlugin {
     }
 
     private boolean installAgent() {
-        sendInfo("Installing Simple Stack transformer, this may take a moment...");
+        sendInfo(Text.of("simplestack.info.install_transformer"));
         if(SimpleStackAgent.install()) {
             disablePlugin(this);
             return true;
@@ -102,10 +102,10 @@ public final class SimpleStack extends BukkitPlugin {
     }
 
     private boolean installByteBuddyAgent() {
-        sendInfo("Creating Simple Stack transformer, this may take a moment...");
+        sendInfo(Text.of("simplestack.info.create_transformer"));
         if(ByteBuddyHolder.install()) {
-            sendSevere("&cSimpleStack is not compatible with this installation of Java!");
-            sendSevere("&cCommon solutions are to use Java 9 or greater OR use a Java 8 JDK.");
+            sendSevere(Text.of("&c").concat("simplestack.errors.incompatible_java_l1"));
+            sendSevere(Text.of("&c").concat("simplestack.errors.incompatible_java_l2"));
             disablePlugin(this);
             return true;
         }
@@ -121,10 +121,9 @@ public final class SimpleStack extends BukkitPlugin {
      */
     private boolean checkVersion() {
         if(!MappingsLookup.loadMappings(this)) {
-            sendSevere(String.format(
-                "Simple Stack %s is not compatible with Minecraft version %s!",
-                this.getDescription().getVersion(),
-                MinecraftVersion.getVersionString()));
+            sendSevere(Text.of("&c").concat("simplestack.errors.incompatible_version").placeholder(
+                PlaceholderFormatter.of("ssver", this.getDescription().getVersion())
+                    .and("mcver", MinecraftVersion.getVersionString())));
             disablePlugin(this);
             return true;
         }
