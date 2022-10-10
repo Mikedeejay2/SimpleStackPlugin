@@ -1,8 +1,6 @@
 package com.mikedeejay2.simplestack.bytebuddy.transformers.advice;
 
-import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
-import com.mikedeejay2.simplestack.api.event.ArmorSlotMaxAmountEvent;
 import com.mikedeejay2.simplestack.api.event.SlotMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytebuddy.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytebuddy.Transformer;
@@ -52,12 +50,17 @@ public class TransformSlotGetMaxStackSize implements MethodVisitorInfo {
         }
 
         @Advice.OnMethodExit
-        public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime, @Advice.This Object nmsSlot) throws Throwable {
-            Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
-            ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
-            Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformSlotGetMaxStackSize", false, pluginClassLoader);
-            Method maxStackSizeMethod = interceptClass.getMethod("getSlotMaxStackSize", int.class, long.class, Object.class);
-            returnValue = (int) maxStackSizeMethod.invoke(null, returnValue, startTime, nmsSlot);
+        public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime, @Advice.This Object nmsSlot) {
+            try {
+                Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
+                ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
+                Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformSlotGetMaxStackSize", false, pluginClassLoader);
+                Method maxStackSizeMethod = interceptClass.getMethod("getSlotMaxStackSize", int.class, long.class, Object.class);
+                returnValue = (int) maxStackSizeMethod.invoke(null, returnValue, startTime, nmsSlot);
+            } catch(Throwable throwable) {
+                Bukkit.getLogger().severe("Simple Stack encountered an exception while processing a slot");
+                throwable.printStackTrace();
+            }
         }
     }
 }

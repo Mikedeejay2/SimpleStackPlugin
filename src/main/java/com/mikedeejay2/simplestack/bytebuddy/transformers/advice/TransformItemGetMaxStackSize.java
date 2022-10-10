@@ -135,6 +135,7 @@ public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
                 Method maxStackSizeMethod = transformerClass.getMethod("getItemMaxStackSize", int.class, long.class, Object.class);
                 returnValue = (int) maxStackSizeMethod.invoke(null, returnValue, startTime, item);
             } catch(Throwable throwable) {
+                Bukkit.getLogger().severe("Simple Stack encountered an exception while processing an Item");
                 throwable.printStackTrace();
             }
         }

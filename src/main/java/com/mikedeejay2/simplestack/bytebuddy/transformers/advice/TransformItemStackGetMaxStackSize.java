@@ -78,12 +78,17 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
          * @see TransformItemGetMaxStackSize.ItemAdvice#onMethodExit(int, long, Object)
          */
         @Advice.OnMethodExit
-        public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime, @Advice.This Object itemStack) throws Throwable {
-            Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
-            ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
-            Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformItemStackGetMaxStackSize", false, pluginClassLoader);
-            Method maxStackSizeMethod = interceptClass.getMethod("getItemStackMaxStackSize", int.class, long.class, Object.class);
-            returnValue = (int) maxStackSizeMethod.invoke(null, returnValue, startTime, itemStack);
+        public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime, @Advice.This Object itemStack) {
+            try {
+                Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
+                ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
+                Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytebuddy.transformers.advice.TransformItemStackGetMaxStackSize", false, pluginClassLoader);
+                Method maxStackSizeMethod = interceptClass.getMethod("getItemStackMaxStackSize", int.class, long.class, Object.class);
+                returnValue = (int) maxStackSizeMethod.invoke(null, returnValue, startTime, itemStack);
+            } catch(Throwable throwable) {
+                Bukkit.getLogger().severe("Simple Stack encountered an exception while processing an ItemStack");
+                throwable.printStackTrace();
+            }
         }
     }
 }
