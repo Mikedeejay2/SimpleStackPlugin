@@ -34,7 +34,7 @@ public class ReportCommand implements SubCommand {
 
         if(sender instanceof Player) {
             final Player player = (Player) sender;
-            final Text clickHereText = Text.of("&e").concat("simplestack.command.report.click_here").color();
+            final Text clickHereText = Text.of("&e&n").concat("simplestack.command.report.click_here").color();
             final String clickHereStr = clickHereText.get(player);
             final BaseComponent[] components = TextComponent.fromLegacyText(clickHereStr);
             final ClickEvent clickEvent = ChatConverter.getClickEvent(COPY_TO_CLIPBOARD, reportStr);
