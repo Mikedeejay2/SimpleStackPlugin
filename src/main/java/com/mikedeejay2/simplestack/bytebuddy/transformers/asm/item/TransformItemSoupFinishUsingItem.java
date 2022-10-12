@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.bytebuddy.transformers.asm;
+package com.mikedeejay2.simplestack.bytebuddy.transformers.asm.item;
 
 import com.mikedeejay2.simplestack.bytebuddy.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytebuddy.Transformer;

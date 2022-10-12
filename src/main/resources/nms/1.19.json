@@ -18,7 +18,8 @@
       "isEmpty": "b()Z",
       "<init>": "<init>(LIMaterial;)V",
       "isDamaged": "i()Z",
-      "isStackable": "g()Z"
+      "isStackable": "g()Z",
+      "is": "a(LItem;)Z"
     }
   },
   "CraftItemStack": {
@@ -87,7 +88,8 @@
     "class_name": "net.minecraft.world.item.Items",
     "fields": {
       "BUCKET": "oH:LItem;",
-      "BOWL": "nM:LItem;"
+      "BOWL": "nM:LItem;",
+      "LAVA_BUCKET": "oJ:LItem;"
     }
   },
   "IMaterial": "net.minecraft.world.level.IMaterial",
@@ -118,5 +120,18 @@
     }
   },
   "IInventory": "net.minecraft.world.IInventory",
-  "CraftInventory": "org.bukkit.craftbukkit.v1_19_R1.inventory.CraftInventory"
+  "CraftInventory": "org.bukkit.craftbukkit.v1_19_R1.inventory.CraftInventory",
+  "SlotFurnaceFuel": {
+    "class_name": "net.minecraft.world.inventory.SlotFurnaceFuel",
+    "methods": {
+      "isBucket": "c(LItemStack;)Z"
+    }
+  },
+  "ContainerFurnace": {
+    "class_name": "net.minecraft.world.inventory.ContainerFurnace",
+    "methods": {
+      "quickMoveStack": "a(LEntityHuman;I)LItemStack;",
+      "isFuel": "d(LItemStack;)Z"
+    }
+  }
 }
