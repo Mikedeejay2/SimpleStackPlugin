@@ -3,6 +3,8 @@ package com.mikedeejay2.simplestack.bytebuddy;
 import com.mikedeejay2.mikedeejay2lib.reflect.*;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReport;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReportSection;
+import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.MutablePair;
+import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.Pair;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.SimpleStack;
 import net.bytebuddy.agent.builder.AgentBuilder;
@@ -35,30 +37,45 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 
 public final class SimpleStackAgent {
     private static ResettableClassFileTransformer transformer;
-    private static final Map<String, Set<MethodVisitorInfo>> VISITORS = new HashMap<>();
+    private static final Map<String, Set<Pair<MethodVisitorInfo, Boolean>>> VISITORS = new HashMap<>();
     private static final AtomicBoolean crashed = new AtomicBoolean(false);
 
-    // Static operation for locating transformers in com.mikedeejay2.simplestack.bytebuddy.transformers
-    static {
-        final String mcVersion = MinecraftVersion.getVersionString();
-        new AnnotationCollector<>(
-            new ClassCollector<>(
-                SimpleStack.getInstance().classLoader(), // Use the plugin class loader
-                SimpleStackAgent.class.getPackageName() + ".transformers", // Traverse in the transformers package
-                true, // Traverse sub-packages
-                MethodVisitorInfo.class), // Only locate classes that are subclasses of MethodVisitorInfo
-            Transformer.class) // Locate the Transformer annotation
-            .collect()
-            .stream()
-            .filter(pair -> Arrays.asList(pair.getValue().value()).contains(mcVersion)) // If current Minecraft version not found, don't use the transformer
-            .map(pair -> Reflector.of(pair.getKey()).constructor().newInstance()) // Create a new instance (no arg) of the transformer
-            .forEach(SimpleStackAgent::addVisitor); // Add the new visitor
+    public static boolean registerTransformers() {
+        try {
+            final String mcVersion = MinecraftVersion.getVersionString();
+            new AnnotationCollector<>(
+                new ClassCollector<>(
+                    SimpleStack.getInstance().classLoader(), // Use the plugin class loader
+                    SimpleStackAgent.class.getPackageName() + ".transformers", // Traverse in the transformers package
+                    true, // Traverse sub-packages
+                    MethodVisitorInfo.class), // Only locate classes that are subclasses of MethodVisitorInfo
+                Transformer.class) // Locate the Transformer annotation
+                .collect()
+                .stream()
+                .filter(pair -> Arrays.asList(pair.getValue().value()).contains(mcVersion)) // If current Minecraft version not found, don't use the transformer
+                .map(pair -> Reflector.of(pair.getKey()).constructor().newInstance()) // Create a new instance (no arg) of the transformer
+                .forEach(SimpleStackAgent::addVisitor); // Add the new visitor
+            return false;
+        } catch(Throwable throwable) {
+            final CrashReport crashReport = new CrashReport(SimpleStack.getInstance(), "Exception while collecting transformers", true, true);
+            crashReport.setThrowable(throwable);
+
+            SimpleStack.getInstance().fillCrashReport(crashReport);
+
+            crashReport.addInfo(SimpleStack.CRASH_INFO_1)
+                .addInfo(SimpleStack.CRASH_INFO_2)
+                .addInfo(SimpleStack.CRASH_INFO_3);
+
+            crashReport.execute();
+            SimpleStack.getInstance().disablePlugin(SimpleStack.getInstance());
+            return true;
+        }
     }
 
     private static void addVisitor(MethodVisitorInfo visitor) {
         String className = visitor.getMappingEntry().owner().qualifiedName();
         VISITORS.putIfAbsent(className, new HashSet<>());
-        VISITORS.get(className).add(visitor);
+        VISITORS.get(className).add(new MutablePair<>(visitor, false));
     }
 
     public static boolean install() {
@@ -78,7 +95,39 @@ public final class SimpleStackAgent {
             .with(InstallationExceptionListener.INSTANCE)
             .installOn(ByteBuddyHolder.getInstrumentation()); // Inject
 
-        return crashed.get();
+        return crashed.get() || detectNotVisited();
+    }
+
+    private static boolean detectNotVisited() {
+        final Map<String, Set<Pair<MethodVisitorInfo, Boolean>>> notVisited = new HashMap<>();
+
+        for(String key : VISITORS.keySet()) {
+            final Set<Pair<MethodVisitorInfo, Boolean>> set = VISITORS.get(key);
+            final Set<Pair<MethodVisitorInfo, Boolean>> curSet = new LinkedHashSet<>();
+            for(Pair<MethodVisitorInfo, Boolean> pair : set) {
+                if(pair.getValue()) continue;
+                curSet.add(pair);
+            }
+            if(curSet.isEmpty()) continue;
+            notVisited.put(key, curSet);
+        }
+
+        if(notVisited.isEmpty()) return false;
+        final CrashReport crashReport = new CrashReport(
+            SimpleStack.getInstance(), "Registered transformer not visited after transformations",
+            true, true);
+
+        CrashReportSection section = crashReport.addSection("Unvisited Transformers");
+        section.addDetail("Transformers", getTransformersString(notVisited));
+
+        SimpleStack.getInstance().fillCrashReport(crashReport);
+
+        crashReport.addInfo(SimpleStack.CRASH_INFO_1)
+            .addInfo(SimpleStack.CRASH_INFO_2)
+            .addInfo(SimpleStack.CRASH_INFO_3);
+
+        crashReport.execute();
+        return true;
     }
 
     public static void reset() {
@@ -86,23 +135,24 @@ public final class SimpleStackAgent {
     }
 
     public static void fillCrashReportSection(CrashReportSection section) {
-        section.addDetail("Transformers", getTransformersString());
+        section.addDetail("Transformers", getTransformersString(VISITORS));
     }
 
-    private static String getTransformersString() {
+    private static String getTransformersString(Map<String, Set<Pair<MethodVisitorInfo, Boolean>>> visitors) {
         StringBuilder builder = new StringBuilder();
-        for(String className : VISITORS.keySet()) {
+        for(String className : visitors.keySet()) {
             builder.append("\n    ").append(className).append(":");
-            for(MethodVisitorInfo info : VISITORS.get(className)) {
+            for(Pair<MethodVisitorInfo, Boolean> pair : visitors.get(className)) {
+                final MethodVisitorInfo info = pair.getLeft();
                 builder.append("\n      ")
                     .append(info.getClass().getSimpleName())
                     .append(" [")
                     .append(info.getMappingEntry().owner().qualifiedName())
-                    .append("#")
+                    .append(".")
                     .append(info.getMappingEntry().name())
-                    .append(":")
                     .append(info.getMappingEntry().descriptor())
-                    .append("]");
+                    .append("], transformed: ")
+                    .append(pair.getRight());
             }
         }
         return builder.toString();
@@ -115,7 +165,7 @@ public final class SimpleStackAgent {
         public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain) {
             if(crashed.get()) return builder;
             String className = typeDescription.getName();
-            Set<MethodVisitorInfo> wrappers = VISITORS.get(className);
+            Set<Pair<MethodVisitorInfo, Boolean>> wrappers = VISITORS.get(className);
             Validate.notNull(wrappers,
                              "No method visitors of name \"%s\" were found.", className);
             Validate.notEmpty(wrappers,
@@ -125,9 +175,9 @@ public final class SimpleStackAgent {
     }
 
     private static final class AgentAsmVisitor implements AsmVisitorWrapper {
-        private final Set<MethodVisitorInfo> visitorInfos;
+        private final Set<Pair<MethodVisitorInfo, Boolean>> visitorInfos;
 
-        public AgentAsmVisitor(Set<MethodVisitorInfo> visitorInfos) {
+        public AgentAsmVisitor(Set<Pair<MethodVisitorInfo, Boolean>> visitorInfos) {
             this.visitorInfos = visitorInfos;
         }
 
@@ -167,7 +217,7 @@ public final class SimpleStackAgent {
     }
 
     private static final class AgentClassVisitor extends ClassVisitor {
-        private final Set<MethodVisitorInfo> visitorInfos;
+        private final Set<Pair<MethodVisitorInfo, Boolean>> visitorInfos;
         private final Map<String, MethodDescription> methods;
 
         private final TypeDescription instrumentedType;
@@ -178,7 +228,7 @@ public final class SimpleStackAgent {
 
         private AgentClassVisitor(
             ClassVisitor classVisitor,
-            Set<MethodVisitorInfo> visitorInfos,
+            Set<Pair<MethodVisitorInfo, Boolean>> visitorInfos,
             Map<String, MethodDescription> methods,
             TypeDescription instrumentedType,
             Implementation.Context implementationContext,
@@ -200,11 +250,13 @@ public final class SimpleStackAgent {
             MethodVisitor visitor = super.visitMethod(access, name, descriptor, signature, exceptions);
             if(crashed.get()) return visitor;
             MethodDescription description = methods.get(name + descriptor);
-            for(MethodVisitorInfo info : visitorInfos) {
+            for(Pair<MethodVisitorInfo, Boolean> pair : visitorInfos) {
+                final MethodVisitorInfo info = pair.getLeft();
                 if(!info.getMappingEntry().matches(name, descriptor)) continue;
                 visitor = info.getWrapper().wrap(
                     instrumentedType, description, visitor,
                     implementationContext, typePool, writerFlags, readerFlags);
+                pair.setValue(true);
             }
             return visitor;
         }

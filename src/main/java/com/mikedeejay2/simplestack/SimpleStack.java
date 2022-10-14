@@ -94,7 +94,7 @@ public final class SimpleStack extends BukkitPlugin {
 
     private boolean installAgent() {
         sendInfo(Text.of("simplestack.info.install_transformer"));
-        if(SimpleStackAgent.install()) {
+        if(SimpleStackAgent.registerTransformers() || SimpleStackAgent.install()) {
             disablePlugin(this);
             return true;
         }

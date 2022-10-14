@@ -40,6 +40,7 @@ public class TransformArmorSlotGetMaxStackSize implements MethodVisitorInfo {
     }
 
     public static int getArmorSlotMaxStackSize(int currentReturnValue, long startTime, Object nmsSlot) {
+        System.out.println("ASDLKFJ");
         final Inventory inventory = NmsConverters.slotToInventory(nmsSlot);
         final int slot = NmsConverters.slotToSlot(nmsSlot);
         final SlotMaxAmountEvent slotEvent = new SlotMaxAmountEvent(inventory, slot, currentReturnValue);
