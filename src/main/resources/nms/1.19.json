@@ -19,7 +19,11 @@
       "<init>": "<init>(LIMaterial;)V",
       "isDamaged": "i()Z",
       "isStackable": "g()Z",
-      "is": "a(LItem;)Z"
+      "is": "a(LItem;)Z",
+      "grow": "f(I)V"
+    },
+    "fields": {
+      "EMPTY": "b:LItemStack;"
     }
   },
   "CraftItemStack": {
@@ -59,7 +63,8 @@
     "methods": {
       "doClick": "b(IILInventoryClickType;LEntityHuman;)V",
       "doClickLambda": "lambda$doClick$3(LSlot;LEntityHuman;LItemStack;)V",
-      "moveItemStackTo": "moveItemStackTo(LItemStack;IIZZ)Z"
+      "moveItemStackTo": "moveItemStackTo(LItemStack;IIZZ)Z",
+      "getSlot": "b(I)LSlot;"
     }
   },
   "InventoryClickType": "net.minecraft.world.inventory.InventoryClickType",
@@ -131,7 +136,8 @@
     "class_name": "net.minecraft.world.inventory.ContainerFurnace",
     "methods": {
       "quickMoveStack": "a(LEntityHuman;I)LItemStack;",
-      "isFuel": "d(LItemStack;)Z"
+      "isFuel": "d(LItemStack;)Z",
+      "moveItemStackTo": "a(LItemStack;IIZ)Z"
     }
   }
 }

@@ -8,13 +8,19 @@ import org.objectweb.asm.Label;
 import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.*;
 import static org.objectweb.asm.Opcodes.*;
 
-//@Transformer({"1.19"})
+/**
+ * Fixes shift clicking lava buckets into a fuel slot of a furnace. This ensures that only one lava bucket can be
+ * inside the fuel slot. If multiple lava buckets are stacked together, the empty bucket will not be returned.
+ *
+ * @author Mikedeejay2
+ */
+@Transformer({"1.19"})
 public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor {
     private boolean visitedIsFuel = false;
-    private boolean visitedIfeq = false;
-    private boolean visitedAload = false;
-    private boolean visitedLabel = false;
-    private final Label actualLabel = new Label();
+    private boolean visitedEntranceLabel = false;
+    private boolean visitedExitLabel = false;
+    private final Label newExitLabel = new Label(); // Represents label that exits the isFuel if statement, not the next else if
+    private Label actualExitLabel; // Represents the actual exit label, pulled from quickMoveStack jump, not the next else if
 
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {
@@ -25,8 +31,8 @@ public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor
     public void visitCode() {
         super.visitCode();
 
-        System.out.println("quickMoveStack");
-        debugPrintString("quickMoveStack");
+//        System.out.println("quickMoveStack");
+//        debugPrintString("quickMoveStack");
     }
 
     @Override
@@ -39,70 +45,66 @@ public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor
     }
 
     @Override
+    public void visitLabel(Label label) {
+        if(!visitedExitLabel && visitedEntranceLabel && actualExitLabel != null && label == actualExitLabel) { // Target actual exit label. This is the exit from isFuel and is not the next else if
+            visitedExitLabel = true;
+            super.visitLabel(newExitLabel); // Add the new exit label to the existing exit label
+        }
+
+        super.visitLabel(label);
+
+        if(!visitedEntranceLabel && visitedIsFuel) { // Target the label after the isFuel statement, inside isFuel if statement
+            visitedEntranceLabel = true;
+            appendIsLavaBucketFix();
+        }
+    }
+
     public void visitJumpInsn(int opcode, Label label) {
-        if(visitedIsFuel && !visitedIfeq && opcode == IFEQ) { // Target isFuel if statement
-            visitedIfeq = true;
-        } else if(visitedAload && !visitedLabel && opcode == IFNE) { // Target quickMoveStack if statement
-            visitedLabel = true;
-            appendIfStatementFix(label);
-            return;
+        if(actualExitLabel == null && visitedEntranceLabel && opcode == IFNE) { // Target quickMoveStack if statement
+            actualExitLabel = label;
         }
         super.visitJumpInsn(opcode, label);
     }
 
     /**
-     * Makes the if statement to return an empty item stack be called if moving a lava bucket.
-     *
-     * @param label
+     * Fixes shift clicking lava buckets into a fuel slot of a furnace. This ensures that only one lava bucket can be
+     * inside the fuel slot. If multiple lava buckets are stacked together, the empty bucket will not be returned.
      */
-    private void appendIfStatementFix(Label label) {
-        super.visitJumpInsn(IFEQ, actualLabel); // Invert statement so that if false, enter if statement
-
-        super.visitVarInsn(ALOAD, 5); // Load ItemStack1
+    private void appendIsLavaBucketFix() {
+        Label notLavaBucketLabel = new Label();
+        // if(itemstack1.is(Items.LAVA_BUCKET))
+        super.visitVarInsn(ALOAD, 5); // Load itemstack1
         super.visitFieldInsn(GETSTATIC, nms("Items").field("LAVA_BUCKET")); // Get Items.LAVA_BUCKET
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("is")); // ItemStack#is(Item)
-        super.visitJumpInsn(IFEQ, label); // If not lava bucket, goto exit
+        super.visitJumpInsn(IFEQ, notLavaBucketLabel); // If not lava bucket, goto false label
 
-        super.visitLabel(actualLabel);
-    }
+        super.visitVarInsn(ALOAD, 0); // Load "this" ContainerFurnace
+        super.visitInsn(ICONST_1); // Get slot index 1
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("Container").method("getSlot")); // Get the slot at index 1
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("Slot").method("getItem")); // Get the item from that slot
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("isEmpty")); // Get whether the item is empty
+        super.visitJumpInsn(IFEQ, newExitLabel); // If not empty, goto false label
 
-    @Override
-    public void visitVarInsn(int opcode, int varIndex) {
-        if(!visitedAload && visitedIfeq && opcode == ALOAD && varIndex == 5) { // Target loading of ItemStack1 upon moveItemStackTo method
-            visitedAload = true;
+        // ItemStack splitStack = itemstack1.split(1); // Only one lava bucket should be moved
+        super.visitVarInsn(ALOAD, 5); // Load itemstack1
+        super.visitInsn(ICONST_1); // Load int 1 (split by 1)
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("split")); // Split itemstack1 by one
+        super.visitVarInsn(ASTORE, 6); // Store split stack to index 6
 
-            Label notLavaBucketLabel = new Label();
-            Label exitLabel = new Label();
-            super.visitVarInsn(ALOAD, 5); // Load ItemStack1
-            super.visitFieldInsn(GETSTATIC, nms("Items").field("LAVA_BUCKET")); // Get Items.LAVA_BUCKET
-            super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("is")); // ItemStack#is(Item)
-            super.visitJumpInsn(IFEQ, notLavaBucketLabel); // If not lava bucket, bypass shrink
+        // if(!this.moveItemStackTo(splitStack, 1, 2, false))
+        super.visitVarInsn(ALOAD, 0); // Load "this" ContainerFurnace
+        super.visitVarInsn(ALOAD, 6); // Load splitStack
+        super.visitInsn(ICONST_1); // Load int 1
+        super.visitInsn(ICONST_2); // Load int 2
+        super.visitInsn(ICONST_0); // Load int 0 (false)
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("ContainerFurnace").method("moveItemStackTo")); // Invoke method moveItemStackTo
 
-            // Shrink by one
-            super.visitVarInsn(ALOAD, 5); // Load ItemStack1
-            super.visitInsn(ICONST_1); // Load 1 (to shrink by)
-            super.visitMethodInsn(INVOKEVIRTUAL, lastNms().method("split")); // Shrink by 64
-            super.visitJumpInsn(GOTO, exitLabel);
+        // Return empty regardless of moveItemStackTo state, this will break the quickMoveStack loop
+        // return ItemStack.EMPTY;
+        super.visitFieldInsn(GETSTATIC, nms("ItemStack").field("EMPTY")); // Get ItemStack.EMPTY
+        super.visitInsn(ARETURN); // Return empty item, this method can do no more
 
-            // If not a lava bucket, load the ItemStack
-            super.visitLabel(notLavaBucketLabel);
-            super.visitFrame(F_SAME1, 0, null, 1, new Object[] {nms("ContainerFurnace").internalName()}); // Has "this" on the stack
-            super.visitVarInsn(ALOAD, 5); // Load ItemStack1
-
-            super.visitLabel(exitLabel);
-            super.visitFrame(F_FULL, 6, new Object[] { // Has two values on the stack
-                nms("ContainerFurnace").internalName(),
-                nms("EntityHuman").internalName(),
-                INTEGER,
-                nms("ItemStack").internalName(),
-                nms("Slot").internalName(),
-                nms("ItemStack").internalName()
-            }, 2, new Object[] {
-                nms("ContainerFurnace").internalName(),
-                nms("ItemStack").internalName()
-            });
-            return;
-        }
-        super.visitVarInsn(opcode, varIndex);
+        super.visitLabel(notLavaBucketLabel); // Below this is for regular item handling, not lava buckets
+        super.visitFrame(F_SAME, 0, null, 0, null);
     }
 }
