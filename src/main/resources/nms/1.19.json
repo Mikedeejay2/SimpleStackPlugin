@@ -139,5 +139,11 @@
       "isFuel": "d(LItemStack;)Z",
       "moveItemStackTo": "a(LItemStack;IIZ)Z"
     }
+  },
+  "TileEntityFurnace": {
+    "class_name": "net.minecraft.world.level.block.entity.TileEntityFurnace",
+    "methods": {
+      "canPlaceItem": "b(ILItemStack;)Z"
+    }
   }
 }
