@@ -16,7 +16,9 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.Implementation;
+import org.bukkit.Bukkit;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
@@ -80,10 +82,8 @@ public final class SimpleStackAgent {
 
     public static boolean install() {
         Validate.isTrue(VISITORS.size() != 0, "No transformers found for installation");
-        ElementMatcher.Junction<? super TypeDescription> typeMatcher = none();
-        for(String className : VISITORS.keySet()) {
-            typeMatcher = typeMatcher.or(named(className));
-        }
+        final ElementMatcher.Junction<? super TypeDescription> typeMatcher = generateTypeMatcher();
+        if(typeMatcher == null) return true;
 
         transformer = new AgentBuilder.Default()
             .disableClassFormatChanges()
@@ -96,6 +96,34 @@ public final class SimpleStackAgent {
             .installOn(ByteBuddyHolder.getInstrumentation()); // Inject
 
         return crashed.get() || detectNotVisited();
+    }
+
+    private static ElementMatcher.Junction<? super TypeDescription> generateTypeMatcher() {
+        ElementMatcher.Junction<? super TypeDescription> typeMatcher = none();
+        final ClassLoader classLoader = Bukkit.class.getClassLoader();
+        for(String className : VISITORS.keySet()) {
+            try { // Load the class, this fixes some classes not being loaded during scans
+                classLoader.loadClass(className);
+            } catch(ClassNotFoundException e) {
+                CrashReport crashReport = new CrashReport(
+                    SimpleStack.getInstance(), "Exception while loading class during type matcher creation",
+                    true, true);
+                crashReport.setThrowable(e);
+
+                CrashReportSection section = crashReport.addSection("Class Details");
+                section.addDetail("Class Name", className);
+                SimpleStack.getInstance().fillCrashReport(crashReport);
+
+                crashReport.addInfo(SimpleStack.CRASH_INFO_1)
+                    .addInfo(SimpleStack.CRASH_INFO_2)
+                    .addInfo(SimpleStack.CRASH_INFO_3);
+
+                crashReport.execute();
+                return null;
+            }
+            typeMatcher = typeMatcher.or(named(className));
+        }
+        return typeMatcher;
     }
 
     private static boolean detectNotVisited() {
