@@ -69,7 +69,7 @@ public final class SimpleStack extends BukkitPlugin {
         registerEvent(new ConfigListener(config));
         setupApi();
 
-        if(checkVersion() || installByteBuddyAgent() || installAgent()) return;
+        if(checkVersion() || installByteBuddyAgent() || installAndTransform()) return;
 
         this.bStats = new BStats(this);
         this.bStats.init(9379);
@@ -92,8 +92,8 @@ public final class SimpleStack extends BukkitPlugin {
         apiClass.field("initialized").set(null, true);
     }
 
-    private boolean installAgent() {
-        sendInfo(Text.of("simplestack.info.install_transformer"));
+    private boolean installAndTransform() {
+        sendInfo(Text.of("simplestack.info.apply_transformations"));
         if(SimpleStackAgent.registerTransformers() || SimpleStackAgent.install()) {
             disablePlugin(this);
             return true;
@@ -102,7 +102,7 @@ public final class SimpleStack extends BukkitPlugin {
     }
 
     private boolean installByteBuddyAgent() {
-        sendInfo(Text.of("simplestack.info.create_transformer"));
+        sendInfo(Text.of("simplestack.info.install_transformer"));
         if(ByteBuddyHolder.install()) {
             sendSevere(Text.of("&c").concat("simplestack.errors.incompatible_java_l1"));
             sendSevere(Text.of("&c").concat("simplestack.errors.incompatible_java_l2"));
