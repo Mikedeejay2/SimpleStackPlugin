@@ -14,7 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19", "1.19.1"})
+@Transformer({"1.19", "1.19.1", "1.19.2"})
 public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor {
     private boolean visitedIsFuel = false;
     private boolean visitedEntranceLabel = false;

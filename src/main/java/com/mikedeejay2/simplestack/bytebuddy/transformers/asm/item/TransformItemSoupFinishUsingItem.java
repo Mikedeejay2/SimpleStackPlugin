@@ -12,11 +12,11 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19", "1.19.1"})
+@Transformer({"1.19", "1.19.1", "1.19.2"})
 public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
     protected boolean visitedNew = false;
-    protected boolean visitedReturn = false;
     protected boolean visitedFrame = false;
+    protected boolean visitedAload = false;
 
     @Override
     public MappingEntry getMappingEntry() {
@@ -30,16 +30,16 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
     }
 
     @Override
-    public void visitInsn(int opcode) {
-        if(!visitedReturn && opcode == ARETURN) { // Target the first return statement.
-            visitedReturn = true;
+    public void visitVarInsn(int opcode, int varIndex) {
+        if(opcode == ALOAD && varIndex == 4) {// Target load ItemStack
+            visitedAload = true;
         }
-        super.visitInsn(opcode);
+        super.visitVarInsn(opcode, varIndex);
     }
 
     @Override
     public void visitFrame(int type, int numLocal, Object[] local, int numStack, Object[] stack) {
-        if(!visitedFrame && visitedReturn) { // Target the frame after the first return statement
+        if(!visitedFrame && visitedAload) { // Target the frame after load ItemStack
             visitedFrame = true;
             // Change this frame to include the same locals append the extra ItemStack.
             // Without this, the frame has no local values.
@@ -60,6 +60,10 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
 
     /**
      * Fixes stacked soups from being replaced by a bowl upon use.
+     * <p>
+     * 1.19.2 fix - Store EntityHuman in index 6, and ItemStack in index 7. In Minecraft 1.19, locals were used up to 4,
+     * in 1.19.2, locals were used up to 5 instead because of NBTTagCompound in index 5. To fix this, new stores have
+     * been increased by one index.
      */
     private void appendStackedSoupFix() {
         final Label emptyBowlLabel = new Label();
@@ -71,7 +75,7 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
 
         super.visitVarInsn(ALOAD, 3); // Load EntityLiving
         super.visitTypeInsn(CHECKCAST, nms("EntityHuman").internalName()); // Cast to EntityHuman
-        super.visitVarInsn(ASTORE, 5); // Store EntityHuman in local index 5
+        super.visitVarInsn(ASTORE, 6); // Store EntityHuman in local index 6
 
         // ItemStack is already shrunk by 1, check if it's empty
         super.visitVarInsn(ALOAD, 4); // Load ItemStack
@@ -81,22 +85,22 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
         super.visitJumpInsn(IFNE, ifNotDropLabel); // If it is empty, jump to empty bowl
 
         // Get PlayerInventory
-        super.visitVarInsn(ALOAD, 5); // Load EntityHuman
+        super.visitVarInsn(ALOAD, 6); // Load EntityHuman
         super.visitMethodInsn(INVOKEVIRTUAL, nms("EntityHuman").method("getInventory"));
         // New empty bowl ItemStack
         super.visitTypeInsn(NEW, nms("ItemStack").internalName()); // Create new ItemStack
         super.visitInsn(DUP); // Duplicate this ItemStack on the stack
         super.visitFieldInsn(GETSTATIC, nms("Items").field("BOWL")); // Get Bowl material
         super.visitMethodInsn(INVOKESPECIAL, nms("ItemStack").method("<init>")); // Call the ItemStack's constructor
-        super.visitVarInsn(ASTORE, 6); // Store the new ItemStack to local index 6
-        super.visitVarInsn(ALOAD, 6); // Load the new ItemStack
+        super.visitVarInsn(ASTORE, 7); // Store the new ItemStack to local index 7
+        super.visitVarInsn(ALOAD, 7); // Load the new ItemStack
         // Add new bowl to inventory
         super.visitMethodInsn(INVOKEVIRTUAL, nms("PlayerInventory").method("add")); // Attempt to add bowl to inventory
         // If it failed, drop on ground
         super.visitJumpInsn(IFNE, ifNotDropLabel); // If no items need to be dropped, bypass drop method
 
-        super.visitVarInsn(ALOAD, 5); // Load EntityHuman
-        super.visitVarInsn(ALOAD, 6); // Load the new ItemStack (empty bowl)
+        super.visitVarInsn(ALOAD, 6); // Load EntityHuman
+        super.visitVarInsn(ALOAD, 7); // Load the new ItemStack (empty bowl)
         super.visitInsn(ICONST_0); // Load false (don't throw randomly)
         super.visitInsn(ICONST_1); // Load true (retain ownership of thrown item)
         super.visitMethodInsn(INVOKEVIRTUAL, nms("EntityHuman").method("drop")); // Drop the rest of the item

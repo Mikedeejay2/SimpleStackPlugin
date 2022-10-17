@@ -281,6 +281,8 @@ public final class SimpleStackAgent {
             for(Pair<MethodVisitorInfo, Boolean> pair : visitorInfos) {
                 final MethodVisitorInfo info = pair.getLeft();
                 if(!info.getMappingEntry().matches(name, descriptor)) continue;
+                // Uncomment to print out current MethodVisitorInfo
+                // System.out.println(info.getMappingEntry().owner().internalName() + "." + info.getMappingEntry().name() + info.getMappingEntry().descriptor());
                 visitor = info.getWrapper().wrap(
                     instrumentedType, description, visitor,
                     implementationContext, typePool, writerFlags, readerFlags);

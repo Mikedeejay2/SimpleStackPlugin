@@ -11,7 +11,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19", "1.19.1"})
+@Transformer({"1.19", "1.19.1", "1.19.2"})
 public class TransformItemSuspiciousStewFinishUsingItem extends TransformItemSoupFinishUsingItem {
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {
@@ -20,7 +20,7 @@ public class TransformItemSuspiciousStewFinishUsingItem extends TransformItemSou
 
     @Override
     public void visitFrame(int type, int numLocal, Object[] local, int numStack, Object[] stack) {
-        if(!visitedFrame && visitedReturn) { // Target the frame after the first return statement
+        if(!visitedFrame && visitedAload) { // Target the frame after the first return statement
             visitedFrame = true;
             // Instead of F_APPEND, F_SAME is instead used for suspicious stew.
             super.visitFrame(F_SAME, 0, null, 0, null);
