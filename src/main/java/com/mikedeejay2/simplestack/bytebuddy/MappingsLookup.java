@@ -1,11 +1,11 @@
 package com.mikedeejay2.simplestack.bytebuddy;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mikedeejay2.mikedeejay2lib.data.json.JsonAccessor;
 import com.mikedeejay2.mikedeejay2lib.data.json.JsonFile;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReport;
-import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReportSection;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.SimpleStack;
 import org.apache.commons.lang3.Validate;
@@ -21,54 +21,7 @@ public class MappingsLookup {
 
     public static boolean loadMappings(SimpleStack plugin) {
         try {
-            final JsonFile jsonFile = new JsonFile(plugin, String.format("nms/%s.json", MinecraftVersion.getVersionString()));
-            if(!jsonFile.loadFromJar(false)) return false; // File couldn't load, fail
-            final JsonAccessor accessor = jsonFile.getAccessor();
-            holder = new MappingsHolder();
-            for(String classKey : accessor.getKeys(false)) {
-                final JsonElement classElement = accessor.get(classKey);
-                if(classElement.isJsonPrimitive()) { // Class entry holds no methods or fields, add it and continue
-                    holder.add(classKey, new ClassMapping(classElement.getAsString()));
-                    continue;
-                }
-                Validate.isTrue(classElement.isJsonObject()); // Should be an object
-                final JsonObject classObject = classElement.getAsJsonObject();
-                Validate.isTrue(classObject.has("class_name")); // Should have a class name
-                final ClassMapping classMapping = new ClassMapping(classObject.get("class_name").getAsString());
-                holder.add(classKey, classMapping);
-
-                if(classObject.has("methods")) {
-                    final JsonElement methodsElement = classObject.get("methods");
-                    Validate.isTrue(methodsElement.isJsonObject()); // Should be an object
-                    final JsonObject methodsObject = methodsElement.getAsJsonObject();
-                    for(String methodKey : methodsObject.keySet()) {
-                        final JsonElement methodElement = methodsObject.get(methodKey);
-                        Validate.isTrue(methodElement.isJsonPrimitive()); // Should only be a String
-                        classMapping.method(methodKey, new MappingEntry(methodElement.getAsString()));
-                    }
-                }
-                if(classObject.has("fields")) {
-                    final JsonElement fieldsElement = classObject.get("fields");
-                    Validate.isTrue(fieldsElement.isJsonObject()); // Should be an object
-                    final JsonObject fieldsObject = fieldsElement.getAsJsonObject();
-                    for(String fieldKey : fieldsObject.keySet()) {
-                        final JsonElement fieldElement = fieldsObject.get(fieldKey);
-                        Validate.isTrue(fieldElement.isJsonPrimitive()); // Should only be a String
-                        classMapping.field(fieldKey, new MappingEntry(fieldElement.getAsString()));
-                    }
-                }
-            }
-
-            // Generate descriptors
-            for(ClassMapping classMapping : holder.mappings.values()) {
-                for(MappingEntry methodEntry : classMapping.methodMappings.values()) {
-                    methodEntry.generateDescriptor();
-                }
-                for(MappingEntry fieldEntry : classMapping.fieldMappings.values()) {
-                    fieldEntry.generateDescriptor();
-                }
-            }
-            return true;
+            return doLoadMappings(plugin, MinecraftVersion.getVersionString());
         } catch(Throwable throwable) {
             CrashReport crashReport = new CrashReport(plugin, "Exception while generating NMS mappings", true, true);
             crashReport.setThrowable(throwable);
@@ -82,6 +35,76 @@ public class MappingsLookup {
             crashReport.execute();
             return false;
         }
+    }
+
+    private static boolean doLoadMappings(SimpleStack plugin, String mcVersion) {
+        final JsonFile jsonFile = new JsonFile(plugin, String.format("nms/%s.json", mcVersion));
+        if(!jsonFile.loadFromJar(false)) return false;
+        final JsonAccessor accessor = jsonFile.getAccessor();
+        if(holder == null) holder = new MappingsHolder();
+        // Special case, load base json mappings
+        if(accessor.contains("using_base")) {
+            JsonElement usingBaseElement = accessor.get("using_base");
+            Validate.isTrue(doLoadMappings(plugin, usingBaseElement.getAsString()),
+                            "Unable to load base version \"%s\" for mappings version \"%s\"",
+                            usingBaseElement.getAsString(), mcVersion);
+        }
+
+        // Iterate through classes in json
+        for(String classKey : accessor.getKeys(false)) {
+            final JsonElement classElement = accessor.get(classKey);
+            if(classKey.equals("using_base")) continue;
+            if(classElement.isJsonPrimitive()) { // Class entry holds no methods or fields, add it and continue
+                holder.add(classKey, new ClassMapping(classElement.getAsString()));
+                continue;
+            }
+            Validate.isTrue(classElement.isJsonObject()); // Should be an object
+            final JsonObject classObject = classElement.getAsJsonObject();
+
+            // Create/get class mapping
+            ClassMapping classMapping;
+            if(!holder.mappings.containsKey(classKey)) { // If class NOT already loaded from a base
+                Validate.isTrue(classObject.has("class_name"),
+                                "Can not find class name for mapping \"%s\"", classKey); // Should have a class name
+                classMapping = new ClassMapping(classObject.get("class_name").getAsString());
+                holder.add(classKey, classMapping);
+            } else {
+                classMapping = holder.clazz(classKey);
+            }
+
+            // Collect methods and fields
+            for(Map.Entry<String, MappingEntry> entry : collectEntries(classObject, "methods").entrySet()) {
+                classMapping.method(entry.getKey(), entry.getValue());
+            }
+            for(Map.Entry<String, MappingEntry> entry : collectEntries(classObject, "fields").entrySet()) {
+                classMapping.field(entry.getKey(), entry.getValue());
+            }
+        }
+
+        // Generate descriptors
+        for(ClassMapping classMapping : holder.mappings.values()) {
+            for(MappingEntry methodEntry : classMapping.methodMappings.values()) {
+                methodEntry.generateDescriptor();
+            }
+            for(MappingEntry fieldEntry : classMapping.fieldMappings.values()) {
+                fieldEntry.generateDescriptor();
+            }
+        }
+        return true;
+    }
+
+    private static Map<String, MappingEntry> collectEntries(JsonObject json, String key) {
+        if(!json.has(key)) return ImmutableMap.of(); // Unable to collect if key doesn't exist
+        final Map<String, MappingEntry> result = new HashMap<>();
+        final JsonElement keyElement = json.get(key);
+        Validate.isTrue(keyElement.isJsonObject()); // Should be an object
+        final JsonObject keyObject = keyElement.getAsJsonObject();
+        for(String curKey : keyObject.keySet()) {
+            final JsonElement curElement = keyObject.get(curKey);
+            Validate.isTrue(curElement.isJsonPrimitive()); // Should only be a String
+            result.put(curKey, new MappingEntry(curElement.getAsString()));
+        }
+        return result;
     }
 
     public static boolean hasMappings() {
