@@ -12,7 +12,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19"})
+@Transformer({"1.19", "1.19.1"})
 public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
     protected boolean visitedNew = false;
     protected boolean visitedReturn = false;

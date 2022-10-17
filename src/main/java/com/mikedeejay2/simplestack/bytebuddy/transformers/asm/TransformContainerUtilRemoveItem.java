@@ -13,7 +13,7 @@ import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19"})
+@Transformer({"1.19", "1.19.1"})
 public class TransformContainerUtilRemoveItem extends MappedMethodVisitor {
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {
@@ -67,8 +67,7 @@ public class TransformContainerUtilRemoveItem extends MappedMethodVisitor {
         //// this.shrink(j);
         super.visitVarInsn(ALOAD, 3); // Load ItemStack
         super.visitVarInsn(ILOAD, 2); // Load amount to remove
-        super.visitMethodInsn(
-            INVOKEVIRTUAL, lastNms().method("shrink")); // Shrink the old ItemStack by the amount
+        super.visitMethodInsn(INVOKEVIRTUAL, lastNms().method("shrink")); // Shrink the old ItemStack by the amount
 
         //// return itemstack;
         super.visitVarInsn(ALOAD, 4); // Load the new removed ItemStack

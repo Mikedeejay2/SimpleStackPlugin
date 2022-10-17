@@ -9,12 +9,12 @@ import static org.objectweb.asm.Opcodes.*;
 import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.*;
 
 /**
- * Fixes stacked damaged items not stacking together upon addThis fixes picking up multiple damaged items from the
+ * Fixes stacked damaged items not stacking together upon add. This fixes picking up multiple damaged items from the
  * ground that are duplicates of each other, ensures that they stack properly in the inventory.
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19"})
+@Transformer({"1.19", "1.19.1"})
 public class TransformPlayerInventoryAdd extends MappedMethodVisitor {
     private boolean visitedIsDamaged = false;
     private boolean visitedIfStatement = false;

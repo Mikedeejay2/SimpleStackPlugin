@@ -14,7 +14,7 @@ import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19"})
+@Transformer({"1.19", "1.19.1"})
 public class TransformItemStackIsStackable extends MappedMethodVisitor {
     private boolean visitedIfStatement = false;
     private boolean visitedIConst = false;

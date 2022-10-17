@@ -71,7 +71,7 @@
     "class_name": "net.minecraft.world.entity.player.EntityHuman",
     "methods": {
       "drop": "a(LItemStack;ZZ)LEntityItem;",
-      "getInventory": "fB()LPlayerInventory;"
+      "getInventory": "fA()LPlayerInventory;"
     }
   },
   "PlayerInventory": {

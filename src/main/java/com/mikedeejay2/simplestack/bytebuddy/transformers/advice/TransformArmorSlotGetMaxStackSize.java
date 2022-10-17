@@ -1,11 +1,9 @@
 package com.mikedeejay2.simplestack.bytebuddy.transformers.advice;
 
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
-import com.mikedeejay2.simplestack.api.SimpleStackTimings;
 import com.mikedeejay2.simplestack.api.event.ArmorSlotMaxAmountEvent;
 import com.mikedeejay2.simplestack.api.event.SlotMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytebuddy.MappingsLookup;
-import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.bytebuddy.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytebuddy.Transformer;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
@@ -25,7 +23,7 @@ import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19"})
+@Transformer({"1.19", "1.19.1"})
 public class TransformArmorSlotGetMaxStackSize implements MethodVisitorInfo {
     private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 

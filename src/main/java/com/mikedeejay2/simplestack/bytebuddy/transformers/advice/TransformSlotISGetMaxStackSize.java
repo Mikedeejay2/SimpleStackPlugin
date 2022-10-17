@@ -22,7 +22,7 @@ import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.nms;
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19"})
+@Transformer({"1.19", "1.19.1"})
 public class TransformSlotISGetMaxStackSize implements MethodVisitorInfo {
     private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 

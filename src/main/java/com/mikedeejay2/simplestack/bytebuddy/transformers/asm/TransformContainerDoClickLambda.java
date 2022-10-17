@@ -13,7 +13,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19"})
+@Transformer({"1.19", "1.19.1"})
 public class TransformContainerDoClickLambda extends MappedMethodVisitor {
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {

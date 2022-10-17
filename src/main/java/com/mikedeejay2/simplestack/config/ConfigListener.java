@@ -28,6 +28,6 @@ public class ConfigListener implements Listener {
 
     @EventHandler
     private void onArmorSlot(ArmorSlotMaxAmountEvent event) {
-        if(!config.isStackedArmorWearable()) event.setAmount(1);
+        if(config.isStackedArmorWearable()) event.setAmount(config.getMaxAmount());
     }
 }
