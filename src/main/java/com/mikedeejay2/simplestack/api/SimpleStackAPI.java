@@ -1,7 +1,5 @@
 package com.mikedeejay2.simplestack.api;
 
-import org.apache.commons.lang3.Validate;
-
 public final class SimpleStackAPI {
     private static SimpleStackConfig config;
     private static SimpleStackTimings timings;
@@ -18,6 +16,8 @@ public final class SimpleStackAPI {
     }
 
     private static void validateInitialized() {
-        Validate.isTrue(initialized, "Simple Stack API has not been initialized");
+        if(!initialized) {
+            throw new IllegalArgumentException("Simple Stack API has not been initialized");
+        }
     }
 }

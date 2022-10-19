@@ -16,7 +16,6 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
-import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.Implementation;
 import org.bukkit.Bukkit;
 import org.objectweb.asm.ClassVisitor;
@@ -41,6 +40,7 @@ public final class SimpleStackAgent {
     private static ResettableClassFileTransformer transformer;
     private static final Map<String, Set<Pair<MethodVisitorInfo, Boolean>>> VISITORS = new HashMap<>();
     private static final AtomicBoolean crashed = new AtomicBoolean(false);
+    private static MethodVisitorInfo lastVisitedInfo = null;
 
     public static boolean registerTransformers() {
         try {
@@ -48,7 +48,7 @@ public final class SimpleStackAgent {
             new AnnotationCollector<>(
                 new ClassCollector<>(
                     SimpleStack.getInstance().classLoader(), // Use the plugin class loader
-                    SimpleStackAgent.class.getPackageName() + ".transformers", // Traverse in the transformers package
+                    SimpleStackAgent.class.getPackage().getName() + ".transformers", // Traverse in the transformers package
                     true, // Traverse sub-packages
                     MethodVisitorInfo.class), // Only locate classes that are subclasses of MethodVisitorInfo
                 Transformer.class) // Locate the Transformer annotation
@@ -163,6 +163,7 @@ public final class SimpleStackAgent {
     }
 
     public static void fillCrashReportSection(CrashReportSection section) {
+        section.addDetail("Last Visited Transformer", lastVisitedInfo != null ? lastVisitedInfo.getClass().getSimpleName() : "null");
         section.addDetail("Transformers", getTransformersString(VISITORS));
     }
 
@@ -283,6 +284,7 @@ public final class SimpleStackAgent {
                 if(!info.getMappingEntry().matches(name, descriptor)) continue;
                 // Uncomment to print out current MethodVisitorInfo
                 // System.out.println(info.getMappingEntry().owner().internalName() + "." + info.getMappingEntry().name() + info.getMappingEntry().descriptor());
+                lastVisitedInfo = info;
                 visitor = info.getWrapper().wrap(
                     instrumentedType, description, visitor,
                     implementationContext, typePool, writerFlags, readerFlags);
@@ -302,7 +304,6 @@ public final class SimpleStackAgent {
 
             CrashReportSection section = crashReport.addSection("Transform Details");
             section.addDetail("Type Name", typeName);
-            section.addDetail("Class Loader", classLoader != null ? classLoader.getName() : null);
             section.addDetail("Loaded", String.valueOf(loaded));
             SimpleStack.getInstance().fillCrashReport(crashReport);
 
