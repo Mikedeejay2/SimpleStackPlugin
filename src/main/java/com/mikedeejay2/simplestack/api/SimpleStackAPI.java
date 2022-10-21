@@ -1,5 +1,7 @@
 package com.mikedeejay2.simplestack.api;
 
+import com.google.common.base.Preconditions;
+
 public final class SimpleStackAPI {
     private static SimpleStackConfig config;
     private static SimpleStackTimings timings;
@@ -15,9 +17,11 @@ public final class SimpleStackAPI {
         return timings;
     }
 
+    public static boolean isAvailable() {
+        return initialized;
+    }
+
     private static void validateInitialized() {
-        if(!initialized) {
-            throw new IllegalArgumentException("Simple Stack API has not been initialized");
-        }
+        Preconditions.checkState(initialized, "Simple Stack API has not been initialized");
     }
 }

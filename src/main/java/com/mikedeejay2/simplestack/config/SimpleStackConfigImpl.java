@@ -15,6 +15,7 @@ import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.SimpleStackConfig;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -337,7 +338,7 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     /////////////////////////////////////
 
     @Override
-    public int getAmount(ItemStack item) {
+    public int getAmount(@NotNull ItemStack item) {
         if(containsUniqueItem(item)) {
             return getUniqueItemAmount(item);
         }
@@ -345,7 +346,7 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     @Override
-    public int getAmount(Material type) {
+    public int getAmount(@NotNull Material type) {
         if(containsCustomAmount(type)) {
             return itemAmounts.get(itemAmounts.indexOf(new MaterialAndAmount(type, 0))).getAmount();
         }
@@ -356,7 +357,7 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     @Override
-    public int getUniqueItemAmount(ItemStack item) {
+    public int getUniqueItemAmount(@NotNull ItemStack item) {
         for(ItemStack curItem : uniqueItemList) {
             if(!ItemComparison.equalsEachOther(curItem, item)) continue;
             return curItem.getAmount();
@@ -365,17 +366,17 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     @Override
-    public boolean containsMaterial(Material material) {
+    public boolean containsMaterial(@NotNull Material material) {
         return materialList.contains(material);
     }
 
     @Override
-    public boolean containsCustomAmount(Material material) {
+    public boolean containsCustomAmount(@NotNull Material material) {
         return itemAmounts.contains(new MaterialAndAmount(material, 0));
     }
 
     @Override
-    public boolean containsUniqueItem(ItemStack item) {
+    public boolean containsUniqueItem(@NotNull ItemStack item) {
         for(ItemStack curItem : uniqueItemList) {
             if(!ItemComparison.equalsEachOther(curItem, item)) continue;
             return true;
@@ -384,12 +385,12 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     @Override
-    public Set<Material> getMaterials() {
+    public @NotNull Set<Material> getMaterials() {
         return ImmutableSet.copyOf(materialList);
     }
 
     @Override
-    public Map<Material, Integer> getItemAmounts() {
+    public @NotNull Map<Material, Integer> getItemAmounts() {
         ImmutableMap.Builder<Material, Integer> builder = ImmutableMap.builder();
         for(MaterialAndAmount entry : itemAmounts) {
             builder.put(entry.getMaterial(), entry.getAmount());
@@ -398,45 +399,45 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     @Override
-    public Set<ItemStack> getUniqueItems() {
+    public @NotNull Set<ItemStack> getUniqueItems() {
         return ImmutableSet.copyOf(uniqueItemList);
     }
 
     @Override
-    public void addMaterial(Material material) {
+    public void addMaterial(@NotNull Material material) {
         if(containsMaterial(material)) return;
         materialList.add(material);
         setModified(true);
     }
 
     @Override
-    public void addCustomAmount(Material material, int amount) {
+    public void addCustomAmount(@NotNull Material material, int amount) {
         if(containsCustomAmount(material)) removeCustomAmount(material);
         itemAmounts.add(new MaterialAndAmount(material, amount));
         setModified(true);
     }
 
     @Override
-    public void addUniqueItem(ItemStack item) {
+    public void addUniqueItem(@NotNull ItemStack item) {
         removeUniqueItem(item);
         uniqueItemList.add(item);
         setModified(true);
     }
 
     @Override
-    public void removeMaterial(Material material) {
+    public void removeMaterial(@NotNull Material material) {
         materialList.remove(material);
         setModified(true);
     }
 
     @Override
-    public void removeCustomAmount(Material material) {
+    public void removeCustomAmount(@NotNull Material material) {
         itemAmounts.remove(new MaterialAndAmount(material, 0));
         setModified(true);
     }
 
     @Override
-    public void removeUniqueItem(ItemStack item) {
+    public void removeUniqueItem(@NotNull ItemStack item) {
         for(ItemStack curItem : uniqueItemList) {
             if(!ItemComparison.equalsEachOther(item, curItem)) continue;
             uniqueItemList.remove(curItem);
@@ -479,12 +480,12 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     @Override
-    public String getLocale() {
+    public @NotNull String getLocale() {
         return langLocale;
     }
 
     @Override
-    public void setLocale(String newLocale) {
+    public void setLocale(@NotNull String newLocale) {
         this.langLocale = newLocale;
         TranslationManager.GLOBAL.setGlobalLocale(newLocale);
         setModified(true);

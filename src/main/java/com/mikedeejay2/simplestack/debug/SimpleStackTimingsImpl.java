@@ -5,6 +5,8 @@ import com.google.common.collect.ImmutableList;
 import com.mikedeejay2.mikedeejay2lib.runnable.EnhancedRunnable;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.SimpleStackTimings;
+import org.bukkit.ChatColor;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -30,7 +32,7 @@ public final class SimpleStackTimingsImpl implements SimpleStackTimings {
         long msTime = System.currentTimeMillis();
         long nanoTime = endTime - startTime;
         if(countTimings) this.runnable.collect(nanoTime);
-        this.detailedTimings.add(new TimingEntry(name, nanoTime, msTime));
+        this.detailedTimings.add(new TimingEntryImpl(name, nanoTime, msTime));
     }
 
     @Override
@@ -59,17 +61,17 @@ public final class SimpleStackTimingsImpl implements SimpleStackTimings {
     }
 
     @Override
-    public List<TimingEntry> getDetailedTimings() {
+    public @NotNull List<TimingEntry> getDetailedTimings() {
         return ImmutableList.copyOf(detailedTimings);
     }
 
     @Override
-    public List<Long> getTickTimings() {
+    public @NotNull List<Long> getTickTimings() {
         return ImmutableList.copyOf(tickTimings);
     }
 
     @Override
-    public String getTimingString(int ticks) {
+    public @NotNull String getTimingString(int ticks) {
         if(tickTimings.isEmpty()) return "N/A";
         ticks = Math.min(tickTimings.size(), ticks);
 
@@ -97,15 +99,15 @@ public final class SimpleStackTimingsImpl implements SimpleStackTimings {
 
         DecimalFormat format = new DecimalFormat("0.0##");
         return String.format("%s%s&f/%s%s&f/%s%s&f/%s%s&f/%s%s",
-                             SimpleStackTimings.getChatColorTotal(min), format.format(min),
-                             SimpleStackTimings.getChatColorTotal(med), format.format(med),
-                             SimpleStackTimings.getChatColorTotal(avg), format.format(avg),
-                             SimpleStackTimings.getChatColorTotal(n95ile), format.format(n95ile),
-                             SimpleStackTimings.getChatColorTotal(max), format.format(max));
+                             getChatColorTotal(min), format.format(min),
+                             getChatColorTotal(med), format.format(med),
+                             getChatColorTotal(avg), format.format(avg),
+                             getChatColorTotal(n95ile), format.format(n95ile),
+                             getChatColorTotal(max), format.format(max));
     }
 
     @Override
-    public List<String> getTimings() {
+    public @NotNull List<String> getTimings() {
         return ImmutableList.of(
             "Ms per tick (min/med/avg/95%ile/max ms):",
             "5s:  " + getTimingString(100),
@@ -117,6 +119,58 @@ public final class SimpleStackTimingsImpl implements SimpleStackTimings {
 
     private static double nsToMs(long nanos) {
         return (nanos / 1000000.0);
+    }
+
+    static ChatColor getChatColorSingle(long nanoTime) {
+        ChatColor color;
+        if(nanoTime < 10000) {
+            color = ChatColor.GREEN;
+        } else if(nanoTime < 50000) {
+            color = ChatColor.YELLOW;
+        } else if(nanoTime < 100000) {
+            color = ChatColor.RED;
+        } else {
+            color = ChatColor.DARK_RED;
+        }
+        return color;
+    }
+
+    static ChatColor getChatColorTotal(double ms) {
+        return getChatColorSingle((long) (ms * 100000.0));
+    }
+
+    private static final class TimingEntryImpl implements TimingEntry {
+        public final String name;
+        public final long nanoTime;
+        public final long msTime;
+        public final ChatColor color;
+
+        public TimingEntryImpl(String name, long nanoTime, long msTime) {
+            this.name = name;
+            this.nanoTime = nanoTime;
+            this.msTime = msTime;
+            color = getChatColorSingle(nanoTime);
+        }
+
+        @Override
+        public @NotNull String getName() {
+            return name;
+        }
+
+        @Override
+        public long getNanoTime() {
+            return nanoTime;
+        }
+
+        @Override
+        public long getMsTime() {
+            return msTime;
+        }
+
+        @Override
+        public @NotNull ChatColor getChatColor() {
+            return color;
+        }
     }
 
     private static final class DebugRunnable extends EnhancedRunnable {
