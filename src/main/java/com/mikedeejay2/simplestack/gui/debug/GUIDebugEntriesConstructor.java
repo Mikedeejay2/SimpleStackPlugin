@@ -114,17 +114,17 @@ public class GUIDebugEntriesConstructor implements GUIConstructor {
 
         private ItemStack getItemStack(SimpleStackTimingsImpl.TimingEntry entry) {
             String base64Head;
-            switch(entry.color) {
+            switch(entry.getChatColor()) {
                 case GREEN: base64Head = Base64Head.LIME.get();break;
                 case YELLOW: base64Head = Base64Head.YELLOW.get();break;
                 case RED: base64Head = Base64Head.RED.get();break;
                 default: base64Head = Base64Head.EXCLAMATION_MARK_RED.get();break;
             }
             return ItemBuilder.of(base64Head)
-                .setName(entry.color + entry.name)
+                .setName(entry.getChatColor() + entry.getName())
                 .setLore(
-                    String.format("%s%.4fms", entry.color, (entry.nanoTime / 1000000.0)),
-                    "&7&o" + new SimpleDateFormat("HH:mm:ss.SSS").format(entry.msTime))
+                    String.format("%s%.4fms", entry.getChatColor(), (entry.getNanoTime() / 1000000.0)),
+                    "&7&o" + new SimpleDateFormat("HH:mm:ss.SSS").format(entry.getMsTime()))
                 .get();
         }
     }
