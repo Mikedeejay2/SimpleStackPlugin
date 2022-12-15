@@ -12,7 +12,7 @@ import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19", "1.19.1", "1.19.2"})
+@Transformer({"1.19", "1.19.1", "1.19.2", "1.19.3"})
 public class TransformSlotTryRemove extends MappedMethodVisitor {
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {

@@ -28,7 +28,7 @@
   "CraftItemStack": {
     "class_name": "org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack",
     "methods": {
-      "asBukkitCopy": "asBukkitCopy(LItemStack;)LItemStack;"
+      "asBukkitCopy": "asBukkitCopy(LItemStack;)Lorg/bukkit/inventory/ItemStack;"
     }
   },
   "ContainerUtil": {
@@ -144,5 +144,6 @@
     "methods": {
       "canPlaceItem": "b(ILItemStack;)Z"
     }
-  }
+  },
+  "EntityThrownTrident": "net.minecraft.world.entity.projectile.EntityThrownTrident"
 }

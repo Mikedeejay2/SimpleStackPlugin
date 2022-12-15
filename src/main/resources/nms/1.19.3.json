@@ -1,0 +1,30 @@
+{
+  "using_base": "1.19.2",
+  "ItemStack": {
+    "methods": {
+      "setCount": "f(I)V",
+      "shrink": "h(I)V",
+      "isSameItemSameTags": "d(LItemStack;LItemStack;)Z"
+    }
+  },
+  "CraftItemStack": "org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemStack",
+  "CraftInventory": "org.bukkit.craftbukkit.v1_19_R2.inventory.CraftInventory",
+  "Item": {
+    "methods": {
+      "getMaxStackSize": "n()I"
+    }
+  },
+  "EntityHuman": {
+    "methods": {
+      "getInventory": "fE()LPlayerInventory;"
+    }
+  },
+  "Items": {
+    "class_name": "net.minecraft.world.item.Items",
+    "fields": {
+      "BUCKET": "pj:LItem;",
+      "BOWL": "od:LItem;",
+      "LAVA_BUCKET": "pl:LItem;"
+    }
+  }
+}

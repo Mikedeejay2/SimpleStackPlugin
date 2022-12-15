@@ -6,12 +6,16 @@ import com.google.gson.JsonObject;
 import com.mikedeejay2.mikedeejay2lib.data.json.JsonAccessor;
 import com.mikedeejay2.mikedeejay2lib.data.json.JsonFile;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReport;
+import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReportSection;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.SimpleStack;
 import org.apache.commons.lang3.Validate;
+import org.bukkit.Bukkit;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.*;
 
 public class MappingsLookup {
     private static MappingsHolder holder = null;
@@ -37,6 +41,38 @@ public class MappingsLookup {
         }
     }
 
+    public static boolean validateMappings(SimpleStack plugin) {
+        final Map<String, ClassMapping> mappings = holder.mappings;
+        final Map<ClassMapping, Exception> failedClasses = new HashMap<>();
+        final Map<MappingEntry, Exception> failedEntries = new HashMap<>();
+        for(ClassMapping classMapping : mappings.values()) {
+            try {
+                failedEntries.putAll(tryMappingValidate(classMapping));
+            } catch(ClassNotFoundException exception) {
+                failedClasses.put(classMapping, exception);
+            }
+        }
+
+        if(!failedClasses.isEmpty() || !failedEntries.isEmpty()) {
+            CrashReport crashReport = new CrashReport(plugin, "Exception while validating NMS mappings", true, true);
+
+            CrashReportSection section = crashReport.addSection("Mapping Validation");
+            section.addDetail("Failed Classes", getFailedClassesStr(failedClasses));
+            section.addDetail("Failed Entries", getFailedEntriesStr(failedEntries));
+
+
+            SimpleStack.getInstance().fillCrashReport(crashReport);
+
+            crashReport.addInfo(SimpleStack.CRASH_INFO_1)
+                .addInfo(SimpleStack.CRASH_INFO_2)
+                .addInfo(SimpleStack.CRASH_INFO_3);
+
+            crashReport.execute();
+            return false;
+        }
+        return true;
+    }
+
     private static boolean doLoadMappings(SimpleStack plugin, String mcVersion) {
         final JsonFile jsonFile = new JsonFile(plugin, String.format("nms/%s.json", mcVersion));
         if(!jsonFile.loadFromJar(false)) return false;
@@ -55,6 +91,15 @@ public class MappingsLookup {
             final JsonElement classElement = accessor.get(classKey);
             if(classKey.equals("using_base")) continue;
             if(classElement.isJsonPrimitive()) { // Class entry holds no methods or fields, add it and continue
+                // If class already exists, change name and continue
+                if(holder.mappings.containsKey(classKey)) {
+                    ClassMapping existingClassMapping = holder.mappings.get(classKey);
+                    ClassMapping classMapping = new ClassMapping(classElement.getAsString());
+                    classMapping.fieldMappings.putAll(existingClassMapping.fieldMappings);
+                    classMapping.methodMappings.putAll(existingClassMapping.methodMappings);
+                    holder.add(classKey, classMapping);
+                    continue;
+                }
                 holder.add(classKey, new ClassMapping(classElement.getAsString()));
                 continue;
             }
@@ -70,13 +115,29 @@ public class MappingsLookup {
                 holder.add(classKey, classMapping);
             } else {
                 classMapping = holder.clazz(classKey);
+                // If class already exists, change name and continue
+                if(classObject.has("class_name")) {
+                    ClassMapping tempClassMapping = new ClassMapping(classObject.get("class_name").getAsString());
+                    tempClassMapping.fieldMappings.putAll(classMapping.fieldMappings);
+                    tempClassMapping.methodMappings.putAll(classMapping.methodMappings);
+                    classMapping = tempClassMapping;
+                    holder.add(classKey, classMapping);
+                }
             }
 
             // Collect methods and fields
             for(Map.Entry<String, MappingEntry> entry : collectEntries(classObject, "methods").entrySet()) {
+                if(entry.getValue() == null) {
+                    classMapping.methodMappings.remove(entry.getKey());
+                    continue;
+                }
                 classMapping.method(entry.getKey(), entry.getValue());
             }
             for(Map.Entry<String, MappingEntry> entry : collectEntries(classObject, "fields").entrySet()) {
+                if(entry.getValue() == null) {
+                    classMapping.methodMappings.remove(entry.getKey());
+                    continue;
+                }
                 classMapping.field(entry.getKey(), entry.getValue());
             }
         }
@@ -102,9 +163,127 @@ public class MappingsLookup {
         for(String curKey : keyObject.keySet()) {
             final JsonElement curElement = keyObject.get(curKey);
             Validate.isTrue(curElement.isJsonPrimitive()); // Should only be a String
+            if(curElement.getAsString().equals("remove")) { // If remove, mark it null
+                result.put(curKey, null);
+                continue;
+            }
             result.put(curKey, new MappingEntry(curElement.getAsString()));
         }
         return result;
+    }
+
+    private static String getFailedClassesStr(Map<ClassMapping, Exception> failed) {
+        if(failed.isEmpty()) return "None";
+        StringBuilder builder = new StringBuilder();
+        for(Map.Entry<ClassMapping, Exception> entry : failed.entrySet()) {
+            final ClassMapping mapping = entry.getKey();
+            final Exception exception = entry.getValue();
+            builder.append("\n    ")
+                .append(mapping.qualifiedName())
+                .append(", exception: ")
+                .append(exception.getClass().getSimpleName())
+                .append(" ")
+                .append(exception.getMessage());
+        }
+        return builder.toString();
+    }
+
+    private static String getFailedEntriesStr(Map<MappingEntry, Exception> failed) {
+        if(failed.isEmpty()) return "None";
+        StringBuilder builder = new StringBuilder();
+        for(Map.Entry<MappingEntry, Exception> entry : failed.entrySet()) {
+            final MappingEntry mapping = entry.getKey();
+            final Exception exception = entry.getValue();
+            builder.append("\n    ")
+                .append(mapping.owner().qualifiedName())
+                .append(".")
+                .append(mapping.name())
+                .append(":")
+                .append(mapping.descriptor())
+                .append(", exception: ")
+                .append(exception.getClass().getSimpleName())
+                .append(" ")
+                .append(exception.getMessage());
+        }
+        return builder.toString();
+    }
+
+    private static Map<MappingEntry, Exception> tryMappingValidate(ClassMapping mapping)
+        throws ClassNotFoundException {
+        Class<?> clazz = Class.forName(mapping.qualifiedName(), true, Bukkit.class.getClassLoader());
+        Map<MappingEntry, Exception> failedEntries = new HashMap<>();
+        for(MappingEntry entry : mapping.fieldMappings.values()) {
+            try {
+                tryValidateField(entry, clazz);
+            } catch(Exception exception) {
+                if(trySuperClasses(entry, clazz, false)) continue;
+                failedEntries.put(entry, exception);
+            }
+        }
+        for(MappingEntry entry : mapping.methodMappings.values()) {
+            try {
+                tryValidateMethod(entry, clazz);
+            } catch(Exception exception) {
+                if(trySuperClasses(entry, clazz, true)) continue;
+                failedEntries.put(entry, exception);
+            }
+        }
+        return failedEntries;
+    }
+
+    private static boolean trySuperClasses(MappingEntry mapping, Class<?> clazz, boolean method) {
+        Class<?> currentClass = clazz.getSuperclass();
+        while(currentClass != null) {
+            try {
+                if (method) tryValidateMethod(mapping, currentClass);
+                else tryValidateField(mapping, currentClass);
+                return true;
+            } catch(Exception ignored) {
+                // ignored
+            }
+            currentClass = currentClass.getSuperclass();
+        }
+        return false;
+    }
+
+    private static void tryValidateMethod(MappingEntry mapping, Class<?> clazz)
+        throws ClassNotFoundException, NoSuchMethodException {
+        if(mapping.name().equals("<init>")) {
+            tryValidateConstructor(mapping, clazz);
+            return;
+        }
+        final String descriptor = mapping.descriptor();
+        final List<Class<?>> paramTypes = TypeConverter.convertParameterTypes(descriptor);
+        final Class<?> returnType = TypeConverter.convertReturnType(descriptor);
+
+        Method method = clazz.getDeclaredMethod(mapping.name(), paramTypes.toArray(new Class<?>[0]));
+        if(!method.getReturnType().equals(returnType)) {
+            throw new NoSuchMethodException(String.format(
+                "Mismatch return type for method \"%s\", expected type \"%s\", actual type \"%s\"",
+                method.getName(), returnType.getName(), method.getReturnType()));
+        }
+    }
+
+    private static void tryValidateConstructor(MappingEntry mapping, Class<?> clazz)
+        throws ClassNotFoundException, NoSuchMethodException {
+        final String descriptor = mapping.descriptor();
+        final List<Class<?>> paramTypes = TypeConverter.convertParameterTypes(descriptor);
+
+        // Exception thrown if constructor not found
+        Constructor<?> constructor = clazz.getDeclaredConstructor(paramTypes.toArray(new Class<?>[0]));
+    }
+
+    private static void tryValidateField(MappingEntry mapping, Class<?> clazz)
+        throws ClassNotFoundException, NoSuchFieldException {
+        final String descriptor = mapping.descriptor();
+        final Class<?> typeClass = TypeConverter.convertType(descriptor);
+
+        Field field = clazz.getField(mapping.name());
+        if(!field.getType().equals(typeClass)) {
+            throw new NoSuchFieldException(String.format(
+                "Mismatch type for field \"%s\", expected type \"%s\", actual type \"%s\"",
+                field.getName(), typeClass.getName(), field.getType()));
+        }
     }
 
     public static boolean hasMappings() {

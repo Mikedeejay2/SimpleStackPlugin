@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.bytebuddy.transformers.asm.item;
 
+import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.bytebuddy.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytebuddy.Transformer;
 import org.objectweb.asm.Label;
@@ -12,11 +13,12 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19", "1.19.1", "1.19.2"})
+@Transformer({"1.19", "1.19.1", "1.19.2", "1.19.3"})
 public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
     protected boolean visitedNew = false;
     protected boolean visitedFrame = false;
     protected boolean visitedAload = false;
+    protected boolean visitedCheckCast = false;
 
     @Override
     public MappingEntry getMappingEntry() {
@@ -31,7 +33,7 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
 
     @Override
     public void visitVarInsn(int opcode, int varIndex) {
-        if(opcode == ALOAD && varIndex == 4) {// Target load ItemStack
+        if(!visitedAload && visitedCheckCast && opcode == ALOAD && varIndex == 4) {// Target load ItemStack
             visitedAload = true;
         }
         super.visitVarInsn(opcode, varIndex);
@@ -51,6 +53,9 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
 
     @Override
     public void visitTypeInsn(int opcode, String type) {
+        if(!visitedCheckCast && opcode == CHECKCAST && type.equals(nms("EntityHuman").internalName())) {
+            visitedCheckCast = true;
+        }
         if(!visitedNew && opcode == NEW && type.equals(nms("ItemStack").internalName())) { // Target new ItemStack() invocation
             visitedNew = true;
             appendStackedSoupFix();

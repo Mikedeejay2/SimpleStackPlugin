@@ -14,7 +14,7 @@
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <minecraft.version>1.19.2</minecraft.version>
+        <minecraft.version>1.19.3</minecraft.version>
     </properties>
 
     <build>

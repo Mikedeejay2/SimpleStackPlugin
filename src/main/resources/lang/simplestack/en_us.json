@@ -57,6 +57,7 @@
   "simplestack.crash.info_message_l2": "Please copy the above crash report and submit a new issue to %url%",
   "simplestack.crash.info_message_l3": "Alternatively, the crash report file can be found at %path%",
   "simplestack.errors.incompatible_version": "Simple Stack %ssver% is not compatible with Minecraft version %mcver%.",
+  "simplestack.info.load_version": "Loading mappings for Minecraft version %mcver%...",
   "simplestack.info.install_transformer": "Installing Simple Stack transformer, this may take a moment...",
   "simplestack.info.apply_transformations": "Applying transformations, this may take a moment...",
   "simplestack.info.finish_init": "Finished initialization.",

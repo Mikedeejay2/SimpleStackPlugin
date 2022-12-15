@@ -120,10 +120,16 @@ public final class SimpleStack extends BukkitPlugin {
      * @return Whether the plugin has been disabled.
      */
     private boolean checkVersion() {
+        sendInfo(Text.of("simplestack.info.load_version").placeholder(
+            PlaceholderFormatter.of("mcver", MinecraftVersion.getVersionString())));
         if(!MappingsLookup.loadMappings(this)) {
             sendSevere(Text.of("&c").concat("simplestack.errors.incompatible_version").placeholder(
                 PlaceholderFormatter.of("ssver", this.getDescription().getVersion())
                     .and("mcver", MinecraftVersion.getVersionString())));
+            disablePlugin(this);
+            return true;
+        }
+        if(!MappingsLookup.validateMappings(this)) {
             disablePlugin(this);
             return true;
         }

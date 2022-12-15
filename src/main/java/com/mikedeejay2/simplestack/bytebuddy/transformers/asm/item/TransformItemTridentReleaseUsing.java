@@ -12,7 +12,7 @@ import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19", "1.19.1", "1.19.2"})
+@Transformer({"1.19", "1.19.1", "1.19.2", "1.19.3"})
 public class TransformItemTridentReleaseUsing extends MappedMethodVisitor {
     private boolean visitedNew = false;
 
@@ -31,7 +31,7 @@ public class TransformItemTridentReleaseUsing extends MappedMethodVisitor {
 
     @Override
     public void visitTypeInsn(int opcode, String type) {
-        if(!visitedNew) {
+        if(!visitedNew && type.equals(nms("EntityThrownTrident").internalName())) {
             visitedNew = true;
             fixTridentThrow();
         }
