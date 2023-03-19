@@ -28,4 +28,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: SimpleStack-Artifacts-${{ github.run_number }}
-          path: ${{ github.workspace }}/target/*.jar
+          path: ${{ github.workspace }}/target/SimpleStack-*.jar
