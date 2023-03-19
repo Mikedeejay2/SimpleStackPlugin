@@ -1,0 +1,8 @@
+{
+  "Object": {
+    "class_name": "java.lang.Object",
+    "methods": {
+      "equals": "equals(LObject;)Z"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "using_base": "base",
+  "List": {
+    "class_name": "java.util.ArrayList",
+    "methods": {
+      "size": "size()I",
+      "contains": "contains(LObject;)Z",
+      "addAll": "addAll(ILjava/util/Collection;)Z",
+      "get": "get(I)LObject;"
+    },
+    "fields": {
+      "DEFAULT_CAPACITY": "DEFAULT_CAPACITY:I",
+      "elementData": "elementData:[LObject;"
+    }
+  }
+}

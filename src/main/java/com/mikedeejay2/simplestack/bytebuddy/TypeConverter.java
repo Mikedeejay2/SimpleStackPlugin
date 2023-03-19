@@ -81,8 +81,8 @@ public final class TypeConverter {
             case '[': {
                 int i = 0;
                 while(typeStr.charAt(i) == '[') {
+                    Validate.isTrue(i != typeStr.length() - 1, "Array type as last character: \"%s\"", typeStr);
                     ++i;
-                    Validate.isTrue(i == typeStr.length() - 1, "Array type as last character: \"%s\"", typeStr);
                 }
                 final Class<?> clazz = convertType(typeStr.substring(i));
                 return Array.newInstance(clazz, new int[i]).getClass();

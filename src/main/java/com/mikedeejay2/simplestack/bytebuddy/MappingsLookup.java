@@ -30,7 +30,7 @@ public class MappingsLookup {
             CrashReport crashReport = new CrashReport(plugin, "Exception while generating NMS mappings", true, true);
             crashReport.setThrowable(throwable);
 
-            SimpleStack.getInstance().fillCrashReport(crashReport);
+            plugin.fillCrashReport(crashReport);
 
             crashReport.addInfo(SimpleStack.CRASH_INFO_1)
                 .addInfo(SimpleStack.CRASH_INFO_2)
@@ -61,7 +61,7 @@ public class MappingsLookup {
             section.addDetail("Failed Entries", getFailedEntriesStr(failedEntries));
 
 
-            SimpleStack.getInstance().fillCrashReport(crashReport);
+            plugin.fillCrashReport(crashReport);
 
             crashReport.addInfo(SimpleStack.CRASH_INFO_1)
                 .addInfo(SimpleStack.CRASH_INFO_2)
@@ -278,7 +278,7 @@ public class MappingsLookup {
         final String descriptor = mapping.descriptor();
         final Class<?> typeClass = TypeConverter.convertType(descriptor);
 
-        Field field = clazz.getField(mapping.name());
+        Field field = clazz.getDeclaredField(mapping.name());
         if(!field.getType().equals(typeClass)) {
             throw new NoSuchFieldException(String.format(
                 "Mismatch type for field \"%s\", expected type \"%s\", actual type \"%s\"",
