@@ -6,8 +6,8 @@
 ![GitHub tag](https://img.shields.io/github/tag/Mikedeejay2/SimpleStackPlugin)
 ![GitHub license](https://img.shields.io/github/license/Mikedeejay2/SimpleStackPlugin)
 
-Development branch for Simple Stack v2.0. For compilable builds, please visit the
-[master/stable](https://github.com/Mikedeejay2/SimpleStackPlugin/tree/master/stable) branch.
+Development branch for Simple Stack v2.0. For latest development builds, visit the 
+[GitHub Actions](https://github.com/Mikedeejay2/SimpleStackPlugin/actions) for this project.
 
 Simple Stack is a plugin designed to make all items stack to 64. No permissions are required to make Simple Stack work,
 just install the plugin to your server and run!
