@@ -11,36 +11,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fix duplication bug when spam clicking items around in the inventory (#84)
+- Fix duplication bug when spam clicking items around in the inventory ([#84])
 - Fix grindstone not dropping XP on use
 - Fix villagers not leveling up or dropping XP on trade
-- Fix shulker boxes unstacking items upon an explosion (#85)
+- Fix shulker boxes unstacking items upon an explosion ([#85])
 
 ## [1.3.7] - 2021-07-31
 
 ### Fixed
 
-- Potentially fix some GUI duplication bugs (Register SimpleStack's listeners after all other listeners) (#70)
-- Shulker boxes protected by any form of world protection could still be broken (#75)
-- Curse of binding armor pieces could be taken off in survival mode (#78)
-- Ground items could spawn above the stack limit (#60)
-- Items taken out of the result slot of the grindstone disappeared (#68)
+- Potentially fix some GUI duplication bugs (Register SimpleStack's listeners after all other listeners) ([#70])
+- Shulker boxes protected by any form of world protection could still be broken ([#75])
+- Curse of binding armor pieces could be taken off in survival mode ([#78])
+- Ground items could spawn above the stack limit ([#60])
+- Items taken out of the result slot of the grindstone disappeared ([#68])
 
 ### Changed
 
-- Updated to 1.17.1+ (#82)
+- Updated to 1.17.1+ ([#82])
 
 ## [1.3.6] - 2020-12-19
 
 ### Fixed
 
-- Fix bug where shulker boxes unstacked items while in whitelist mode (#63)
+- Fix bug where shulker boxes unstacked items while in whitelist mode ([#63])
 
 ## [1.3.5] - 2020-12-12
 
 ### Fixed
 
-- Custom GUIs item dragging would create one extra item per slot (#61 & #62)
+- Custom GUIs item dragging would create one extra item per slot ([#61] & [#62])
 
 ### Changed
 
@@ -60,13 +60,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Moved the "Switch List Mode" button to the main configuration menu
-- Items in the "Item Amounts" list no longer need to also be in the "Item Types" list (#58)
+- Items in the "Item Amounts" list no longer need to also be in the "Item Types" list ([#58])
 
 ## [1.3.3] - 2020-11-25
 
 ### Fixed
 
-- Shulker boxes could be stored in shulker boxes (#56)
+- Shulker boxes could be stored in shulker boxes ([#56])
 
 ### Changed
 
@@ -78,7 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - The config.yml file was not generating example entries on startup
-- When consuming soup or stew, the entire stack would be consumed and replaced by a single bowl (#55)
+- When consuming soup or stew, the entire stack would be consumed and replaced by a single bowl ([#55])
 
 ### Changed
 
@@ -93,32 +93,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Ground item stacking wasn't stacking unstackable items most of the time (#53)
+- Ground item stacking wasn't stacking unstackable items most of the time ([#53])
 
 ## [1.3.0] - 2020-11-22
 
 ### Added
 
-- Allow items to be properly stacked together when on the ground (#34)
-- Allow "unique items" (Items where all data needs to match) to be specified in a list in the config to allow for a specific item to have a custom stack size (#12)
-- Allow a new default max item value to be set in config (#35)
+- Allow items to be properly stacked together when on the ground ([#34])
+- Allow "unique items" (Items where all data needs to match) to be specified in a list in the config to allow for a 
+  specific item to have a custom stack size ([#12])
+- Allow a new default max item value to be set in config ([#35])
 - Add a config option to disable custom hopper stacking to improve performance
-- Add a real-time configuration GUI in-game using /simplestack config (#15)
+- Add a real-time configuration GUI in-game using /simplestack config ([#15])
 - This plugin now records plugin statistics using BStats, link to Simple Stack statistics can be found 
   [here](https://bstats.org/plugin/bukkit/Simple%20Stack/9379)
 
 ### Fixed
 
-- Ground items that usually stacked to 64 but were configured to stack to less than 64 could still be stacked together on the ground up to 64 (#32)
-- When a player has a full inventory, items could be picked up into armor slots (#33)
-- Rare NullPointerException error when dragging items around in inventory (#40)
-- Shulkers (sometimes other items) could be stacked in the inventory on top of items that weren't of the same type (#41)
-- Fix bug where items stacking on the ground were not checking the config before stacking together (#42)
-- Hoppers didn't stack items in their inventory upon initial pickup (#46)
-- Rare AssertionError when unstackable items were moving through a hopper into a hopper minecart (#43)
-- Too many potions could be moved into a brewing stand through a hopper resulting in item loss (#44)
-- Entities without inventories that were picking up unstackable items would throw an error to the console (#47)
-- Items that weren't armor could be put in armor slots of a player's inventory (#49)
+- Ground items that usually stacked to 64 but were configured to stack to less than 64 could still be stacked together 
+  on the ground up to 64 ([#32])
+- When a player has a full inventory, items could be picked up into armor slots ([#33])
+- Rare NullPointerException error when dragging items around in inventory ([#40])
+- Shulkers (sometimes other items) could be stacked in the inventory on top of items that weren't of the same type 
+  ([#41])
+- Fix bug where items stacking on the ground were not checking the config before stacking together ([#42])
+- Hoppers didn't stack items in their inventory upon initial pickup ([#46])
+- Rare AssertionError when unstackable items were moving through a hopper into a hopper minecart ([#43])
+- Too many potions could be moved into a brewing stand through a hopper resulting in item loss ([#44])
+- Entities without inventories that were picking up unstackable items would throw an error to the console ([#47])
+- Items that weren't armor could be put in armor slots of a player's inventory ([#49])
 - Add a few safeguards for potential NullPointerException errors
 - Fix a few rare errors when saving the config in-game
 
@@ -298,3 +301,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.0.2]: https://github.com/Mikedeejay2/SimpleStackPlugin/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/Mikedeejay2/SimpleStackPlugin/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/Mikedeejay2/SimpleStackPlugin/releases/tag/1.0.0
+
+[#85]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/85
+[#84]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/84
+[#82]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/82
+[#78]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/78
+[#75]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/75
+[#70]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/70
+[#68]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/68
+[#63]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/63
+[#62]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/62
+[#61]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/61
+[#60]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/60
+[#58]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/58
+[#56]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/56
+[#55]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/55
+[#53]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/53
+[#49]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/49
+[#47]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/47
+[#46]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/46
+[#44]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/44
+[#43]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/43
+[#42]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/42
+[#41]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/41
+[#40]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/40
+[#35]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/35
+[#34]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/34
+[#33]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/33
+[#32]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/32
+[#15]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/15
+[#12]: https://github.com/Mikedeejay2/SimpleStackPlugin/issues/12
