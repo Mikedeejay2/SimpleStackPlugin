@@ -13,7 +13,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19", "1.19.1", "1.19.2", "1.19.3"})
+@Transformer({"1.19", "1.19.1", "1.19.2", "1.19.3", "1.18"})
 public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
     protected boolean visitedNew = false;
     protected boolean visitedFrame = false;
@@ -87,7 +87,7 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("isEmpty")); // Get whether ItemStack is empty
 
         Label ifNotDropLabel = new Label();
-        super.visitJumpInsn(IFNE, ifNotDropLabel); // If it is empty, jump to empty bowl
+        super.visitJumpInsn(IFNE, emptyBowlLabel); // If it is empty, jump to empty bowl
 
         // Get PlayerInventory
         super.visitVarInsn(ALOAD, 6); // Load EntityHuman

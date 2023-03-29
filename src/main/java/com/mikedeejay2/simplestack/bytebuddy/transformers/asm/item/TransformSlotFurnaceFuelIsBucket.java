@@ -13,7 +13,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19", "1.19.1", "1.19.2", "1.19.3"})
+@Transformer({"1.19", "1.19.1", "1.19.2", "1.19.3", "1.18"})
 public class TransformSlotFurnaceFuelIsBucket extends MappedMethodVisitor {
     @Override
     public MappingEntry getMappingEntry() {

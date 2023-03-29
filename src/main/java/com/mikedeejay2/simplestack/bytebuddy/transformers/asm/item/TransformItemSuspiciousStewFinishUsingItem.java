@@ -12,7 +12,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19", "1.19.1", "1.19.2", "1.19.3"})
+@Transformer({"1.19", "1.19.1", "1.19.2", "1.19.3", "1.18"})
 public class TransformItemSuspiciousStewFinishUsingItem extends TransformItemSoupFinishUsingItem {
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {
