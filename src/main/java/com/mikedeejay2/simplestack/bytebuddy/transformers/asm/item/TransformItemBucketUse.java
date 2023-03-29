@@ -13,7 +13,10 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({"1.19", "1.19.1", "1.19.2", "1.19.3", "1.18"})
+@Transformer({
+    "1.19", "1.19.1", "1.19.2", "1.19.3",
+    "1.18", "1.18.1"
+})
 public class TransformItemBucketUse extends MappedMethodVisitor {
     protected boolean visitedNew = false;
     protected final Label returnLabel = new Label();
