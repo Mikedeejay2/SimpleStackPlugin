@@ -1,0 +1,32 @@
+{
+  "using_base": "1.18.1",
+  "CraftItemStack": "org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack",
+  "CraftInventory": "org.bukkit.craftbukkit.v1_18_R2.inventory.CraftInventory",
+  "ItemStack": {
+    "methods": {
+      "getMaxStackSize": "e()I",
+      "copy": "n()LItemStack;",
+      "getCount": "J()I",
+      "isDamaged": "h()Z",
+      "isStackable": "f()Z"
+    },
+    "fields": {
+      "EMPTY": "b:LItemStack;"
+    }
+  },
+  "Container": {
+    "methods": {
+      "getSlot": "b(I)LSlot;"
+    }
+  },
+  "Item": {
+    "methods": {
+      "getMaxStackSize": "m()I"
+    }
+  },
+  "EntityHuman": {
+    "methods": {
+      "getInventory": "fr()LPlayerInventory;"
+    }
+  }
+}

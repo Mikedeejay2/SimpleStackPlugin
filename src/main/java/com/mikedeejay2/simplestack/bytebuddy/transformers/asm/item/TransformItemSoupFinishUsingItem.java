@@ -1,6 +1,5 @@
 package com.mikedeejay2.simplestack.bytebuddy.transformers.asm.item;
 
-import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.bytebuddy.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytebuddy.Transformer;
 import org.objectweb.asm.Label;
@@ -15,7 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
  */
 @Transformer({
     "1.19", "1.19.1", "1.19.2", "1.19.3",
-    "1.18", "1.18.1"
+    "1.18", "1.18.1", "1.18.2"
 })
 public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
     protected boolean visitedNew = false;

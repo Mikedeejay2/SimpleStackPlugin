@@ -15,7 +15,7 @@ import static com.mikedeejay2.simplestack.bytebuddy.MappingsLookup.*;
  */
 @Transformer({
     "1.19", "1.19.1", "1.19.2", "1.19.3",
-    "1.18", "1.18.1"
+    "1.18", "1.18.1", "1.18.2"
 })
 public class TransformContainerMoveItemStackTo extends MappedMethodVisitor {
     private boolean visitedGetMaxStackSize = false;
