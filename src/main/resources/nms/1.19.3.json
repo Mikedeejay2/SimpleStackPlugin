@@ -20,7 +20,6 @@
     }
   },
   "Items": {
-    "class_name": "net.minecraft.world.item.Items",
     "fields": {
       "BUCKET": "pj:LItem;",
       "BOWL": "od:LItem;",
