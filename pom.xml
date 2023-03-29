@@ -111,7 +111,31 @@
                 <configuration>
                     <finalName>${project.name}-${project.version}</finalName>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>api</id>
+                        <goals><goal>jar</goal></goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <classifier>API</classifier>
+                            <includes>
+                                <include>com/mikedeejay2/simplestack/api/**</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-jar-plugin</artifactId>-->
+<!--                <version>${maven-jar-plugin.version}</version>-->
+<!--                <configuration>-->
+<!--                    <includes>-->
+<!--                        <include>com/mikedeejay2/simplestack/api/**</include>-->
+<!--                    </includes>-->
+<!--                    <finalName>${project.name}-API-${project.version}</finalName>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
         </plugins>
         <resources>
             <resource>
