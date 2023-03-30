@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.bytecode.transformers.advice;
+package com.mikedeejay2.simplestack.bytecode;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -19,7 +19,7 @@ public final class NmsConverters {
     private static final Field FIELD_SLOT_CONTAINER;
     private static final Constructor<?> CONSTRUCTOR_CRAFT_INVENTORY;
 
-    // Get all NMS classes and methods using NMSMappings
+    // Get all NMS classes and methods using MappingsLookup
     static {
         try {
             final Class<?> itemStackClass = nms("ItemStack").toClass();
