@@ -69,7 +69,7 @@ public final class SimpleStack extends BukkitPlugin {
         registerEvent(new ConfigListener(config));
         setupApi();
 
-        if(checkVersion() || installByteBuddyAgent() || installAndTransform()) return;
+        if(loadMappings() || installByteBuddyAgent() || installAndTransform()) return;
 
         this.bStats = new BStats(this);
         this.bStats.init(9379);
@@ -92,9 +92,17 @@ public final class SimpleStack extends BukkitPlugin {
         apiClass.field("initialized").set(null, true);
     }
 
-    private boolean installAndTransform() {
-        sendInfo(Text.of("simplestack.info.apply_transformations"));
-        if(SimpleStackAgent.registerTransformers() || SimpleStackAgent.install()) {
+    private boolean loadMappings() {
+        sendInfo(Text.of("simplestack.info.load_version").placeholder(
+            PlaceholderFormatter.of("mcver", MinecraftVersion.getVersionString())));
+        if(!MappingsLookup.loadMappings(this)) {
+            sendSevere(Text.of("&c").concat("simplestack.errors.incompatible_version").placeholder(
+                PlaceholderFormatter.of("ssver", this.getDescription().getVersion())
+                    .and("mcver", MinecraftVersion.getVersionString())));
+            disablePlugin(this);
+            return true;
+        }
+        if(!MappingsLookup.validateMappings(this)) {
             disablePlugin(this);
             return true;
         }
@@ -112,24 +120,9 @@ public final class SimpleStack extends BukkitPlugin {
         return false;
     }
 
-    /**
-     * Helper method to check the Minecraft version that the Minecraft server is running on.
-     * <p>
-     * If the version is not compatible, disable this plugin.
-     *
-     * @return Whether the plugin has been disabled.
-     */
-    private boolean checkVersion() {
-        sendInfo(Text.of("simplestack.info.load_version").placeholder(
-            PlaceholderFormatter.of("mcver", MinecraftVersion.getVersionString())));
-        if(!MappingsLookup.loadMappings(this)) {
-            sendSevere(Text.of("&c").concat("simplestack.errors.incompatible_version").placeholder(
-                PlaceholderFormatter.of("ssver", this.getDescription().getVersion())
-                    .and("mcver", MinecraftVersion.getVersionString())));
-            disablePlugin(this);
-            return true;
-        }
-        if(!MappingsLookup.validateMappings(this)) {
+    private boolean installAndTransform() {
+        sendInfo(Text.of("simplestack.info.apply_transformations"));
+        if(SimpleStackAgent.registerTransformers() || SimpleStackAgent.install()) {
             disablePlugin(this);
             return true;
         }
