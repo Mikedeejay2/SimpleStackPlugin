@@ -131,7 +131,7 @@ public class GUIDebugSettingsModule extends GUIAbstractRuntimeModule {
     }
 
     /**
-     * Get the <tt>GUIItem</tt> for the "about" button
+     * Get the <code>GUIItem</code> for the "about" button
      *
      * @return The about item
      */

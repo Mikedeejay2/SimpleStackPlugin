@@ -125,7 +125,7 @@ public class GUILanguageConstructor extends GUIAbstractListConstructor<GUIItem> 
 
 
     /**
-     * A <tt>GUIEvent</tt> that changes the default language of Simple Stack to a new language
+     * A <code>GUIEvent</code> that changes the default language of Simple Stack to a new language
      * from the config.
      *
      * @author Mikedeejay2

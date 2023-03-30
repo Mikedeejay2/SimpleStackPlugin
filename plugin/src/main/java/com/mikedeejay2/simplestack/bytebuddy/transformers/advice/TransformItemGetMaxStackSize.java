@@ -83,7 +83,6 @@ public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
          * <p>
          * Exit the <code>getMaxStackSize()</code> method. This method has to enter Simple Stack's ClassLoader to
          * access its classes, so reflection must be used in this method.
-         * </p>
          * <p>
          * This method injects these instructions into <code>getMaxStackSize()</code>:
          * <ol>
@@ -119,7 +118,6 @@ public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
          * All of this must occur explicitly within this method, no helper methods from the plugin can be used because
          * calling a plugin's method would be attempting to call a method that Minecraft's <code>ClassLoader</code>
          * would not be able to find, most likely causing a server crash.
-         * </p>
          *
          * @param returnValue The original return value of the method. This argument is modified at the end of this
          *                    method which Byte Buddy uses to change what the <code>getMaxStackSize()</code> method
@@ -127,7 +125,6 @@ public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
          * @param startTime   The starting nano time of the method, generated in {@link TransformItemGetMaxStackSize.ItemAdvice#onMethodEnter()},
          *                    used for debug purposes.
          * @param item        The NMS Item object that this method is operating within.
-         * @throws Throwable  Any possible errors caused during reflective calls.
          */
         @Advice.OnMethodExit
         public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime, @Advice.This Object item) {

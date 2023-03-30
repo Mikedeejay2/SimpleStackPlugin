@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * The <tt>GUIModule</tt> for the main configuration GUI screen
+ * The <code>GUIModule</code> for the main configuration GUI screen
  *
  * @author Mikedeejay2
  */
@@ -92,11 +92,11 @@ public class GUIConfigModule implements GUIModule {
     }
 
     /**
-     * Overridden <tt>onOpenHead</tt> method that generates the configuration screen
+     * Overridden <code>onOpenHead</code> method that generates the configuration screen
      * when the GUI is opened
      *
      * @param player The player that opened the GUI
-     * @param gui    The <tt>GUIContainer</tt> that the config GUI is contained in
+     * @param gui    The <code>GUIContainer</code> that the config GUI is contained in
      */
     @Override
     public void onOpenHead(Player player, GUIContainer gui) {
@@ -123,7 +123,7 @@ public class GUIConfigModule implements GUIModule {
     }
 
     /**
-     * Get the <tt>GUIItem</tt> for the "Switch List Mode" button
+     * Get the <code>GUIItem</code> for the "Switch List Mode" button
      *
      * @return The switch list mode item
      */
@@ -141,7 +141,7 @@ public class GUIConfigModule implements GUIModule {
     }
 
     /**
-     * Get the <tt>GUIItem</tt> for the close button
+     * Get the <code>GUIItem</code> for the close button
      *
      * @return The close button
      */
@@ -153,7 +153,7 @@ public class GUIConfigModule implements GUIModule {
     }
 
     /**
-     * Get the <tt>GUIItem</tt> for the item type amount list button
+     * Get the <code>GUIItem</code> for the item type amount list button
      *
      * @return The item type amount list button
      */
@@ -173,7 +173,7 @@ public class GUIConfigModule implements GUIModule {
     }
 
     /**
-     * Get the <tt>GUIItem</tt> for the language select button
+     * Get the <code>GUIItem</code> for the language select button
      *
      * @return The language button
      */
@@ -193,7 +193,7 @@ public class GUIConfigModule implements GUIModule {
     }
 
     /**
-     * Get the <tt>GUIItem</tt> for the default max amount button
+     * Get the <code>GUIItem</code> for the default max amount button
      *
      * @return The default max amount button
      */
@@ -231,7 +231,7 @@ public class GUIConfigModule implements GUIModule {
     }
 
     /**
-     * Get the <tt>GUIItem</tt> for the unique item list button
+     * Get the <code>GUIItem</code> for the unique item list button
      *
      * @return The unique item list button
      */
@@ -248,7 +248,7 @@ public class GUIConfigModule implements GUIModule {
     }
 
     /**
-     * Get the <tt>GUIItem</tt> for the item type list button
+     * Get the <code>GUIItem</code> for the item type list button
      *
      * @return The item type list button
      */
@@ -265,7 +265,7 @@ public class GUIConfigModule implements GUIModule {
     }
 
     /**
-     * Get the <tt>GUIItem</tt> for the "Stacked Armor Wearable" button
+     * Get the <code>GUIItem</code> for the "Stacked Armor Wearable" button
      *
      * @return The creative drag mode item
      */

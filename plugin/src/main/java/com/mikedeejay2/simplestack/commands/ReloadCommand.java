@@ -26,7 +26,7 @@ public class ReloadCommand implements SubCommand {
      * /simplestack reload could be run to reload the config in the server and make the
      * plugin function with the modified config.
      *
-     * @param sender The <tt>CommandSender</tt> that sent the command
+     * @param sender The <code>CommandSender</code> that sent the command
      * @param args   The arguments for the command (subcommands)
      */
     @Override

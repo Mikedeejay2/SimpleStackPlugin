@@ -88,7 +88,7 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     /**
-     * Load the default max amount into the <tt>maxAmount</tt> variable for this config
+     * Load the default max amount into the <code>maxAmount</code> variable for this config
      */
     private void loadDefaultAmount() {
         maxAmount = accessor.getInt("Default Max Amount");
@@ -99,7 +99,7 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     /**
-     * Load item amounts into the <tt>itemAmounts</tt> map for this config
+     * Load item amounts into the <code>itemAmounts</code> map for this config
      */
     private void loadItemAmounts() {
         itemAmounts.clear();
@@ -123,7 +123,7 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     /**
-     * Load the list mode into the <tt>ListMode</tt> variable for this config
+     * Load the list mode into the <code>ListMode</code> variable for this config
      */
     private void loadListMode() {
         String listMode = accessor.getString("List Mode");
@@ -137,7 +137,7 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     /**
-     * Load the material list into the <tt>materialList</tt> list for this config
+     * Load the material list into the <code>materialList</code> list for this config
      */
     private void loadMaterialList() {
         List<String> matList = accessor.getStringList("Item Types");
@@ -156,7 +156,7 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     /**
-     * Load the unique items list into the <tt>uniqueItems</tt> list for this config
+     * Load the unique items list into the <code>uniqueItems</code> list for this config
      */
     private void loadItemList() {
         this.uniqueItems = new JsonFile(plugin, "unique_items.json");
@@ -186,7 +186,7 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     /**
-     * Overridden method from <tt>DataFile</tt> that loads from disk.
+     * Overridden method from <code>DataFile</code> that loads from disk.
      * This method also loads the data into the above variables for quick access.
      * This method will also attempt to update the yaml file in case it is outdated.
      *
@@ -203,7 +203,7 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     /**
-     * Overridden method from <tt>DataFile</tt> that loads from a jar file.
+     * Overridden method from <code>DataFile</code> that loads from a jar file.
      * This method also loads the data into the above variables for quick access.
      *
      * @param throwErrors Whether this method should throw errors it encounters or not
@@ -217,7 +217,7 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     /**
-     * Overridden method from <tt>DataFile</tt> that saves the current config file to the disk.
+     * Overridden method from <code>DataFile</code> that saves the current config file to the disk.
      * This method also saves the "unique_items.json" file that this config file controls.
      *
      * @param throwErrors Whether this method should throw errors it encounters or not
@@ -260,7 +260,7 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     /**
-     * Overridden method from <tt>DataFile</tt> that resets the config to its default state.
+     * Overridden method from <code>DataFile</code> that resets the config to its default state.
      *
      * @param throwErrors Whether this method should throw errors it encounters or not
      * @return Whether the reset was successful or not
@@ -272,7 +272,7 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     /**
-     * Overridden method from <tt>DataFile</tt> that attempts to update the current file with
+     * Overridden method from <code>DataFile</code> that attempts to update the current file with
      * any new values found inside of the jar. This method will also update old naming conventions
      * that might be found in the file as well.
      *
@@ -304,7 +304,7 @@ public class SimpleStackConfigImpl extends YamlFile implements SimpleStackConfig
     }
 
     /**
-     * Overridden method from <tt>DataFile</tt> that reloads the config from disk
+     * Overridden method from <code>DataFile</code> that reloads the config from disk
      * if the file hasn't been modified in game, and saves the file to disk if the
      * file has been modified in game. This prevents data loss from reloads.
      *

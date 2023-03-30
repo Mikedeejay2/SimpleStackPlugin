@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Random;
 
 /**
- * The <tt>GUIModule</tt> for the about screen in the GUI.
+ * The <code>GUIModule</code> for the about screen in the GUI.
  *
  * @author Mikedeejay2
  */
@@ -163,10 +163,10 @@ public class GUIAboutModule implements GUIModule {
     }
 
     /**
-     * Overridden method <tt>onOpenHead</tt> that generates the about screen
+     * Overridden method <code>onOpenHead</code> that generates the about screen
      *
      * @param player The player the opened the GUI
-     * @param gui    The <tt>GUIContainer</tt> that the about screen is located in
+     * @param gui    The <code>GUIContainer</code> that the about screen is located in
      */
     @Override
     public void onOpenHead(Player player, GUIContainer gui) {
@@ -186,7 +186,7 @@ public class GUIAboutModule implements GUIModule {
      * Generate the back button for the about screen
      *
      * @param player    The player that opened the GUI (For the player's locale)
-     * @param textLayer The text <tt>GUILayer</tt> that will be used
+     * @param textLayer The text <code>GUILayer</code> that will be used
      */
     private void genBackButton(Player player, GUILayer textLayer) {
         AnimatedGUIItem backItem = new AnimatedGUIItem((ItemStack) null, false, 60);
@@ -201,8 +201,8 @@ public class GUIAboutModule implements GUIModule {
     /**
      * Generate the about section with the about text and intro animation
      *
-     * @param textLayer  The text <tt>GUILayer</tt> that will be used
-     * @param aboutLayer The about <tt>GUILayer</tt> that will be used
+     * @param textLayer  The text <code>GUILayer</code> that will be used
+     * @param aboutLayer The about <code>GUILayer</code> that will be used
      * @param player     The player that opened the GUI (For the player's locale)
      */
     private void genAbout(GUILayer textLayer, GUILayer aboutLayer, Player player) {
@@ -240,7 +240,7 @@ public class GUIAboutModule implements GUIModule {
     /**
      * Generate the Simple Stack title text and animation
      *
-     * @param textLayer The text <tt>GUILayer</tt> that will be used
+     * @param textLayer The text <code>GUILayer</code> that will be used
      */
     private void genText(GUILayer textLayer) {
         AnimatedGUIItem item1 = new AnimatedGUIItem((ItemStack) null, false, 10);
@@ -349,7 +349,7 @@ public class GUIAboutModule implements GUIModule {
     /**
      * Generate the background flying block animation
      *
-     * @param flyLayer The fly <tt>GUILayer</tt> that will be used
+     * @param flyLayer The fly <code>GUILayer</code> that will be used
      */
     private void genFly(GUILayer flyLayer) {
         for(int col = 1; col <= 9; ++col) {
@@ -362,7 +362,7 @@ public class GUIAboutModule implements GUIModule {
      * Generate the background of the about screen. This includes
      * the cool transition from nothing to purple.
      *
-     * @param base The base <tt>GUILayer</tt> that will be used
+     * @param base The base <code>GUILayer</code> that will be used
      */
     private void genBackground(GUILayer base) {
         AnimatedGUIItem item1 = getBackgroundItem(2);
@@ -396,7 +396,7 @@ public class GUIAboutModule implements GUIModule {
     }
 
     /**
-     * Get the background <tt>AnimatedGUIItem</tt> of the background with the transition
+     * Get the background <code>AnimatedGUIItem</code> of the background with the transition
      * animation
      *
      * @param delay The delay of the animation
