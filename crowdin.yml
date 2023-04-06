@@ -1,0 +1,3 @@
+files:
+  - source: /plugin/src/main/resources/lang/simplestack/en_us.json
+    translation: /plugin/src/main/resources/lang/simplestack/%locale_with_underscore%.json
