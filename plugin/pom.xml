@@ -68,19 +68,19 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.mikedeejay2.mikedeejay2lib</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.internal.mikedeejay2lib</shadedPattern>
+                                    <shadedPattern>${parent.groupId}.${parent.artifactId}.internal.mikedeejay2lib</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.bstats</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.internal.bstats</shadedPattern>
+                                    <shadedPattern>${parent.groupId}.${parent.artifactId}.internal.bstats</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>net.bytebuddy</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.internal.bytebuddy</shadedPattern>
+                                    <shadedPattern>${parent.groupId}.${parent.artifactId}.internal.bytebuddy</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.objectweb.asm</pattern>
-                                    <shadedPattern>${project.groupId}.${project.artifactId}.internal.asm</shadedPattern>
+                                    <shadedPattern>${parent.groupId}.${parent.artifactId}.internal.asm</shadedPattern>
                                 </relocation>
                             </relocations>
                             <minimizeJar>true</minimizeJar>
