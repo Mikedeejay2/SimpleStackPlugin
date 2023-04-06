@@ -2,6 +2,7 @@ package com.mikedeejay2.simplestack.bytecode.transformers.advice;
 
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.event.SlotMaxAmountEvent;
+import com.mikedeejay2.simplestack.bytecode.AdviceBridge;
 import com.mikedeejay2.simplestack.bytecode.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytecode.NmsConverters;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
@@ -11,9 +12,6 @@ import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
-
-import java.lang.reflect.Method;
 
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.MappingEntry;
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
@@ -64,11 +62,11 @@ public class TransformSlotISGetMaxStackSize implements MethodVisitorInfo {
             @Advice.This Object nmsSlot,
             @Advice.Argument(0) Object nmsItemStack) {
             try {
-                Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
-                ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
-                Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice.TransformSlotISGetMaxStackSize", false, pluginClassLoader);
-                Method maxStackSizeMethod = interceptClass.getMethod("getSlotMaxStackSize", int.class, long.class, Object.class, Object.class);
-                returnValue = (int) maxStackSizeMethod.invoke(null, returnValue, startTime, nmsSlot, nmsItemStack);
+//                Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
+//                ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
+//                Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice.TransformSlotISGetMaxStackSize", false, pluginClassLoader);
+//                Method maxStackSizeMethod = interceptClass.getMethod("getSlotMaxStackSize", int.class, long.class, Object.class, Object.class);
+                returnValue = (int) AdviceBridge.getSlotISMaxStackSize.invoke(null, returnValue, startTime, nmsSlot, nmsItemStack);
             } catch(Throwable throwable) {
                 Bukkit.getLogger().severe("Simple Stack encountered an exception while processing a slot");
                 throwable.printStackTrace();

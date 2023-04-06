@@ -7,6 +7,7 @@ import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.MutablePair;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.Pair;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.SimpleStack;
+import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.asm.AsmVisitorWrapper;
@@ -15,7 +16,9 @@ import net.bytebuddy.description.field.FieldList;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.dynamic.ClassFileLocator;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
 import net.bytebuddy.implementation.Implementation;
 import org.bukkit.Bukkit;
 import org.objectweb.asm.ClassVisitor;
@@ -85,6 +88,10 @@ public final class SimpleStackAgent {
         final ElementMatcher.Junction<? super TypeDescription> typeMatcher = generateTypeMatcher();
         if(typeMatcher == null) return true;
 
+        // Move AdviceBridge to Minecraft's ClassLoader so advice can access specific SimpleStack methods
+        if(injectAdviceBridge()) return true;
+
+        // Install transformer
         transformer = new AgentBuilder.Default()
             .disableClassFormatChanges()
             .ignore(not(nameStartsWith("net.minecraft").or(nameStartsWith("org.bukkit"))))
@@ -96,6 +103,23 @@ public final class SimpleStackAgent {
             .installOn(ByteBuddyHolder.getInstrumentation()); // Inject
 
         return crashed.get() || detectNotVisited();
+    }
+
+    private static boolean injectAdviceBridge() {
+        try {
+            final ClassLoader classLoader = Bukkit.class.getClassLoader();
+            // Takes AdviceBridge from the plugin's ClassLoader and loads it into Minecraft's ClassLoader
+            Class<?> adviceBridgeClass = new ByteBuddy()
+                .redefine(AdviceBridge.class, ClassFileLocator.ForClassLoader.of(SimpleStack.getInstance().classLoader()))
+                .make()
+                .load(classLoader, ClassReloadingStrategy.fromInstalledAgent())
+                .getLoaded();
+            classLoader.loadClass(adviceBridgeClass.getName());
+        } catch(Exception e) {
+            e.printStackTrace();
+            return true;
+        }
+        return false;
     }
 
     private static ElementMatcher.Junction<? super TypeDescription> generateTypeMatcher() {
