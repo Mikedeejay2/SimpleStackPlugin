@@ -12,41 +12,46 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 public final class SimpleStackTimingsImpl implements SimpleStackTimings {
+    private final TimingsCollector noOpCollector;
+    private final TimingsCollector activeCollector;
     private final SimpleStack plugin;
 
-    private boolean shouldCollect;
+    private boolean isCollecting;
+    private TimingsCollector timingsCollector;
     private EvictingQueue<TimingEntry> detailedTimings;
     private EvictingQueue<Long> tickTimings;
     private DebugRunnable runnable;
 
     public SimpleStackTimingsImpl(SimpleStack plugin) {
         this.plugin = plugin;
-        this.shouldCollect = false;
+        this.isCollecting = false;
+        this.noOpCollector = new NoOpTimingsCollector();
+        this.activeCollector = new ActiveTimingsCollector(this);
+        this.timingsCollector = noOpCollector;
         this.runnable = null;
         this.detailedTimings = null;
     }
 
     public void collect(long startTime, String name, boolean countTimings) {
-        if(!shouldCollect) return;
-        long endTime = System.nanoTime();
-        long msTime = System.currentTimeMillis();
-        long nanoTime = endTime - startTime;
-        if(countTimings) this.runnable.collect(nanoTime);
-        this.detailedTimings.add(new TimingEntryImpl(name, nanoTime, msTime));
+        this.timingsCollector.collect(startTime, name, countTimings);
     }
 
     @Override
     public void startCollecting() {
+        if(this.isCollecting) return;
         this.detailedTimings = EvictingQueue.create(500);
         this.tickTimings = EvictingQueue.create(18000); // 15 minutes
         this.runnable = new DebugRunnable(this);
         this.runnable.runTaskTimer(plugin);
-        this.shouldCollect = true;
+        this.isCollecting = true;
+        this.timingsCollector = activeCollector;
     }
 
     @Override
     public void stopCollecting() {
-        this.shouldCollect = false;
+        if(!this.isCollecting) return;
+        this.isCollecting = false;
+        this.timingsCollector = noOpCollector;
         this.detailedTimings.clear();
         this.tickTimings.clear();
         this.runnable.cancel();
@@ -57,7 +62,7 @@ public final class SimpleStackTimingsImpl implements SimpleStackTimings {
 
     @Override
     public boolean isCollecting() {
-        return shouldCollect;
+        return isCollecting;
     }
 
     @Override
@@ -191,5 +196,31 @@ public final class SimpleStackTimingsImpl implements SimpleStackTimings {
             system.tickTimings.add(currentTick);
             currentTick = 0;
         }
+    }
+
+    private interface TimingsCollector {
+        void collect(long startTime, String name, boolean countTimings);
+    }
+
+    private static final class ActiveTimingsCollector implements TimingsCollector {
+        private final SimpleStackTimingsImpl system;
+
+        public ActiveTimingsCollector(SimpleStackTimingsImpl system) {
+            this.system = system;
+        }
+
+        @Override
+        public void collect(long startTime, String name, boolean countTimings) {
+            long endTime = System.nanoTime();
+            long msTime = endTime / 1000000;
+            long nanoTime = endTime - startTime;
+            if(countTimings) system.runnable.collect(nanoTime);
+            system.detailedTimings.add(new TimingEntryImpl(name, nanoTime, msTime));
+        }
+    }
+
+    private static final class NoOpTimingsCollector implements TimingsCollector {
+        @Override
+        public void collect(long startTime, String name, boolean countTimings) {}
     }
 }
