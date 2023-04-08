@@ -3,8 +3,21 @@ package com.mikedeejay2.simplestack.api.event;
 import com.google.common.base.Preconditions;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Simple Stack event. Called whenever the <code>getMaxStackSize()</code> method is called on an <code>ItemStack</code>.
+ * <p>
+ * Similar to {@link MaterialMaxAmountEvent} but with an {@link ItemStack} instead of a {@link Material}.
+ * This event takes precedence over {@link MaterialMaxAmountEvent} since it is called after the material event has been
+ * called.
+ * <p>
+ * {@link ItemStack#getMaxStackSize()}, along with the NMS counterpart, will call this event.
+ *
+ * @author Mikedeejay2
+ * @since 2.0.0
+ */
 public class ItemStackMaxAmountEvent extends SimpleStackEvent {
     private static final HandlerList handlers = new HandlerList();
 

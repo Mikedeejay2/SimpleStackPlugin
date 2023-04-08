@@ -19,7 +19,7 @@ import com.mikedeejay2.simplestack.config.ConfigListener;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
 
 /**
- * Simple Stack v2.0 plugin for Minecraft TBD - 1.19
+ * Simple Stack v2
  * <p>
  * The source code for Simple Stack can be found here:
  * <a href="https://github.com/Mikedeejay2/SimpleStackPlugin">https://github.com/Mikedeejay2/SimpleStackPlugin</a>

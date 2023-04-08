@@ -7,6 +7,13 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Simple Stack event. Called when an <code>ItemStack</code> is placed into a slot of an inventory. Can be used to
+ * change the stack size of a specific slot of an inventory.
+ *
+ * @author Mikedeejay2
+ * @since 2.0.0
+ */
 public class SlotMaxAmountEvent extends SimpleStackEvent {
     private static final HandlerList handlers = new HandlerList();
 

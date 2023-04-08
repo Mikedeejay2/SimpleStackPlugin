@@ -5,6 +5,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * Simple Stack's timings information. Can be used to analyze Simple Stack's performance and toggle whether timings are
+ * actively being collected.
+ *
+ * @author Mikedeejay2
+ * @since 2.0.0
+ */
 public interface SimpleStackTimings {
     void startCollecting();
     void stopCollecting();
