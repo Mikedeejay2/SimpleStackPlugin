@@ -62,10 +62,6 @@ public class TransformSlotISGetMaxStackSize implements MethodVisitorInfo {
             @Advice.This Object nmsSlot,
             @Advice.Argument(0) Object nmsItemStack) {
             try {
-//                Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
-//                ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
-//                Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice.TransformSlotISGetMaxStackSize", false, pluginClassLoader);
-//                Method maxStackSizeMethod = interceptClass.getMethod("getSlotMaxStackSize", int.class, long.class, Object.class, Object.class);
                 returnValue = (int) AdviceBridge.getSlotISMaxStackSize.invoke(null, returnValue, startTime, nmsSlot, nmsItemStack);
             } catch(Throwable throwable) {
                 Bukkit.getLogger().severe("Simple Stack encountered an exception while processing a slot");

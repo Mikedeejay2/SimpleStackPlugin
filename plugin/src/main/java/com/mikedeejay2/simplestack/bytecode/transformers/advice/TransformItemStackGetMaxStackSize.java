@@ -49,8 +49,6 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
         final ItemStack itemStack = NmsConverters.itemStackToItemStack(nmsItemStack);
         final ItemStackMaxAmountEvent event = new ItemStackMaxAmountEvent(itemStack, currentReturnValue);
         Bukkit.getPluginManager().callEvent(event);
-//        int maxStackSize = SimpleStack.getInstance().config().getAmount(itemStack);
-//        if(maxStackSize == -1) maxStackSize = currentReturnValue;
         TIMINGS.collect(startTime, "ItemStack size redirect", true);
         return event.getAmount();
     }
@@ -75,12 +73,11 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
          * @see TransformItemGetMaxStackSize.ItemAdvice#onMethodExit(int, long, Object)
          */
         @Advice.OnMethodExit
-        public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime, @Advice.This Object itemStack) {
+        public static void onMethodExit(
+            @Advice.Return(readOnly = false) int returnValue,
+            @Advice.Enter long startTime,
+            @Advice.This Object itemStack) {
             try {
-//                Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
-//                ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
-//                Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice.TransformItemStackGetMaxStackSize", false, pluginClassLoader);
-//                Method maxStackSizeMethod = interceptClass.getMethod("getItemStackMaxStackSize", int.class, long.class, Object.class);
                 returnValue = (int) AdviceBridge.getItemStackMaxStackSize.invoke(null, returnValue, startTime, itemStack);
             } catch(Throwable throwable) {
                 Bukkit.getLogger().severe("Simple Stack encountered an exception while processing an ItemStack");

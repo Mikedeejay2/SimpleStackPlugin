@@ -3,13 +3,11 @@ package com.mikedeejay2.simplestack.bytecode.transformers.advice;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.event.MaterialMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytecode.*;
-import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.plugin.Plugin;
 
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
 
@@ -51,8 +49,6 @@ public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
         final Material material = NmsConverters.itemToMaterial(nmsItem);
         final MaterialMaxAmountEvent event = new MaterialMaxAmountEvent(material, currentReturnValue);
         Bukkit.getPluginManager().callEvent(event);
-//        maxStackSize = SimpleStack.getInstance().config().getAmount(material);
-//        if(maxStackSize < 0) maxStackSize = currentReturnValue;
         TIMINGS.collect(startTime, "Item size redirect", false);
         return event.getAmount();
     }
@@ -75,60 +71,12 @@ public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
             return System.nanoTime();
         }
 
-        /**
-         * <p>
-         * Exit the <code>getMaxStackSize()</code> method. This method has to enter Simple Stack's ClassLoader to
-         * access its classes, so reflection must be used in this method.
-         * <p>
-         * This method injects these instructions into <code>getMaxStackSize()</code>:
-         * <ol>
-         *     <li>
-         *         Get the SimpleStack plugin from Bukkit's {@link org.bukkit.plugin.PluginManager#getPlugin(String)}.
-         *         The Bukkit API is loaded on the same ClassLoader as Minecraft itself, so no worries in getting any
-         *         of these classes. This {@link Plugin} object will be {@link SimpleStack} but it can't be casted to it
-         *         because the <code>ClassLoader</code> that this code is operating in will not know where to find any
-         *         SimpleStack classes <i>(Plugins are jar files and therefore require that they are loaded through
-         *         their own <code>PluginClassLoader</code>; all of this happens in
-         *         {@link org.bukkit.plugin.java.JavaPluginLoader})</i>.
-         *     </li>
-         *     <li>
-         *         Get the {@link ClassLoader} of SimpleStack. This will be a <code>PluginClassLoader</code> and it's
-         *         needed to locate and use any of the plugin's classes.
-         *     </li>
-         *     <li>
-         *         Get the {@link TransformItemGetMaxStackSize} class using the obtained {@link ClassLoader}. This class is
-         *         needed to get the redirect methods.
-         *     </li>
-         *     <li>
-         *         Get the method {@link TransformItemGetMaxStackSize#getItemMaxStackSize(int, long, Object)}. This method
-         *         will be run in the plugin's <code>ClassLoader</code> which means that it has access to any plugin
-         *         method.
-         *     </li>
-         *     <li>
-         *         Invoke the retrieved method and set the returnValue parameter to its return value. The returnValue
-         *         parameter is used by Byte Buddy to change what is actually returned by the
-         *         <code>getMaxStackSize()</code> method. The invoked method will get what Simple Stack says the max
-         *         stack size should be.
-         *     </li>
-         * </ol>
-         * All of this must occur explicitly within this method, no helper methods from the plugin can be used because
-         * calling a plugin's method would be attempting to call a method that Minecraft's <code>ClassLoader</code>
-         * would not be able to find, most likely causing a server crash.
-         *
-         * @param returnValue The original return value of the method. This argument is modified at the end of this
-         *                    method which Byte Buddy uses to change what the <code>getMaxStackSize()</code> method
-         *                    actually returns.
-         * @param startTime   The starting nano time of the method, generated in {@link TransformItemGetMaxStackSize.ItemAdvice#onMethodEnter()},
-         *                    used for debug purposes.
-         * @param item        The NMS Item object that this method is operating within.
-         */
         @Advice.OnMethodExit
-        public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime, @Advice.This Object item) {
+        public static void onMethodExit(
+            @Advice.Return(readOnly = false) int returnValue,
+            @Advice.Enter long startTime,
+            @Advice.This Object item) {
             try {
-//                Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
-//                ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
-//                Class<?> transformerClass = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice.TransformItemGetMaxStackSize", false, pluginClassLoader);
-//                Method maxStackSizeMethod = transformerClass.getMethod("getItemMaxStackSize", int.class, long.class, Object.class);
                 returnValue = (int) AdviceBridge.getItemMaxStackSize.invoke(null, returnValue, startTime, item);
             } catch(Throwable throwable) {
                 Bukkit.getLogger().severe("Simple Stack encountered an exception while processing an Item");

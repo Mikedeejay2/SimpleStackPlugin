@@ -53,12 +53,11 @@ public class TransformArmorSlotGetMaxStackSize implements MethodVisitorInfo {
         }
 
         @Advice.OnMethodExit
-        public static void onMethodExit(@Advice.Return(readOnly = false) int returnValue, @Advice.Enter long startTime, @Advice.This Object nmsSlot) {
+        public static void onMethodExit(
+            @Advice.Return(readOnly = false) int returnValue,
+            @Advice.Enter long startTime,
+            @Advice.This Object nmsSlot) {
             try {
-//                Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
-//                ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
-//                Class<?> interceptClass = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice.TransformArmorSlotGetMaxStackSize", false, pluginClassLoader);
-//                Method maxStackSizeMethod = interceptClass.getMethod("getArmorSlotMaxStackSize", int.class, long.class, Object.class);
                 returnValue = (int) AdviceBridge.getArmorSlotMaxStackSize.invoke(null, returnValue, startTime, nmsSlot);
             } catch(Throwable throwable) {
                 Bukkit.getLogger().severe("Simple Stack encountered an exception while processing an armor slot");
