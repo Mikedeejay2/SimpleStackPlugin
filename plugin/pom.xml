@@ -68,19 +68,19 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.mikedeejay2.mikedeejay2lib</pattern>
-                                    <shadedPattern>${parent.groupId}.${parent.artifactId}.internal.mikedeejay2lib</shadedPattern>
+                                    <shadedPattern>${project.parent.groupId}.${project.parent.artifactId}.internal.mikedeejay2lib</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.bstats</pattern>
-                                    <shadedPattern>${parent.groupId}.${parent.artifactId}.internal.bstats</shadedPattern>
+                                    <shadedPattern>${project.parent.groupId}.${project.parent.artifactId}.internal.bstats</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>net.bytebuddy</pattern>
-                                    <shadedPattern>${parent.groupId}.${parent.artifactId}.internal.bytebuddy</shadedPattern>
+                                    <shadedPattern>${project.parent.groupId}.${project.parent.artifactId}.internal.bytebuddy</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.objectweb.asm</pattern>
-                                    <shadedPattern>${parent.groupId}.${parent.artifactId}.internal.asm</shadedPattern>
+                                    <shadedPattern>${project.parent.groupId}.${project.parent.artifactId}.internal.asm</shadedPattern>
                                 </relocation>
                             </relocations>
                             <minimizeJar>true</minimizeJar>
@@ -136,7 +136,7 @@
         <dependency>
             <groupId>com.mikedeejay2</groupId>
             <artifactId>simplestack-api</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
