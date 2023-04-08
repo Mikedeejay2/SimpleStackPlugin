@@ -1,0 +1,14 @@
+{
+  "BukkitMaterial": {
+    "class_name": "org.bukkit.Material",
+    "methods": {
+      "getMaxStackSize": "getMaxStackSize()I"
+    }
+  },
+  "BukkitItemStack": {
+    "class_name": "org.bukkit.inventory.ItemStack",
+    "methods": {
+      "getMaxStackSize": "getMaxStackSize()I"
+    }
+  }
+}

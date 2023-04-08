@@ -1,23 +1,23 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.advice;
 
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
-import com.mikedeejay2.simplestack.api.event.SlotMaxAmountEvent;
+import com.mikedeejay2.simplestack.api.event.ItemStackMaxAmountEvent;
+import com.mikedeejay2.simplestack.api.event.MaterialMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytecode.AdviceBridge;
 import com.mikedeejay2.simplestack.bytecode.MethodVisitorInfo;
-import com.mikedeejay2.simplestack.bytecode.NmsConverters;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.MappingEntry;
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
 
 /**
- * Advice for changing specific slots of a container. (ItemStack parameterized)
+ * Advice for changing the max stack size of an {@link ItemStack}. This does not interact with NMS in any way, it is
+ * specifically for compatibility with other plugins.
  *
  * @author Mikedeejay2
  */
@@ -25,31 +25,33 @@ import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
     "1.19", "1.19.1", "1.19.2", "1.19.3",
     "1.18", "1.18.1", "1.18.2"
 })
-public class TransformSlotISGetMaxStackSize implements MethodVisitorInfo {
+public class TransformBukkitItemStackGetMaxStackSize implements MethodVisitorInfo {
     private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 
     @Override
     public AsmVisitorWrapper.ForDeclaredMethods.MethodVisitorWrapper getWrapper() {
-        return Advice.to(SlotAdvice.class);
+        return Advice.to(MaterialAdvice.class);
     }
 
     @Override
     public MappingEntry getMappingEntry() {
-        return nms("Slot").method("getMaxStackSize1");
+        return nms("BukkitItemStack").method("getMaxStackSize");
     }
 
-    public static int getSlotMaxStackSize(int currentReturnValue, long startTime, Object nmsSlot, Object nmsItemStack) {
-        if(SlotMaxAmountEvent.getHandlerList().getRegisteredListeners().length == 0) return currentReturnValue;
-        final Inventory inventory = NmsConverters.slotToInventory(nmsSlot);
-        final int slot = NmsConverters.slotToSlot(nmsSlot);
-        final ItemStack itemStack = nmsItemStack != null ? NmsConverters.itemStackToItemStack(nmsItemStack) : null;
-        final SlotMaxAmountEvent event = new SlotMaxAmountEvent(inventory, slot, currentReturnValue, itemStack);
+    public static int getBukkitItemStackMaxStackSize(int currentReturnValue, long startTime, ItemStack itemStack) {
+        final ItemStackMaxAmountEvent event = new ItemStackMaxAmountEvent(itemStack, currentReturnValue);
         Bukkit.getPluginManager().callEvent(event);
-        TIMINGS.collect(startTime, "Slot (ItemStack) redirect", true);
+        TIMINGS.collect(startTime, "Bukkit ItemStack size redirect", false);
         return event.getAmount();
     }
 
-    public static class SlotAdvice {
+    public static class MaterialAdvice {
+
+        /**
+         * Enter the <code>getMaxStackSize()</code> method. The current system nano time is returned for debug purposes.
+         *
+         * @return The start time of this method
+         */
         @Advice.OnMethodEnter
         public static long onMethodEnter() {
             return System.nanoTime();
@@ -59,12 +61,11 @@ public class TransformSlotISGetMaxStackSize implements MethodVisitorInfo {
         public static void onMethodExit(
             @Advice.Return(readOnly = false) int returnValue,
             @Advice.Enter long startTime,
-            @Advice.This Object nmsSlot,
-            @Advice.Argument(0) Object nmsItemStack) {
+            @Advice.This ItemStack itemStack) {
             try {
-                returnValue = AdviceBridge.getSlotISMaxStackSize(returnValue, startTime, nmsSlot, nmsItemStack);
+                returnValue = AdviceBridge.getBukkitItemStackMaxStackSize(returnValue, startTime, itemStack);
             } catch(Throwable throwable) {
-                Bukkit.getLogger().severe("Simple Stack encountered an exception while processing a slot");
+                Bukkit.getLogger().severe("Simple Stack encountered an exception while processing a Bukkit ItemStack");
                 throwable.printStackTrace();
             }
         }

@@ -57,7 +57,7 @@ public class TransformSlotGetMaxStackSize implements MethodVisitorInfo {
             @Advice.Enter long startTime,
             @Advice.This Object nmsSlot) {
             try {
-                returnValue = (int) AdviceBridge.getSlotMaxStackSize.invoke(null, returnValue, startTime, nmsSlot);
+                returnValue = AdviceBridge.getSlotMaxStackSize(returnValue, startTime, nmsSlot);
             } catch(Throwable throwable) {
                 Bukkit.getLogger().severe("Simple Stack encountered an exception while processing a slot");
                 throwable.printStackTrace();

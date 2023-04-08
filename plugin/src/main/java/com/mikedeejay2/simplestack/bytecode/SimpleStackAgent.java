@@ -109,14 +109,27 @@ public final class SimpleStackAgent {
         try {
             final ClassLoader classLoader = Bukkit.class.getClassLoader();
             // Takes AdviceBridge from the plugin's ClassLoader and loads it into Minecraft's ClassLoader
+            final ClassFileLocator classFileLocator = ClassFileLocator.ForClassLoader.of(SimpleStack.getInstance().classLoader());
+            final ClassReloadingStrategy adviceBridge = ClassReloadingStrategy.fromInstalledAgent(ClassReloadingStrategy.Strategy.RETRANSFORMATION);
             Class<?> adviceBridgeClass = new ByteBuddy()
-                .redefine(AdviceBridge.class, ClassFileLocator.ForClassLoader.of(SimpleStack.getInstance().classLoader()))
+                .redefine(AdviceBridge.class, classFileLocator)
                 .make()
-                .load(classLoader, ClassReloadingStrategy.fromInstalledAgent())
+                .load(classLoader, adviceBridge)
                 .getLoaded();
             classLoader.loadClass(adviceBridgeClass.getName());
-        } catch(Exception e) {
-            e.printStackTrace();
+            Reflector.of(adviceBridgeClass).method("initialize").invoke(null);
+        } catch(Throwable throwable) {
+            final CrashReport crashReport = new CrashReport(SimpleStack.getInstance(), "Exception while injecting Advice bridge", true, true);
+            crashReport.setThrowable(throwable);
+
+            SimpleStack.getInstance().fillCrashReport(crashReport);
+
+            crashReport.addInfo(SimpleStack.CRASH_INFO_1)
+                .addInfo(SimpleStack.CRASH_INFO_2)
+                .addInfo(SimpleStack.CRASH_INFO_3);
+
+            crashReport.execute();
+            SimpleStack.getInstance().disablePlugin(SimpleStack.getInstance());
             return true;
         }
         return false;

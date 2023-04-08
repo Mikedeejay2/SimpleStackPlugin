@@ -58,7 +58,7 @@ public class TransformArmorSlotGetMaxStackSize implements MethodVisitorInfo {
             @Advice.Enter long startTime,
             @Advice.This Object nmsSlot) {
             try {
-                returnValue = (int) AdviceBridge.getArmorSlotMaxStackSize.invoke(null, returnValue, startTime, nmsSlot);
+                returnValue = AdviceBridge.getArmorSlotMaxStackSize(returnValue, startTime, nmsSlot);
             } catch(Throwable throwable) {
                 Bukkit.getLogger().severe("Simple Stack encountered an exception while processing an armor slot");
                 throwable.printStackTrace();

@@ -78,7 +78,7 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
             @Advice.Enter long startTime,
             @Advice.This Object itemStack) {
             try {
-                returnValue = (int) AdviceBridge.getItemStackMaxStackSize.invoke(null, returnValue, startTime, itemStack);
+                returnValue = AdviceBridge.getItemStackMaxStackSize(returnValue, startTime, itemStack);
             } catch(Throwable throwable) {
                 Bukkit.getLogger().severe("Simple Stack encountered an exception while processing an ItemStack");
                 throwable.printStackTrace();

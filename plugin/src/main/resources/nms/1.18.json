@@ -1,4 +1,5 @@
 {
+  "using_base": "bukkit",
   "Item": {
     "class_name": "net.minecraft.world.item.Item",
     "methods": {
