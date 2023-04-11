@@ -1,7 +1,6 @@
 package com.mikedeejay2.simplestack.bytecode;
 
 import com.mikedeejay2.mikedeejay2lib.reflect.*;
-import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReport;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReportSection;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.MutablePair;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.Pair;
@@ -62,17 +61,7 @@ public final class SimpleStackAgent {
                 .forEach(SimpleStackAgent::addVisitor); // Add the new visitor
             return false;
         } catch(Throwable throwable) {
-            final CrashReport crashReport = new CrashReport(SimpleStack.getInstance(), "Exception while collecting transformers", true, true);
-            crashReport.setThrowable(throwable);
-
-            SimpleStack.getInstance().fillCrashReport(crashReport);
-
-            crashReport.addInfo(SimpleStack.CRASH_INFO_1)
-                .addInfo(SimpleStack.CRASH_INFO_2)
-                .addInfo(SimpleStack.CRASH_INFO_3);
-
-            crashReport.execute();
-            SimpleStack.getInstance().disablePlugin(SimpleStack.getInstance());
+            SimpleStack.doCrash("Exception while collecting transformers", throwable, c -> {});
             return true;
         }
     }
@@ -119,17 +108,7 @@ public final class SimpleStackAgent {
             classLoader.loadClass(adviceBridgeClass.getName());
             Reflector.of(adviceBridgeClass).method("initialize").invoke(null);
         } catch(Throwable throwable) {
-            final CrashReport crashReport = new CrashReport(SimpleStack.getInstance(), "Exception while injecting Advice bridge", true, true);
-            crashReport.setThrowable(throwable);
-
-            SimpleStack.getInstance().fillCrashReport(crashReport);
-
-            crashReport.addInfo(SimpleStack.CRASH_INFO_1)
-                .addInfo(SimpleStack.CRASH_INFO_2)
-                .addInfo(SimpleStack.CRASH_INFO_3);
-
-            crashReport.execute();
-            SimpleStack.getInstance().disablePlugin(SimpleStack.getInstance());
+            SimpleStack.doCrash("Exception while injecting Advice bridge", throwable, c -> {});
             return true;
         }
         return false;
@@ -142,20 +121,10 @@ public final class SimpleStackAgent {
             try { // Load the class, this fixes some classes not being loaded during scans
                 classLoader.loadClass(className);
             } catch(ClassNotFoundException e) {
-                CrashReport crashReport = new CrashReport(
-                    SimpleStack.getInstance(), "Exception while loading class during type matcher creation",
-                    true, true);
-                crashReport.setThrowable(e);
-
-                CrashReportSection section = crashReport.addSection("Class Details");
-                section.addDetail("Class Name", className);
-                SimpleStack.getInstance().fillCrashReport(crashReport);
-
-                crashReport.addInfo(SimpleStack.CRASH_INFO_1)
-                    .addInfo(SimpleStack.CRASH_INFO_2)
-                    .addInfo(SimpleStack.CRASH_INFO_3);
-
-                crashReport.execute();
+                SimpleStack.doCrash("Exception while loading class during type matcher creation", e, crashReport -> {
+                    CrashReportSection section = crashReport.addSection("Class Details");
+                    section.addDetail("Class Name", className);
+                });
                 return null;
             }
             typeMatcher = typeMatcher.or(named(className));
@@ -178,20 +147,10 @@ public final class SimpleStackAgent {
         }
 
         if(notVisited.isEmpty()) return false;
-        final CrashReport crashReport = new CrashReport(
-            SimpleStack.getInstance(), "Registered transformer not visited after transformations",
-            true, true);
-
-        CrashReportSection section = crashReport.addSection("Unvisited Transformers");
-        section.addDetail("Transformers", getTransformersString(notVisited));
-
-        SimpleStack.getInstance().fillCrashReport(crashReport);
-
-        crashReport.addInfo(SimpleStack.CRASH_INFO_1)
-            .addInfo(SimpleStack.CRASH_INFO_2)
-            .addInfo(SimpleStack.CRASH_INFO_3);
-
-        crashReport.execute();
+        SimpleStack.doCrash("Registered transformer not visited after transformations", null, crashReport -> {
+            CrashReportSection section = crashReport.addSection("Unvisited Transformers");
+            section.addDetail("Transformers", getTransformersString(notVisited));
+        });
         return true;
     }
 
@@ -336,19 +295,11 @@ public final class SimpleStackAgent {
 
         @Override
         public void onError(String typeName, ClassLoader classLoader, JavaModule module, boolean loaded, Throwable throwable) {
-            CrashReport crashReport = new CrashReport(SimpleStack.getInstance(), "Exception while transforming classes", true, true);
-            crashReport.setThrowable(throwable);
-
-            CrashReportSection section = crashReport.addSection("Transform Details");
-            section.addDetail("Type Name", typeName);
-            section.addDetail("Loaded", String.valueOf(loaded));
-            SimpleStack.getInstance().fillCrashReport(crashReport);
-
-            crashReport.addInfo(SimpleStack.CRASH_INFO_1)
-                .addInfo(SimpleStack.CRASH_INFO_2)
-                .addInfo(SimpleStack.CRASH_INFO_3);
-
-            crashReport.execute();
+            SimpleStack.doCrash("Exception while transforming classes", throwable, crashReport -> {
+                CrashReportSection section = crashReport.addSection("Transform Details");
+                section.addDetail("Type Name", typeName);
+                section.addDetail("Loaded", String.valueOf(loaded));
+            });
             crashed.compareAndSet(false, true);
         }
 
@@ -363,18 +314,10 @@ public final class SimpleStackAgent {
 
         @Override
         public Throwable onError(Instrumentation instrumentation, ResettableClassFileTransformer classFileTransformer, Throwable throwable) {
-            CrashReport crashReport = new CrashReport(SimpleStack.getInstance(), "Exception while transforming classes", true, true);
-            crashReport.setThrowable(throwable);
-
-            CrashReportSection section = crashReport.addSection("Install Details");
-            section.addDetail("Class File Transformer", classFileTransformer.getClass().getCanonicalName());
-            SimpleStack.getInstance().fillCrashReport(crashReport);
-
-            crashReport.addInfo(SimpleStack.CRASH_INFO_1)
-                .addInfo(SimpleStack.CRASH_INFO_2)
-                .addInfo(SimpleStack.CRASH_INFO_3);
-
-            crashReport.execute();
+            SimpleStack.doCrash("Exception while transforming classes", throwable, crashReport -> {
+                CrashReportSection section = crashReport.addSection("Install Details");
+                section.addDetail("Class File Transformer", classFileTransformer.getClass().getCanonicalName());
+            });
             crashed.compareAndSet(false, true);
             return null;
         }

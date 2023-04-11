@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mikedeejay2.mikedeejay2lib.data.json.JsonAccessor;
 import com.mikedeejay2.mikedeejay2lib.data.json.JsonFile;
-import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReport;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReportSection;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.SimpleStack;
@@ -27,16 +26,7 @@ public class MappingsLookup {
         try {
             return doLoadMappings(plugin, MinecraftVersion.getVersionString());
         } catch(Throwable throwable) {
-            CrashReport crashReport = new CrashReport(plugin, "Exception while generating NMS mappings", true, true);
-            crashReport.setThrowable(throwable);
-
-            plugin.fillCrashReport(crashReport);
-
-            crashReport.addInfo(SimpleStack.CRASH_INFO_1)
-                .addInfo(SimpleStack.CRASH_INFO_2)
-                .addInfo(SimpleStack.CRASH_INFO_3);
-
-            crashReport.execute();
+            SimpleStack.doCrash("Exception while generating NMS mappings", throwable, c -> {});
             return false;
         }
     }
@@ -54,20 +44,11 @@ public class MappingsLookup {
         }
 
         if(!failedClasses.isEmpty() || !failedEntries.isEmpty()) {
-            CrashReport crashReport = new CrashReport(plugin, "Exception while validating NMS mappings", true, true);
-
-            CrashReportSection section = crashReport.addSection("Mapping Validation");
-            section.addDetail("Failed Classes", getFailedClassesStr(failedClasses));
-            section.addDetail("Failed Entries", getFailedEntriesStr(failedEntries));
-
-
-            plugin.fillCrashReport(crashReport);
-
-            crashReport.addInfo(SimpleStack.CRASH_INFO_1)
-                .addInfo(SimpleStack.CRASH_INFO_2)
-                .addInfo(SimpleStack.CRASH_INFO_3);
-
-            crashReport.execute();
+            SimpleStack.doCrash("Exception while validating NMS mappings", null, crashReport -> {
+                CrashReportSection section = crashReport.addSection("Mapping Validation");
+                section.addDetail("Failed Classes", getFailedClassesStr(failedClasses));
+                section.addDetail("Failed Entries", getFailedEntriesStr(failedEntries));
+            });
             return false;
         }
         return true;

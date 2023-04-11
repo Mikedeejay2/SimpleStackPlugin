@@ -18,6 +18,8 @@ import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
 import com.mikedeejay2.simplestack.config.ConfigListener;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
 
+import java.util.function.Consumer;
+
 /**
  * Simple Stack v2
  * <p>
@@ -153,5 +155,19 @@ public final class SimpleStack extends BukkitPlugin {
     public void fillCrashReport(CrashReport crashReport) {
         config.fillCrashReportSection(crashReport.addSection("Simple Stack Configuration"));
         SimpleStackAgent.fillCrashReportSection(crashReport.addSection("Simple Stack Agent"));
+    }
+
+    public static void doCrash(String description, Throwable throwable, Consumer<CrashReport> consumer) {
+        CrashReport crashReport = new CrashReport(SimpleStack.getInstance(), description, true, true);
+        crashReport.setThrowable(throwable);
+
+        consumer.accept(crashReport);
+        SimpleStack.getInstance().fillCrashReport(crashReport);
+
+        crashReport.addInfo(SimpleStack.CRASH_INFO_1)
+            .addInfo(SimpleStack.CRASH_INFO_2)
+            .addInfo(SimpleStack.CRASH_INFO_3);
+
+        crashReport.execute();
     }
 }
