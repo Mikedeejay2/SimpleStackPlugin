@@ -19,8 +19,8 @@ version 1.3.8 can still be found in the master/stable branch. These fixes are co
 versions of Simple Stack, could include bugs.
 
 ### Translating
-Translating this plugin into other languages is going to be managed on a Discord server once the 2.0
-update is finished. Alternatively, a pull request can be submitted to update a language file.
+Translations for this project will be managed on Crowdin once the 2.0 update is finished. Alternatively, a pull request
+can be submitted to update a language file.
 
 ### Downloads
 This plugin can be downloaded through any of the below links:
