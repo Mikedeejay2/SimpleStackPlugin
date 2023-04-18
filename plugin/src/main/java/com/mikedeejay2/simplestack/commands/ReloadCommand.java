@@ -32,7 +32,7 @@ public class ReloadCommand implements SubCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         SimpleStackConfigImpl config = ((SimpleStackConfigImpl) SimpleStackAPI.getConfig());
-        config.reload(true);
+        config.reload();
         plugin.sendMessage(sender, Text.of("&e&l%s&r &b%s").format(
             Text.of("simplestack.generic.success"),
             Text.of("simplestack.reload.success")));

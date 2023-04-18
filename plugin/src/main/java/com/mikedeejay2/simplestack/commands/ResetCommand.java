@@ -31,7 +31,7 @@ public class ResetCommand implements SubCommand {
      */
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        ((SimpleStackConfigImpl) SimpleStackAPI.getConfig()).resetFromJar(true);
+        ((SimpleStackConfigImpl) SimpleStackAPI.getConfig()).reset();
         plugin.sendMessage(sender, Text.of("&e&l%s&r &b%s").format(
             Text.of("simplestack.generic.success"),
             Text.of("simplestack.reset.success")));

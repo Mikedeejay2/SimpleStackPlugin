@@ -68,6 +68,7 @@ public final class SimpleStack extends BukkitPlugin {
 
         this.timings = new SimpleStackTimingsImpl(this);
         this.config = new SimpleStackConfigImpl(this);
+        this.config.load();
         registerEvent(new ConfigListener(config));
         setupApi();
 
@@ -140,7 +141,7 @@ public final class SimpleStack extends BukkitPlugin {
         super.onDisable();
 
         if(config != null && config.isModified()) {
-            config.saveToDisk(true);
+            config.save();
         }
     }
 
