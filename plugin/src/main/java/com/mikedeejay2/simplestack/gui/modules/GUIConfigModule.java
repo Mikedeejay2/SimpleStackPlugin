@@ -21,6 +21,7 @@ import com.mikedeejay2.simplestack.gui.constructors.*;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Iterator;
@@ -83,6 +84,15 @@ public class GUIConfigModule implements GUIModule {
             Text.of(""),
             Text.of("&7  ").concat("generic.enabled"),
             Text.of("&c&l⊳ ").concat("generic.disabled"));
+
+    private static final ItemFlag[] PREVIEW_ITEM_FLAGS = new ItemFlag[] {
+        ItemFlag.HIDE_POTION_EFFECTS,
+        ItemFlag.HIDE_ATTRIBUTES,
+        ItemFlag.HIDE_UNBREAKABLE,
+        ItemFlag.HIDE_ENCHANTS,
+        ItemFlag.HIDE_DESTROYS,
+        ItemFlag.HIDE_PLACED_ON
+    };
 
     private final SimpleStack plugin;
     protected final int LIST_ANIM_AMOUNT = 8;
@@ -165,7 +175,11 @@ public class GUIConfigModule implements GUIModule {
             Map.Entry<Material, Integer> entry = iterator.next();
             Material material = entry.getKey();
             if(material == null) continue;
-            itemTypeAmountList.addFrame(ItemBuilder.of(ITEM_TYPE_AMOUNT_ITEM).setType(material), 20);
+            itemTypeAmountList.addFrame(
+                ItemBuilder.of(ITEM_TYPE_AMOUNT_ITEM)
+                    .setType(material)
+                    .addItemFlags(PREVIEW_ITEM_FLAGS),
+                20);
         }
         itemTypeAmountList.addEvent(new GUIOpenNewEvent(plugin, GUIItemTypeAmountConstructor.INSTANCE));
         itemTypeAmountList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
@@ -240,7 +254,11 @@ public class GUIConfigModule implements GUIModule {
         final Set<ItemStack> uniqueItems = SimpleStackAPI.getConfig().getUniqueItems();
         final Iterator<ItemStack> iterator = uniqueItems.iterator();
         for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, uniqueItems.size()); ++i) {
-            uniqueItemList.addFrame(ItemBuilder.of(UNIQUE_ITEM_LIST_ITEM).setType(iterator.next().getType()), 20);
+            uniqueItemList.addFrame(
+                ItemBuilder.of(UNIQUE_ITEM_LIST_ITEM)
+                    .setType(iterator.next().getType())
+                    .addItemFlags(PREVIEW_ITEM_FLAGS),
+                20);
         }
         uniqueItemList.addEvent(new GUIOpenNewEvent(plugin, GUIUniqueConstructor.INSTANCE));
         uniqueItemList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
@@ -257,7 +275,11 @@ public class GUIConfigModule implements GUIModule {
         final Set<Material> materialItems = SimpleStackAPI.getConfig().getMaterials();
         final Iterator<Material> iterator = materialItems.iterator();
         for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, materialItems.size()); ++i) {
-            itemTypeList.addFrame(ItemBuilder.of(ITEM_TYPE_ITEM).setType(iterator.next()), 20);
+            itemTypeList.addFrame(
+                ItemBuilder.of(ITEM_TYPE_ITEM)
+                    .setType(iterator.next())
+                    .addItemFlags(PREVIEW_ITEM_FLAGS),
+                20);
         }
         itemTypeList.addEvent(new GUIOpenNewEvent(plugin, GUIItemTypeConstructor.INSTANCE));
         itemTypeList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
