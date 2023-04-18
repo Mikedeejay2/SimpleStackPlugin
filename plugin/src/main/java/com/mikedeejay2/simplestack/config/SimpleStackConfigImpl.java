@@ -274,7 +274,10 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
         private final ConfigValue<List<ItemStack>> uniqueItemList = collectionValue(UNIQUE_ITEM_LIST_TYPE, "items", new ArrayList<>());
 
         public UniqueItemFile(BukkitPlugin plugin) {
-            super(plugin, "unique_items.json", FileType.JSON, false);
+            super(plugin, "unique_items.yml", FileType.YAML, false);
+            updater.convert("unique_items.json", "unique_items.yml", (oldAccessor, newAccessor) -> {
+                newAccessor.setItemStackList("items", oldAccessor.getItemStackList("items"));
+            }).rename("unique_items.json", "unique_items_old.json");
         }
     }
 }
