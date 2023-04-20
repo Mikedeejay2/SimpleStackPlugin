@@ -32,7 +32,7 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
 
     //Variables
     // List mode of the material list. Either Blacklist of Whitelist.
-    private final ConfigValue<Boolean> whitelist = value(WHITELIST_TYPE, "List Mode");
+    private final ConfigValueBoolean whitelist = valueBoolean(WHITELIST_TYPE, "List Mode");
     // Material list of the config (Item Type list in config)
     private final ConfigValue<ReferenceSet<Material>> materialSet = collectionValue(MATERIAL_LIST_TYPE, "Item Types", new ReferenceLinkedOpenHashSet<>());
     // Localization code specified in the config
@@ -42,9 +42,9 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
     // Unique items list from the unique_items.json
     private final ConfigValue<Object2IntMap<ItemStack>> uniqueItemMap = uniqueItemFile.uniqueItemMap;
     // The max amount for all items in minecraft
-    private final ConfigValue<Integer> maxAmount = value(MAX_AMOUNT_TYPE, "Default Max Amount");
+    private final ConfigValueInteger maxAmount = valueInteger(MAX_AMOUNT_TYPE, "Default Max Amount");
     // Whether stacked armor can be worn or not
-    private final ConfigValue<Boolean> stackedArmorWearable = value(ValueType.BOOLEAN, "Stacked Armor Wearable");
+    private final ConfigValueBoolean stackedArmorWearable = valueBoolean(ValueType.BOOLEAN, "Stacked Armor Wearable");
 
     public SimpleStackConfigImpl(SimpleStack plugin) {
         super(plugin, "config.yml", FileType.YAML, true);
@@ -160,39 +160,39 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
 
     @Override
     public void removeUniqueItem(@NotNull ItemStack item) {
-        uniqueItemMap.get().remove(item);
+        uniqueItemMap.get().removeInt(item);
     }
 
     @Override
     public boolean isWhitelist() {
-        return whitelist.get();
+        return whitelist.getBoolean();
     }
 
     @Override
     public void setListMode(boolean whitelist) {
-        this.whitelist.set(whitelist);
+        this.whitelist.setBoolean(whitelist);
         setModified(true);
     }
 
     @Override
     public boolean isStackedArmorWearable() {
-        return stackedArmorWearable.get();
+        return stackedArmorWearable.getBoolean();
     }
 
     @Override
     public void setStackedArmorWearable(boolean stackedArmorWearable) {
-        this.stackedArmorWearable.set(stackedArmorWearable);
+        this.stackedArmorWearable.setBoolean(stackedArmorWearable);
         setModified(true);
     }
 
     @Override
     public int getMaxAmount() {
-        return maxAmount.get();
+        return maxAmount.getInteger();
     }
 
     @Override
     public void setMaxAmount(int maxAmount) {
-        this.maxAmount.set(maxAmount);
+        this.maxAmount.setInteger(maxAmount);
         setModified(true);
     }
 
