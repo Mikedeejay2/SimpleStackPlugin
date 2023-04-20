@@ -11,6 +11,7 @@ import com.mikedeejay2.mikedeejay2lib.util.structure.list.MapAsList;
 import com.mikedeejay2.mikedeejay2lib.util.structure.list.SetAsList;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.SimpleStackConfig;
+import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.objects.*;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -33,13 +34,13 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
     // List mode of the material list. Either Blacklist of Whitelist.
     private final ConfigValue<Boolean> whitelist = value(WHITELIST_TYPE, "List Mode");
     // Material list of the config (Item Type list in config)
-    private final ConfigValue<ObjectSet<Material>> materialSet = collectionValue(MATERIAL_LIST_TYPE, "Item Types", new ObjectLinkedOpenHashSet<>());
+    private final ConfigValue<ReferenceSet<Material>> materialSet = collectionValue(MATERIAL_LIST_TYPE, "Item Types", new ReferenceLinkedOpenHashSet<>());
     // Localization code specified in the config
     private final ConfigValue<String> locale = value(LOCALE_TYPE, "Language");
     // Item amounts based on the item's material (Item Type amounts list in config)
     private final ConfigValue<Reference2IntMap<Material>> itemAmountMap = mapValue(ITEM_AMOUNTS_TYPE, "Item Amounts", new Reference2IntLinkedOpenHashMap<>());
     // Unique items list from the unique_items.json
-    private final ConfigValue<Object2IntMap<FastItemStackCompare>> uniqueItemMap = uniqueItemFile.uniqueItemMap;
+    private final ConfigValue<Object2IntMap<ItemStack>> uniqueItemMap = uniqueItemFile.uniqueItemMap;
     // The max amount for all items in minecraft
     private final ConfigValue<Integer> maxAmount = value(MAX_AMOUNT_TYPE, "Default Max Amount");
     // Whether stacked armor can be worn or not
@@ -71,7 +72,7 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
         return new MapAsList<>(itemAmountMap.get());
     }
 
-    public List<Map.Entry<FastItemStackCompare, Integer>> getUniqueItemsRef() {
+    public List<Map.Entry<ItemStack, Integer>> getUniqueItemsRef() {
         return new MapAsList<>(uniqueItemMap.get());
     }
 
@@ -123,11 +124,7 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
 
     @Override
     public @NotNull Set<ItemStack> getUniqueItems() {
-        final ImmutableSet.Builder<ItemStack> builder = ImmutableSet.builder();
-        for(FastItemStackCompare stack : uniqueItemMap.get().keySet()) {
-            builder.add(stack.get());
-        }
-        return builder.build();
+        return ImmutableSet.copyOf(uniqueItemMap.get().keySet());
     }
 
     @Override
@@ -145,7 +142,7 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
 
     @Override
     public void addUniqueItem(@NotNull ItemStack item) {
-        uniqueItemMap.get().put(new FastItemStackCompare(item), item.getAmount());
+        uniqueItemMap.get().put(item, item.getAmount());
         setModified(true);
     }
 
@@ -227,7 +224,8 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
     }
 
     private static final class UniqueItemFile extends ConfigFile {
-        private final ConfigValue<Object2IntMap<FastItemStackCompare>> uniqueItemMap = mapValue(UNIQUE_ITEM_LIST_TYPE, "items", new Object2IntLinkedOpenHashMap<>());
+        private final ConfigValue<Object2IntMap<ItemStack>> uniqueItemMap =
+            mapValue(UNIQUE_ITEM_LIST_TYPE, "items", new Object2IntLinkedOpenCustomHashMap<>(new UniqueStrategy()));
 
         public UniqueItemFile(BukkitPlugin plugin) {
             super(plugin, "unique_items.yml", FileType.YAML, false);
@@ -235,42 +233,27 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
                 newAccessor.setItemStackList("items", oldAccessor.getItemStackList("items"));
             }).rename("unique_items.json", "unique_items_old.json");
         }
-    }
 
-    public static final class FastItemStackCompare {
-        private final ItemStack itemStack;
+        private static final class UniqueStrategy implements Hash.Strategy<ItemStack> {
+            @Override
+            public int hashCode(ItemStack o) {
+                int hash = 1;
 
-        public FastItemStackCompare(ItemStack itemStack) {
-            this.itemStack = itemStack;
-        }
+                hash = hash * 31 + o.getType().hashCode();
+                hash = hash * 31 + 1; // Don't include amount
+                hash = hash * 31; // Don't include durability
+                hash = hash * 31 + (o.hasItemMeta() ? o.getItemMeta().hashCode() : 0);
 
-        public ItemStack get() {
-            return itemStack;
-        }
+                return hash;
+            }
 
-        @Override
-        public int hashCode() {
-            int hash = 1;
-
-            hash = hash * 31 + itemStack.getType().hashCode();
-            hash = hash * 31 + 1; // Don't include amount
-            hash = hash * 31; // Don't include durability
-            hash = hash * 31 + (itemStack.hasItemMeta() ? itemStack.getItemMeta().hashCode() : 0);
-
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            ItemStack other = obj instanceof ItemStack ? (ItemStack) obj : obj instanceof FastItemStackCompare ? ((FastItemStackCompare) obj).get() : null;
-            if(other == null) return false;
-            if(itemStack.getType() != other.getType()) return false;
-            return itemStack.getItemMeta().equals(other.getItemMeta());
-        }
-
-        @Override
-        public String toString() {
-            return itemStack.toString();
+            @Override
+            public boolean equals(ItemStack a, ItemStack b) {
+                if(a == b) return true;
+                if(a == null || b == null) return false;
+                if(a.getType() != b.getType()) return false;
+                return a.getItemMeta().equals(b.getItemMeta());
+            }
         }
     }
 }

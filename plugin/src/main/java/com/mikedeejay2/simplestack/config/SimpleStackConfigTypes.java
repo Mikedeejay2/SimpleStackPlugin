@@ -7,14 +7,12 @@ import com.mikedeejay2.mikedeejay2lib.text.language.TranslationManager;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.MutablePair;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.Pair;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl.FastItemStackCompare;
 import it.unimi.dsi.fastutil.objects.*;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
-import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -30,9 +28,9 @@ final class SimpleStackConfigTypes {
             return false;
         });
 
-    static final ValueType<ObjectSet<Material>> MATERIAL_LIST_TYPE = ValueType.STRING_LIST
+    static final ValueType<ReferenceSet<Material>> MATERIAL_LIST_TYPE = ValueType.STRING_LIST
         .onSaveDo(list -> list.add(0, "Example Item"))
-        .map(list -> new ObjectLinkedOpenHashSet<>(
+        .map(list -> new ReferenceLinkedOpenHashSet<>(
                  list.stream()
                      .filter(str -> !str.equals("Example Item")) // Filter out the example item
                      .map(str -> { // Map to a list of Materials
@@ -73,16 +71,16 @@ final class SimpleStackConfigTypes {
             .map(entry -> new MutablePair<>(entry.getKey().toString(), entry.getIntValue())) // Map to pairs of (String, Integer)
             .collect(toLinkedMap(Pair::getKey, Pair::getValue)));
 
-    static final ValueType<Object2IntMap<FastItemStackCompare>> UNIQUE_ITEM_LIST_TYPE = ValueType.ITEM_STACK_LIST
+    static final ValueType<Object2IntMap<ItemStack>> UNIQUE_ITEM_LIST_TYPE = ValueType.ITEM_STACK_LIST
         .map(list -> new Object2IntLinkedOpenHashMap<>(
                  list.stream().filter(item -> { // Filter all valid items
                          if(item != null && !item.getType().isAir()) return true;
                          plugin.sendWarning(Text.of("simplestack.warnings.invalid_unique_item"));
                          return false;
-                     }).map(item -> new MutablePair<>(new FastItemStackCompare(item), item.getAmount()))
+                     }).map(item -> new MutablePair<>(item, item.getAmount()))
                      .collect(toLinkedMap(Pair::getKey, Pair::getValue))),
              map -> map.object2IntEntrySet().stream()
-                 .map(entry -> entry.getKey().get())
+                 .map(Map.Entry::getKey)
                  .collect(Collectors.toList()));
 
     static final ValueType<Integer> MAX_AMOUNT_TYPE = ValueType.INTEGER.onLoadReplace(amount -> {

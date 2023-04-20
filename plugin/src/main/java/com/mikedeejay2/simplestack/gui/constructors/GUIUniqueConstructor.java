@@ -11,18 +11,18 @@ import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
-import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl.FastItemStackCompare;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public class GUIUniqueConstructor extends GUIAbstractListConstructor<Map.Entry<FastItemStackCompare, Integer>> {
-    private static final Function<Map.Entry<FastItemStackCompare, Integer>, GUIItem> MAPPER =
-        (entry) -> new GUIItem(entry.getKey().get()).setMovable(true);
-    private static final Function<GUIItem, Map.Entry<FastItemStackCompare, Integer>> UNMAPPER =
-        (guiItem) -> new AbstractMap.SimpleEntry<>(new FastItemStackCompare(guiItem.get()), guiItem.getAmount());
+public class GUIUniqueConstructor extends GUIAbstractListConstructor<Map.Entry<ItemStack, Integer>> {
+    private static final Function<Map.Entry<ItemStack, Integer>, GUIItem> MAPPER =
+        (entry) -> new GUIItem(entry.getKey()).setMovable(true);
+    private static final Function<GUIItem, Map.Entry<ItemStack, Integer>> UNMAPPER =
+        (guiItem) -> new AbstractMap.SimpleEntry<>(guiItem.get(), guiItem.getAmount());
 
     public static final GUIUniqueConstructor INSTANCE = new GUIUniqueConstructor(SimpleStack.getInstance());
 
@@ -43,7 +43,7 @@ public class GUIUniqueConstructor extends GUIAbstractListConstructor<Map.Entry<F
     }
 
     @Override
-    protected List<Map.Entry<FastItemStackCompare, Integer>> getUnmappedList() {
+    protected List<Map.Entry<ItemStack, Integer>> getUnmappedList() {
         return ((SimpleStackConfigImpl) SimpleStackAPI.getConfig()).getUniqueItemsRef();
     }
 }
