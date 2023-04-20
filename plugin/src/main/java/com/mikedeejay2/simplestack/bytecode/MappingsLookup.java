@@ -78,6 +78,8 @@ public class MappingsLookup {
                     ClassMapping classMapping = new ClassMapping(classElement.getAsString());
                     classMapping.fieldMappings.putAll(existingClassMapping.fieldMappings);
                     classMapping.methodMappings.putAll(existingClassMapping.methodMappings);
+                    classMapping.methodMappings.forEach((s, m) -> m.owner = classMapping);
+                    classMapping.fieldMappings.forEach((s, m) -> m.owner = classMapping);
                     holder.add(classKey, classMapping);
                     continue;
                 }

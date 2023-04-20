@@ -40,7 +40,7 @@ public class TransformBukkitMaterialGetMaxStackSize implements MethodVisitorInfo
     public static int getBukkitMaterialMaxStackSize(int currentReturnValue, long startTime, Material material) {
         final MaterialMaxAmountEvent event = new MaterialMaxAmountEvent(material, currentReturnValue);
         Bukkit.getPluginManager().callEvent(event);
-        TIMINGS.collect(startTime, "Bukkit Material size redirect", false);
+        TIMINGS.collect(startTime, "Bukkit Material size redirect", true);
         return event.getAmount();
     }
 

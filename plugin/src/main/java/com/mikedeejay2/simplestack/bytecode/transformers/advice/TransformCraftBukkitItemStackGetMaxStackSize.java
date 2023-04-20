@@ -24,7 +24,7 @@ import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
     "1.19", "1.19.1", "1.19.2", "1.19.3",
     "1.18", "1.18.1", "1.18.2"
 })
-public class TransformBukkitItemStackGetMaxStackSize implements MethodVisitorInfo {
+public class TransformCraftBukkitItemStackGetMaxStackSize implements MethodVisitorInfo {
     private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 
     @Override
@@ -34,13 +34,13 @@ public class TransformBukkitItemStackGetMaxStackSize implements MethodVisitorInf
 
     @Override
     public MappingEntry getMappingEntry() {
-        return nms("BukkitItemStack").method("getMaxStackSize");
+        return nms("CraftItemStack").method("getMaxStackSize");
     }
 
-    public static int getBukkitItemStackMaxStackSize(int currentReturnValue, long startTime, ItemStack itemStack) {
+    public static int getCraftBukkitItemStackMaxStackSize(int currentReturnValue, long startTime, ItemStack itemStack) {
         final ItemStackMaxAmountEvent event = new ItemStackMaxAmountEvent(itemStack, currentReturnValue);
         Bukkit.getPluginManager().callEvent(event);
-        TIMINGS.collect(startTime, "Bukkit ItemStack size redirect", true);
+        TIMINGS.collect(startTime, "CraftBukkit ItemStack size redirect", true);
         return event.getAmount();
     }
 
@@ -60,12 +60,11 @@ public class TransformBukkitItemStackGetMaxStackSize implements MethodVisitorInf
         public static void onMethodExit(
             @Advice.Return(readOnly = false) int returnValue,
             @Advice.Enter long startTime,
-            @Advice.This ItemStack itemStack) {
+            @Advice.This ItemStack craftItemStack) {
             try {
-                System.out.println("alskdfjasldkj");
-                returnValue = AdviceBridge.getBukkitItemStackMaxStackSize(returnValue, startTime, itemStack);
+                returnValue = AdviceBridge.getCraftBukkitItemStackMaxStackSize(returnValue, startTime, craftItemStack);
             } catch(Throwable throwable) {
-                Bukkit.getLogger().severe("Simple Stack encountered an exception while processing a Bukkit ItemStack");
+                Bukkit.getLogger().severe("Simple Stack encountered an exception while processing a CraftBukkit ItemStack");
                 throwable.printStackTrace();
             }
         }

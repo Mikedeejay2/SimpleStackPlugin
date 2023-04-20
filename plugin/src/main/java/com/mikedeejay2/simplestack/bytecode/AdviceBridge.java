@@ -16,6 +16,7 @@ public final class AdviceBridge {
     private static Method getSlotISMaxStackSize;
     private static Method getBukkitMaterialMaxStackSize;
     private static Method getBukkitItemStackMaxStackSize;
+    private static Method getCraftBukkitItemStackMaxStackSize;
 
     public static void initialize() {
         final Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
@@ -48,6 +49,10 @@ public final class AdviceBridge {
             getBukkitItemStackMaxStackSize = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice.TransformBukkitItemStackGetMaxStackSize", false, pluginClassLoader)
                 .getMethod("getBukkitItemStackMaxStackSize", int.class, long.class, ItemStack.class);
             getBukkitItemStackMaxStackSize.setAccessible(true);
+
+            getCraftBukkitItemStackMaxStackSize = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice.TransformCraftBukkitItemStackGetMaxStackSize", false, pluginClassLoader)
+                .getMethod("getCraftBukkitItemStackMaxStackSize", int.class, long.class, ItemStack.class);
+            getCraftBukkitItemStackMaxStackSize.setAccessible(true);
         } catch(ClassNotFoundException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
@@ -78,6 +83,10 @@ public final class AdviceBridge {
     }
 
     public static int getBukkitItemStackMaxStackSize(int currentReturnValue, long startTime, ItemStack itemStack) throws InvocationTargetException, IllegalAccessException {
+        return (int) getBukkitItemStackMaxStackSize.invoke(null, currentReturnValue, startTime, itemStack);
+    }
+
+    public static int getCraftBukkitItemStackMaxStackSize(int currentReturnValue, long startTime, ItemStack itemStack) throws InvocationTargetException, IllegalAccessException {
         return (int) getBukkitItemStackMaxStackSize.invoke(null, currentReturnValue, startTime, itemStack);
     }
 }

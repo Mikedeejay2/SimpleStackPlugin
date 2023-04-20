@@ -29,7 +29,8 @@
   "CraftItemStack": {
     "class_name": "org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack",
     "methods": {
-      "asBukkitCopy": "asBukkitCopy(LItemStack;)Lorg/bukkit/inventory/ItemStack;"
+      "asBukkitCopy": "asBukkitCopy(LItemStack;)Lorg/bukkit/inventory/ItemStack;",
+      "getMaxStackSize": "getMaxStackSize()I"
     }
   },
   "ContainerUtil": {
