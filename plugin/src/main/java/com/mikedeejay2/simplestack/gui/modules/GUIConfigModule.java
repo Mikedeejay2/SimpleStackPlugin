@@ -16,7 +16,6 @@ import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
-import com.mikedeejay2.simplestack.api.SimpleStackConfig;
 import com.mikedeejay2.simplestack.gui.constructors.*;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -34,22 +33,6 @@ import java.util.Set;
  * @author Mikedeejay2
  */
 public class GUIConfigModule implements GUIModule {
-    private static final ItemBuilder BLACKLIST_ITEM = ItemBuilder.of(Base64Head.X_BLACK.get())
-        .setName(Text.of("&b&l").concat("simplestack.list_type.blacklist"))
-        .setLore(
-            Text.of("&7").concat("simplestack.gui.item_types.change_mode_whitelist"),
-            Text.of(""),
-            Text.of("&a&l⊳ ").concat("simplestack.list_type.blacklist"),
-            Text.of("&7  ").concat("simplestack.list_type.whitelist"));
-
-    private static final ItemBuilder WHITELIST_ITEM = ItemBuilder.of(Base64Head.CHECKMARK_WHITE.get())
-        .setName(Text.of("&b&l").concat("simplestack.list_type.whitelist"))
-        .setLore(
-            Text.of("&7").concat("simplestack.gui.item_types.change_mode_blacklist"),
-            Text.of(""),
-            Text.of("&7  ").concat("simplestack.list_type.blacklist"),
-            Text.of("&a&l⊳ ").concat("simplestack.list_type.whitelist"));
-
     private static final ItemBuilder CLOSE_ITEM = ItemBuilder.of(Material.REDSTONE)
         .setName(Text.of("&c&o").concat("simplestack.gui.config.close_select"));
 
@@ -117,7 +100,6 @@ public class GUIConfigModule implements GUIModule {
         GUIItem uniqueItemList = getGUIItemUniqueItemList();
         GUIItem language = getGUIItemLanguage();
         GUIItem defaultMaxAmount = getGUIItemDefaultMaxAmount();
-        GUIItem switchListMode = getGUIItemSwitchListMode();
         GUIItem stackableArmor = getGUIItemStackedArmor();
 
         layer.setItem(2, 4, itemTypeList);
@@ -126,28 +108,9 @@ public class GUIConfigModule implements GUIModule {
         layer.setItem(3, 4, language);
         layer.setItem(3, 5, defaultMaxAmount);
         layer.setItem(3, 6, stackableArmor);
-        layer.setItem(4, 5, switchListMode);
 
         GUIItem closeItem = getGUIItemCloseItem();
-        layer.setItem(5, 5, closeItem);
-    }
-
-    /**
-     * Get the <code>GUIItem</code> for the "Switch List Mode" button
-     *
-     * @return The switch list mode item
-     */
-    private GUIItem getGUIItemSwitchListMode() {
-        SimpleStackConfig config = SimpleStackAPI.getConfig();
-        GUIItem switchListMode = new GUIItem(config.isWhitelist() ? WHITELIST_ITEM : BLACKLIST_ITEM);
-        GUIButtonToggleableEvent button = new GUIButtonToggleableEvent(
-            (info) -> config.setListMode(true),
-            (info) -> config.setListMode(false),
-            config.isWhitelist())
-            .setOnItem(WHITELIST_ITEM).setOffItem(BLACKLIST_ITEM);
-        button.setSound(Sound.UI_BUTTON_CLICK).setVolume(0.3f);
-        switchListMode.addEvent(button);
-        return switchListMode;
+        layer.setItem(4, 5, closeItem);
     }
 
     /**

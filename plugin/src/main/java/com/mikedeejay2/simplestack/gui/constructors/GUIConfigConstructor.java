@@ -45,10 +45,10 @@ public class GUIConfigConstructor implements GUIConstructor {
 
     @Override
     public GUIContainer get() {
-        GUIContainer gui = new GUIContainer(plugin, Text.of("simplestack.gui.config.title"), 5);
+        GUIContainer gui = new GUIContainer(plugin, Text.of("simplestack.gui.config.title"), 4);
         GUIAnimationModule animation = new GUIAnimationModule(plugin, 1);
         GUIAnimDecoratorModule outlineModule = new GUIAnimOutlineModule(
-            ANIMATED_GUI_ITEM, new AnimationSpecification(Position.of(3, 5), Style.CIRCULAR));
+            ANIMATED_GUI_ITEM, new AnimationSpecification(Position.of(2, 5), Style.CIRCULAR));
         GUINavigatorModule naviModule = new GUINavigatorModule(plugin, "config");
         GUIConfigModule configModule = new GUIConfigModule(plugin);
         GUIDebugOpenerModule debugModule = new GUIDebugOpenerModule(plugin);
