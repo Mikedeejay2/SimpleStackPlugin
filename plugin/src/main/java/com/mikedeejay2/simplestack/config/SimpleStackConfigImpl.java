@@ -7,9 +7,11 @@ import com.mikedeejay2.mikedeejay2lib.config.ConfigFile;
 import com.mikedeejay2.mikedeejay2lib.data.FileType;
 import com.mikedeejay2.mikedeejay2lib.text.language.TranslationManager;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReportSection;
-import com.mikedeejay2.mikedeejay2lib.util.item.ItemComparison;
+import com.mikedeejay2.mikedeejay2lib.util.structure.list.MapAsList;
+import com.mikedeejay2.mikedeejay2lib.util.structure.list.SetAsList;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.SimpleStackConfig;
+import it.unimi.dsi.fastutil.objects.*;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -31,13 +33,13 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
     // List mode of the material list. Either Blacklist of Whitelist.
     private final ConfigValue<Boolean> whitelist = value(WHITELIST_TYPE, "List Mode");
     // Material list of the config (Item Type list in config)
-    private final ConfigValue<List<Material>> materialList = collectionValue(MATERIAL_LIST_TYPE, "Item Types", new ArrayList<>());
+    private final ConfigValue<ObjectSet<Material>> materialSet = collectionValue(MATERIAL_LIST_TYPE, "Item Types", new ObjectLinkedOpenHashSet<>());
     // Localization code specified in the config
     private final ConfigValue<String> locale = value(LOCALE_TYPE, "Language");
     // Item amounts based on the item's material (Item Type amounts list in config)
-    private final ConfigValue<List<MaterialAndAmount>> itemAmounts = collectionValue(ITEM_AMOUNTS_TYPE, "Item Amounts", new ArrayList<>());
+    private final ConfigValue<Reference2IntMap<Material>> itemAmountMap = mapValue(ITEM_AMOUNTS_TYPE, "Item Amounts", new Reference2IntLinkedOpenHashMap<>());
     // Unique items list from the unique_items.json
-    private final ConfigValue<List<ItemStack>> uniqueItemList = uniqueItemFile.uniqueItemList;
+    private final ConfigValue<Object2IntMap<FastItemStackCompare>> uniqueItemMap = uniqueItemFile.uniqueItemMap;
     // The max amount for all items in minecraft
     private final ConfigValue<Integer> maxAmount = value(MAX_AMOUNT_TYPE, "Default Max Amount");
     // Whether stacked armor can be worn or not
@@ -62,15 +64,15 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
     }
 
     public List<Material> getMaterialsRef() {
-        return materialList.get();
+        return new SetAsList<>(materialSet.get());
     }
 
-    public List<MaterialAndAmount> getItemAmountsRef() {
-        return itemAmounts.get();
+    public List<Map.Entry<Material, Integer>> getItemAmountsRef() {
+        return new MapAsList<>(itemAmountMap.get());
     }
 
-    public List<ItemStack> getUniqueItemsRef() {
-        return uniqueItemList.get();
+    public List<Map.Entry<FastItemStackCompare, Integer>> getUniqueItemsRef() {
+        return new MapAsList<>(uniqueItemMap.get());
     }
 
     @Override
@@ -80,9 +82,8 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
 
     @Override
     public int getAmount(@NotNull Material type) {
-        if(containsCustomAmount(type)) {
-            return itemAmounts.get().get(itemAmounts.get().indexOf(new MaterialAndAmount(type, 0))).getAmount();
-        }
+        final int customAmount = itemAmountMap.get().getInt(type);
+        if(customAmount != 0) return customAmount;
         if(isWhitelist() == containsMaterial(type)) {
             return getMaxAmount();
         }
@@ -91,92 +92,78 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
 
     @Override
     public int getUniqueItemAmount(@NotNull ItemStack item) {
-        for(ItemStack curItem : uniqueItemList.get()) {
-            if(!ItemComparison.equalsEachOther(curItem, item)) continue;
-            return curItem.getAmount();
-        }
-        return -1;
+        final int amount = uniqueItemMap.get().getInt(item);
+        return amount > 0 ? amount : -1;
     }
 
     @Override
     public boolean containsMaterial(@NotNull Material material) {
-        return materialList.get().contains(material);
+        return materialSet.get().contains(material);
     }
 
     @Override
     public boolean containsCustomAmount(@NotNull Material material) {
-        return itemAmounts.get().contains(new MaterialAndAmount(material, 0));
+        return itemAmountMap.get().containsKey(material);
     }
 
     @Override
     public boolean containsUniqueItem(@NotNull ItemStack item) {
-        for(ItemStack curItem : uniqueItemList.get()) {
-            if(!ItemComparison.equalsEachOther(curItem, item)) continue;
-            return true;
-        }
-        return false;
+        return uniqueItemMap.get().containsKey(item);
     }
 
     @Override
     public @NotNull Set<Material> getMaterials() {
-        return ImmutableSet.copyOf(materialList.get());
+        return ImmutableSet.copyOf(materialSet.get());
     }
 
     @Override
     public @NotNull Map<Material, Integer> getItemAmounts() {
-        ImmutableMap.Builder<Material, Integer> builder = ImmutableMap.builder();
-        for(MaterialAndAmount entry : itemAmounts.get()) {
-            builder.put(entry.getMaterial(), entry.getAmount());
+        return ImmutableMap.copyOf(itemAmountMap.get());
+    }
+
+    @Override
+    public @NotNull Set<ItemStack> getUniqueItems() {
+        final ImmutableSet.Builder<ItemStack> builder = ImmutableSet.builder();
+        for(FastItemStackCompare stack : uniqueItemMap.get().keySet()) {
+            builder.add(stack.get());
         }
         return builder.build();
     }
 
     @Override
-    public @NotNull Set<ItemStack> getUniqueItems() {
-        return ImmutableSet.copyOf(uniqueItemList.get());
-    }
-
-    @Override
     public void addMaterial(@NotNull Material material) {
         if(containsMaterial(material)) return;
-        materialList.get().add(material);
+        materialSet.get().add(material);
         setModified(true);
     }
 
     @Override
     public void addCustomAmount(@NotNull Material material, int amount) {
-        if(containsCustomAmount(material)) removeCustomAmount(material);
-        itemAmounts.get().add(new MaterialAndAmount(material, amount));
+        itemAmountMap.get().put(material, amount);
         setModified(true);
     }
 
     @Override
     public void addUniqueItem(@NotNull ItemStack item) {
-        removeUniqueItem(item);
-        uniqueItemList.get().add(item);
+        uniqueItemMap.get().put(new FastItemStackCompare(item), item.getAmount());
         setModified(true);
     }
 
     @Override
     public void removeMaterial(@NotNull Material material) {
-        materialList.get().remove(material);
+        materialSet.get().remove(material);
         setModified(true);
     }
 
     @Override
     public void removeCustomAmount(@NotNull Material material) {
-        itemAmounts.get().remove(new MaterialAndAmount(material, 0));
+        itemAmountMap.get().removeInt(material);
         setModified(true);
     }
 
     @Override
     public void removeUniqueItem(@NotNull ItemStack item) {
-        for(ItemStack curItem : uniqueItemList.get()) {
-            if(!ItemComparison.equalsEachOther(item, curItem)) continue;
-            uniqueItemList.get().remove(curItem);
-            setModified(true);
-            break;
-        }
+        uniqueItemMap.get().remove(item);
     }
 
     @Override
@@ -239,46 +226,51 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
         }
     }
 
-    public static final class MaterialAndAmount {
-        private final Material material;
-        private final int amount;
-
-        public MaterialAndAmount(Material material, int amount) {
-            this.material = material;
-            this.amount = amount;
-        }
-
-        public Material getMaterial() {
-            return material;
-        }
-
-        public int getAmount() {
-            return amount;
-        }
-
-        @Override
-        public int hashCode() {
-            return material.hashCode();
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            Object material = obj;
-            if(obj.getClass() == MaterialAndAmount.class) {
-                material = ((MaterialAndAmount) obj).getMaterial();
-            }
-            return this.material == material;
-        }
-    }
-
     private static final class UniqueItemFile extends ConfigFile {
-        private final ConfigValue<List<ItemStack>> uniqueItemList = collectionValue(UNIQUE_ITEM_LIST_TYPE, "items", new ArrayList<>());
+        private final ConfigValue<Object2IntMap<FastItemStackCompare>> uniqueItemMap = mapValue(UNIQUE_ITEM_LIST_TYPE, "items", new Object2IntLinkedOpenHashMap<>());
 
         public UniqueItemFile(BukkitPlugin plugin) {
             super(plugin, "unique_items.yml", FileType.YAML, false);
             updater.convert("unique_items.json", "unique_items.yml", (oldAccessor, newAccessor) -> {
                 newAccessor.setItemStackList("items", oldAccessor.getItemStackList("items"));
             }).rename("unique_items.json", "unique_items_old.json");
+        }
+    }
+
+    public static final class FastItemStackCompare {
+        private final ItemStack itemStack;
+
+        public FastItemStackCompare(ItemStack itemStack) {
+            this.itemStack = itemStack;
+        }
+
+        public ItemStack get() {
+            return itemStack;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 1;
+
+            hash = hash * 31 + itemStack.getType().hashCode();
+            hash = hash * 31 + 1; // Don't include amount
+            hash = hash * 31; // Don't include durability
+            hash = hash * 31 + (itemStack.hasItemMeta() ? itemStack.getItemMeta().hashCode() : 0);
+
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            ItemStack other = obj instanceof ItemStack ? (ItemStack) obj : obj instanceof FastItemStackCompare ? ((FastItemStackCompare) obj).get() : null;
+            if(other == null) return false;
+            if(itemStack.getType() != other.getType()) return false;
+            return itemStack.getItemMeta().equals(other.getItemMeta());
+        }
+
+        @Override
+        public String toString() {
+            return itemStack.toString();
         }
     }
 }

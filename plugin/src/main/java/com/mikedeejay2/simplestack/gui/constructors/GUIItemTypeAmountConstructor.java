@@ -11,18 +11,17 @@ import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 import java.util.function.Function;
 
-import static com.mikedeejay2.simplestack.config.SimpleStackConfigImpl.*;
-
-public class GUIItemTypeAmountConstructor extends GUIAbstractListConstructor<MaterialAndAmount> {
-    private static final Function<MaterialAndAmount, GUIItem> MAPPER =
-        (pair) -> new GUIItem(new ItemStack(pair.getMaterial(), pair.getAmount())).setMovable(true);
-    private static final Function<GUIItem, MaterialAndAmount> UNMAPPER =
-        (item) -> new MaterialAndAmount(item.getType(), item.getAmount());
+public class GUIItemTypeAmountConstructor extends GUIAbstractListConstructor<Map.Entry<Material, Integer>> {
+    private static final Function<Map.Entry<Material, Integer>, GUIItem> MAPPER =
+        (pair) -> new GUIItem(new ItemStack(pair.getKey(), pair.getValue())).setMovable(true);
+    private static final Function<GUIItem, Map.Entry<Material, Integer>> UNMAPPER =
+        (item) -> new AbstractMap.SimpleEntry<>(item.getType(), item.getAmount());
 
     public static final GUIItemTypeAmountConstructor INSTANCE = new GUIItemTypeAmountConstructor(SimpleStack.getInstance());
 
@@ -43,7 +42,7 @@ public class GUIItemTypeAmountConstructor extends GUIAbstractListConstructor<Mat
     }
 
     @Override
-    protected List<MaterialAndAmount> getUnmappedList() {
+    protected List<Map.Entry<Material, Integer>> getUnmappedList() {
         return ((SimpleStackConfigImpl) SimpleStackAPI.getConfig()).getItemAmountsRef();
     }
 }

@@ -25,6 +25,7 @@
         <junit.version>5.9.2</junit.version>
         <mockito.version>5.2.0</mockito.version>
         <assertj.version>3.24.2</assertj.version>
+        <fastutil.version>8.5.12</fastutil.version>
 
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
