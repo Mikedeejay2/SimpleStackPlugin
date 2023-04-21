@@ -20,42 +20,29 @@ public final class AdviceBridge {
 
     public static void initialize() {
         final Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
-        final ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
+        final ClassLoader classLoader = plugin.getClass().getClassLoader();
         try {
-            getArmorSlotMaxStackSize = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice.TransformArmorSlotGetMaxStackSize", false, pluginClassLoader)
-                .getMethod("getArmorSlotMaxStackSize", int.class, long.class, Object.class);
-            getArmorSlotMaxStackSize.setAccessible(true);
-
-            getItemMaxStackSize = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice.TransformItemGetMaxStackSize", false, pluginClassLoader)
-                .getMethod("getItemMaxStackSize", int.class, long.class, Object.class);
-            getItemMaxStackSize.setAccessible(true);
-
-            getItemStackMaxStackSize = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice.TransformItemStackGetMaxStackSize", false, pluginClassLoader)
-                .getMethod("getItemStackMaxStackSize", int.class, long.class, Object.class);
-            getItemStackMaxStackSize.setAccessible(true);
-
-            getSlotMaxStackSize = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice.TransformSlotGetMaxStackSize", false, pluginClassLoader)
-                .getMethod("getSlotMaxStackSize", int.class, long.class, Object.class);
-            getSlotMaxStackSize.setAccessible(true);
-
-            getSlotISMaxStackSize = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice.TransformSlotISGetMaxStackSize", false, pluginClassLoader)
-                .getMethod("getSlotMaxStackSize", int.class, long.class, Object.class, Object.class);
-            getSlotISMaxStackSize.setAccessible(true);
-
-            getBukkitMaterialMaxStackSize = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice.TransformBukkitMaterialGetMaxStackSize", false, pluginClassLoader)
-                .getMethod("getBukkitMaterialMaxStackSize", int.class, long.class, Material.class);
-            getBukkitMaterialMaxStackSize.setAccessible(true);
-
-            getBukkitItemStackMaxStackSize = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice.TransformBukkitItemStackGetMaxStackSize", false, pluginClassLoader)
-                .getMethod("getBukkitItemStackMaxStackSize", int.class, long.class, ItemStack.class);
-            getBukkitItemStackMaxStackSize.setAccessible(true);
-
-            getCraftBukkitItemStackMaxStackSize = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice.TransformCraftBukkitItemStackGetMaxStackSize", false, pluginClassLoader)
-                .getMethod("getCraftBukkitItemStackMaxStackSize", int.class, long.class, ItemStack.class);
-            getCraftBukkitItemStackMaxStackSize.setAccessible(true);
+            getArmorSlotMaxStackSize = getMethod("TransformArmorSlotGetMaxStackSize", classLoader, "getArmorSlotMaxStackSize", Object.class);
+            getItemMaxStackSize = getMethod("TransformItemGetMaxStackSize", classLoader, "getItemMaxStackSize", Object.class);
+            getItemStackMaxStackSize = getMethod("TransformItemStackGetMaxStackSize", classLoader, "getItemStackMaxStackSize", Object.class);
+            getSlotMaxStackSize = getMethod("TransformSlotGetMaxStackSize", classLoader, "getSlotMaxStackSize", Object.class);
+            getSlotISMaxStackSize = getMethod("TransformSlotISGetMaxStackSize", classLoader, "getSlotMaxStackSize", Object.class, Object.class);
+            getBukkitMaterialMaxStackSize = getMethod("TransformBukkitMaterialGetMaxStackSize", classLoader, "getBukkitMaterialMaxStackSize", Material.class);
+            getBukkitItemStackMaxStackSize = getMethod("TransformBukkitItemStackGetMaxStackSize", classLoader, "getBukkitItemStackMaxStackSize", ItemStack.class);
+            getCraftBukkitItemStackMaxStackSize = getMethod("TransformCraftBukkitItemStackGetMaxStackSize", classLoader, "getCraftBukkitItemStackMaxStackSize", ItemStack.class);
         } catch(ClassNotFoundException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static Method getMethod(String className, ClassLoader classLoader, String methodName, Class<?>... args) throws ClassNotFoundException, NoSuchMethodException {
+        final Class<?> clazz = Class.forName("com.mikedeejay2.simplestack.bytecode.transformers.advice." + className, false, classLoader);
+        final Class<?>[] newArgs = new Class<?>[args.length + 2];
+        System.arraycopy(new Class<?>[]{int.class, long.class}, 0, newArgs, 0, 2);
+        System.arraycopy(args, 0, newArgs, 2, args.length);
+        final Method method = clazz.getMethod(methodName, newArgs);
+        method.setAccessible(true);
+        return method;
     }
 
     public static int getArmorSlotMaxStackSize(int currentReturnValue, long startTime, Object nmsSlot) throws InvocationTargetException, IllegalAccessException {
@@ -87,6 +74,6 @@ public final class AdviceBridge {
     }
 
     public static int getCraftBukkitItemStackMaxStackSize(int currentReturnValue, long startTime, ItemStack itemStack) throws InvocationTargetException, IllegalAccessException {
-        return (int) getBukkitItemStackMaxStackSize.invoke(null, currentReturnValue, startTime, itemStack);
+        return (int) getCraftBukkitItemStackMaxStackSize.invoke(null, currentReturnValue, startTime, itemStack);
     }
 }
