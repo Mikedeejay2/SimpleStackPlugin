@@ -285,15 +285,13 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
 
             static {
                 final MethodHandles.Lookup lookup = MethodHandles.lookup();
-                MethodHandle handle = null;
                 try {
                     final Field metaField = ItemStack.class.getDeclaredField("meta");
                     metaField.setAccessible(true);
-                    handle = lookup.unreflectGetter(metaField);
+                    metaHandle = lookup.unreflectGetter(metaField);
                 } catch(NoSuchFieldException | IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
-                metaHandle = handle;
             }
 
             private static ItemMeta fastGetMeta(ItemStack stack) {
