@@ -14,7 +14,7 @@ import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.lastNms;
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
 
 public final class NmsConverters {
-    private static final Method METHOD_AS_BUKKIT_COPY;      // org.bukkit.craftbukkit.inventory.CraftItemStack#asBukkitCopy()
+    private static final Method METHOD_AS_BUKKIT_COPY;
     private static final Field FIELD_SLOT_SLOT;
     private static final Field FIELD_SLOT_CONTAINER;
     private static final Constructor<?> CONSTRUCTOR_CRAFT_INVENTORY;
@@ -26,14 +26,19 @@ public final class NmsConverters {
             final Class<?> craftItemStackClass = nms("CraftItemStack").toClass();
             METHOD_AS_BUKKIT_COPY = craftItemStackClass.getMethod(
                 lastNms().method("asBukkitCopy").name(), itemStackClass);
+            METHOD_AS_BUKKIT_COPY.setAccessible(true);
 
             final Class<?> slotClass = nms("Slot").toClass();
             FIELD_SLOT_SLOT = slotClass.getDeclaredField(lastNms().field("slot").name());
+            FIELD_SLOT_SLOT.setAccessible(true);
+
             FIELD_SLOT_CONTAINER = slotClass.getDeclaredField(lastNms().field("container").name());
+            FIELD_SLOT_CONTAINER.setAccessible(true);
 
             final Class<?> iInventoryClass = nms("IInventory").toClass();
             final Class<?> craftInventoryClass = nms("CraftInventory").toClass();
             CONSTRUCTOR_CRAFT_INVENTORY = craftInventoryClass.getConstructor(iInventoryClass);
+            CONSTRUCTOR_CRAFT_INVENTORY.setAccessible(true);
         } catch(NoSuchMethodException | NoSuchFieldException e) {
             Bukkit.getLogger().severe("SimpleStack cannot locate NMS classes");
             throw new RuntimeException(e);
