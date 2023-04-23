@@ -1,6 +1,8 @@
 package com.mikedeejay2.simplestack.api;
 
 import com.google.common.base.Preconditions;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Simple Stack v2 API
@@ -16,6 +18,11 @@ public final class SimpleStackAPI {
     private static SimpleStackTimings timings;
     private static boolean initialized;
 
+    @Contract(value = " -> fail", pure = true)
+    private SimpleStackAPI() {
+        throw new UnsupportedOperationException("SimpleStackAPI cannot be instantiated as an object.");
+    }
+
     /**
      * Get the {@link SimpleStackConfig} instance for modifying and retrieving data from Simple Stack's configuration.
      *
@@ -24,7 +31,8 @@ public final class SimpleStackAPI {
      * {@link SimpleStackAPI#isAvailable()} before calling this method to ensure that this exception isn't thrown.
      * @see SimpleStackConfig
      */
-    public static SimpleStackConfig getConfig() throws IllegalStateException {
+    @Contract(pure = true)
+    public static @Nullable SimpleStackConfig getConfig() throws IllegalStateException {
         validateInitialized();
         return config;
     }
@@ -37,7 +45,8 @@ public final class SimpleStackAPI {
      * {@link SimpleStackAPI#isAvailable()} before calling this method to ensure that this exception isn't thrown.
      * @see SimpleStackTimings
      */
-    public static SimpleStackTimings getTimings() throws IllegalStateException {
+    @Contract(pure = true)
+    public static @Nullable SimpleStackTimings getTimings() throws IllegalStateException {
         validateInitialized();
         return timings;
     }
@@ -48,6 +57,7 @@ public final class SimpleStackAPI {
      *
      * @return Simple Stack API availability state
      */
+    @Contract(pure = true)
     public static boolean isAvailable() {
         return initialized;
     }
