@@ -281,14 +281,14 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
          * @author Mikedeejay2
          */
         private static final class UniqueStrategy implements Hash.Strategy<ItemStack> {
-            private static final MethodHandle metaHandle;
+            private static final MethodHandle HANDLE_META;
 
             static {
                 final MethodHandles.Lookup lookup = MethodHandles.lookup();
                 try {
                     final Field metaField = ItemStack.class.getDeclaredField("meta");
                     metaField.setAccessible(true);
-                    metaHandle = lookup.unreflectGetter(metaField);
+                    HANDLE_META = lookup.unreflectGetter(metaField);
                 } catch(NoSuchFieldException | IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
@@ -298,7 +298,7 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
                 // If not Bukkit ItemStack, get meta regularly
                 if(stack.getClass().getSimpleName().length() != 9) return stack.hasItemMeta() ? stack.getItemMeta() : null;
                 try {
-                    return (ItemMeta) metaHandle.invoke(stack);
+                    return (ItemMeta) HANDLE_META.invokeExact(stack);
                 } catch(Throwable e) {
                     throw new RuntimeException(e);
                 }

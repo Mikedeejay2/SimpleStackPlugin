@@ -62,7 +62,6 @@ public class TransformBukkitItemStackGetMaxStackSize implements MethodVisitorInf
             @Advice.Enter long startTime,
             @Advice.This ItemStack itemStack) {
             try {
-                System.out.println("alskdfjasldkj");
                 returnValue = AdviceBridge.getBukkitItemStackMaxStackSize(returnValue, startTime, itemStack);
             } catch(Throwable throwable) {
                 Bukkit.getLogger().severe("Simple Stack encountered an exception while processing a Bukkit ItemStack");

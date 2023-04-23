@@ -96,22 +96,27 @@ public final class SimpleStackAgent {
 
     private static boolean injectAdviceBridge() {
         try {
-            final ClassLoader classLoader = Bukkit.class.getClassLoader();
-            // Takes AdviceBridge from the plugin's ClassLoader and loads it into Minecraft's ClassLoader
-            final ClassFileLocator classFileLocator = ClassFileLocator.ForClassLoader.of(SimpleStack.getInstance().classLoader());
-            final ClassReloadingStrategy adviceBridge = ClassReloadingStrategy.fromInstalledAgent(ClassReloadingStrategy.Strategy.RETRANSFORMATION);
-            Class<?> adviceBridgeClass = new ByteBuddy()
-                .redefine(AdviceBridge.class, classFileLocator)
-                .make()
-                .load(classLoader, adviceBridge)
-                .getLoaded();
-            classLoader.loadClass(adviceBridgeClass.getName());
-            Reflector.of(adviceBridgeClass).method("initialize").invoke(null);
+            final Class<?> adviceBridgeClass = injectClass(AdviceBridge.class);
+            adviceBridgeClass.getMethod("initialize").invoke(null);
         } catch(Throwable throwable) {
             SimpleStack.doCrash("Exception while injecting Advice bridge", throwable, c -> {});
             return true;
         }
         return false;
+    }
+
+    private static Class<?> injectClass(Class<?> clazz) throws ClassNotFoundException {
+        final ClassLoader classLoader = Bukkit.class.getClassLoader();
+        // Takes class from the plugin's ClassLoader and loads it into Minecraft's ClassLoader
+        final ClassFileLocator classFileLocator = ClassFileLocator.ForClassLoader.of(SimpleStack.getInstance().classLoader());
+        final ClassReloadingStrategy classReloadingStrategy = ClassReloadingStrategy.fromInstalledAgent(ClassReloadingStrategy.Strategy.RETRANSFORMATION);
+        Class<?> adviceBridgeClass = new ByteBuddy()
+            .redefine(clazz, classFileLocator)
+            .make()
+            .load(classLoader, classReloadingStrategy)
+            .getLoaded();
+        classLoader.loadClass(adviceBridgeClass.getName());
+        return adviceBridgeClass;
     }
 
     private static ElementMatcher.Junction<? super TypeDescription> generateTypeMatcher() {
