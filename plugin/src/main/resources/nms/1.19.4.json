@@ -1,0 +1,29 @@
+{
+  "using_base": "1.19.3",
+  "CraftItemStack": "org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack",
+  "CraftInventory": "org.bukkit.craftbukkit.v1_19_R3.inventory.CraftInventory",
+  "EntityHuman": {
+    "methods": {
+      "getInventory": "fJ()LPlayerInventory;"
+    }
+  },
+  "Item": {
+    "methods": {
+      "getMaxStackSize": "l()I"
+    }
+  },
+  "Items": {
+    "fields": {
+      "BUCKET": "pG:LItem;",
+      "BOWL": "oy:LItem;",
+      "LAVA_BUCKET": "pI:LItem;"
+    }
+  },
+  "ItemStack": {
+    "methods": {
+      "setCount": "f(I)V",
+      "shrink": "h(I)V",
+      "isSameItemSameTags": "d(LItemStack;LItemStack;)Z"
+    }
+  }
+}
