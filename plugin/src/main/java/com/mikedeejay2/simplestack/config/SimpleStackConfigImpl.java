@@ -82,7 +82,9 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
 
     @Override
     public int getAmount(@NotNull ItemStack item) {
-        return getUniqueItemAmount(item);
+        final int amount = getUniqueItemAmount(item);
+        if(amount != -1) return amount;
+        return getAmount(item.getType());
     }
 
     @Override
