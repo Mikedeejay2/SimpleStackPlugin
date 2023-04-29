@@ -33,7 +33,7 @@ public final class SimpleStackClassInjector {
     }
 
     private ClassInjector getClassInjector() {
-        return new ClassInjector.UsingUnsafe(classLoader);
+        return new ClassInjector.UsingReflection(classLoader);
     }
 
     public static SimpleStackClassInjector of(ClassLoader classLoader, Class<?>... classes) {
