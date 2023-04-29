@@ -17,6 +17,7 @@ import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.ClassFileLocator;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
 import net.bytebuddy.implementation.Implementation;
 import org.bukkit.Bukkit;
@@ -32,6 +33,7 @@ import org.apache.commons.lang3.Validate;
 import org.objectweb.asm.util.CheckClassAdapter;
 
 import java.lang.instrument.Instrumentation;
+import java.lang.invoke.MethodHandles;
 import java.security.ProtectionDomain;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -95,28 +97,16 @@ public final class SimpleStackAgent {
     }
 
     private static boolean injectAdviceBridge() {
+        final ClassLoader classLoader = Bukkit.class.getClassLoader();
         try {
-            final Class<?> adviceBridgeClass = injectClass(AdviceBridge.class);
+            SimpleStackClassInjector.of(classLoader, AdviceBridge.class).inject();
+            final Class<?> adviceBridgeClass = Class.forName(AdviceBridge.class.getName(), true, classLoader);
             adviceBridgeClass.getMethod("initialize").invoke(null);
         } catch(Throwable throwable) {
             SimpleStack.doCrash("Exception while injecting Advice bridge", throwable, c -> {});
             return true;
         }
         return false;
-    }
-
-    private static Class<?> injectClass(Class<?> clazz) throws ClassNotFoundException {
-        final ClassLoader classLoader = Bukkit.class.getClassLoader();
-        // Takes class from the plugin's ClassLoader and loads it into Minecraft's ClassLoader
-        final ClassFileLocator classFileLocator = ClassFileLocator.ForClassLoader.of(SimpleStack.getInstance().classLoader());
-        final ClassReloadingStrategy classReloadingStrategy = ClassReloadingStrategy.fromInstalledAgent(ClassReloadingStrategy.Strategy.RETRANSFORMATION);
-        Class<?> adviceBridgeClass = new ByteBuddy()
-            .redefine(clazz, classFileLocator)
-            .make()
-            .load(classLoader, classReloadingStrategy)
-            .getLoaded();
-        classLoader.loadClass(adviceBridgeClass.getName());
-        return adviceBridgeClass;
     }
 
     private static ElementMatcher.Junction<? super TypeDescription> generateTypeMatcher() {
