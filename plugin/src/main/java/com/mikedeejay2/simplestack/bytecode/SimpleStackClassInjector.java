@@ -3,7 +3,6 @@ package com.mikedeejay2.simplestack.bytecode;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.ClassFileLocator;
 import net.bytebuddy.dynamic.loading.ClassInjector;
-import org.bukkit.Bukkit;
 
 import java.io.IOException;
 import java.util.*;
