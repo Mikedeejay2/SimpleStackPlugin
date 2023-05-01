@@ -24,8 +24,20 @@ public final class SimpleStackClassInjector {
 
     private Map<TypeDescription, byte[]> getTypes() {
         return classes.stream().collect(Collectors.toMap(
-            TypeDescription.ForLoadedType::new,
-            ClassFileLocator.ForClassLoader::read));
+            SimpleStackClassInjector::forLoadedType,
+            SimpleStackClassInjector::forClassLoader));
+    }
+
+    private static TypeDescription.ForLoadedType forLoadedType(Class<?> clazz) {
+        return new TypeDescription.ForLoadedType(clazz);
+    }
+
+    private static byte[] forClassLoader(Class<?> clazz) {
+        try(ClassFileLocator locator = ClassFileLocator.ForClassLoader.of(SimpleStackClassInjector.class.getClassLoader())) {
+            return locator.locate(clazz.getName()).resolve();
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Map<TypeDescription, Class<?>> inject() throws IOException {
