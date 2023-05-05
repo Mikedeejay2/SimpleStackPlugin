@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.gui.modules;
+package com.mikedeejay2.simplestack.gui.config.modules;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;

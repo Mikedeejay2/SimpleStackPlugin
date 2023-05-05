@@ -22,7 +22,7 @@ public class ConfigListener implements Listener {
 
     @EventHandler
     private void onItemStack(ItemStackMaxAmountEvent event) {
-        final int amount = config.getUniqueItemAmount(event.getItemStack());
+        final int amount = config.getAmount(event.getItemStack());
         if(amount != -1) event.setAmount(amount);
     }
 

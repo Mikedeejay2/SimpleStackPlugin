@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.gui.constructors;
+package com.mikedeejay2.simplestack.gui.config.constructors;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.GUIInteractHandler;
@@ -9,8 +9,6 @@ import com.mikedeejay2.mikedeejay2lib.gui.interact.normal.GUIInteractExecutorDef
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.api.SimpleStackAPI;
-import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.AbstractMap;
@@ -18,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+// TODO: REMOVE
+@Deprecated
 public class GUIUniqueConstructor extends GUIAbstractListConstructor<Map.Entry<ItemStack, Integer>> {
     private static final Function<Map.Entry<ItemStack, Integer>, GUIItem> MAPPER =
         (entry) -> new GUIItem(entry.getKey()).setMovable(true);
@@ -27,7 +27,7 @@ public class GUIUniqueConstructor extends GUIAbstractListConstructor<Map.Entry<I
     public static final GUIUniqueConstructor INSTANCE = new GUIUniqueConstructor(SimpleStack.getInstance());
 
     private GUIUniqueConstructor(SimpleStack plugin) {
-        super(plugin, Text.of("simplestack.gui.unique_items.title"), 6, MAPPER, UNMAPPER);
+        super(plugin, Text.of("simplestack.gui.unique_items.title"), 6, null, null);
     }
 
     @Override
@@ -44,6 +44,7 @@ public class GUIUniqueConstructor extends GUIAbstractListConstructor<Map.Entry<I
 
     @Override
     protected List<Map.Entry<ItemStack, Integer>> getUnmappedList() {
-        return ((SimpleStackConfigImpl) SimpleStackAPI.getConfig()).getUniqueItemsRef();
+//        return ((SimpleStackConfigImpl) SimpleStackAPI.getConfig()).getUniqueItemsRef();
+        return null;
     }
 }

@@ -6,7 +6,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.structure.NavigationHolder;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.gui.constructors.GUIConfigConstructor;
+import com.mikedeejay2.simplestack.gui.config.constructors.GUIConfigConstructor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.gui.debug;
+package com.mikedeejay2.simplestack.gui.dev.modules;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
@@ -11,7 +11,7 @@ import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.gui.constructors.GUIConfigConstructor;
+import com.mikedeejay2.simplestack.gui.config.constructors.GUIConfigConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -37,8 +37,8 @@ public class GUIAboutModule implements GUIModule {
         int slot = event.getSlot();
         int rows = gui.getRows();
         int cols = gui.getCols();
-        int row = gui.getRowFromSlot(slot);
-        int col = gui.getColFromSlot(slot);
+        int row = gui.getRow(slot);
+        int col = gui.getColumn(slot);
         int newRow = row;
         int newCol = col;
 

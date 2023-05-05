@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.gui.debug;
+package com.mikedeejay2.simplestack.gui.dev.modules;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
@@ -14,6 +14,8 @@ import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.SimpleStackTimings;
+import com.mikedeejay2.simplestack.gui.dev.constructors.GUIAboutConstructor;
+import com.mikedeejay2.simplestack.gui.dev.constructors.GUIDebugEntriesConstructor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

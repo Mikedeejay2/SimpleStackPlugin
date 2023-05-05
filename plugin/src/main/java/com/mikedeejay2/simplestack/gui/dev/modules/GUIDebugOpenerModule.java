@@ -1,8 +1,9 @@
-package com.mikedeejay2.simplestack.gui.debug;
+package com.mikedeejay2.simplestack.gui.dev.modules;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
 import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.gui.dev.constructors.GUIDebuggerConstructor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;

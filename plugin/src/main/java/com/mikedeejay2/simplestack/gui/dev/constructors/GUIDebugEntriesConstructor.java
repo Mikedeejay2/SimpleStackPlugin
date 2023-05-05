@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.gui.debug;
+package com.mikedeejay2.simplestack.gui.dev.constructors;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIConstructor;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
@@ -11,11 +11,13 @@ import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.util.GUIAbstractRuntimeModule;
 import com.mikedeejay2.mikedeejay2lib.gui.util.SlotMatcher;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
+import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.SimpleStackTimings;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
+import com.mikedeejay2.simplestack.gui.config.constructors.GUIBaseConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,21 +25,20 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class GUIDebugEntriesConstructor implements GUIConstructor {
+public class GUIDebugEntriesConstructor extends GUIBaseConstructor {
     public static final GUIDebugEntriesConstructor INSTANCE = new GUIDebugEntriesConstructor(
         SimpleStack.getInstance(), SimpleStackAPI.getTimings());
 
-    private final SimpleStack plugin;
     private final SimpleStackTimings timings;
 
     private GUIDebugEntriesConstructor(SimpleStack plugin, SimpleStackTimings timings) {
-        this.plugin = plugin;
+        super(plugin, Text.of("&cTiming Entries"), 6);
         this.timings = timings;
     }
 
     @Override
     public GUIContainer get() {
-        GUIContainer newGui = new GUIContainer(plugin, "&cTiming Entries", 6);
+        GUIContainer newGui = super.get();
         GUIListModule list = new GUIListModule(plugin, GUIListModule.ListViewMode.PAGED, 2, 6, 1, 9, "list");
         list.addBack(1, 4);
         list.addBack(1, 3);
@@ -50,7 +51,6 @@ public class GUIDebugEntriesConstructor implements GUIConstructor {
             SlotMatcher.inRange(1, 1, 1, 9),
             GUIDebuggerConstructor.OUTLINE_ITEM, new AnimationSpecification(
                 AnimationSpecification.Position.TOP_LEFT, AnimationSpecification.Style.COL)));
-        newGui.addModule(new GUINavigatorModule(plugin, "config"));
         newGui.addModule(new GUIGetEntriesModule(plugin, list, timings));
         newGui.addModule(list);
 
@@ -100,7 +100,7 @@ public class GUIDebugEntriesConstructor implements GUIConstructor {
             }
             gui.removeItem(3, 5);
             for(int i = detailedTimings.size() - 1; i >= 0; --i) {
-                list.addListItem(new GUIItem(getItemStack(detailedTimings.get(i))));
+                list.addItem(new GUIItem(getItemStack(detailedTimings.get(i))));
             }
         }
 

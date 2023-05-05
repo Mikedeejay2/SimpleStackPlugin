@@ -1,10 +1,11 @@
-package com.mikedeejay2.simplestack.gui.debug;
+package com.mikedeejay2.simplestack.gui.dev.constructors;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIConstructor;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.animation.GUIAnimationModule;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.gui.dev.modules.GUIAboutModule;
 
 public class GUIAboutConstructor implements GUIConstructor {
     public static final GUIAboutConstructor INSTANCE = new GUIAboutConstructor(SimpleStack.getInstance());

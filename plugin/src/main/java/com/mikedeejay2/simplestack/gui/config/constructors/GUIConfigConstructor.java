@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.gui.constructors;
+package com.mikedeejay2.simplestack.gui.config.constructors;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIConstructor;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
@@ -13,8 +13,8 @@ import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.gui.debug.GUIDebugOpenerModule;
-import com.mikedeejay2.simplestack.gui.modules.GUIConfigModule;
+import com.mikedeejay2.simplestack.gui.dev.modules.GUIDebugOpenerModule;
+import com.mikedeejay2.simplestack.gui.config.modules.GUIConfigModule;
 import org.bukkit.Material;
 
 import com.mikedeejay2.mikedeejay2lib.gui.animation.AnimationSpecification.Position;
@@ -25,7 +25,7 @@ import com.mikedeejay2.mikedeejay2lib.gui.animation.AnimationSpecification.Style
  *
  * @author Mikedeejay2
  */
-public class GUIConfigConstructor implements GUIConstructor {
+public class GUIConfigConstructor extends GUIBaseConstructor {
     public static final GUIConfigConstructor INSTANCE = new GUIConfigConstructor(SimpleStack.getInstance());
 
     public static final AnimatedGUIItem ANIMATED_GUI_ITEM =
@@ -37,15 +37,13 @@ public class GUIConfigConstructor implements GUIConstructor {
             .addFrame(ItemBuilder.of(Material.CYAN_STAINED_GLASS_PANE).setEmptyName().get(), 1)
             .addFrame(ItemBuilder.of(Material.PURPLE_STAINED_GLASS_PANE).setEmptyName().get(), 100);
 
-    private final SimpleStack plugin;
-
     private GUIConfigConstructor(SimpleStack plugin) {
-        this.plugin = plugin;
+        super(plugin, Text.of("simplestack.gui.config.title"), 4);
     }
 
     @Override
     public GUIContainer get() {
-        GUIContainer gui = new GUIContainer(plugin, Text.of("simplestack.gui.config.title"), 4);
+        GUIContainer gui = super.get();
         GUIAnimationModule animation = new GUIAnimationModule(plugin, 1);
         GUIAnimDecoratorModule outlineModule = new GUIAnimOutlineModule(
             ANIMATED_GUI_ITEM, new AnimationSpecification(Position.of(2, 5), Style.CIRCULAR));

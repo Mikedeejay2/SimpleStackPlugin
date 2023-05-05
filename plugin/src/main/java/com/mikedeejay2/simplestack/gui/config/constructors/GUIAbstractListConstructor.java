@@ -1,54 +1,47 @@
-package com.mikedeejay2.simplestack.gui.constructors;
+package com.mikedeejay2.simplestack.gui.config.constructors;
 
-import com.mikedeejay2.mikedeejay2lib.gui.GUIConstructor;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIDecoratorModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIMappedListModule;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIMappedListModule.MappingFunction;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIMappedListModule.UnmappingFunction;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.util.GUIRuntimeModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.gui.modules.GUIModifiedConfigModule;
+import com.mikedeejay2.simplestack.gui.config.modules.GUIModifiedConfigModule;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.function.Function;
 
 import static com.mikedeejay2.mikedeejay2lib.gui.util.SlotMatcher.inRange;
 
-public abstract class GUIAbstractListConstructor<T> implements GUIConstructor {
-    protected final SimpleStack plugin;
-    protected final Text title;
-    protected final int inventoryRows;
-    protected final Function<T, GUIItem> mapFunction;
-    protected final Function<GUIItem, T> unmapFunction;
+public abstract class GUIAbstractListConstructor<T> extends GUIBaseConstructor {
+    protected final MappingFunction<T> mapFunction;
+    protected final UnmappingFunction<T> unmapFunction;
 
     public GUIAbstractListConstructor(
         SimpleStack plugin,
         Text title,
         int inventoryRows,
-        Function<T, GUIItem> mapFunction,
-        Function<GUIItem, T> unmapFunction) {
-        this.plugin = plugin;
-        this.title = title;
-        this.inventoryRows = inventoryRows;
+        MappingFunction<T> mapFunction,
+        UnmappingFunction<T> unmapFunction) {
+        super(plugin, title, inventoryRows);
         this.mapFunction = mapFunction;
         this.unmapFunction = unmapFunction;
     }
 
     @Override
     public GUIContainer get() {
-        GUIContainer gui = new GUIContainer(plugin, title, inventoryRows);
+        GUIContainer gui = super.get();
         GUIDecoratorModule border = new GUIDecoratorModule(
             inRange(1, 1, 1, 9).or(inRange(inventoryRows, 1, inventoryRows, 9)),
             new GUIItem(ItemBuilder.of(Base64Head.WHITE.get()).setEmptyName().get()));
         gui.addModule(border);
-        GUINavigatorModule navi = new GUINavigatorModule(plugin, "config");
-        gui.addModule(navi);
         GUIMappedListModule<T> listModule = new GUIMappedListModule<>(
             plugin, GUIListModule.ListViewMode.PAGED,
             getUnmappedList(), mapFunction,

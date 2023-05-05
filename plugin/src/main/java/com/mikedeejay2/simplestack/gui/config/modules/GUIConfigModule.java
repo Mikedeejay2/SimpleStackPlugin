@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.gui.modules;
+package com.mikedeejay2.simplestack.gui.config.modules;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.GUILayer;
@@ -16,16 +16,12 @@ import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
-import com.mikedeejay2.simplestack.gui.constructors.*;
+import com.mikedeejay2.simplestack.gui.config.constructors.GUIItemListConstructor;
+import com.mikedeejay2.simplestack.gui.config.constructors.GUILanguageConstructor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * The <code>GUIModule</code> for the main configuration GUI screen
@@ -36,18 +32,25 @@ public class GUIConfigModule implements GUIModule {
     private static final ItemBuilder CLOSE_ITEM = ItemBuilder.of(Material.REDSTONE)
         .setName(Text.of("&c&o").concat("simplestack.gui.config.close_select"));
 
-    private static final ItemBuilder ITEM_TYPE_AMOUNT_ITEM = ItemBuilder.of(Material.BARRIER)
-        .setName(Text.of("&b&l").concat("simplestack.gui.item_type_amts.title"))
-        .setLore(Text.of("&f").concat("simplestack.gui.config.item_type_description"));
+//    private static final ItemBuilder ITEM_TYPE_AMOUNT_ITEM = ItemBuilder.of(Material.BARRIER)
+//        .setName(Text.of("&b&l").concat("simplestack.gui.item_type_amts.title"))
+//        .setLore(Text.of("&f").concat("simplestack.gui.config.item_type_description"));
+//
+//    private static final ItemBuilder UNIQUE_ITEM_LIST_ITEM = ItemBuilder.of(Material.BARRIER)
+//        .setName(Text.of("&b&l").concat("simplestack.gui.unique_items.title"))
+//        .setLore(
+//            Text.of("&f").concat("simplestack.gui.config.unique_item_desc_l1"),
+//            Text.of("&7").concat("simplestack.gui.config.unique_item_desc_l2"),
+//            Text.of("&7").concat("simplestack.gui.config.unique_item_desc_l3"));
+//
+//    private static final ItemBuilder ITEM_TYPE_ITEM = ItemBuilder.of(Material.BARRIER)
+//        .setName(Text.of("&b&l").concat("simplestack.gui.item_types.title"))
+//        .setLore(
+//            Text.of("&f").concat("simplestack.gui.config.item_type_desc_l1"),
+//            Text.of("&7").concat("simplestack.gui.config.item_type_desc_l2"),
+//            Text.of("&7").concat("simplestack.gui.config.item_type_desc_l3"));
 
-    private static final ItemBuilder UNIQUE_ITEM_LIST_ITEM = ItemBuilder.of(Material.BARRIER)
-        .setName(Text.of("&b&l").concat("simplestack.gui.unique_items.title"))
-        .setLore(
-            Text.of("&f").concat("simplestack.gui.config.unique_item_desc_l1"),
-            Text.of("&7").concat("simplestack.gui.config.unique_item_desc_l2"),
-            Text.of("&7").concat("simplestack.gui.config.unique_item_desc_l3"));
-
-    private static final ItemBuilder ITEM_TYPE_ITEM = ItemBuilder.of(Material.BARRIER)
+    private static final ItemBuilder ITEM_LIST = ItemBuilder.of(Material.BARRIER)
         .setName(Text.of("&b&l").concat("simplestack.gui.item_types.title"))
         .setLore(
             Text.of("&f").concat("simplestack.gui.config.item_type_desc_l1"),
@@ -95,16 +98,18 @@ public class GUIConfigModule implements GUIModule {
     public void onOpenHead(Player player, GUIContainer gui) {
         GUILayer layer = gui.getLayer(0);
 
-        GUIItem itemTypeList = getGUIItemItemTypeList();
-        GUIItem itemTypeAmountList = getGUIItemItemTypeAmountList();
-        GUIItem uniqueItemList = getGUIItemUniqueItemList();
+//        GUIItem itemTypeList = getGUIItemItemTypeList();
+//        GUIItem itemTypeAmountList = getGUIItemItemTypeAmountList();
+//        GUIItem uniqueItemList = getGUIItemUniqueItemList();
+        GUIItem itemList = getGUIItemList();
         GUIItem language = getGUIItemLanguage();
         GUIItem defaultMaxAmount = getGUIItemDefaultMaxAmount();
         GUIItem stackableArmor = getGUIItemStackedArmor();
 
-        layer.setItem(2, 4, itemTypeList);
-        layer.setItem(2, 5, itemTypeAmountList);
-        layer.setItem(2, 6, uniqueItemList);
+//        layer.setItem(2, 4, itemTypeList);
+//        layer.setItem(2, 5, itemTypeAmountList);
+//        layer.setItem(2, 6, uniqueItemList);
+        layer.setItem(2, 5, itemList);
         layer.setItem(3, 4, language);
         layer.setItem(3, 5, defaultMaxAmount);
         layer.setItem(3, 6, stackableArmor);
@@ -125,29 +130,29 @@ public class GUIConfigModule implements GUIModule {
         return closeItem;
     }
 
-    /**
-     * Get the <code>GUIItem</code> for the item type amount list button
-     *
-     * @return The item type amount list button
-     */
-    private GUIItem getGUIItemItemTypeAmountList() {
-        AnimatedGUIItem itemTypeAmountList = new AnimatedGUIItem(ITEM_TYPE_AMOUNT_ITEM, true);
-        final Map<Material, Integer> itemAmounts = SimpleStackAPI.getConfig().getItemAmounts();
-        final Iterator<Map.Entry<Material, Integer>> iterator = itemAmounts.entrySet().iterator();
-        for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, itemAmounts.size()); ++i) {
-            Map.Entry<Material, Integer> entry = iterator.next();
-            Material material = entry.getKey();
-            if(material == null) continue;
-            itemTypeAmountList.addFrame(
-                ItemBuilder.of(ITEM_TYPE_AMOUNT_ITEM)
-                    .setType(material)
-                    .addItemFlags(PREVIEW_ITEM_FLAGS),
-                20);
-        }
-        itemTypeAmountList.addEvent(new GUIOpenNewEvent(plugin, GUIItemTypeAmountConstructor.INSTANCE));
-        itemTypeAmountList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
-        return itemTypeAmountList;
-    }
+//    /**
+//     * Get the <code>GUIItem</code> for the item type amount list button
+//     *
+//     * @return The item type amount list button
+//     */
+//    private GUIItem getGUIItemItemTypeAmountList() {
+//        AnimatedGUIItem itemTypeAmountList = new AnimatedGUIItem(ITEM_TYPE_AMOUNT_ITEM, true);
+//        final Map<Material, Integer> itemAmounts = SimpleStackAPI.getConfig().getItemAmounts();
+//        final Iterator<Map.Entry<Material, Integer>> iterator = itemAmounts.entrySet().iterator();
+//        for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, itemAmounts.size()); ++i) {
+//            Map.Entry<Material, Integer> entry = iterator.next();
+//            Material material = entry.getKey();
+//            if(material == null) continue;
+//            itemTypeAmountList.addFrame(
+//                ItemBuilder.of(ITEM_TYPE_AMOUNT_ITEM)
+//                    .setType(material)
+//                    .addItemFlags(PREVIEW_ITEM_FLAGS),
+//                20);
+//        }
+//        itemTypeAmountList.addEvent(new GUIOpenNewEvent(plugin, GUIItemTypeAmountConstructor.INSTANCE));
+//        itemTypeAmountList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
+//        return itemTypeAmountList;
+//    }
 
     /**
      * Get the <code>GUIItem</code> for the language select button
@@ -207,44 +212,61 @@ public class GUIConfigModule implements GUIModule {
         return defaultMaxAmount;
     }
 
-    /**
-     * Get the <code>GUIItem</code> for the unique item list button
-     *
-     * @return The unique item list button
-     */
-    private GUIItem getGUIItemUniqueItemList() {
-        AnimatedGUIItem uniqueItemList = new AnimatedGUIItem(UNIQUE_ITEM_LIST_ITEM, true);
-        final Set<ItemStack> uniqueItems = SimpleStackAPI.getConfig().getUniqueItems();
-        final Iterator<ItemStack> iterator = uniqueItems.iterator();
-        for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, uniqueItems.size()); ++i) {
-            uniqueItemList.addFrame(
-                ItemBuilder.of(UNIQUE_ITEM_LIST_ITEM)
-                    .setType(iterator.next().getType())
-                    .addItemFlags(PREVIEW_ITEM_FLAGS),
-                20);
-        }
-        uniqueItemList.addEvent(new GUIOpenNewEvent(plugin, GUIUniqueConstructor.INSTANCE));
-        uniqueItemList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
-        return uniqueItemList;
-    }
+//    /**
+//     * Get the <code>GUIItem</code> for the unique item list button
+//     *
+//     * @return The unique item list button
+//     */
+//    private GUIItem getGUIItemUniqueItemList() {
+//        AnimatedGUIItem uniqueItemList = new AnimatedGUIItem(UNIQUE_ITEM_LIST_ITEM, true);
+//        final Set<ItemStack> uniqueItems = SimpleStackAPI.getConfig().getUniqueItems();
+//        final Iterator<ItemStack> iterator = uniqueItems.iterator();
+//        for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, uniqueItems.size()); ++i) {
+//            uniqueItemList.addFrame(
+//                ItemBuilder.of(UNIQUE_ITEM_LIST_ITEM)
+//                    .setType(iterator.next().getType())
+//                    .addItemFlags(PREVIEW_ITEM_FLAGS),
+//                20);
+//        }
+//        uniqueItemList.addEvent(new GUIOpenNewEvent(plugin, GUIUniqueConstructor.INSTANCE));
+//        uniqueItemList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
+//        return uniqueItemList;
+//    }
 
-    /**
-     * Get the <code>GUIItem</code> for the item type list button
-     *
-     * @return The item type list button
-     */
-    private GUIItem getGUIItemItemTypeList() {
-        AnimatedGUIItem itemTypeList = new AnimatedGUIItem(ITEM_TYPE_ITEM, true);
-        final Set<Material> materialItems = SimpleStackAPI.getConfig().getMaterials();
-        final Iterator<Material> iterator = materialItems.iterator();
-        for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, materialItems.size()); ++i) {
-            itemTypeList.addFrame(
-                ItemBuilder.of(ITEM_TYPE_ITEM)
-                    .setType(iterator.next())
-                    .addItemFlags(PREVIEW_ITEM_FLAGS),
-                20);
-        }
-        itemTypeList.addEvent(new GUIOpenNewEvent(plugin, GUIItemTypeConstructor.INSTANCE));
+//    /**
+//     * Get the <code>GUIItem</code> for the item type list button
+//     *
+//     * @return The item type list button
+//     */
+//    private GUIItem getGUIItemItemTypeList() {
+//        AnimatedGUIItem itemTypeList = new AnimatedGUIItem(ITEM_TYPE_ITEM, true);
+//        final Set<Material> materialItems = SimpleStackAPI.getConfig().getMaterials();
+//        final Iterator<Material> iterator = materialItems.iterator();
+//        for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, materialItems.size()); ++i) {
+//            itemTypeList.addFrame(
+//                ItemBuilder.of(ITEM_TYPE_ITEM)
+//                    .setType(iterator.next())
+//                    .addItemFlags(PREVIEW_ITEM_FLAGS),
+//                20);
+//        }
+//        itemTypeList.addEvent(new GUIOpenNewEvent(plugin, GUIItemTypeConstructor.INSTANCE));
+//        itemTypeList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
+//        return itemTypeList;
+//    }
+
+    private GUIItem getGUIItemList() {
+        AnimatedGUIItem itemTypeList = new AnimatedGUIItem(ITEM_LIST, true);
+        // TODO: THIS
+//        final Set<Material> materialItems = SimpleStackAPI.getConfig().getMaterials();
+//        final Iterator<Material> iterator = materialItems.iterator();
+//        for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, materialItems.size()); ++i) {
+//            itemTypeList.addFrame(
+//                ItemBuilder.of(ITEM_TYPE_ITEM)
+//                    .setType(iterator.next())
+//                    .addItemFlags(PREVIEW_ITEM_FLAGS),
+//                20);
+//        }
+        itemTypeList.addEvent(new GUIOpenNewEvent(plugin, GUIItemListConstructor.INSTANCE));
         itemTypeList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
         return itemTypeList;
     }
