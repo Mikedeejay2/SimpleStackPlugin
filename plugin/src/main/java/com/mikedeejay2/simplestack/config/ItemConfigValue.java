@@ -70,6 +70,10 @@ public class ItemConfigValue {
         return checks.size() == 1 && checks.contains(ItemCheck.MATERIAL);
     }
 
+    public boolean canBeMaterialValue() {
+        return checks.contains(ItemCheck.MATERIAL);
+    }
+
     public Material asMaterial() {
         return configItem.getType();
     }

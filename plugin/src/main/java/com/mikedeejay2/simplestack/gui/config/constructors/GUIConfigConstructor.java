@@ -1,6 +1,5 @@
 package com.mikedeejay2.simplestack.gui.config.constructors;
 
-import com.mikedeejay2.mikedeejay2lib.gui.GUIConstructor;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.animation.AnimationSpecification;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.GUIInteractHandler;

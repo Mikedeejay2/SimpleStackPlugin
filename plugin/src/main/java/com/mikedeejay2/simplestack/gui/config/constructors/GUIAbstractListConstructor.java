@@ -13,7 +13,6 @@ import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.gui.config.modules.GUIModifiedConfigModule;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;

@@ -1,45 +1,57 @@
 package com.mikedeejay2.simplestack.config;
 
 import com.mikedeejay2.mikedeejay2lib.util.item.FastItemMeta;
+import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.objects.*;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class ItemMap {
-    private final Reference2IntMap<Material> materialMap = new Reference2IntLinkedOpenHashMap<>();
-    private final ReferenceList<ItemProperties> metaList = new ReferenceArrayList<>();
-    private final ReferenceList<ItemConfigValue> valueList = new ReferenceArrayList<>();
+    private final EnumMap<Material, Integer> material2AmountMap = new EnumMap<>(Material.class);
+    private final EnumMap<Material, Object2IntMap<ItemMeta>> material2Meta2AmountMap = new EnumMap<>(Material.class);
+    private final EnumMap<Material, ReferenceList<ItemConfigValue>> material2ValueMap = new EnumMap<>(Material.class);
+    private final ReferenceList<ItemConfigValue> wildcardValueList = new ReferenceArrayList<>();
+
     private final ReferenceList<ItemConfigValue> consolidated = new ReferenceArrayList<>();
 
     private boolean shouldBuildMaps = true;
 
     public int getMaterial(Material material) {
-        return materialMap.getOrDefault(material, -1);
+        return material2AmountMap.getOrDefault(material, -1);
     }
 
     public int getItemStack(ItemStack itemStack) {
-        int result = getMetaAmount(itemStack);
+        final Material material = itemStack.getType();
+        int result = getMetaAmount(itemStack, material);
         if(result != -1) return result;
-        return getValueAmount(itemStack);
+        result = getValueAmount(itemStack, material);
+        if(result != -1) return result;
+        return getWildcardAmount(itemStack);
     }
 
-    private int getMetaAmount(ItemStack itemStack) {
-        for(ItemProperties cur : metaList) {
-            if(cur.getType() != itemStack.getType()) continue;
-            if(!Objects.equals(cur.getItemMeta(), FastItemMeta.getItemMeta(itemStack))) continue;
-            return cur.getAmount();
+    private int getMetaAmount(ItemStack itemStack, Material material) {
+        if(!itemStack.hasItemMeta() || !material2Meta2AmountMap.containsKey(material)) return -1;
+        final ItemMeta meta = FastItemMeta.getItemMeta(itemStack);
+        return material2Meta2AmountMap.get(material).getOrDefault(meta, -1);
+    }
+
+    private int getValueAmount(ItemStack itemStack, Material material) {
+        if(!material2ValueMap.containsKey(material)) return -1;
+        for(ItemConfigValue value : material2ValueMap.get(material)) {
+            if(value.checkItem(itemStack)) return value.getAmount();
         }
         return -1;
     }
 
-    private int getValueAmount(ItemStack itemStack) {
-        for(ItemConfigValue cur : valueList) {
-            if(cur.checkItem(itemStack)) return cur.getAmount();
+    private int getWildcardAmount(ItemStack itemStack) {
+        for(ItemConfigValue value : wildcardValueList) {
+            if(value.checkItem(itemStack)) return value.getAmount();
         }
         return -1;
     }
@@ -60,20 +72,33 @@ public final class ItemMap {
 
     public void buildMaps() {
         if(!shouldBuildMaps) return;
-        materialMap.clear();
-        metaList.clear();
-        valueList.clear();
+        material2AmountMap.clear();
+        material2Meta2AmountMap.clear();
+        material2ValueMap.clear();
+        wildcardValueList.clear();
+
         for(ItemConfigValue value : consolidated) {
             final int amount = value.getItem().getAmount();
+            ItemProperties item = value.getItem();
             if(value.canBeMaterial()) {
-                materialMap.put(value.asMaterial(), amount);
+                if(material2AmountMap.containsKey(item.getType())) continue;
+                material2AmountMap.put(item.getType(), amount);
                 continue;
             }
             if(value.canBeMetaMaterial()) {
-                metaList.add(value.getItem());
+                if(!material2Meta2AmountMap.containsKey(item.getType())) {
+                    material2Meta2AmountMap.put(item.getType(), new Object2IntLinkedOpenHashMap<>());
+                }
+                material2Meta2AmountMap.get(item.getType()).put(item.getItemMeta(), item.getAmount());
                 continue;
             }
-            valueList.add(value);
+            if(value.canBeMaterialValue()) {
+                if(!material2ValueMap.containsKey(item.getType())) {
+                    material2ValueMap.put(item.getType(), new ReferenceArrayList<>());
+                }
+                material2ValueMap.get(item.getType()).add(value);
+            }
+            wildcardValueList.add(value);
         }
     }
 

@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.gui.config.constructors;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.GUIInteractHandler;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.GUIInteractType;
+import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractExecutorList;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractHandlerList;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.normal.GUIInteractExecutorDefaultInv;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
@@ -13,7 +14,6 @@ import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.config.ItemConfigValue;
 import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
-import com.mikedeejay2.simplestack.gui.config.interact.GUIInteractItemList;
 
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class GUIItemListConstructor extends GUIAbstractListConstructor<ItemConfi
         GUIInteractHandler interaction = new GUIInteractHandlerList(64);
         interaction.resetExecutors();
         interaction.addExecutor(new GUIInteractExecutorDefaultInv(64));
-        interaction.addExecutor(new GUIInteractItemList(GUIInteractType.DEFAULT, 64, false));
+        interaction.addExecutor(new GUIInteractExecutorList(GUIInteractType.DEFAULT, 64, false));
         gui.setDefaultMoveState(true);
         gui.setInteractionHandler(interaction);
         return gui;

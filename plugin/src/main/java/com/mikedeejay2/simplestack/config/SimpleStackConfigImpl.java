@@ -5,7 +5,6 @@ import com.mikedeejay2.mikedeejay2lib.config.ConfigFile;
 import com.mikedeejay2.mikedeejay2lib.data.FileType;
 import com.mikedeejay2.mikedeejay2lib.text.language.TranslationManager;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReportSection;
-import com.mikedeejay2.mikedeejay2lib.util.structure.list.SetAsList;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.SimpleStackConfig;
 import org.bukkit.Material;

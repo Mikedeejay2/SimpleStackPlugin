@@ -51,15 +51,18 @@ public final class ItemProperties {
         return ImmutableMap.<String, Object>builder()
             .put("type", type.toString())
             .put("amount", amount)
-            .put("meta", meta)
+            .put("meta", meta == null ? "none" : meta)
             .build();
     }
 
     public static ItemProperties deserialize(Map<String, Object> map) {
+        Object metaObj = map.get("meta");
+        ItemMeta meta = metaObj instanceof ItemMeta ? (ItemMeta) metaObj : null;
+
         return new ItemProperties(
             Material.valueOf((String) map.get("type")),
             (int) map.get("amount"),
-            (ItemMeta) map.get("meta"));
+            meta);
     }
 
     @Override
