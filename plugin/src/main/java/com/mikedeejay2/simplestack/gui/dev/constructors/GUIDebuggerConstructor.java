@@ -26,7 +26,7 @@ public class GUIDebuggerConstructor extends GUIBaseConstructor {
     private final SimpleStack plugin;
 
     public GUIDebuggerConstructor(SimpleStack plugin) {
-        super(plugin, Text.of("&cDebug Menu"), 3);
+        super(plugin, Text.of("&cDebug Menu").color(), 3);
         this.plugin = plugin;
     }
 

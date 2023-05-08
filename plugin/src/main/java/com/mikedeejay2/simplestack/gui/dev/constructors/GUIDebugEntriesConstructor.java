@@ -1,13 +1,11 @@
 package com.mikedeejay2.simplestack.gui.dev.constructors;
 
-import com.mikedeejay2.mikedeejay2lib.gui.GUIConstructor;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.animation.AnimationSpecification;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.animation.GUIAnimationModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIAnimDecoratorModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.util.GUIAbstractRuntimeModule;
 import com.mikedeejay2.mikedeejay2lib.gui.util.SlotMatcher;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
@@ -32,7 +30,7 @@ public class GUIDebugEntriesConstructor extends GUIBaseConstructor {
     private final SimpleStackTimings timings;
 
     private GUIDebugEntriesConstructor(SimpleStack plugin, SimpleStackTimings timings) {
-        super(plugin, Text.of("&cTiming Entries"), 6);
+        super(plugin, Text.of("&cTiming Entries").color(), 6);
         this.timings = timings;
     }
 
