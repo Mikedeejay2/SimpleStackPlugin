@@ -86,6 +86,18 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
         return itemMap.get().getMaterial(type);
     }
 
+    public void addItem(ItemConfigValue value) {
+        itemMap.get().addItem(value);
+    }
+
+    public void removeItem(ItemConfigValue value) {
+        itemMap.get().removeItem(value);
+    }
+
+    public boolean containsItem(ItemConfigValue value) {
+        return itemMap.get().containsItem(value);
+    }
+
 //    @Override
 //    public int getUniqueItemAmount(@NotNull ItemStack item) {
 //        final int amount = uniqueItemMap.get().getInt(item);

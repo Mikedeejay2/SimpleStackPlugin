@@ -1,7 +1,6 @@
 package com.mikedeejay2.simplestack.config;
 
 import com.mikedeejay2.mikedeejay2lib.util.item.FastItemMeta;
-import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.objects.*;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -64,6 +63,10 @@ public final class ItemMap {
     public void removeItem(ItemConfigValue value) {
         consolidated.remove(value);
         buildMaps();
+    }
+
+    public boolean containsItem(ItemConfigValue value) {
+        return consolidated.contains(value);
     }
 
     public List<ItemConfigValue> getList() {

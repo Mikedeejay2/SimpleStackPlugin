@@ -11,6 +11,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ItemConfigValue {
+    public static final String DATA_KEY = "item_config_value";
+
     protected final Set<ItemCheck> checks = EnumSet.noneOf(ItemCheck.class);
 
     protected final ItemProperties configItem;
@@ -38,12 +40,15 @@ public class ItemConfigValue {
     }
 
     public ItemBuilder asItemBuilder() {
-        return ItemBuilder.of(configItem.asItemStack()).addLoreText(
-            checks.stream()
-                .map(ItemConfigValue.ItemCheck::getNameKey)
-                .map(Text::of)
-                .map(text -> Text.of("&a • ").concat(text).color())
-                .collect(Collectors.toList()));
+        return ItemBuilder.of(configItem.asItemStack())
+            .addLore("")
+            .addLore(Text.of("&7Matches: ").color())
+            .addLoreText(
+                checks.stream()
+                    .map(ItemConfigValue.ItemCheck::getNameKey)
+                    .map(Text::of)
+                    .map(text -> Text.of("&a • ").concat(text).color())
+                    .collect(Collectors.toList()));
     }
 
     public ItemConfigValue addCheck(ItemCheck check) {
@@ -141,7 +146,7 @@ public class ItemConfigValue {
         ITEM_META("simplestack.config.item_checks.item_meta") {
             @Override
             public boolean check(ItemStack item, ItemProperties configItem) {
-                return configItem.getItemMeta().equals(FastItemMeta.getItemMeta(item));
+                return Objects.equals(configItem.getItemMeta(), FastItemMeta.getItemMeta(item));
             }
         };
 

@@ -2,7 +2,7 @@ package com.mikedeejay2.simplestack.gui.config.constructors;
 
 import com.google.common.collect.ImmutableList;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
-import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEventInfo;
+import com.mikedeejay2.mikedeejay2lib.gui.event.GUIClickEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.sound.GUIPlaySoundEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GUILanguageConstructor extends GUIAbstractListConstructor<GUIItem> {
     private static final MappingFunction<GUIItem> MAPPER = (item, i, module) -> item;
@@ -79,7 +80,7 @@ public class GUILanguageConstructor extends GUIAbstractListConstructor<GUIItem> 
      * @return A list of GUIItems for each language
      */
     public List<GUIItem> getLanguageList() {
-        List<GUIItem> items = new ArrayList<>(languageItems);
+        List<GUIItem> items = languageItems.stream().map(GUIItem::clone).collect(Collectors.toList());
 
         String currentLocale = SimpleStackAPI.getConfig().getLocale();
         int index = 0;
@@ -139,13 +140,13 @@ public class GUILanguageConstructor extends GUIAbstractListConstructor<GUIItem> 
         }
 
         @Override
-        protected void executeClick(GUIEventInfo info) {
+        protected void executeClick(GUIClickEvent event) {
             SimpleStackConfig config = SimpleStackAPI.getConfig();
             config.setLocale(locale);
-            GUIListModule listModule = info.getGUI().getModule(GUIListModule.class);
+            GUIListModule listModule = event.getGUI().getModule(GUIListModule.class);
             List<GUIItem> langItems = GUILanguageConstructor.INSTANCE.getLanguageList();
             listModule.setItems(langItems);
-            super.executeClick(info);
+            super.executeClick(event);
         }
 
         public String getLocale() {
