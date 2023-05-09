@@ -33,6 +33,7 @@ public class ItemConfigValue {
     }
 
     public boolean checkItem(ItemStack item) {
+        if(checks.size() == 0) return false;
         for(ItemCheck check : checks) {
             if(!check.check(item, configItem)) return false;
         }

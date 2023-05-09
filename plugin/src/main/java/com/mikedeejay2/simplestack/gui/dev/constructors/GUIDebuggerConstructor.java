@@ -1,6 +1,5 @@
 package com.mikedeejay2.simplestack.gui.dev.constructors;
 
-import com.mikedeejay2.mikedeejay2lib.gui.GUIConstructor;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.animation.AnimationSpecification;
 import com.mikedeejay2.mikedeejay2lib.gui.animation.AnimationSpecification.Position;
@@ -8,7 +7,6 @@ import com.mikedeejay2.mikedeejay2lib.gui.animation.AnimationSpecification.Style
 import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.animation.GUIAnimationModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIAnimOutlineModule;
-import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;

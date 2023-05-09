@@ -76,6 +76,10 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
         return itemMap.get().getList();
     }
 
+    public ItemMap getItemMap() {
+        return itemMap.get();
+    }
+
     @Override
     public int getAmount(@NotNull ItemStack item) {
         return itemMap.get().getItemStack(item);
