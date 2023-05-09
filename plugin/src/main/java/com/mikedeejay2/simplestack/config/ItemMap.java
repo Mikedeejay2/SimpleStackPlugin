@@ -41,14 +41,14 @@ public final class ItemMap {
     private int getValueAmount(ItemStack itemStack, Material material) {
         if(!material2ValueMap.containsKey(material)) return -1;
         for(ItemConfigValue value : material2ValueMap.get(material)) {
-            if(value.checkItem(itemStack)) return value.getAmount();
+            if(value.matchItem(itemStack)) return value.getAmount();
         }
         return -1;
     }
 
     private int getWildcardAmount(ItemStack itemStack) {
         for(ItemConfigValue value : wildcardValueList) {
-            if(value.checkItem(itemStack)) return value.getAmount();
+            if(value.matchItem(itemStack)) return value.getAmount();
         }
         return -1;
     }
@@ -114,7 +114,8 @@ public final class ItemMap {
         if(list == null) return itemMap;
         itemMap.shouldBuildMaps = false;
         for(Map<String, Object> cur : list) {
-            itemMap.addItem(ItemConfigValue.deserialize(cur));
+            ItemConfigValue value = ItemConfigValue.deserialize(cur);
+            if(value != null) itemMap.addItem(value);
         }
         itemMap.shouldBuildMaps = true;
         itemMap.buildMaps();

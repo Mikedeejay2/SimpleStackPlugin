@@ -47,5 +47,4 @@ public interface SimpleStackConfig {
     void setLocale(@NotNull String newLocale);
 
     boolean isModified();
-    void setModified(boolean modified);
 }

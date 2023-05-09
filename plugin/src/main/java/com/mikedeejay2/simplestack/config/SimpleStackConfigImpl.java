@@ -92,10 +92,12 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
 
     public void addItem(ItemConfigValue value) {
         itemMap.get().addItem(value);
+        setItemsModified(true);
     }
 
     public void removeItem(ItemConfigValue value) {
         itemMap.get().removeItem(value);
+        setItemsModified(true);
     }
 
     public boolean containsItem(ItemConfigValue value) {
@@ -217,6 +219,10 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
         this.locale.set(newLocale);
         TranslationManager.GLOBAL.setGlobalLocale(newLocale);
         setModified(true);
+    }
+
+    public void setItemsModified(boolean modified) {
+        this.itemsFile.setModified(modified);
     }
 
     public void fillCrashReportSection(CrashReportSection section) {

@@ -10,7 +10,8 @@ import org.bukkit.entity.Player;
 public class GUIModifiedConfigModule implements GUIModule {
     public static final GUIModifiedConfigModule INSTANCE = new GUIModifiedConfigModule();
 
-    private final ItemMap itemMap = ((SimpleStackConfigImpl) SimpleStackAPI.getConfig()).getItemMap();
+    private final SimpleStackConfigImpl config = ((SimpleStackConfigImpl) SimpleStackAPI.getConfig());
+    private final ItemMap itemMap = config.getItemMap();
     private int itemMapHash;
 
     @Override
@@ -22,5 +23,6 @@ public class GUIModifiedConfigModule implements GUIModule {
     public void onClose(Player player, GUIContainer gui) {
         if(itemMapHash == itemMap.hashCode()) return;
         itemMap.buildMaps();
+        config.setItemsModified(true);
     }
 }

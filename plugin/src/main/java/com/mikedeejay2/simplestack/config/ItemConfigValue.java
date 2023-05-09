@@ -13,28 +13,28 @@ import java.util.stream.Collectors;
 public class ItemConfigValue {
     public static final String DATA_KEY = "item_config_value";
 
-    protected final Set<ItemCheck> checks = EnumSet.noneOf(ItemCheck.class);
+    protected final Set<ItemMatcher> matches = EnumSet.noneOf(ItemMatcher.class);
 
     protected final ItemProperties configItem;
 
-    public ItemConfigValue(ItemStack configItem, ItemCheck... checks) {
+    public ItemConfigValue(ItemStack configItem, ItemMatcher... matches) {
         this.configItem = new ItemProperties(configItem);
-        Collections.addAll(this.checks, checks);
+        Collections.addAll(this.matches, matches);
     }
 
-    public ItemConfigValue(ItemStack configItem, Collection<ItemCheck> checks) {
+    public ItemConfigValue(ItemStack configItem, Collection<ItemMatcher> matches) {
         this.configItem = new ItemProperties(configItem);
-        this.checks.addAll(checks);
+        this.matches.addAll(matches);
     }
 
-    protected ItemConfigValue(ItemProperties item, Set<ItemCheck> checks) {
+    protected ItemConfigValue(ItemProperties item, Set<ItemMatcher> matches) {
         this.configItem = item;
-        this.checks.addAll(checks);
+        this.matches.addAll(matches);
     }
 
-    public boolean checkItem(ItemStack item) {
-        if(checks.size() == 0) return false;
-        for(ItemCheck check : checks) {
+    public boolean matchItem(ItemStack item) {
+        if(matches.size() == 0) return false;
+        for(ItemMatcher check : matches) {
             if(!check.check(item, configItem)) return false;
         }
         return true;
@@ -45,39 +45,39 @@ public class ItemConfigValue {
             .addLore("")
             .addLore(Text.of("&7Matches: ").color())
             .addLoreText(
-                checks.stream()
-                    .map(ItemConfigValue.ItemCheck::getNameKey)
+                matches.stream()
+                    .map(ItemMatcher::getNameKey)
                     .map(Text::of)
                     .map(text -> Text.of("&a • ").concat(text).color())
                     .collect(Collectors.toList()));
     }
 
-    public ItemConfigValue addCheck(ItemCheck check) {
-        checks.add(check);
+    public ItemConfigValue addMatcher(ItemMatcher matcher) {
+        matches.add(matcher);
         return this;
     }
 
-    public ItemConfigValue removeCheck(ItemCheck check) {
-        checks.remove(check);
+    public ItemConfigValue removeMatcher(ItemMatcher matcher) {
+        matches.remove(matcher);
         return this;
     }
 
-    public ItemConfigValue setChecks(Collection<ItemCheck> checks) {
-        this.checks.clear();
-        this.checks.addAll(checks);
+    public ItemConfigValue setMatches(Collection<ItemMatcher> matches) {
+        this.matches.clear();
+        this.matches.addAll(matches);
         return this;
     }
 
     public boolean canBeMetaMaterial() {
-        return checks.size() == 2 && checks.contains(ItemCheck.MATERIAL) && checks.contains(ItemCheck.ITEM_META);
+        return matches.size() == 2 && matches.contains(ItemMatcher.MATERIAL) && matches.contains(ItemMatcher.ITEM_META);
     }
 
     public boolean canBeMaterial() {
-        return checks.size() == 1 && checks.contains(ItemCheck.MATERIAL);
+        return matches.size() == 1 && matches.contains(ItemMatcher.MATERIAL);
     }
 
     public boolean canBeMaterialValue() {
-        return checks.contains(ItemCheck.MATERIAL);
+        return matches.contains(ItemMatcher.MATERIAL);
     }
 
     public Material asMaterial() {
@@ -92,14 +92,14 @@ public class ItemConfigValue {
         return configItem.getAmount();
     }
 
-    public Set<ItemCheck> getChecks() {
-        return checks;
+    public Set<ItemMatcher> getMatches() {
+        return matches;
     }
 
     @Override
     public int hashCode() {
         int hash = 1;
-        hash = hash * 31 + checks.hashCode();
+        hash = hash * 31 + matches.hashCode();
         hash = hash * 31 + configItem.hashCode();
         return hash;
     }
@@ -108,36 +108,38 @@ public class ItemConfigValue {
     public boolean equals(Object obj) {
         if(!(obj instanceof ItemConfigValue)) return false;
         final ItemConfigValue other = (ItemConfigValue) obj;
-        if(!checks.equals(other.checks)) return false;
+        if(!matches.equals(other.matches)) return false;
         return configItem.equals(other.configItem);
     }
 
     public Map<String, Object> serialize() {
         return ImmutableMap.<String, Object>builder()
             .put("item", configItem.serialize())
-            .put("checks", checks.stream()
+            .put("matchers", matches.stream()
                 .map(Enum::toString)
                 .collect(Collectors.toList()))
             .build();
     }
 
     public static ItemConfigValue deserialize(Map<String, Object> map) {
+        if(!map.containsKey("item")) return null;
+        if(!map.containsKey("matchers")) return null;
         return new ItemConfigValue(
             ItemProperties.deserialize((Map<String, Object>) map.get("item")),
-            ((List<String>) map.get("checks")).stream()
-                .map(ItemCheck::valueOf)
+            ((List<String>) map.get("matchers")).stream()
+                .map(ItemMatcher::valueOf)
                 .collect(Collectors.toSet()));
     }
 
     @Override
     public String toString() {
         return "ItemConfigValue{" +
-            "checks=" + checks +
+            "checks=" + matches +
             ", configItem=" + configItem +
             '}';
     }
 
-    public enum ItemCheck {
+    public enum ItemMatcher {
         MATERIAL("simplestack.config.item_checks.material") {
             @Override
             public boolean check(ItemStack item, ItemProperties configItem) {
@@ -153,7 +155,7 @@ public class ItemConfigValue {
 
         private final String nameKey;
 
-        ItemCheck(String nameKey) {
+        ItemMatcher(String nameKey) {
             this.nameKey = nameKey;
         }
 

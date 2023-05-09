@@ -2,7 +2,6 @@ package com.mikedeejay2.simplestack.gui.config.modules;
 
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
 import com.mikedeejay2.mikedeejay2lib.gui.event.GUIClickEvent;
-import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.navigation.GUIOpenNewEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.sound.GUIPlaySoundEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.util.GUIAbstractClickEvent;
@@ -13,7 +12,7 @@ import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.config.ItemConfigValue;
-import com.mikedeejay2.simplestack.config.ItemConfigValue.ItemCheck;
+import com.mikedeejay2.simplestack.config.ItemConfigValue.ItemMatcher;
 import com.mikedeejay2.simplestack.gui.config.constructors.GUIItemRemoveConstructor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -34,7 +33,7 @@ public class GUIItemConfigModule implements GUIModule {
     public GUIItemConfigModule(SimpleStack plugin, ItemConfigValue configValue) {
         this.configValue = configValue;
         this.plugin = plugin;
-        this.matcherItems = new GUIItem[ItemCheck.values().length];
+        this.matcherItems = new GUIItem[ItemMatcher.values().length];
         genMatcherItems();
     }
 
@@ -58,10 +57,10 @@ public class GUIItemConfigModule implements GUIModule {
     }
 
     private void genMatcherItems() {
-        final ItemCheck[] matchValues = ItemCheck.values();
+        final ItemMatcher[] matchValues = ItemMatcher.values();
         for(int i = 0; i < matchValues.length; ++i) {
-            ItemCheck match = matchValues[i];
-            State state = State.getState(match, configValue.getChecks());
+            ItemMatcher match = matchValues[i];
+            State state = State.getState(match, configValue.getMatches());
             GUIItem item = new GUIItem(state.getItem())
                 .setName(Text.of(match.getNameKey()))
                 .addExtraData("state", state)
@@ -74,8 +73,8 @@ public class GUIItemConfigModule implements GUIModule {
 
     private void updateItems() {
         for(GUIItem item : matcherItems) {
-            ItemCheck matcher = item.getExtraData("match", ItemCheck.class);
-            State state = State.getState(matcher, configValue.getChecks());
+            ItemMatcher matcher = item.getExtraData("match", ItemMatcher.class);
+            State state = State.getState(matcher, configValue.getMatches());
             if(item.getExtraData("state", State.class) == state) continue;
             item.set(state.getItem())
                 .setName(Text.of(matcher.getNameKey()))
@@ -126,7 +125,7 @@ public class GUIItemConfigModule implements GUIModule {
             return item;
         }
 
-        public static State getState(ItemCheck matcher, Set<ItemCheck> allMatchers) {
+        public static State getState(ItemMatcher matcher, Set<ItemMatcher> allMatchers) {
             // TODO: ADD INCOMPATIBILITIES
             if(allMatchers.contains(matcher)) return State.VALID_ENABLED;
             return State.VALID_DISABLED;
@@ -134,10 +133,10 @@ public class GUIItemConfigModule implements GUIModule {
     }
 
     private static final class MatcherEvent extends GUIAbstractClickEvent {
-        private final ItemCheck matcher;
+        private final ItemMatcher matcher;
         private final ItemConfigValue value;
 
-        public MatcherEvent(ItemCheck matcher, ItemConfigValue value) {
+        public MatcherEvent(ItemMatcher matcher, ItemConfigValue value) {
             super(ClickType.LEFT, ClickType.RIGHT);
             this.matcher = matcher;
             this.value = value;
@@ -145,17 +144,17 @@ public class GUIItemConfigModule implements GUIModule {
 
         @Override
         protected void executeClick(GUIClickEvent info) {
-            State state = State.getState(matcher, value.getChecks());
+            State state = State.getState(matcher, value.getMatches());
             updateMatch(state);
         }
 
         private void updateMatch(State state) {
             switch(state) {
                 case VALID_ENABLED:
-                    value.removeCheck(matcher);
+                    value.removeMatcher(matcher);
                     break;
                 case VALID_DISABLED:
-                    value.addCheck(matcher);
+                    value.addMatcher(matcher);
                     break;
             }
         }

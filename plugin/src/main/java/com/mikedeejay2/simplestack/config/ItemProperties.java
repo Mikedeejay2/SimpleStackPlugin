@@ -56,6 +56,8 @@ public final class ItemProperties {
     }
 
     public static ItemProperties deserialize(Map<String, Object> map) {
+        if(!map.containsKey("type")) return null;
+        if(!map.containsKey("amount")) return null;
         Object metaObj = map.get("meta");
         ItemMeta meta = metaObj instanceof ItemMeta ? (ItemMeta) metaObj : null;
 
