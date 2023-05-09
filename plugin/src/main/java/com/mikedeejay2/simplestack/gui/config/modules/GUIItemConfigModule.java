@@ -60,7 +60,7 @@ public class GUIItemConfigModule implements GUIModule {
         final ItemMatcher[] matchValues = ItemMatcher.values();
         for(int i = 0; i < matchValues.length; ++i) {
             ItemMatcher match = matchValues[i];
-            State state = State.getState(match, configValue.getMatches());
+            State state = State.getState(match, configValue.getMatchers());
             GUIItem item = new GUIItem(state.getItem())
                 .setName(Text.of(match.getNameKey()))
                 .addExtraData("state", state)
@@ -74,7 +74,7 @@ public class GUIItemConfigModule implements GUIModule {
     private void updateItems() {
         for(GUIItem item : matcherItems) {
             ItemMatcher matcher = item.getExtraData("match", ItemMatcher.class);
-            State state = State.getState(matcher, configValue.getMatches());
+            State state = State.getState(matcher, configValue.getMatchers());
             if(item.getExtraData("state", State.class) == state) continue;
             item.set(state.getItem())
                 .setName(Text.of(matcher.getNameKey()))
@@ -144,7 +144,7 @@ public class GUIItemConfigModule implements GUIModule {
 
         @Override
         protected void executeClick(GUIClickEvent info) {
-            State state = State.getState(matcher, value.getMatches());
+            State state = State.getState(matcher, value.getMatchers());
             updateMatch(state);
         }
 

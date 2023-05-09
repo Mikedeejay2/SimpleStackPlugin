@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.config;
 import com.google.common.collect.ImmutableMap;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
+import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.mikedeejay2lib.util.item.FastItemMeta;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -13,71 +14,84 @@ import java.util.stream.Collectors;
 public class ItemConfigValue {
     public static final String DATA_KEY = "item_config_value";
 
-    protected final Set<ItemMatcher> matches = EnumSet.noneOf(ItemMatcher.class);
+    protected final Set<ItemMatcher> matchers = EnumSet.noneOf(ItemMatcher.class);
 
     protected final ItemProperties configItem;
 
-    public ItemConfigValue(ItemStack configItem, ItemMatcher... matches) {
+    public ItemConfigValue(ItemStack configItem, ItemMatcher... matchers) {
         this.configItem = new ItemProperties(configItem);
-        Collections.addAll(this.matches, matches);
+        Collections.addAll(this.matchers, matchers);
     }
 
-    public ItemConfigValue(ItemStack configItem, Collection<ItemMatcher> matches) {
+    public ItemConfigValue(ItemStack configItem, Collection<ItemMatcher> matchers) {
         this.configItem = new ItemProperties(configItem);
-        this.matches.addAll(matches);
+        this.matchers.addAll(matchers);
     }
 
-    protected ItemConfigValue(ItemProperties item, Set<ItemMatcher> matches) {
+    protected ItemConfigValue(ItemProperties item, Set<ItemMatcher> matchers) {
         this.configItem = item;
-        this.matches.addAll(matches);
+        this.matchers.addAll(matchers);
     }
 
     public boolean matchItem(ItemStack item) {
-        if(matches.size() == 0) return false;
-        for(ItemMatcher check : matches) {
+        if(matchers.size() == 0) return false;
+        for(ItemMatcher check : matchers) {
             if(!check.check(item, configItem)) return false;
         }
         return true;
     }
 
     public ItemBuilder asItemBuilder() {
-        return ItemBuilder.of(configItem.asItemStack())
-            .addLore("")
-            .addLore(Text.of("&7Matches: ").color())
-            .addLoreText(
-                matches.stream()
-                    .map(ItemMatcher::getNameKey)
-                    .map(Text::of)
-                    .map(text -> Text.of("&a • ").concat(text).color())
-                    .collect(Collectors.toList()));
+        ItemBuilder builder = ItemBuilder.of(Base64Head.QUESTION_MARK_CYAN.get())
+            .setName(Text.of("&r&f").concat("Any Item").color()) // TODO: Localization
+            .addLore("");
+        for(ItemMatcher matcher : matchers) {
+            builder = matcher.addToItem(builder, configItem);
+        }
+        if(!matchers.isEmpty()) {
+            builder = builder.addLore(Text.of("&7").concat("Matches").concat(": ").color()) // TODO: Localization
+                .addLoreText(
+                    matchers.stream()
+                        .map(ItemMatcher::getNameKey)
+                        .map(Text::of)
+                        .map(text -> Text.of("&a • ").concat(text).color())
+                        .collect(Collectors.toList()));
+        } else {
+            builder = builder.addLore(Text.of("&c⚠ ").concat("No matchers on this item").color()); // TODO: Localization
+        }
+        return builder;
     }
 
     public ItemConfigValue addMatcher(ItemMatcher matcher) {
-        matches.add(matcher);
+        matchers.add(matcher);
         return this;
     }
 
     public ItemConfigValue removeMatcher(ItemMatcher matcher) {
-        matches.remove(matcher);
+        matchers.remove(matcher);
         return this;
     }
 
-    public ItemConfigValue setMatches(Collection<ItemMatcher> matches) {
-        this.matches.clear();
-        this.matches.addAll(matches);
+    public ItemConfigValue setMatchers(Collection<ItemMatcher> matchers) {
+        this.matchers.clear();
+        this.matchers.addAll(matchers);
         return this;
+    }
+
+    public boolean containsMatch(ItemMatcher matcher) {
+        return matchers.contains(matcher);
     }
 
     public boolean canBeMetaMaterial() {
-        return matches.size() == 2 && matches.contains(ItemMatcher.MATERIAL) && matches.contains(ItemMatcher.ITEM_META);
+        return matchers.size() == 2 && containsMatch(ItemMatcher.MATERIAL) && containsMatch(ItemMatcher.ITEM_META);
     }
 
     public boolean canBeMaterial() {
-        return matches.size() == 1 && matches.contains(ItemMatcher.MATERIAL);
+        return matchers.size() == 1 && matchers.contains(ItemMatcher.MATERIAL);
     }
 
     public boolean canBeMaterialValue() {
-        return matches.contains(ItemMatcher.MATERIAL);
+        return matchers.contains(ItemMatcher.MATERIAL);
     }
 
     public Material asMaterial() {
@@ -92,14 +106,14 @@ public class ItemConfigValue {
         return configItem.getAmount();
     }
 
-    public Set<ItemMatcher> getMatches() {
-        return matches;
+    public Set<ItemMatcher> getMatchers() {
+        return matchers;
     }
 
     @Override
     public int hashCode() {
         int hash = 1;
-        hash = hash * 31 + matches.hashCode();
+        hash = hash * 31 + matchers.hashCode();
         hash = hash * 31 + configItem.hashCode();
         return hash;
     }
@@ -108,14 +122,14 @@ public class ItemConfigValue {
     public boolean equals(Object obj) {
         if(!(obj instanceof ItemConfigValue)) return false;
         final ItemConfigValue other = (ItemConfigValue) obj;
-        if(!matches.equals(other.matches)) return false;
+        if(!matchers.equals(other.matchers)) return false;
         return configItem.equals(other.configItem);
     }
 
     public Map<String, Object> serialize() {
         return ImmutableMap.<String, Object>builder()
             .put("item", configItem.serialize())
-            .put("matchers", matches.stream()
+            .put("matchers", matchers.stream()
                 .map(Enum::toString)
                 .collect(Collectors.toList()))
             .build();
@@ -134,7 +148,7 @@ public class ItemConfigValue {
     @Override
     public String toString() {
         return "ItemConfigValue{" +
-            "checks=" + matches +
+            "matchers=" + matchers +
             ", configItem=" + configItem +
             '}';
     }
@@ -145,11 +159,21 @@ public class ItemConfigValue {
             public boolean check(ItemStack item, ItemProperties configItem) {
                 return item.getType() == configItem.getType();
             }
+
+            @Override
+            public ItemBuilder addToItem(ItemBuilder builder, ItemProperties properties) {
+                return builder.setType(properties.getType()).setName("");
+            }
         },
         ITEM_META("simplestack.config.item_checks.item_meta") {
             @Override
             public boolean check(ItemStack item, ItemProperties configItem) {
                 return Objects.equals(configItem.getItemMeta(), FastItemMeta.getItemMeta(item));
+            }
+
+            @Override
+            public ItemBuilder addToItem(ItemBuilder builder, ItemProperties properties) {
+                return properties.hasItemMeta() ? builder.setMeta(properties.getItemMeta()) : builder;
             }
         };
 
@@ -164,5 +188,7 @@ public class ItemConfigValue {
         }
 
         public abstract boolean check(ItemStack item, ItemProperties configItem);
+
+        public abstract ItemBuilder addToItem(ItemBuilder builder, ItemProperties properties);
     }
 }
