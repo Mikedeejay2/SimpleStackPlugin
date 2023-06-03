@@ -40,7 +40,7 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
     // Whether stacked armor can be worn or not
     private final ConfigValueBoolean stackedArmorWearable = valueBoolean(ValueType.BOOLEAN, "Stacked Armor Wearable");
 
-    private final ConfigValue<ItemMap> itemMap = itemsFile.itemMap;
+    private final ConfigValue<ConfigItemMap> itemMap = itemsFile.itemMap;
 
     public SimpleStackConfigImpl(SimpleStack plugin) {
         super(plugin, "config.yml", FileType.YAML, true);
@@ -76,7 +76,7 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
         return itemMap.get().getList();
     }
 
-    public ItemMap getItemMap() {
+    public ConfigItemMap getItemMap() {
         return itemMap.get();
     }
 
@@ -241,7 +241,7 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
     }
 
     private static final class ItemsFile extends ConfigFile {
-        private final ConfigValue<ItemMap> itemMap = value(ITEM_MAP_TYPE, "items", new ItemMap());
+        private final ConfigValue<ConfigItemMap> itemMap = value(ITEM_MAP_TYPE, "items", new ConfigItemMap());
 
         public ItemsFile(BukkitPlugin plugin) {
             super(plugin, "items.yml", FileType.YAML, false);

@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public final class ItemMap {
+public final class ConfigItemMap {
     private final EnumMap<Material, Integer> material2AmountMap = new EnumMap<>(Material.class);
     private final EnumMap<Material, Object2IntMap<ItemMeta>> material2Meta2AmountMap = new EnumMap<>(Material.class);
     private final EnumMap<Material, ReferenceList<ItemConfigValue>> material2ValueMap = new EnumMap<>(Material.class);
@@ -79,6 +79,7 @@ public final class ItemMap {
         wildcardValueList.clear();
 
         for(ItemConfigValue value : consolidated) {
+            if(value.getMatchers().size() == 0) continue;
             final int amount = value.getItem().getAmount();
             ItemProperties item = value.getItem();
             if(value.canBeMaterial()) {
@@ -98,6 +99,7 @@ public final class ItemMap {
                     material2ValueMap.put(item.getType(), new ReferenceArrayList<>());
                 }
                 material2ValueMap.get(item.getType()).add(value);
+                continue;
             }
             wildcardValueList.add(value);
         }
@@ -109,17 +111,17 @@ public final class ItemMap {
                 .collect(Collectors.toList());
     }
 
-    public static ItemMap deserialize(List<Map<String, Object>> list) {
-        final ItemMap itemMap = new ItemMap();
-        if(list == null) return itemMap;
-        itemMap.shouldBuildMaps = false;
+    public static ConfigItemMap deserialize(List<Map<String, Object>> list) {
+        final ConfigItemMap configItemMap = new ConfigItemMap();
+        if(list == null) return configItemMap;
+        configItemMap.shouldBuildMaps = false;
         for(Map<String, Object> cur : list) {
             ItemConfigValue value = ItemConfigValue.deserialize(cur);
-            if(value != null) itemMap.addItem(value);
+            if(value != null) configItemMap.addItem(value);
         }
-        itemMap.shouldBuildMaps = true;
-        itemMap.buildMaps();
-        return itemMap;
+        configItemMap.shouldBuildMaps = true;
+        configItemMap.buildMaps();
+        return configItemMap;
     }
 
     @Override

@@ -1,17 +1,9 @@
 package com.mikedeejay2.simplestack.config;
 
 import com.mikedeejay2.mikedeejay2lib.config.ConfigFile.ValueType;
-import com.mikedeejay2.mikedeejay2lib.data.section.SectionAccessor;
-import com.mikedeejay2.mikedeejay2lib.text.PlaceholderFormatter;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.text.language.TranslationManager;
-import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.MutablePair;
-import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.Pair;
 import com.mikedeejay2.simplestack.SimpleStack;
-import it.unimi.dsi.fastutil.objects.*;
-import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 import java.util.function.Function;
@@ -29,8 +21,8 @@ final class SimpleStackConfigTypes {
 //            return false;
 //        });
 
-    static final ValueType<ItemMap> ITEM_MAP_TYPE = ValueType.of(
-        (accessor, name) -> ItemMap.deserialize((List<Map<String, Object>>) accessor.get(name)),
+    static final ValueType<ConfigItemMap> ITEM_MAP_TYPE = ValueType.of(
+        (accessor, name) -> ConfigItemMap.deserialize((List<Map<String, Object>>) accessor.get(name)),
         (accessor, name, value) -> accessor.set(name, value.serialize()));
 
     // TODO: REMOVE

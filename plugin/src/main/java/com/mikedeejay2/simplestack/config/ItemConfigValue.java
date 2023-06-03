@@ -15,27 +15,30 @@ public class ItemConfigValue {
     public static final String DATA_KEY = "item_config_value";
 
     protected final Set<ItemMatcher> matchers = EnumSet.noneOf(ItemMatcher.class);
+    protected final Set<ItemMatcher> optimizedMatchers = EnumSet.noneOf(ItemMatcher.class);
 
     protected final ItemProperties configItem;
 
     public ItemConfigValue(ItemStack configItem, ItemMatcher... matchers) {
         this.configItem = new ItemProperties(configItem);
         Collections.addAll(this.matchers, matchers);
+        buildOptimizedMatchers();
     }
 
     public ItemConfigValue(ItemStack configItem, Collection<ItemMatcher> matchers) {
         this.configItem = new ItemProperties(configItem);
         this.matchers.addAll(matchers);
+        buildOptimizedMatchers();
     }
 
     protected ItemConfigValue(ItemProperties item, Set<ItemMatcher> matchers) {
         this.configItem = item;
         this.matchers.addAll(matchers);
+        buildOptimizedMatchers();
     }
 
     public boolean matchItem(ItemStack item) {
-        if(matchers.size() == 0) return false;
-        for(ItemMatcher check : matchers) {
+        for(ItemMatcher check : optimizedMatchers) {
             if(!check.check(item, configItem)) return false;
         }
         return true;
@@ -43,11 +46,12 @@ public class ItemConfigValue {
 
     public ItemBuilder asItemBuilder() {
         ItemBuilder builder = ItemBuilder.of(Base64Head.QUESTION_MARK_CYAN.get())
-            .setName(Text.of("&r&f").concat("Any Item").color()) // TODO: Localization
-            .addLore("");
+            .setAmount(configItem.getAmount())
+            .setName(Text.of("&r&f").concat("Any Item").color()); // TODO: Localization;
         for(ItemMatcher matcher : matchers) {
             builder = matcher.addToItem(builder, configItem);
         }
+        builder.addLore("");
         if(!matchers.isEmpty()) {
             builder = builder.addLore(Text.of("&7").concat("Matches").concat(": ").color()) // TODO: Localization
                 .addLoreText(
@@ -64,26 +68,44 @@ public class ItemConfigValue {
 
     public ItemConfigValue addMatcher(ItemMatcher matcher) {
         matchers.add(matcher);
+        buildOptimizedMatchers();
         return this;
     }
 
     public ItemConfigValue removeMatcher(ItemMatcher matcher) {
         matchers.remove(matcher);
+        buildOptimizedMatchers();
         return this;
     }
 
     public ItemConfigValue setMatchers(Collection<ItemMatcher> matchers) {
         this.matchers.clear();
         this.matchers.addAll(matchers);
+        buildOptimizedMatchers();
         return this;
     }
 
-    public boolean containsMatch(ItemMatcher matcher) {
+    public boolean containsMatcher(ItemMatcher matcher) {
         return matchers.contains(matcher);
     }
 
+    private void buildOptimizedMatchers() {
+        optimizedMatchers.clear();
+        for(ItemMatcher matcher : matchers) {
+            switch(matcher) {
+                case MATERIAL: // Material will have already been checked
+                    break;
+                default:
+                    optimizedMatchers.add(matcher);
+            }
+        }
+    }
+
     public boolean canBeMetaMaterial() {
-        return matchers.size() == 2 && containsMatch(ItemMatcher.MATERIAL) && containsMatch(ItemMatcher.ITEM_META);
+        return matchers.size() == 2 &&
+            containsMatcher(ItemMatcher.MATERIAL) &&
+            containsMatcher(ItemMatcher.ITEM_META) &&
+            configItem.hasItemMeta();
     }
 
     public boolean canBeMaterial() {
