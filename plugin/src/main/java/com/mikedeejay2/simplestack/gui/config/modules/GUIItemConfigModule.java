@@ -12,9 +12,11 @@ import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.ItemMatcher;
+import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.config.ItemConfigValue;
 import com.mikedeejay2.simplestack.config.ItemMatcherImpl;
 import com.mikedeejay2.simplestack.config.ItemMatcherRegistry;
+import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
 import com.mikedeejay2.simplestack.gui.config.constructors.GUIItemRemoveConstructor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -29,6 +31,7 @@ import java.util.Set;
 public class GUIItemConfigModule implements GUIModule {
     private static final ItemBuilder removeItem = ItemBuilder.of(Material.REDSTONE)
         .setName(Text.of("Remove Item"));
+    private static final SimpleStackConfigImpl config = ((SimpleStackConfigImpl) SimpleStackAPI.getConfig());
 
     private final ItemConfigValue configValue;
     private final SimpleStack plugin;
@@ -150,6 +153,7 @@ public class GUIItemConfigModule implements GUIModule {
         protected void executeClick(GUIClickEvent info) {
             State state = State.getState(matcher, value.getMatchers());
             updateMatch(state);
+            config.setItemsModified(true);
         }
 
         private void updateMatch(State state) {

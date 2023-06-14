@@ -130,4 +130,17 @@ public final class ConfigItemMap {
             consolidated +
             '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        ConfigItemMap that = (ConfigItemMap) o;
+        return Objects.equals(consolidated, that.consolidated);
+    }
+
+    @Override
+    public int hashCode() {
+        return consolidated.hashCode();
+    }
 }
