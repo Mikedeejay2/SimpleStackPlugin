@@ -19,6 +19,7 @@
   "simplestack.warnings.invalid_max_amount": "The default max amount specified in the config is outside of the required range (1 - 64)",
   "simplestack.warnings.material_already_exists": "That material already exists in the config.",
   "simplestack.warnings.custom_amount_does_not_exist": "A customized amount for that item type does not exist in the config.",
+  "simplestack.warnings.invalid_item_matcher": "An item matcher named %matcher% is invalid, skipping",
   "simplestack.list_type.blacklist": "Blacklist",
   "simplestack.list_type.whitelist": "Whitelist",
   "simplestack.gui.config.title": "Configuration GUI",
@@ -63,6 +64,6 @@
   "simplestack.info.finish_init": "Finished initialization.",
   "simplestack.errors.incompatible_java_l1": "SimpleStack is not compatible with this installation of Java.",
   "simplestack.errors.incompatible_java_l2": "Common solutions are to use Java 9 or greater OR use a Java 8 JDK.",
-  "simplestack.config.item_checks.material": "Material",
-  "simplestack.config.item_checks.item_meta": "Item Meta"
+  "simplestack.config.item_matchers.material": "Same Material",
+  "simplestack.config.item_matchers.item_meta": "Same Item Meta"
 }

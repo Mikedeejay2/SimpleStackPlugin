@@ -79,7 +79,7 @@ public final class ConfigItemMap {
         wildcardValueList.clear();
 
         for(ItemConfigValue value : consolidated) {
-            if(value.getMatchers().size() == 0) continue;
+            if(value.getMatchersMap().size() == 0) continue;
             final int amount = value.getItem().getAmount();
             ItemProperties item = value.getItem();
             if(value.canBeMaterial()) {

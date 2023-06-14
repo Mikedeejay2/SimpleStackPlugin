@@ -11,8 +11,10 @@ import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.api.ItemMatcher;
 import com.mikedeejay2.simplestack.config.ItemConfigValue;
-import com.mikedeejay2.simplestack.config.ItemConfigValue.ItemMatcher;
+import com.mikedeejay2.simplestack.config.ItemMatcherImpl;
+import com.mikedeejay2.simplestack.config.ItemMatcherRegistry;
 import com.mikedeejay2.simplestack.gui.config.constructors.GUIItemRemoveConstructor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -20,6 +22,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class GUIItemConfigModule implements GUIModule {
@@ -57,9 +61,9 @@ public class GUIItemConfigModule implements GUIModule {
     }
 
     private void genMatcherItems() {
-        final ItemMatcher[] matchValues = ItemMatcher.values();
-        for(int i = 0; i < matchValues.length; ++i) {
-            ItemMatcher match = matchValues[i];
+        final List<ItemMatcherImpl> matchValues = new ArrayList<>(ItemMatcherRegistry.ALL_MATCHERS.values());
+        for(int i = 0; i < matchValues.size(); ++i) {
+            ItemMatcherImpl match = matchValues.get(i);
             State state = State.getState(match, configValue.getMatchers());
             GUIItem item = new GUIItem(state.getItem())
                 .setName(Text.of(match.getNameKey()))
@@ -73,7 +77,7 @@ public class GUIItemConfigModule implements GUIModule {
 
     private void updateItems() {
         for(GUIItem item : matcherItems) {
-            ItemMatcher matcher = item.getExtraData("match", ItemMatcher.class);
+            ItemMatcherImpl matcher = item.getExtraData("match", ItemMatcherImpl.class);
             State state = State.getState(matcher, configValue.getMatchers());
             if(item.getExtraData("state", State.class) == state) continue;
             item.set(state.getItem())
@@ -125,18 +129,18 @@ public class GUIItemConfigModule implements GUIModule {
             return item;
         }
 
-        public static State getState(ItemMatcher matcher, Set<ItemMatcher> allMatchers) {
+        public static State getState(ItemMatcherImpl matcher, Set<ItemMatcher> allMatchers) {
             // TODO: ADD INCOMPATIBILITIES
-            if(allMatchers.contains(matcher)) return State.VALID_ENABLED;
+            if(allMatchers.contains(matcher.getMatcherType())) return State.VALID_ENABLED;
             return State.VALID_DISABLED;
         }
     }
 
     private static final class MatcherEvent extends GUIAbstractClickEvent {
-        private final ItemMatcher matcher;
+        private final ItemMatcherImpl matcher;
         private final ItemConfigValue value;
 
-        public MatcherEvent(ItemMatcher matcher, ItemConfigValue value) {
+        public MatcherEvent(ItemMatcherImpl matcher, ItemConfigValue value) {
             super(ClickType.LEFT, ClickType.RIGHT);
             this.matcher = matcher;
             this.value = value;
@@ -151,10 +155,10 @@ public class GUIItemConfigModule implements GUIModule {
         private void updateMatch(State state) {
             switch(state) {
                 case VALID_ENABLED:
-                    value.removeMatcher(matcher);
+                    value.removeMatcher(matcher.getMatcherType());
                     break;
                 case VALID_DISABLED:
-                    value.addMatcher(matcher);
+                    value.addMatcher(matcher.getMatcherType());
                     break;
             }
         }
