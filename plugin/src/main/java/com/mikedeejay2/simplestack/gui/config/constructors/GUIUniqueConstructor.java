@@ -7,6 +7,8 @@ import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractExecutorList;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractHandlerList;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.normal.GUIInteractExecutorDefaultInv;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIMappedListModule.MappingFunction;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIMappedListModule.UnmappingFunction;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.simplestack.SimpleStack;
 import org.bukkit.inventory.ItemStack;
@@ -14,15 +16,14 @@ import org.bukkit.inventory.ItemStack;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 // TODO: REMOVE
 @Deprecated
 public class GUIUniqueConstructor extends GUIAbstractListConstructor<Map.Entry<ItemStack, Integer>> {
-    private static final Function<Map.Entry<ItemStack, Integer>, GUIItem> MAPPER =
-        (entry) -> new GUIItem(entry.getKey()).setMovable(true);
-    private static final Function<GUIItem, Map.Entry<ItemStack, Integer>> UNMAPPER =
-        (guiItem) -> new AbstractMap.SimpleEntry<>(guiItem.get(), guiItem.getAmount());
+    private static final MappingFunction<Map.Entry<ItemStack, Integer>> MAPPER =
+        (entry, index, module) -> new GUIItem(entry.getKey()).setMovable(true);
+    private static final UnmappingFunction<Map.Entry<ItemStack, Integer>> UNMAPPER =
+        (guiItem, index, module) -> new AbstractMap.SimpleEntry<>(guiItem.get(), guiItem.getAmount());
 
     public static final GUIUniqueConstructor INSTANCE = new GUIUniqueConstructor(SimpleStack.getInstance());
 
