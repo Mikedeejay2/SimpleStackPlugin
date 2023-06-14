@@ -37,8 +37,8 @@ public class GUIAboutModule implements GUIModule {
         int slot = event.getSlot();
         int rows = gui.getRows();
         int cols = gui.getCols();
-        int row = gui.getRowFromSlot(slot);
-        int col = gui.getColFromSlot(slot);
+        int row = gui.getRow(slot);
+        int col = gui.getColumn(slot);
         int newRow = row;
         int newCol = col;
 

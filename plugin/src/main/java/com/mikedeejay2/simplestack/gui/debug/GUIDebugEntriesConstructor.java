@@ -100,7 +100,7 @@ public class GUIDebugEntriesConstructor implements GUIConstructor {
             }
             gui.removeItem(3, 5);
             for(int i = detailedTimings.size() - 1; i >= 0; --i) {
-                list.addListItem(new GUIItem(getItemStack(detailedTimings.get(i))));
+                list.addItem(new GUIItem(getItemStack(detailedTimings.get(i))));
             }
         }
 

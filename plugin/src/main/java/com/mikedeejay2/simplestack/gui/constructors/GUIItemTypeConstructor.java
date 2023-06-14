@@ -7,6 +7,8 @@ import com.mikedeejay2.mikedeejay2lib.gui.interact.GUIInteractType;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractExecutorList;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.list.GUIInteractHandlerList;
 import com.mikedeejay2.mikedeejay2lib.gui.interact.normal.GUIInteractExecutorDefaultInv;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIMappedListModule.MappingFunction;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIMappedListModule.UnmappingFunction;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
@@ -23,9 +25,10 @@ import java.util.List;
 import java.util.function.Function;
 
 public class GUIItemTypeConstructor extends GUIAbstractListConstructor<Material> {
-    private static final Function<Material, GUIItem> MAPPER =
-        (material) -> new GUIItem(new ItemStack(material)).setMovable(true);
-    private static final Function<GUIItem, Material> UNMAPPER = GUIItem::getType;
+    private static final MappingFunction<Material> MAPPER =
+        (material, index, module) -> new GUIItem(new ItemStack(material)).setMovable(true);
+    private static final UnmappingFunction<Material> UNMAPPER =
+        (item, index, module) -> item.getType();
     public static final GUIItemTypeConstructor INSTANCE = new GUIItemTypeConstructor(SimpleStack.getInstance());
 
     private static final ItemBuilder BLACKLIST_ITEM = ItemBuilder.of(Base64Head.X_WHITE.get())

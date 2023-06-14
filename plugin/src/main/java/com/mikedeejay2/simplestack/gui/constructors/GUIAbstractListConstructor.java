@@ -7,6 +7,8 @@ import com.mikedeejay2.mikedeejay2lib.gui.modules.decoration.GUIDecoratorModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIMappedListModule;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.navigation.GUINavigatorModule;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIMappedListModule.MappingFunction;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIMappedListModule.UnmappingFunction;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.util.GUIRuntimeModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
@@ -24,15 +26,15 @@ public abstract class GUIAbstractListConstructor<T> implements GUIConstructor {
     protected final SimpleStack plugin;
     protected final Text title;
     protected final int inventoryRows;
-    protected final Function<T, GUIItem> mapFunction;
-    protected final Function<GUIItem, T> unmapFunction;
+    protected final MappingFunction<T> mapFunction;
+    protected final UnmappingFunction<T> unmapFunction;
 
     public GUIAbstractListConstructor(
         SimpleStack plugin,
         Text title,
         int inventoryRows,
-        Function<T, GUIItem> mapFunction,
-        Function<GUIItem, T> unmapFunction) {
+        MappingFunction<T> mapFunction,
+        UnmappingFunction<T> unmapFunction) {
         this.plugin = plugin;
         this.title = title;
         this.inventoryRows = inventoryRows;

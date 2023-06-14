@@ -1,0 +1,151 @@
+{
+  "using_base": "bukkit",
+  "Item": {
+    "class_name": "net.minecraft.world.item.Item",
+    "methods": {
+      "getMaxStackSize": "l()I"
+    }
+  },
+  "ItemStack": {
+    "class_name": "net.minecraft.world.item.ItemStack",
+    "methods": {
+      "getMaxStackSize": "g()I",
+      "split": "a(I)LItemStack;",
+      "copy": "p()LItemStack;",
+      "setCount": "f(I)V",
+      "shrink": "h(I)V",
+      "getCount": "L()I",
+      "isSameItemSameTags": "c(LItemStack;LItemStack;)Z",
+      "isEmpty": "b()Z",
+      "<init>": "<init>(LIMaterial;)V",
+      "isDamaged": "j()Z",
+      "isStackable": "h()Z",
+      "is": "a(LItem;)Z"
+    },
+    "fields": {
+      "EMPTY": "b:LItemStack;"
+    }
+  },
+  "CraftItemStack": {
+    "class_name": "org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack",
+    "methods": {
+      "asBukkitCopy": "asBukkitCopy(LItemStack;)Lorg/bukkit/inventory/ItemStack;",
+      "getMaxStackSize": "getMaxStackSize()I"
+    }
+  },
+  "ContainerUtil": {
+    "class_name": "net.minecraft.world.ContainerUtil",
+    "methods": {
+      "removeItem": "a(Ljava/util/List;II)LItemStack;"
+    }
+  },
+  "Slot": {
+    "class_name": "net.minecraft.world.inventory.Slot",
+    "methods": {
+      "tryRemove": "a(IILEntityHuman;)Ljava/util/Optional;",
+      "getItem": "e()LItemStack;",
+      "getMaxStackSize": "a()I",
+      "getMaxStackSize1": "a_(LItemStack;)I"
+    },
+    "fields": {
+      "slot": "a:I",
+      "container": "d:LIInventory;"
+    }
+  },
+  "EntityPlayer": {
+    "class_name": "net.minecraft.server.level.EntityPlayer",
+    "methods": {
+      "drop": "a(LItemStack;ZZ)LEntityItem;"
+    }
+  },
+  "EntityItem": "net.minecraft.world.entity.item.EntityItem",
+  "Container": {
+    "class_name": "net.minecraft.world.inventory.Container",
+    "methods": {
+      "doClick": "b(IILInventoryClickType;LEntityHuman;)V",
+      "doClickLambda": "lambda$doClick$3(LSlot;LEntityHuman;LItemStack;)V",
+      "moveItemStackTo": "moveItemStackTo(LItemStack;IIZZ)Z",
+      "getSlot": "b(I)LSlot;"
+    }
+  },
+  "InventoryClickType": "net.minecraft.world.inventory.InventoryClickType",
+  "EntityHuman": {
+    "class_name": "net.minecraft.world.entity.player.EntityHuman",
+    "methods": {
+      "drop": "a(LItemStack;ZZ)LEntityItem;",
+      "getInventory": "fN()LPlayerInventory;"
+    }
+  },
+  "PlayerInventory": {
+    "class_name": "net.minecraft.world.entity.player.PlayerInventory",
+    "methods": {
+      "setItem": "a(ILItemStack;)V",
+      "add": "e(LItemStack;)Z",
+      "add2": "c(ILItemStack;)Z"
+    }
+  },
+  "ItemBucket": {
+    "class_name": "net.minecraft.world.item.ItemBucket",
+    "methods": {
+      "getEmptySuccessItem": "a(LItemStack;LEntityHuman;)LItemStack;"
+    }
+  },
+  "Items": {
+    "class_name": "net.minecraft.world.item.Items",
+    "fields": {
+      "BUCKET": "pK:LItem;",
+      "BOWL": "oC:LItem;",
+      "LAVA_BUCKET": "pM:LItem;"
+    }
+  },
+  "IMaterial": "net.minecraft.world.level.IMaterial",
+  "ItemSoup": {
+    "class_name": "net.minecraft.world.item.ItemSoup",
+    "methods": {
+      "finishUsingItem": "a(LItemStack;LWorld;LEntityLiving;)LItemStack;"
+    }
+  },
+  "World": "net.minecraft.world.level.World",
+  "EntityLiving": "net.minecraft.world.entity.EntityLiving",
+  "ItemSuspiciousStew": {
+    "class_name": "net.minecraft.world.item.ItemSuspiciousStew",
+    "methods": {
+      "finishUsingItem": "a(LItemStack;LWorld;LEntityLiving;)LItemStack;"
+    }
+  },
+  "ArmorSlot": {
+    "class_name": "net.minecraft.world.inventory.ContainerPlayer$1",
+    "methods": {
+      "getMaxStackSize": "a()I"
+    }
+  },
+  "ItemTrident": {
+    "class_name": "net.minecraft.world.item.ItemTrident",
+    "methods": {
+      "releaseUsing": "a(LItemStack;LWorld;LEntityLiving;I)V"
+    }
+  },
+  "IInventory": "net.minecraft.world.IInventory",
+  "CraftInventory": "org.bukkit.craftbukkit.v1_20_R1.inventory.CraftInventory",
+  "SlotFurnaceFuel": {
+    "class_name": "net.minecraft.world.inventory.SlotFurnaceFuel",
+    "methods": {
+      "isBucket": "c(LItemStack;)Z"
+    }
+  },
+  "ContainerFurnace": {
+    "class_name": "net.minecraft.world.inventory.ContainerFurnace",
+    "methods": {
+      "quickMoveStack": "a(LEntityHuman;I)LItemStack;",
+      "isFuel": "d(LItemStack;)Z",
+      "moveItemStackTo": "a(LItemStack;IIZ)Z"
+    }
+  },
+  "TileEntityFurnace": {
+    "class_name": "net.minecraft.world.level.block.entity.TileEntityFurnace",
+    "methods": {
+      "canPlaceItem": "b(ILItemStack;)Z"
+    }
+  },
+  "EntityThrownTrident": "net.minecraft.world.entity.projectile.EntityThrownTrident"
+}

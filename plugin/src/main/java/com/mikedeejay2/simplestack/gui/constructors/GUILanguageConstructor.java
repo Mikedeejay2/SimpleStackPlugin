@@ -2,11 +2,12 @@ package com.mikedeejay2.simplestack.gui.constructors;
 
 import com.google.common.collect.ImmutableList;
 import com.mikedeejay2.mikedeejay2lib.gui.GUIContainer;
-import com.mikedeejay2.mikedeejay2lib.gui.event.GUIEventInfo;
+import com.mikedeejay2.mikedeejay2lib.gui.event.GUIClickEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.sound.GUIPlaySoundEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.item.AnimatedGUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.animation.GUIAnimationModule;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIMappedListModule.MappingFunction;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
@@ -19,10 +20,9 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 public class GUILanguageConstructor extends GUIAbstractListConstructor<GUIItem> {
-    private static final Function<GUIItem, GUIItem> MAPPER = (item) -> item;
+    private static final MappingFunction<GUIItem> MAPPER = (item, index, module) -> item;
     public static final GUILanguageConstructor INSTANCE = new GUILanguageConstructor(SimpleStack.getInstance());
 
     private static final Text CLICK_MESSAGE = Text.of("&f").concat(Text.of("simplestack.gui.language.language_select"));
@@ -139,12 +139,12 @@ public class GUILanguageConstructor extends GUIAbstractListConstructor<GUIItem> 
         }
 
         @Override
-        protected void executeClick(GUIEventInfo info) {
+        protected void executeClick(GUIClickEvent info) {
             SimpleStackConfig config = SimpleStackAPI.getConfig();
             config.setLocale(locale);
             GUIListModule listModule = info.getGUI().getModule(GUIListModule.class);
             List<GUIItem> langItems = GUILanguageConstructor.INSTANCE.getLanguageList();
-            listModule.setGUIItems(langItems);
+            listModule.setItems(langItems);
             super.executeClick(info);
         }
 
