@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.bytecode;
+package com.mikedeejay2.simplestack.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

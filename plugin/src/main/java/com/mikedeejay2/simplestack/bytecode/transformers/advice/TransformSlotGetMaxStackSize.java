@@ -4,9 +4,10 @@ import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.event.SlotMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytecode.AdviceBridge;
 import com.mikedeejay2.simplestack.bytecode.MethodVisitorInfo;
-import com.mikedeejay2.simplestack.bytecode.NmsConverters;
+import com.mikedeejay2.simplestack.util.NmsConverters;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
+import com.mikedeejay2.simplestack.util.SafeEventCall;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
@@ -41,7 +42,7 @@ public class TransformSlotGetMaxStackSize implements MethodVisitorInfo {
         final Inventory inventory = NmsConverters.slotToInventory(nmsSlot);
         final int slot = NmsConverters.slotToSlot(nmsSlot);
         final SlotMaxAmountEvent event = new SlotMaxAmountEvent(inventory, slot, currentReturnValue);
-        Bukkit.getPluginManager().callEvent(event);
+        SafeEventCall.callEvent(event);
         TIMINGS.collect(startTime, "Slot redirect", true);
         return event.getAmount();
     }

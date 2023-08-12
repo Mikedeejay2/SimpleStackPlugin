@@ -4,6 +4,8 @@ import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.event.MaterialMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytecode.*;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
+import com.mikedeejay2.simplestack.util.NmsConverters;
+import com.mikedeejay2.simplestack.util.SafeEventCall;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
@@ -49,7 +51,7 @@ public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
     public static int getItemMaxStackSize(int currentReturnValue, long startTime, Object nmsItem) {
         final Material material = NmsConverters.itemToMaterial(nmsItem);
         final MaterialMaxAmountEvent event = new MaterialMaxAmountEvent(material, currentReturnValue);
-        Bukkit.getPluginManager().callEvent(event);
+        SafeEventCall.callEvent(event);
         TIMINGS.collect(startTime, "Item size redirect", false);
         return event.getAmount();
     }

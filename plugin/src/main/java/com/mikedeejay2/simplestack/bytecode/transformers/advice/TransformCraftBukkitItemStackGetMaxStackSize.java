@@ -6,6 +6,7 @@ import com.mikedeejay2.simplestack.bytecode.AdviceBridge;
 import com.mikedeejay2.simplestack.bytecode.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
+import com.mikedeejay2.simplestack.util.SafeEventCall;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
@@ -40,7 +41,7 @@ public class TransformCraftBukkitItemStackGetMaxStackSize implements MethodVisit
 
     public static int getCraftBukkitItemStackMaxStackSize(int currentReturnValue, long startTime, ItemStack itemStack) {
         final ItemStackMaxAmountEvent event = new ItemStackMaxAmountEvent(itemStack, currentReturnValue);
-        Bukkit.getPluginManager().callEvent(event);
+        SafeEventCall.callEvent(event);
         TIMINGS.collect(startTime, "CraftBukkit ItemStack size redirect", true);
         return event.getAmount();
     }

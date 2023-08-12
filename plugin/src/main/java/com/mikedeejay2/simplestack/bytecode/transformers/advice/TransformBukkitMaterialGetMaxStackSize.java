@@ -6,6 +6,7 @@ import com.mikedeejay2.simplestack.bytecode.AdviceBridge;
 import com.mikedeejay2.simplestack.bytecode.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
+import com.mikedeejay2.simplestack.util.SafeEventCall;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
@@ -40,7 +41,7 @@ public class TransformBukkitMaterialGetMaxStackSize implements MethodVisitorInfo
 
     public static int getBukkitMaterialMaxStackSize(int currentReturnValue, long startTime, Material material) {
         final MaterialMaxAmountEvent event = new MaterialMaxAmountEvent(material, currentReturnValue);
-        Bukkit.getPluginManager().callEvent(event);
+        SafeEventCall.callEvent(event);
         TIMINGS.collect(startTime, "Bukkit Material size redirect", true);
         return event.getAmount();
     }

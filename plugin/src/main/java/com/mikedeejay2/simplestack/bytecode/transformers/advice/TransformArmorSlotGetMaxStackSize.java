@@ -5,6 +5,8 @@ import com.mikedeejay2.simplestack.api.event.ArmorSlotMaxAmountEvent;
 import com.mikedeejay2.simplestack.api.event.SlotMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytecode.*;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
+import com.mikedeejay2.simplestack.util.NmsConverters;
+import com.mikedeejay2.simplestack.util.SafeEventCall;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
@@ -40,9 +42,9 @@ public class TransformArmorSlotGetMaxStackSize implements MethodVisitorInfo {
         final Inventory inventory = NmsConverters.slotToInventory(nmsSlot);
         final int slot = NmsConverters.slotToSlot(nmsSlot);
         final SlotMaxAmountEvent slotEvent = new SlotMaxAmountEvent(inventory, slot, currentReturnValue);
-        Bukkit.getPluginManager().callEvent(slotEvent);
+        SafeEventCall.callEvent(slotEvent);
         final ArmorSlotMaxAmountEvent armorSlotEvent = new ArmorSlotMaxAmountEvent(inventory, slot, slotEvent.getAmount());
-        Bukkit.getPluginManager().callEvent(armorSlotEvent);
+        SafeEventCall.callEvent(armorSlotEvent);
         TIMINGS.collect(startTime, "Armor slot redirect", true);
         return armorSlotEvent.getAmount();
     }
