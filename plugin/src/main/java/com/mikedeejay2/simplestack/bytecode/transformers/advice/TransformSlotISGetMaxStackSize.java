@@ -4,7 +4,7 @@ import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.event.SlotMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytecode.AdviceBridge;
 import com.mikedeejay2.simplestack.bytecode.MethodVisitorInfo;
-import com.mikedeejay2.simplestack.bytecode.NmsConverters;
+import com.mikedeejay2.simplestack.util.NmsConverters;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
 import com.mikedeejay2.simplestack.util.SafeEventCall;

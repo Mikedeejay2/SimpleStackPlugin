@@ -4,6 +4,7 @@ import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.event.ItemStackMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytecode.*;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
+import com.mikedeejay2.simplestack.util.NmsConverters;
 import com.mikedeejay2.simplestack.util.SafeEventCall;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
