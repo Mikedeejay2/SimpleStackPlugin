@@ -7,6 +7,7 @@ import com.mikedeejay2.simplestack.bytecode.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytecode.NmsConverters;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
+import com.mikedeejay2.simplestack.util.SafeEventCall;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
@@ -45,7 +46,7 @@ public class TransformSlotISGetMaxStackSize implements MethodVisitorInfo {
         final int slot = NmsConverters.slotToSlot(nmsSlot);
         final ItemStack itemStack = nmsItemStack != null ? NmsConverters.itemStackToItemStack(nmsItemStack) : null;
         final SlotMaxAmountEvent event = new SlotMaxAmountEvent(inventory, slot, currentReturnValue, itemStack);
-        Bukkit.getPluginManager().callEvent(event);
+        SafeEventCall.callEvent(event);
         TIMINGS.collect(startTime, "Slot (ItemStack) redirect", true);
         return event.getAmount();
     }
