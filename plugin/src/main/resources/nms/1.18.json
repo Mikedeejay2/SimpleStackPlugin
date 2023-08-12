@@ -3,7 +3,8 @@
   "Item": {
     "class_name": "net.minecraft.world.item.Item",
     "methods": {
-      "getMaxStackSize": "l()I"
+      "getMaxStackSize": "l()I",
+      "isEnchantable": "c_(LItemStack;)Z"
     }
   },
   "ItemStack": {

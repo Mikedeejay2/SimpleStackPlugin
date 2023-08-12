@@ -9,7 +9,8 @@
   },
   "Item": {
     "methods": {
-      "getMaxStackSize": "l()I"
+      "getMaxStackSize": "l()I",
+      "isEnchantable": "d_(LItemStack;)Z"
     }
   },
   "Items": {
