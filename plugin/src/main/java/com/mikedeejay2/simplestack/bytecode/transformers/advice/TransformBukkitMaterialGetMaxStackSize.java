@@ -11,6 +11,7 @@ import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
+import static com.mikedeejay2.simplestack.SimpleStack.getInstance;
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.MappingEntry;
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
 
@@ -40,7 +41,9 @@ public class TransformBukkitMaterialGetMaxStackSize implements MethodVisitorInfo
 
     public static int getBukkitMaterialMaxStackSize(int currentReturnValue, long startTime, Material material) {
         final MaterialMaxAmountEvent event = new MaterialMaxAmountEvent(material, currentReturnValue);
-        Bukkit.getPluginManager().callEvent(event);
+        Bukkit.getScheduler().runTask(getInstance(), () -> {
+            Bukkit.getPluginManager().callEvent(event);
+        });
         TIMINGS.collect(startTime, "Bukkit Material size redirect", true);
         return event.getAmount();
     }

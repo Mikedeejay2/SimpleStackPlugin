@@ -9,6 +9,7 @@ import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
+import static com.mikedeejay2.simplestack.SimpleStack.getInstance;
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
 
 /**
@@ -49,7 +50,9 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
     public static int getItemStackMaxStackSize(int currentReturnValue, long startTime, Object nmsItemStack) {
         final ItemStack itemStack = NmsConverters.itemStackToItemStack(nmsItemStack);
         final ItemStackMaxAmountEvent event = new ItemStackMaxAmountEvent(itemStack, currentReturnValue);
-        Bukkit.getPluginManager().callEvent(event);
+        Bukkit.getScheduler().runTask(getInstance(), () -> {
+            Bukkit.getPluginManager().callEvent(event);
+        });
         TIMINGS.collect(startTime, "ItemStack size redirect", true);
         return event.getAmount();
     }
