@@ -1,0 +1,10 @@
+{
+  "using_base": "1.20.1",
+  "CraftItemStack": "org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack",
+  "CraftInventory": "org.bukkit.craftbukkit.v1_20_R2.inventory.CraftInventory",
+  "EntityHuman": {
+    "methods": {
+      "getInventory": "fR()LPlayerInventory;"
+    }
+  }
+}
