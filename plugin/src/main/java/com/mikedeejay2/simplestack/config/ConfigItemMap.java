@@ -10,12 +10,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public final class ConfigItemMap {
-    private final EnumMap<Material, Integer> material2AmountMap = new EnumMap<>(Material.class);
-    private final EnumMap<Material, Object2IntMap<ItemMeta>> material2Meta2AmountMap = new EnumMap<>(Material.class);
-    private final EnumMap<Material, ReferenceList<ItemConfigValue>> material2ValueMap = new EnumMap<>(Material.class);
-    private final ReferenceList<ItemConfigValue> wildcardValueList = new ReferenceArrayList<>();
+    private final EnumMap<Material, Integer> material2AmountMap = new EnumMap<>(Material.class); // Material only
+    private final EnumMap<Material, Object2IntMap<ItemMeta>> material2Meta2AmountMap = new EnumMap<>(Material.class); // Material and ItemMeta combined
+    private final EnumMap<Material, ReferenceList<ItemConfigValue>> material2ValueMap = new EnumMap<>(Material.class); // Material and meta matchers
+    private final ReferenceList<ItemConfigValue> wildcardValueList = new ReferenceArrayList<>(); // Any item and meta matchers (Including full ItemMeta)
 
-    private final ReferenceList<ItemConfigValue> consolidated = new ReferenceArrayList<>();
+    private final ObjectList<ItemConfigValue> consolidated = new ObjectArrayList<>();
 
     private boolean shouldBuildMaps = true;
 
@@ -24,8 +24,10 @@ public final class ConfigItemMap {
     }
 
     public int getItemStack(ItemStack itemStack) {
+        System.out.println("Checking " + itemStack.getItemMeta().getDisplayName());
         final Material material = itemStack.getType();
         int result = getMetaAmount(itemStack, material);
+        System.out.println("Checking meta material amount " + result);
         if(result != -1) return result;
         result = getValueAmount(itemStack, material);
         if(result != -1) return result;
@@ -79,7 +81,7 @@ public final class ConfigItemMap {
         wildcardValueList.clear();
 
         for(ItemConfigValue value : consolidated) {
-            if(value.getMatchersMap().size() == 0) continue;
+            if(value.getMatchersMap().isEmpty()) continue;
             final int amount = value.getItem().getAmount();
             ItemProperties item = value.getItem();
             if(value.canBeMaterial()) {

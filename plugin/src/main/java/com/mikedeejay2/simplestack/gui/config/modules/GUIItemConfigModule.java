@@ -7,16 +7,18 @@ import com.mikedeejay2.mikedeejay2lib.gui.event.sound.GUIPlaySoundEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.event.util.GUIAbstractClickEvent;
 import com.mikedeejay2.mikedeejay2lib.gui.item.GUIItem;
 import com.mikedeejay2.mikedeejay2lib.gui.modules.GUIModule;
+import com.mikedeejay2.mikedeejay2lib.gui.modules.list.GUIListModule;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.api.ItemMatcher;
+import com.mikedeejay2.simplestack.api.MatcherDataType;
+import com.mikedeejay2.simplestack.api.MatcherOperatorType;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.config.ItemConfigValue;
-import com.mikedeejay2.simplestack.config.ItemMatcherImpl;
-import com.mikedeejay2.simplestack.config.ItemMatcherRegistry;
 import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
+import com.mikedeejay2.simplestack.config.matcher.MatcherDataSource;
+import com.mikedeejay2.simplestack.config.matcher.MatcherDataSourceRegistry;
 import com.mikedeejay2.simplestack.gui.config.constructors.GUIItemRemoveConstructor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -35,12 +37,12 @@ public class GUIItemConfigModule implements GUIModule {
 
     private final ItemConfigValue configValue;
     private final SimpleStack plugin;
-    private final GUIItem[] matcherItems;
+    private final GUIListModule listModule;
 
-    public GUIItemConfigModule(SimpleStack plugin, ItemConfigValue configValue) {
+    public GUIItemConfigModule(SimpleStack plugin, ItemConfigValue configValue, GUIListModule listModule) {
         this.configValue = configValue;
         this.plugin = plugin;
-        this.matcherItems = new GUIItem[ItemMatcher.values().length];
+        this.listModule = listModule;
         genMatcherItems();
     }
 
@@ -52,9 +54,6 @@ public class GUIItemConfigModule implements GUIModule {
     @Override
     public void onOpenHead(Player player, GUIContainer gui) {
         gui.setItem(gui.getRows(), 5, getRemoveItem());
-        for(int i = 0; i < matcherItems.length; ++i) {
-            gui.setItem(2, i + 2, matcherItems[i]);
-        }
         updateItems();
     }
 
@@ -64,24 +63,23 @@ public class GUIItemConfigModule implements GUIModule {
     }
 
     private void genMatcherItems() {
-        final List<ItemMatcherImpl> matchValues = new ArrayList<>(ItemMatcherRegistry.ALL_MATCHERS.values());
-        for(int i = 0; i < matchValues.size(); ++i) {
-            ItemMatcherImpl match = matchValues.get(i);
-            State state = State.getState(match, configValue.getMatchers());
+        final Set<MatcherDataSource<?, ?>> dataSources = MatcherDataSourceRegistry.getDataSources(configValue.getItem().asItemStack().getItemMeta()); // asItemStack so ItemMeta is never null
+        for(MatcherDataSource<?, ?> dataSource : dataSources) {
+            State state = State.getState(dataSource.getDataType(), configValue.getMatcherDataTypes());
             GUIItem item = new GUIItem(state.getItem())
-                .setName(Text.of(match.getNameKey()))
+                .setName(Text.of(dataSource.getNameKey()))
                 .addExtraData("state", state)
-                .addExtraData("match", match)
-                .addEvent(new MatcherEvent(match, configValue));
+                .addExtraData("datasource", dataSource)
+                .addEvent(new MatcherEvent(dataSource.getDataType(), configValue));
             updateItemSound(item, state);
-            matcherItems[i] = item;
+            listModule.addItem(item);
         }
     }
 
     private void updateItems() {
-        for(GUIItem item : matcherItems) {
-            ItemMatcherImpl matcher = item.getExtraData("match", ItemMatcherImpl.class);
-            State state = State.getState(matcher, configValue.getMatchers());
+        for(GUIItem item : listModule.getList()) {
+            MatcherDataSource<?, ?> matcher = item.getExtraData("datasource", MatcherDataSource.class);
+            State state = State.getState(matcher.getDataType(), configValue.getMatcherDataTypes());
             if(item.getExtraData("state", State.class) == state) continue;
             item.set(state.getItem())
                 .setName(Text.of(matcher.getNameKey()))
@@ -132,26 +130,26 @@ public class GUIItemConfigModule implements GUIModule {
             return item;
         }
 
-        public static State getState(ItemMatcherImpl matcher, Set<ItemMatcher> allMatchers) {
+        public static State getState(MatcherDataType dataType, Set<MatcherDataType> allTypes) {
             // TODO: ADD INCOMPATIBILITIES
-            if(allMatchers.contains(matcher.getMatcherType())) return State.VALID_ENABLED;
+            if(allTypes.contains(dataType)) return State.VALID_ENABLED;
             return State.VALID_DISABLED;
         }
     }
 
     private static final class MatcherEvent extends GUIAbstractClickEvent {
-        private final ItemMatcherImpl matcher;
+        private final MatcherDataType dataType;
         private final ItemConfigValue value;
 
-        public MatcherEvent(ItemMatcherImpl matcher, ItemConfigValue value) {
+        public MatcherEvent(MatcherDataType dataType, ItemConfigValue value) {
             super(ClickType.LEFT, ClickType.RIGHT);
-            this.matcher = matcher;
+            this.dataType = dataType;
             this.value = value;
         }
 
         @Override
         protected void executeClick(GUIClickEvent info) {
-            State state = State.getState(matcher, value.getMatchers());
+            State state = State.getState(dataType, value.getMatcherDataTypes());
             updateMatch(state);
             config.setItemsModified(true);
         }
@@ -159,10 +157,10 @@ public class GUIItemConfigModule implements GUIModule {
         private void updateMatch(State state) {
             switch(state) {
                 case VALID_ENABLED:
-                    value.removeMatcher(matcher.getMatcherType());
+                    value.removeMatcher(dataType);
                     break;
                 case VALID_DISABLED:
-                    value.addMatcher(matcher.getMatcherType());
+                    value.addMatcher(dataType, MatcherOperatorType.EQUALS);
                     break;
             }
         }
