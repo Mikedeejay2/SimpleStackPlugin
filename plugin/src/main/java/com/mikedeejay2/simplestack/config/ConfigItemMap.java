@@ -24,10 +24,8 @@ public final class ConfigItemMap {
     }
 
     public int getItemStack(ItemStack itemStack) {
-        System.out.println("Checking " + itemStack.getItemMeta().getDisplayName());
         final Material material = itemStack.getType();
         int result = getMetaAmount(itemStack, material);
-        System.out.println("Checking meta material amount " + result);
         if(result != -1) return result;
         result = getValueAmount(itemStack, material);
         if(result != -1) return result;
@@ -128,9 +126,18 @@ public final class ConfigItemMap {
 
     @Override
     public String toString() {
-        return "ItemMap{" +
-            consolidated +
+        return "ConfigItemMap{" +
+            "consolidated=" + consolidated +
+            ", shouldBuildMaps=" + shouldBuildMaps +
             '}';
+    }
+
+    public String fillCrashReportSection() {
+        final StringBuilder builder = new StringBuilder();
+        for(ItemConfigValue value : consolidated) {
+            builder.append("\n").append(value.fillCrashReportSection().replace("\n", "\n  "));
+        }
+        return builder.toString();
     }
 
     @Override

@@ -75,4 +75,9 @@ public class MatcherExecutor<I extends ItemMeta, T> {
     public int hashCode() {
         return Objects.hash(dataSource, operator);
     }
+
+    @Override
+    public String toString() {
+        return dataSource.getDataType().name() + ": " + getOperatorType().name();
+    }
 }

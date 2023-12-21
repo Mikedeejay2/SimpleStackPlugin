@@ -87,10 +87,8 @@ public final class ItemProperties {
 
     @Override
     public String toString() {
-        return "ItemProperties{" +
-            "type=" + type +
-            ", amount=" + amount +
-            ", meta=" + meta +
-            '}';
+        final StringBuilder builder = new StringBuilder(type.name() + " x " + amount);
+        if(hasItemMeta()) builder.append(" (").append(meta).append(")");
+        return builder.toString();
     }
 }

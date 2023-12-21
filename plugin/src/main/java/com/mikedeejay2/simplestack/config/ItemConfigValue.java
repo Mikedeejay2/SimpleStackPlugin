@@ -206,6 +206,15 @@ public class ItemConfigValue {
             '}';
     }
 
+    public String fillCrashReportSection() {
+        final StringBuilder builder = new StringBuilder("- " + properties.toString());
+        builder.append("\nMatchers: ");
+        for(MatcherExecutor<?, ?> matcher : matchers.values()) {
+            builder.append("\n  ").append(matcher);
+        }
+        return builder.toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if(this == o) return true;
