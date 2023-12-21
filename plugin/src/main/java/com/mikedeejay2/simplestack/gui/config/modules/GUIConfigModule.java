@@ -22,7 +22,6 @@ import com.mikedeejay2.simplestack.gui.config.constructors.GUILanguageConstructo
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemFlag;
 
 /**
@@ -125,30 +124,6 @@ public class GUIConfigModule implements GUIModule {
         return closeItem;
     }
 
-//    /**
-//     * Get the <code>GUIItem</code> for the item type amount list button
-//     *
-//     * @return The item type amount list button
-//     */
-//    private GUIItem getGUIItemItemTypeAmountList() {
-//        AnimatedGUIItem itemTypeAmountList = new AnimatedGUIItem(ITEM_TYPE_AMOUNT_ITEM, true);
-//        final Map<Material, Integer> itemAmounts = SimpleStackAPI.getConfig().getItemAmounts();
-//        final Iterator<Map.Entry<Material, Integer>> iterator = itemAmounts.entrySet().iterator();
-//        for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, itemAmounts.size()); ++i) {
-//            Map.Entry<Material, Integer> entry = iterator.next();
-//            Material material = entry.getKey();
-//            if(material == null) continue;
-//            itemTypeAmountList.addFrame(
-//                ItemBuilder.of(ITEM_TYPE_AMOUNT_ITEM)
-//                    .setType(material)
-//                    .addItemFlags(PREVIEW_ITEM_FLAGS),
-//                20);
-//        }
-//        itemTypeAmountList.addEvent(new GUIOpenNewEvent(plugin, GUIItemTypeAmountConstructor.INSTANCE));
-//        itemTypeAmountList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
-//        return itemTypeAmountList;
-//    }
-
     /**
      * Get the <code>GUIItem</code> for the language select button
      *
@@ -218,48 +193,6 @@ public class GUIConfigModule implements GUIModule {
         defaultMaxAmount.addEvent(button);
         return defaultMaxAmount;
     }
-
-//    /**
-//     * Get the <code>GUIItem</code> for the unique item list button
-//     *
-//     * @return The unique item list button
-//     */
-//    private GUIItem getGUIItemUniqueItemList() {
-//        AnimatedGUIItem uniqueItemList = new AnimatedGUIItem(UNIQUE_ITEM_LIST_ITEM, true);
-//        final Set<ItemStack> uniqueItems = SimpleStackAPI.getConfig().getUniqueItems();
-//        final Iterator<ItemStack> iterator = uniqueItems.iterator();
-//        for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, uniqueItems.size()); ++i) {
-//            uniqueItemList.addFrame(
-//                ItemBuilder.of(UNIQUE_ITEM_LIST_ITEM)
-//                    .setType(iterator.next().getType())
-//                    .addItemFlags(PREVIEW_ITEM_FLAGS),
-//                20);
-//        }
-//        uniqueItemList.addEvent(new GUIOpenNewEvent(plugin, GUIUniqueConstructor.INSTANCE));
-//        uniqueItemList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
-//        return uniqueItemList;
-//    }
-
-//    /**
-//     * Get the <code>GUIItem</code> for the item type list button
-//     *
-//     * @return The item type list button
-//     */
-//    private GUIItem getGUIItemItemTypeList() {
-//        AnimatedGUIItem itemTypeList = new AnimatedGUIItem(ITEM_TYPE_ITEM, true);
-//        final Set<Material> materialItems = SimpleStackAPI.getConfig().getMaterials();
-//        final Iterator<Material> iterator = materialItems.iterator();
-//        for(int i = 0; i < Math.min(LIST_ANIM_AMOUNT, materialItems.size()); ++i) {
-//            itemTypeList.addFrame(
-//                ItemBuilder.of(ITEM_TYPE_ITEM)
-//                    .setType(iterator.next())
-//                    .addItemFlags(PREVIEW_ITEM_FLAGS),
-//                20);
-//        }
-//        itemTypeList.addEvent(new GUIOpenNewEvent(plugin, GUIItemTypeConstructor.INSTANCE));
-//        itemTypeList.addEvent(new GUIPlaySoundEvent(Sound.UI_BUTTON_CLICK, 0.3f, 1f));
-//        return itemTypeList;
-//    }
 
     private GUIItem getGUIItemList() {
         AnimatedGUIItem itemTypeList = new AnimatedGUIItem(ITEM_LIST, true);
