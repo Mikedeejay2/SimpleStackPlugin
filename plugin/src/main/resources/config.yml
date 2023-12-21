@@ -1,38 +1,11 @@
-# List Mode: The mode that the item types list will operate in
-#   * Blacklist = Items added to the list will not be stackable
-#   * Whitelist = Items added to the list will be stackable, but unstackable items will stay unstackable if they're not in the list
-List Mode: Blacklist
-
-# Item Types: Item types that will or will not be stacked to 64 based on the list mode above
-Item Types:
-  - Example Item
-
-# Item Amounts: Set the amount of items that an item of that type can hold.
-Item Amounts:
-  Example Item: 64
-
-# Language: The default language for in game text. If the specified language is not supported English will be used.
-# Supported Languages:
-#   * en_us - English
-#   * zh_cn - 简体中文 (Simplified Chinese)
-#   * ko_kr - 한국어 (Korean)
-#   * es_ar - Español (Argentinian Spanish)
-#   * es_cl - Español (Chilean Spanish)
-#   * es_mx - Español (Mexican Spanish)
-#   * es_uy - Español (Uruguayan Spanish)
-#   * es_ve - Español (Venezuelan Spanish)
-#   * de_de - Deutsch (German)
-# Note: Language is also based off of per-player, the language specified in this config only applies
-# to the console or unknown languages.
+# The default language for the console and unknown languages
 Language: en_us
 
-# Default Max Amount: Set the default max amount for ALL items in Minecraft
-# This setting could be dangerous, do proper testing before changing this value.
-Default Max Amount: 64
+# When true, overrides the default maximum stack sizes of all items with the Max Stack Override amount
+Override Default Stack Sizes: false
 
-# Stacked Armor Wearable: When true, players can wear stacked armor in an armor slot.
-# Keeping this value to false means that only one of an armor piece can be worn at a time.
-# Stacked armor does not add to how much armor a player has but instead increases the
-# overall durability of the stack. When one armor piece breaks, it just decreases the stack
-# by one.
+# The default maximum stack size for all items if Override Default Stack Sizes is true
+Max Stack Override: 64
+
+# Allows wearing stacked armor in an armor slot
 Stacked Armor Wearable: false

@@ -56,7 +56,7 @@ public class SetAmountCommand implements SubCommand {
             return;
         }
         item.setAmount(amount);
-        if(amount > SimpleStackAPI.getConfig().getMaxAmount()) {
+        if(amount > SimpleStackAPI.getConfig().getMaxStackOverride()) {
             plugin.sendMessage(sender, Text.of("&e").concat("simplestack.warnings.big_number"));
         }
         plugin.sendMessage(sender, Text.of("&e&l%s&r &b%s").format(

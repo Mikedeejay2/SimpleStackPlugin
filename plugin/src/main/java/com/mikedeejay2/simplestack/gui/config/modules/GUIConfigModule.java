@@ -16,11 +16,13 @@ import com.mikedeejay2.mikedeejay2lib.text.Text;
 import com.mikedeejay2.mikedeejay2lib.util.head.Base64Head;
 import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
+import com.mikedeejay2.simplestack.api.SimpleStackConfig;
 import com.mikedeejay2.simplestack.gui.config.constructors.GUIItemListConstructor;
 import com.mikedeejay2.simplestack.gui.config.constructors.GUILanguageConstructor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemFlag;
 
 /**
@@ -32,25 +34,7 @@ public class GUIConfigModule implements GUIModule {
     private static final ItemBuilder CLOSE_ITEM = ItemBuilder.of(Material.REDSTONE)
         .setName(Text.of("&c&o").concat("simplestack.gui.config.close_select"));
 
-//    private static final ItemBuilder ITEM_TYPE_AMOUNT_ITEM = ItemBuilder.of(Material.BARRIER)
-//        .setName(Text.of("&b&l").concat("simplestack.gui.item_type_amts.title"))
-//        .setLore(Text.of("&f").concat("simplestack.gui.config.item_type_description"));
-//
-//    private static final ItemBuilder UNIQUE_ITEM_LIST_ITEM = ItemBuilder.of(Material.BARRIER)
-//        .setName(Text.of("&b&l").concat("simplestack.gui.unique_items.title"))
-//        .setLore(
-//            Text.of("&f").concat("simplestack.gui.config.unique_item_desc_l1"),
-//            Text.of("&7").concat("simplestack.gui.config.unique_item_desc_l2"),
-//            Text.of("&7").concat("simplestack.gui.config.unique_item_desc_l3"));
-//
-//    private static final ItemBuilder ITEM_TYPE_ITEM = ItemBuilder.of(Material.BARRIER)
-//        .setName(Text.of("&b&l").concat("simplestack.gui.item_types.title"))
-//        .setLore(
-//            Text.of("&f").concat("simplestack.gui.config.item_type_desc_l1"),
-//            Text.of("&7").concat("simplestack.gui.config.item_type_desc_l2"),
-//            Text.of("&7").concat("simplestack.gui.config.item_type_desc_l3"));
-
-    private static final ItemBuilder ITEM_LIST = ItemBuilder.of(Material.BARRIER)
+    private static final ItemBuilder ITEM_LIST = ItemBuilder.of(Material.MOJANG_BANNER_PATTERN)
         .setName(Text.of("&b&l").concat("simplestack.gui.item_types.title"))
         .setLore(
             Text.of("&f").concat("simplestack.gui.config.item_type_desc_l1"),
@@ -80,6 +64,23 @@ public class GUIConfigModule implements GUIModule {
         ItemFlag.HIDE_PLACED_ON
     };
 
+    private static final int[] SNAP_MAX_STACK_AMOUNTS = new int[] {1, 8, 16, 32, 48, 64};
+
+    private static final Text[] LORE_MAX_STACK_ON = new Text[] {
+        Text.of("&f").concat("simplestack.gui.config.override_max_stack_size.desc_l1"),
+        Text.of("&f").concat("simplestack.gui.config.override_max_stack_size.desc_l2"),
+        Text.of("&7").concat("simplestack.gui.config.override_max_stack_size.desc_on_l1"),
+        Text.of("&7").concat("simplestack.gui.config.override_max_stack_size.desc_on_l2"),
+        Text.of("&7").concat("simplestack.gui.config.override_max_stack_size.desc_on_l3"),
+        Text.of("&7").concat("simplestack.gui.config.override_max_stack_size.desc_on_l4")
+    };
+
+    private static final Text[] LORE_MAX_STACK_OFF = new Text[] {
+        Text.of("&f").concat("simplestack.gui.config.override_max_stack_size.desc_l1"),
+        Text.of("&f").concat("simplestack.gui.config.override_max_stack_size.desc_l2"),
+        Text.of("&7").concat("simplestack.gui.config.override_max_stack_size.desc_off_l1")
+    };
+
     private final SimpleStack plugin;
     protected final int LIST_ANIM_AMOUNT = 8;
 
@@ -98,17 +99,11 @@ public class GUIConfigModule implements GUIModule {
     public void onOpenHead(Player player, GUIContainer gui) {
         GUILayer layer = gui.getLayer(0);
 
-//        GUIItem itemTypeList = getGUIItemItemTypeList();
-//        GUIItem itemTypeAmountList = getGUIItemItemTypeAmountList();
-//        GUIItem uniqueItemList = getGUIItemUniqueItemList();
         GUIItem itemList = getGUIItemList();
         GUIItem language = getGUIItemLanguage();
         GUIItem defaultMaxAmount = getGUIItemDefaultMaxAmount();
         GUIItem stackableArmor = getGUIItemStackedArmor();
 
-//        layer.setItem(2, 4, itemTypeList);
-//        layer.setItem(2, 5, itemTypeAmountList);
-//        layer.setItem(2, 6, uniqueItemList);
         layer.setItem(2, 5, itemList);
         layer.setItem(3, 4, language);
         layer.setItem(3, 5, defaultMaxAmount);
@@ -180,24 +175,36 @@ public class GUIConfigModule implements GUIModule {
      * @return The default max amount button
      */
     private GUIItem getGUIItemDefaultMaxAmount() {
+        final SimpleStackConfig config = SimpleStackAPI.getConfig();
         GUIItem defaultMaxAmount = new GUIItem(
-            ItemBuilder.of(Material.BOOK)
-                .setAmount(SimpleStackAPI.getConfig().getMaxAmount())
-                .setName(Text.of("&b&l").concat("simplestack.gui.config.default_max_select"))
-                .setLore(
-                    Text.of("&f").concat("simplestack.gui.config.default_max_desc_l1"),
-                    Text.of("&f").concat("simplestack.gui.config.default_max_desc_l2"),
-                    Text.of("&7").concat("simplestack.gui.config.default_max_desc_l3"),
-                    Text.of("&7").concat("simplestack.gui.config.default_max_desc_l4")
-                ));
+            ItemBuilder.of(config.overrideDefaultStackSizes() ? Material.KNOWLEDGE_BOOK : Material.BOOK)
+                .setAmount(config.overrideDefaultStackSizes() ? config.getMaxStackOverride() : 1)
+                .setName(Text.of("&b&l").concat("simplestack.gui.config.override_max_stack_size"))
+                .setLore(config.overrideDefaultStackSizes() ? LORE_MAX_STACK_ON : LORE_MAX_STACK_OFF));
 
         GUIButtonEvent button = new GUIButtonEvent((info) -> {
             final GUIItem item = info.getGUIItem();
-            if(info.isShiftClick()) {
-                if(info.isLeftClick()) {
-                    item.setAmount(1);
-                } else if(info.isRightClick()) {
-                    item.setAmount(64);
+            if(!config.overrideDefaultStackSizes()) {
+                if(!info.isLeftClick()) return;
+                item.setType(Material.KNOWLEDGE_BOOK)
+                    .setAmount(config.getMaxStackOverride())
+                    .setLore(LORE_MAX_STACK_ON);
+                config.setOverrideDefaultStackSizes(true);
+                return;
+            }
+            if(info.isShiftClick() && info.isLeftClick()) {
+                item.setType(Material.BOOK)
+                    .setAmount(1)
+                    .setLore(LORE_MAX_STACK_OFF);
+                config.setOverrideDefaultStackSizes(false);
+                return;
+            }
+            if(info.isShiftClick() && info.isRightClick()) {
+                if(item.getAmount() == 64) item.setAmount(1);
+                else for(int i : SNAP_MAX_STACK_AMOUNTS) {
+                    if(i <= item.getAmount()) continue;
+                    item.setAmount(i);
+                    break;
                 }
             } else if(info.isLeftClick()) {
                 item.setAmount(item.getAmount() > 1 ? item.getAmount() - 1 : 1);
@@ -205,7 +212,7 @@ public class GUIConfigModule implements GUIModule {
                 item.setAmount(item.getAmount() < 64 ? item.getAmount() + 1 : 64);
             }
             int amount = item.getAmount();
-            SimpleStackAPI.getConfig().setMaxAmount(amount);
+            SimpleStackAPI.getConfig().setMaxStackOverride(amount);
         });
         button.setSound(Sound.UI_BUTTON_CLICK).setVolume(0.3f);
         defaultMaxAmount.addEvent(button);

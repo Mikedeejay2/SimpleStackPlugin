@@ -17,17 +17,27 @@ public class ConfigListener implements Listener {
     @EventHandler
     private void onMaterial(MaterialMaxAmountEvent event) {
         final int amount = config.getAmount(event.getType());
-        if(amount != -1) event.setAmount(amount);
+        if(amount != -1) {
+            event.setAmount(amount);
+            return;
+        }
+        if(config.overrideDefaultStackSizes()) {
+            event.setAmount(config.getMaxStackOverride());
+        }
     }
 
     @EventHandler
     private void onItemStack(ItemStackMaxAmountEvent event) {
         final int amount = config.getAmount(event.getItemStack());
-        if(amount != -1) event.setAmount(amount);
+        if(amount != -1) {
+            event.setAmount(amount);
+        }
     }
 
     @EventHandler
     private void onArmorSlot(ArmorSlotMaxAmountEvent event) {
-        if(config.isStackedArmorWearable()) event.setAmount(config.getMaxAmount());
+        if(config.isStackedArmorWearable()) {
+            event.setAmount(config.overrideDefaultStackSizes() ? config.getMaxStackOverride() : 64);
+        }
     }
 }

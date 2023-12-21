@@ -24,19 +24,12 @@ import static com.mikedeejay2.simplestack.config.SimpleStackConfigTypes.*;
 public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConfig {
     private final ItemsFile itemsFile = child(new ItemsFile(plugin));
 
-//    //Variables
-//    // List mode of the material list. Either Blacklist of Whitelist.
-//    private final ConfigValueBoolean whitelist = valueBoolean(WHITELIST_TYPE, "List Mode");
-//    // Material list of the config (Item Type list in config)
-//    private final ConfigValue<ReferenceSet<Material>> materialSet = collectionValue(MATERIAL_LIST_TYPE, "Item Types", new ReferenceLinkedOpenHashSet<>());
     // Localization code specified in the config
     private final ConfigValue<String> locale = value(LOCALE_TYPE, "Language");
-//    // Item amounts based on the item's material (Item Type amounts list in config)
-//    private final ConfigValue<Reference2IntMap<Material>> itemAmountMap = mapValue(ITEM_AMOUNTS_TYPE, "Item Amounts", new Reference2IntLinkedOpenHashMap<>());
-//    // Unique items list from the unique_items.json
-//    private final ConfigValue<Object2IntMap<ItemStack>> uniqueItemMap = uniqueItemFile.uniqueItemMap;
+    // Whether the override the default stack sizes with the Max Stack Override
+    private final ConfigValueBoolean overrideDefaultStackSizes = valueBoolean(ValueType.BOOLEAN, "Override Default Stack Sizes");
     // The max amount for all items in minecraft
-    private final ConfigValueInteger maxAmount = valueInteger(MAX_AMOUNT_TYPE, "Default Max Amount");
+    private final ConfigValueInteger maxStackOverride = valueInteger(MAX_AMOUNT_TYPE, "Max Stack Override");
     // Whether stacked armor can be worn or not
     private final ConfigValueBoolean stackedArmorWearable = valueBoolean(ValueType.BOOLEAN, "Stacked Armor Wearable");
 
@@ -59,18 +52,6 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
         if(success) setLocale(TranslationManager.SYSTEM_LOCALE);
         return success;
     }
-
-//    public List<Material> getMaterialsRef() {
-//        return new SetAsList<>(materialSet.get());
-//    }
-//
-//    public List<Map.Entry<Material, Integer>> getItemAmountsRef() {
-//        return new MapAsList<>(itemAmountMap.get());
-//    }
-//
-//    public List<Map.Entry<ItemStack, Integer>> getUniqueItemsRef() {
-//        return new MapAsList<>(uniqueItemMap.get());
-//    }
 
     public List<ItemConfigValue> getItemsRef() {
         return itemMap.get().getList();
@@ -104,89 +85,6 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
         return itemMap.get().containsItem(value);
     }
 
-//    @Override
-//    public int getUniqueItemAmount(@NotNull ItemStack item) {
-//        final int amount = uniqueItemMap.get().getInt(item);
-//        return amount > 0 ? amount : -1;
-//    }
-//
-//    @Override
-//    public boolean containsMaterial(@NotNull Material material) {
-//        return materialSet.get().contains(material);
-//    }
-//
-//    @Override
-//    public boolean containsCustomAmount(@NotNull Material material) {
-//        return itemAmountMap.get().containsKey(material);
-//    }
-//
-//    @Override
-//    public boolean containsUniqueItem(@NotNull ItemStack item) {
-//        return uniqueItemMap.get().containsKey(item);
-//    }
-//
-//    @Override
-//    public @NotNull Set<Material> getMaterials() {
-//        return ImmutableSet.copyOf(materialSet.get());
-//    }
-//
-//    @Override
-//    public @NotNull Map<Material, Integer> getItemAmounts() {
-//        return ImmutableMap.copyOf(itemAmountMap.get());
-//    }
-//
-//    @Override
-//    public @NotNull Set<ItemStack> getUniqueItems() {
-//        return ImmutableSet.copyOf(uniqueItemMap.get().keySet());
-//    }
-//
-//    @Override
-//    public void addMaterial(@NotNull Material material) {
-//        if(containsMaterial(material)) return;
-//        materialSet.get().add(material);
-//        setModified(true);
-//    }
-//
-//    @Override
-//    public void addCustomAmount(@NotNull Material material, int amount) {
-//        itemAmountMap.get().put(material, amount);
-//        setModified(true);
-//    }
-//
-//    @Override
-//    public void addUniqueItem(@NotNull ItemStack item) {
-//        uniqueItemMap.get().put(item, item.getAmount());
-//        setModified(true);
-//    }
-//
-//    @Override
-//    public void removeMaterial(@NotNull Material material) {
-//        materialSet.get().remove(material);
-//        setModified(true);
-//    }
-//
-//    @Override
-//    public void removeCustomAmount(@NotNull Material material) {
-//        itemAmountMap.get().removeInt(material);
-//        setModified(true);
-//    }
-//
-//    @Override
-//    public void removeUniqueItem(@NotNull ItemStack item) {
-//        uniqueItemMap.get().removeInt(item);
-//    }
-//
-//    @Override
-//    public boolean isWhitelist() {
-//        return whitelist.getBoolean();
-//    }
-//
-//    @Override
-//    public void setListMode(boolean whitelist) {
-//        this.whitelist.setBoolean(whitelist);
-//        setModified(true);
-//    }
-
     @Override
     public boolean isStackedArmorWearable() {
         return stackedArmorWearable.getBoolean();
@@ -199,13 +97,24 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
     }
 
     @Override
-    public int getMaxAmount() {
-        return maxAmount.getInteger();
+    public boolean overrideDefaultStackSizes() {
+        return overrideDefaultStackSizes.getBoolean();
     }
 
     @Override
-    public void setMaxAmount(int maxAmount) {
-        this.maxAmount.setInteger(maxAmount);
+    public void setOverrideDefaultStackSizes(boolean overrideDefaultStackSizes) {
+        this.overrideDefaultStackSizes.setBoolean(overrideDefaultStackSizes);
+        setModified(true);
+    }
+
+    @Override
+    public int getMaxStackOverride() {
+        return maxStackOverride.getInteger();
+    }
+
+    @Override
+    public void setMaxStackOverride(int maxStackOverride) {
+        this.maxStackOverride.setInteger(maxStackOverride);
         setModified(true);
     }
 
@@ -227,9 +136,7 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
 
     public void fillCrashReportSection(CrashReportSection section) {
         fillCrashReportSection_(section, this);
-        for(ConfigFile child : children) {
-            fillCrashReportSection_(section, child);
-        }
+        section.addDetail("Items", itemMap.get().fillCrashReportSection());
         section.addDetail("Is Config Loaded", String.valueOf(isLoaded()));
         section.addDetail("Is Config Modified", String.valueOf(isModified()));
     }
