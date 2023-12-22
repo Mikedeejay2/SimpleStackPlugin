@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import com.mikedeejay2.mikedeejay2lib.item.ItemBuilder;
 import com.mikedeejay2.mikedeejay2lib.text.PlaceholderFormatter;
 import com.mikedeejay2.mikedeejay2lib.text.Text;
-import com.mikedeejay2.mikedeejay2lib.util.item.FastItemMeta;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.ImmutablePair;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.Pair;
 import com.mikedeejay2.simplestack.SimpleStack;
@@ -14,7 +13,6 @@ import com.mikedeejay2.simplestack.config.matcher.*;
 import it.unimi.dsi.fastutil.objects.ReferenceLinkedOpenHashSet;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
@@ -35,10 +33,10 @@ public class ItemConfigValue {
     public ItemConfigValue(ItemProperties item, Map<MatcherDataType, MatcherExecutor<?, ?>> matchers) {
         this.properties = item;
         this.matchers.putAll(matchers);
+        buildOptimizedMatchers();
     }
 
-    public boolean matchItem(ItemStack item) {
-        final ItemMeta itemMeta = FastItemMeta.getItemMeta(item);
+    public boolean matchItem(ItemMeta itemMeta) {
         final ItemMeta propertiesMeta = properties.getItemMeta();
         for(MatcherExecutor<?, ?> executor : optimizedMatchers) {
             if(!executor.check(itemMeta, propertiesMeta)) return false;

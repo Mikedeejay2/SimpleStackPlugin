@@ -25,30 +25,31 @@ public final class ConfigItemMap {
 
     public int getItemStack(ItemStack itemStack) {
         final Material material = itemStack.getType();
-        int result = getMetaAmount(itemStack, material);
+        final ItemMeta itemMeta = itemStack.hasItemMeta() ? FastItemMeta.getItemMeta(itemStack) : null;
+        int result = itemMeta != null ? getMetaAmount(itemMeta, material) : -1;
         if(result != -1) return result;
-        result = getValueAmount(itemStack, material);
+        result = getValueAmount(itemMeta, material);
         if(result != -1) return result;
         return getWildcardAmount(itemStack);
     }
 
-    private int getMetaAmount(ItemStack itemStack, Material material) {
-        if(!itemStack.hasItemMeta() || !material2Meta2AmountMap.containsKey(material)) return -1;
-        final ItemMeta meta = FastItemMeta.getItemMeta(itemStack);
-        return material2Meta2AmountMap.get(material).getOrDefault(meta, -1);
+    private int getMetaAmount(ItemMeta itemMeta, Material material) {
+        if(!material2Meta2AmountMap.containsKey(material)) return -1;
+        return material2Meta2AmountMap.get(material).getOrDefault(itemMeta, -1);
     }
 
-    private int getValueAmount(ItemStack itemStack, Material material) {
+    private int getValueAmount(ItemMeta itemMeta, Material material) {
         if(!material2ValueMap.containsKey(material)) return -1;
         for(ItemConfigValue value : material2ValueMap.get(material)) {
-            if(value.matchItem(itemStack)) return value.getAmount();
+            if(value.matchItem(itemMeta)) return value.getAmount();
         }
         return -1;
     }
 
     private int getWildcardAmount(ItemStack itemStack) {
+        final ItemMeta itemMeta = FastItemMeta.getItemMeta(itemStack);
         for(ItemConfigValue value : wildcardValueList) {
-            if(value.matchItem(itemStack)) return value.getAmount();
+            if(value.matchItem(itemMeta)) return value.getAmount();
         }
         return -1;
     }

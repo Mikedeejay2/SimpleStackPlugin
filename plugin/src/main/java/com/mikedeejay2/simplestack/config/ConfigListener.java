@@ -19,10 +19,6 @@ public class ConfigListener implements Listener {
         final int amount = config.getAmount(event.getType());
         if(amount != -1) {
             event.setAmount(amount);
-            return;
-        }
-        if(config.overrideDefaultStackSizes()) {
-            event.setAmount(config.getMaxStackOverride());
         }
     }
 

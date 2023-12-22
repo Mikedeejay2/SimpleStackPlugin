@@ -68,7 +68,11 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
 
     @Override
     public int getAmount(@NotNull Material type) {
-        return itemMap.get().getMaterial(type);
+        final int amount = itemMap.get().getMaterial(type);
+        if(amount == -1 && overrideDefaultStackSizes()) {
+            return getMaxStackOverride();
+        }
+        return amount;
     }
 
     public void addItem(ItemConfigValue value) {
