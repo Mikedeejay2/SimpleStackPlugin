@@ -13,7 +13,7 @@ import static org.objectweb.asm.Opcodes.*;
  * @author Mikedeejay2
  */
 @Transformer({
-    "1.20.2", "1.20.1", "1.20",
+    "1.20.4", "1.20.2", "1.20.1", "1.20",
     "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
     "1.18", "1.18.1", "1.18.2"
 })
@@ -52,13 +52,15 @@ public class TransformEntityPlayerDrop extends MappedMethodVisitor {
         super.visitVarInsn(ALOAD, 1); // Load ItemStack
         super.visitFieldInsn(GETSTATIC, "java/lang/Integer", "MAX_VALUE", "I"); // Get max Integer value
         super.visitMethodInsn(INVOKEVIRTUAL, lastNms().method("split")); // Split the max possible
-        super.visitVarInsn(ASTORE, 4); // Store new ItemStack to local index 5
+        super.visitVarInsn(ASTORE, 6); // Store new ItemStack to local index 6
 
         super.visitVarInsn(ALOAD, 0); // Load this
-        super.visitVarInsn(ALOAD, 4); // Load split ItemStack
-        super.visitVarInsn(ILOAD, 2); // Load flag boolean
-        super.visitVarInsn(ILOAD, 3); // Load flag1 boolean
-        super.visitMethodInsn(INVOKEVIRTUAL, nms("EntityPlayer").method("drop")); // Call the drop method recursively
+        super.visitVarInsn(ALOAD, 6); // Load split ItemStack
+        super.visitVarInsn(ILOAD, 2); // Load throwRandomly boolean
+        super.visitVarInsn(ILOAD, 3); // Load retainOwnership boolean
+        MappingEntry drop = nms("EntityPlayer").method("drop");
+        if(drop.descriptor().contains("ZZZ)")) super.visitVarInsn(ILOAD, 4); // Load callDropEvent boolean (If running on paper servers)
+        super.visitMethodInsn(INVOKEVIRTUAL, drop); // Call the drop method recursively
         super.visitInsn(POP); // Pop the returned EntityItem from above call, we don't need it
 
         super.visitJumpInsn(GOTO, whileLabel); // Jump to start of while loop

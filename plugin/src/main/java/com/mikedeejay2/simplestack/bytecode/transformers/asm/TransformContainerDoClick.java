@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.asm;
 
+import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import org.objectweb.asm.Label;
@@ -14,7 +15,7 @@ import static org.objectweb.asm.Opcodes.*;
  * @author Mikedeejay2
  */
 @Transformer({
-    "1.20.2", "1.20.1", "1.20",
+    "1.20.4", "1.20.2", "1.20.1", "1.20",
     "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
     "1.18", "1.18.1", "1.18.2"
 })
@@ -41,9 +42,7 @@ public class TransformContainerDoClick extends MappedMethodVisitor {
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
         if(!visitedIsSameItemSameTags && opcode == INVOKESTATIC && // Check starting reference method isSameItemSameTags
-            owner.equals(nms("ItemStack").internalName()) &&
-            name.equals(lastNms().method("isSameItemSameTags").name()) &&
-            descriptor.equals(lastNmsMethod().descriptor())) {
+            equalsMapping(owner, name, descriptor, nms("ItemStack").method("isSameItemSameTags"))) {
             this.visitedIsSameItemSameTags = true;
         } else if(!appendedHotbarSwap && opcode == INVOKEVIRTUAL && // Hotbar swap point 1
             equalsMapping(owner, name, descriptor, nms("PlayerInventory").method("setItem"))) {
@@ -91,13 +90,16 @@ public class TransformContainerDoClick extends MappedMethodVisitor {
      * Fixes swapping overstacked items into the hotbar. Injected on a PlayerInventory#setItem call.
      */
     public void appendHotbarSwap() {
+        // For <= 1.20.2, index is 9. For >= 1.20.4, index is 13
+        int itemstack1Idx = MinecraftVersion.getVersionLong()[1] >= 20 && MinecraftVersion.getVersionLong()[2] >= 4 ? 13 : 9;
         Label exitLabel = new Label();
+
         super.visitInsn(POP); // Pop ItemStack
         super.visitInsn(POP); // Pop button
         super.visitInsn(POP); // Pop PlayerInventory
 
         super.visitVarInsn(ALOAD, 7); // Load itemstack
-        super.visitVarInsn(ALOAD, 9); // Load itemstack1
+        super.visitVarInsn(ALOAD, itemstack1Idx); // Load itemstack1
         super.visitJumpInsn(IF_ACMPEQ, exitLabel); // If they're the same, don't do this
         super.visitFrame(F_SAME, 0, null, 0, null);
         super.visitVarInsn(ALOAD, 5); // Load PlayerInventory
