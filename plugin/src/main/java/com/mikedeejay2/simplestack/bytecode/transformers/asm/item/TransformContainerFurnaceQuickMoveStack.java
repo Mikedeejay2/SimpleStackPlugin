@@ -101,7 +101,9 @@ public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor
         super.visitInsn(ICONST_1); // Load int 1
         super.visitInsn(ICONST_2); // Load int 2
         super.visitInsn(ICONST_0); // Load int 0 (false)
-        super.visitMethodInsn(INVOKEVIRTUAL, nms("ContainerFurnace").method("moveItemStackTo")); // Invoke method moveItemStackTo
+        MappingEntry moveItemStackTo = nms("Container").method("moveItemStackTo");
+        if(moveItemStackTo.descriptor().contains("IIZZ)")) super.visitInsn(ICONST_0); // Load int 0 (false, If running on paper servers)
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("ContainerFurnace"), moveItemStackTo); // Invoke method moveItemStackTo
 
         // Return empty regardless of moveItemStackTo state, this will break the quickMoveStack loop
         // return ItemStack.EMPTY;

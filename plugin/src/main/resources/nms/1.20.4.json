@@ -19,7 +19,8 @@
   },
   "EntityPlayer": {
     "methods": {
-      "drop": "drop(LItemStack;ZZZ)LEntityItem;"
+      "drop": "drop(LItemStack;ZZZ)LEntityItem;",
+      "__SPIGOT__drop": "a(LItemStack;ZZ)LEntityItem;"
     }
   },
   "Items": {

@@ -150,6 +150,13 @@ public class MappingsLookup {
                 result.put(curKey, null);
                 continue;
             }
+            if(curKey.startsWith("__")) {
+                final String noPrefixKey = curKey.substring(curKey.lastIndexOf("__") + 2);
+                if(!result.containsKey(noPrefixKey)) continue;
+                MappingEntry oldEntry = result.get(noPrefixKey);
+                oldEntry.alternate(new MappingEntry(curElement.getAsString()));
+                continue;
+            }
             result.put(curKey, new MappingEntry(curElement.getAsString()));
         }
         return result;
@@ -199,7 +206,7 @@ public class MappingsLookup {
             try {
                 tryValidateField(entry, clazz);
             } catch(Exception exception) {
-                if(trySuperClasses(entry, clazz, false)) continue;
+                if(tryAlternateMappings(entry, clazz, false)) continue;
                 failedEntries.put(entry, exception);
             }
         }
@@ -207,24 +214,23 @@ public class MappingsLookup {
             try {
                 tryValidateMethod(entry, clazz);
             } catch(Exception exception) {
-                if(trySuperClasses(entry, clazz, true)) continue;
+                if(tryAlternateMappings(entry, clazz, true)) continue;
                 failedEntries.put(entry, exception);
             }
         }
         return failedEntries;
     }
 
-    private static boolean trySuperClasses(MappingEntry mapping, Class<?> clazz, boolean method) {
-        Class<?> currentClass = clazz.getSuperclass();
-        while(currentClass != null) {
+    private static boolean tryAlternateMappings(MappingEntry parentMapping, Class<?> clazz, boolean method) {
+        for(MappingEntry alternate : parentMapping.alternates()) {
             try {
-                if (method) tryValidateMethod(mapping, currentClass);
-                else tryValidateField(mapping, currentClass);
+                if (method) tryValidateMethod(alternate, clazz);
+                else tryValidateField(alternate, clazz);
+                parentMapping.useAlternate(alternate);
                 return true;
-            } catch(Exception ignored) {
+            } catch(Exception exception) {
                 // ignored
             }
-            currentClass = currentClass.getSuperclass();
         }
         return false;
     }
@@ -383,11 +389,12 @@ public class MappingsLookup {
     }
 
     public static final class MappingEntry {
-        private final String name;
+        private String name;
         private String referenceName;
         private ClassMapping owner;
         private String descriptorFormat;
         private String descriptor;
+        private final List<MappingEntry> alternates;
 
         private MappingEntry(String value) {
             Validate.isTrue(value.contains(":") || value.contains("("),
@@ -395,11 +402,11 @@ public class MappingsLookup {
             value = value.replaceFirst("\\(", ":("); // Add a separator between method name and descriptor
             this.name = value.substring(0, value.indexOf(':'));
             this.descriptor(value.substring(value.indexOf(':') + 1));
+            this.alternates = new ArrayList<>();
         }
 
-        private MappingEntry descriptor(String descriptor) {
+        private void descriptor(String descriptor) {
             this.descriptorFormat = descriptor;
-            return this;
         }
 
         private void owner(ClassMapping owner) {
@@ -408,6 +415,21 @@ public class MappingsLookup {
 
         private void referenceName(String referenceName) {
             this.referenceName = referenceName;
+        }
+
+        private void alternate(MappingEntry alternate) {
+            this.alternates.add(alternate);
+        }
+
+        public List<MappingEntry> alternates() {
+            return alternates;
+        }
+
+        private void useAlternate(MappingEntry alternate) {
+            Validate.isTrue(alternates.contains(alternate), "Tried to use mapping that wasn't an alternate");
+            this.name = alternate.name;
+            this.descriptorFormat = alternate.descriptorFormat;
+            this.descriptor = alternate.descriptor;
         }
 
         public String name() {
@@ -427,6 +449,9 @@ public class MappingsLookup {
         }
 
         private String generateDescriptor() {
+            for(MappingEntry alternate : alternates) {
+                alternate.generateDescriptor();
+            }
             String newDescriptor = descriptorFormat;
             int index = newDescriptor.indexOf('L');
             while(index != -1) {

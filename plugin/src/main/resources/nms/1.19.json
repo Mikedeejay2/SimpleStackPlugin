@@ -138,8 +138,7 @@
     "class_name": "net.minecraft.world.inventory.ContainerFurnace",
     "methods": {
       "quickMoveStack": "a(LEntityHuman;I)LItemStack;",
-      "isFuel": "d(LItemStack;)Z",
-      "moveItemStackTo": "a(LItemStack;IIZ)Z"
+      "isFuel": "d(LItemStack;)Z"
     }
   },
   "TileEntityFurnace": {
