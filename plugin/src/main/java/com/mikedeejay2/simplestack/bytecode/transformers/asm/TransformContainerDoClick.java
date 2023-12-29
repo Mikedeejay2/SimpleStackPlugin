@@ -14,11 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({
-    "1.20.4", "1.20.2", "1.20.1", "1.20",
-    "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
-    "1.18", "1.18.1", "1.18.2"
-})
+@Transformer("1.18-1.20.4")
 public class TransformContainerDoClick extends MappedMethodVisitor {
     protected boolean visitedIsSameItemSameTags = false;
     protected boolean appendedStackCheck1 = false;
@@ -91,7 +87,7 @@ public class TransformContainerDoClick extends MappedMethodVisitor {
      */
     public void appendHotbarSwap() {
         // For <= 1.20.2, index is 9. For >= 1.20.4, index is 13
-        int itemstack1Idx = MinecraftVersion.getVersionLong()[1] >= 20 && MinecraftVersion.getVersionLong()[2] >= 4 ? 13 : 9;
+        int itemstack1Idx = MinecraftVersion.check(">=1.20.4") ? 13 : 9;
         Label exitLabel = new Label();
 
         super.visitInsn(POP); // Pop ItemStack

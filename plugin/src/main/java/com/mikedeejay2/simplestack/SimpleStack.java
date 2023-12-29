@@ -97,11 +97,11 @@ public final class SimpleStack extends BukkitPlugin {
 
     private boolean loadMappings() {
         sendInfo(Text.of("simplestack.info.load_version").placeholder(
-            PlaceholderFormatter.of("mcver", MinecraftVersion.getVersionString())));
+            PlaceholderFormatter.of("mcver", MinecraftVersion.VERSION)));
         if(!MappingsLookup.loadMappings(this)) {
             sendSevere(Text.of("&c").concat("simplestack.errors.incompatible_version").placeholder(
                 PlaceholderFormatter.of("ssver", this.getDescription().getVersion())
-                    .and("mcver", MinecraftVersion.getVersionString())));
+                    .and("mcver", MinecraftVersion.VERSION)));
             disablePlugin(this);
             return true;
         }

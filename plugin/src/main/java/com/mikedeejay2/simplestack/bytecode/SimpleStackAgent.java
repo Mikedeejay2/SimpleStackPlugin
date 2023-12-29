@@ -43,7 +43,6 @@ public final class SimpleStackAgent {
 
     public static boolean registerTransformers() {
         try {
-            final String mcVersion = MinecraftVersion.getVersionString();
             new AnnotationCollector<>(
                 new ClassCollector<>(
                     SimpleStack.getInstance().classLoader(), // Use the plugin class loader
@@ -53,7 +52,7 @@ public final class SimpleStackAgent {
                 Transformer.class) // Locate the Transformer annotation
                 .collect()
                 .stream()
-                .filter(pair -> Arrays.asList(pair.getValue().value()).contains(mcVersion)) // If current Minecraft version not found, don't use the transformer
+                .filter(pair -> MinecraftVersion.check(pair.getValue().value())) // If current Minecraft version not found, don't use the transformer
                 .map(pair -> Reflector.of(pair.getKey()).constructor().newInstance()) // Create a new instance (no arg) of the transformer
                 .forEach(SimpleStackAgent::addVisitor); // Add the new visitor
             return false;

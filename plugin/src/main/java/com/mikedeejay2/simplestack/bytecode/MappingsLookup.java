@@ -24,7 +24,7 @@ public class MappingsLookup {
 
     public static boolean loadMappings(SimpleStack plugin) {
         try {
-            return doLoadMappings(plugin, MinecraftVersion.getVersionString());
+            return doLoadMappings(plugin, MinecraftVersion.VERSION);
         } catch(Throwable throwable) {
             SimpleStack.doCrash("Exception while generating NMS mappings", throwable, c -> {});
             return false;
