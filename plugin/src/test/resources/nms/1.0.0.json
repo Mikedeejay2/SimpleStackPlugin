@@ -6,7 +6,9 @@
       "size": "size()I",
       "contains": "contains(LObject;)Z",
       "addAll2": "addAll(ILjava/util/Collection;)Z",
-      "get": "get(I)LObject;"
+      "get": "get(I)LObject;",
+      "indexOf": "invalidIndexOf(LObject;)I",
+      "__ALTERNATE__indexOf": "indexOf(LObject;)I"
     },
     "fields": {
       "DEFAULT_CAPACITY": "DEFAULT_CAPACITY:I",
