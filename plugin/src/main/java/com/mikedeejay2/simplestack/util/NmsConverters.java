@@ -10,6 +10,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
 
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.lastNms;
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
@@ -92,8 +93,7 @@ public final class NmsConverters {
         try {
             material = Material.valueOf(key);
         } catch(IllegalArgumentException e) {
-            Bukkit.getLogger().severe(String.format("SimpleStack could not find material of ID \"%s\"", key));
-            e.printStackTrace();
+            Bukkit.getLogger().log(Level.SEVERE, String.format("SimpleStack could not find material of ID \"%s\"", key), e);
             return null;
         }
         return material;
@@ -103,8 +103,7 @@ public final class NmsConverters {
         try {
             return (ItemStack) HANDLE_AS_BUKKIT_COPY.invoke(nmsItemStack);
         } catch(Throwable e) {
-            Bukkit.getLogger().severe(String.format("SimpleStack could not convert ItemStack \"%s\"", nmsItemStack));
-            e.printStackTrace();
+            Bukkit.getLogger().log(Level.SEVERE, String.format("SimpleStack could not convert ItemStack \"%s\"", nmsItemStack), e);
             return null;
         }
     }
@@ -113,8 +112,7 @@ public final class NmsConverters {
         try {
             return (int) HANDLE_SLOT_SLOT.invoke(nmsSlot);
         } catch(Throwable e) {
-            Bukkit.getLogger().severe(String.format("SimpleStack could not convert slot \"%s\"", nmsSlot));
-            e.printStackTrace();
+            Bukkit.getLogger().log(Level.SEVERE, String.format("SimpleStack could not convert slot \"%s\"", nmsSlot), e);
             return -1;
         }
     }
@@ -124,8 +122,7 @@ public final class NmsConverters {
             Object nmsIInventory = HANDLE_SLOT_CONTAINER.invoke(nmsSlot);
             return (Inventory) HANDLE_CRAFT_INVENTORY.invoke(nmsIInventory);
         } catch(Throwable e) {
-            Bukkit.getLogger().severe(String.format("SimpleStack could not convert slot \"%s\"", nmsSlot));
-            e.printStackTrace();
+            Bukkit.getLogger().log(Level.SEVERE, String.format("SimpleStack could not convert slot \"%s\"", nmsSlot), e);
             return null;
         }
     }

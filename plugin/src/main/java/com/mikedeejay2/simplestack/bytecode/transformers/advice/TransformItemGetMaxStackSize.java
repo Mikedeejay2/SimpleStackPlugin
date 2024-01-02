@@ -11,6 +11,8 @@ import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
+import java.util.logging.Level;
+
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
 
 /**
@@ -78,8 +80,7 @@ public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
             try {
                 returnValue = AdviceBridge.getItemMaxStackSize(returnValue, startTime, item);
             } catch(Throwable throwable) {
-                Bukkit.getLogger().severe("Simple Stack encountered an exception while processing an Item");
-                throwable.printStackTrace();
+                Bukkit.getLogger().log(Level.SEVERE, "Simple Stack encountered an exception while processing an Item", throwable);
             }
         }
     }

@@ -13,6 +13,8 @@ import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 
+import java.util.logging.Level;
+
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
 
 /**
@@ -57,8 +59,7 @@ public class TransformSlotGetMaxStackSize implements MethodVisitorInfo {
             try {
                 returnValue = AdviceBridge.getSlotMaxStackSize(returnValue, startTime, nmsSlot);
             } catch(Throwable throwable) {
-                Bukkit.getLogger().severe("Simple Stack encountered an exception while processing a slot");
-                throwable.printStackTrace();
+                Bukkit.getLogger().log(Level.SEVERE, "Simple Stack encountered an exception while processing a slot", throwable);
             }
         }
     }

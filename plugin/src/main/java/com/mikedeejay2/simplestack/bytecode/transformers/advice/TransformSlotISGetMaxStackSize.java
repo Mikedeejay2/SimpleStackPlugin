@@ -14,6 +14,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.logging.Level;
+
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.MappingEntry;
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
 
@@ -62,8 +64,7 @@ public class TransformSlotISGetMaxStackSize implements MethodVisitorInfo {
             try {
                 returnValue = AdviceBridge.getSlotISMaxStackSize(returnValue, startTime, nmsSlot, nmsItemStack);
             } catch(Throwable throwable) {
-                Bukkit.getLogger().severe("Simple Stack encountered an exception while processing a slot");
-                throwable.printStackTrace();
+                Bukkit.getLogger().log(Level.SEVERE, "Simple Stack encountered an exception while processing a slot", throwable);
             }
         }
     }
