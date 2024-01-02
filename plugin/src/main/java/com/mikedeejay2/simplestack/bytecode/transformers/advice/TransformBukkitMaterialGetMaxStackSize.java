@@ -12,6 +12,8 @@ import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
+import java.util.logging.Level;
+
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.MappingEntry;
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
 
@@ -21,11 +23,7 @@ import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
  *
  * @author Mikedeejay2
  */
-@Transformer({
-    "1.20.2", "1.20.1", "1.20",
-    "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
-    "1.18", "1.18.1", "1.18.2"
-})
+@Transformer("1.18-1.20.4")
 public class TransformBukkitMaterialGetMaxStackSize implements MethodVisitorInfo {
     private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 
@@ -66,8 +64,7 @@ public class TransformBukkitMaterialGetMaxStackSize implements MethodVisitorInfo
             try {
                 returnValue = AdviceBridge.getBukkitMaterialMaxStackSize(returnValue, startTime, material);
             } catch(Throwable throwable) {
-                Bukkit.getLogger().severe("Simple Stack encountered an exception while processing a Bukkit Material");
-                throwable.printStackTrace();
+                Bukkit.getLogger().log(Level.SEVERE, "Simple Stack encountered an exception while processing a Bukkit Material", throwable);
             }
         }
     }

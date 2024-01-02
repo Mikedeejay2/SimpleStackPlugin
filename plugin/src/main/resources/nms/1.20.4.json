@@ -1,0 +1,33 @@
+{
+  "using_base": "1.20.2",
+  "CraftItemStack": "org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack",
+  "CraftInventory": "org.bukkit.craftbukkit.v1_20_R3.inventory.CraftInventory",
+  "EntityHuman": {
+    "methods": {
+      "getInventory": "fS()LPlayerInventory;"
+    }
+  },
+  "Slot": {
+    "methods": {
+      "getItem": "g()LItemStack;"
+    }
+  },
+  "ItemStack": {
+    "fields": {
+      "EMPTY": "f:LItemStack;"
+    }
+  },
+  "EntityPlayer": {
+    "methods": {
+      "drop": "drop(LItemStack;ZZZ)LEntityItem;",
+      "__SPIGOT__drop": "a(LItemStack;ZZ)LEntityItem;"
+    }
+  },
+  "Items": {
+    "fields": {
+      "BUCKET": "qv:LItem;",
+      "BOWL": "pn:LItem;",
+      "LAVA_BUCKET": "qx:LItem;"
+    }
+  }
+}

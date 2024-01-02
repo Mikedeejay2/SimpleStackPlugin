@@ -42,6 +42,27 @@ public abstract class MappedMethodVisitor extends MethodVisitor implements Metho
             field.descriptor());
     }
 
+    public final void visitMethodInsn(int opcode, MappingsLookup.ClassMapping owner, MappingsLookup.MappingEntry method, boolean isInterface) {
+        super.visitMethodInsn(
+            opcode,
+            owner.internalName(),
+            method.name(),
+            method.descriptor(),
+            isInterface);
+    }
+
+    public final void visitMethodInsn(int opcode, MappingsLookup.ClassMapping owner, MappingsLookup.MappingEntry method) {
+        visitMethodInsn(opcode, owner, method, false);
+    }
+
+    public final void visitFieldInsn(int opcode, MappingsLookup.ClassMapping owner, MappingsLookup.MappingEntry field) {
+        super.visitFieldInsn(
+            opcode,
+            owner.internalName(),
+            field.name(),
+            field.descriptor());
+    }
+
     protected final boolean equalsMapping(String owner, String name, String descriptor, MappingsLookup.MappingEntry mapping) {
         return owner.equals(mapping.owner().internalName()) &&
             name.equals(mapping.name()) &&

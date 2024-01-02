@@ -14,11 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({
-    "1.20.2", "1.20.1", "1.20",
-    "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
-    "1.18", "1.18.1", "1.18.2"
-})
+@Transformer("1.18-1.20.4")
 public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor {
     private boolean visitedIsFuel = false;
     private boolean visitedEntranceLabel = false;
@@ -101,7 +97,9 @@ public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor
         super.visitInsn(ICONST_1); // Load int 1
         super.visitInsn(ICONST_2); // Load int 2
         super.visitInsn(ICONST_0); // Load int 0 (false)
-        super.visitMethodInsn(INVOKEVIRTUAL, nms("ContainerFurnace").method("moveItemStackTo")); // Invoke method moveItemStackTo
+        MappingEntry moveItemStackTo = nms("Container").method("moveItemStackTo");
+        if(moveItemStackTo.descriptor().contains("IIZZ)")) super.visitInsn(ICONST_0); // Load int 0 (false, If running on paper servers)
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("ContainerFurnace"), moveItemStackTo); // Invoke method moveItemStackTo
 
         // Return empty regardless of moveItemStackTo state, this will break the quickMoveStack loop
         // return ItemStack.EMPTY;

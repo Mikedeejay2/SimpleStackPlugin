@@ -13,16 +13,14 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({
-    "1.20.2", "1.20.1", "1.20",
-    "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
-    "1.18", "1.18.1", "1.18.2"
-})
+@Transformer("1.18-1.20.4")
 public class TransformTileEntityFurnaceCanPlaceItem extends MappedMethodVisitor {
-    private boolean visitedBucket = false;
+    private boolean visitedAstore = false;
+    private int jumpInsnCount = 0;
+    private Label falseLabel = null;
+    private Label trueLabel = null;
+    private boolean visitedTrueLabel = false;
     private boolean visitedTrueFrame = false;
-    private boolean visitedFalseLabel = false;
-    private final Label newFalseLabel = new Label();
 
     @Override
     public MappingEntry getMappingEntry() {
@@ -37,27 +35,38 @@ public class TransformTileEntityFurnaceCanPlaceItem extends MappedMethodVisitor 
     }
 
     @Override
-    public void visitFieldInsn(int opcode, String owner, String name, String descriptor) {
-        if(!visitedBucket && opcode == GETSTATIC &&
-            equalsMapping(owner, name, descriptor, nms("Items").field("BUCKET"))) {
-            visitedBucket = true;
+    public void visitVarInsn(int opcode, int varIndex) {
+        super.visitVarInsn(opcode, varIndex);
+        if(!visitedAstore && opcode == ASTORE && varIndex == 3) {
+            visitedAstore = true;
         }
-        super.visitFieldInsn(opcode, owner, name, descriptor);
+    }
+
+    @Override
+    public void visitJumpInsn(int opcode, Label label) {
+        super.visitJumpInsn(opcode, label);
+        if(visitedAstore && (opcode == IFNE || opcode == IFEQ)) { // Count the jumps
+            ++jumpInsnCount;
+            if(jumpInsnCount == 1) { // The first jump points to true on both paper and spigot compilations
+                trueLabel = label;
+            } else if(jumpInsnCount == 2) { // The second jump points to false on both paper and spigot compilations
+                falseLabel = label;
+            }
+        }
     }
 
     @Override
     public void visitLabel(Label label) {
         super.visitLabel(label);
-        if(!visitedFalseLabel && visitedTrueFrame) {
-            visitedFalseLabel = true;
-            super.visitLabel(newFalseLabel);
+        if(label == trueLabel) {
+            visitedTrueLabel = true;
         }
     }
 
     @Override
     public void visitFrame(int type, int numLocal, Object[] local, int numStack, Object[] stack) {
         super.visitFrame(type, numLocal, local, numStack, stack);
-        if(!visitedTrueFrame && visitedBucket) {
+        if(!visitedTrueFrame && visitedTrueLabel) {
             visitedTrueFrame = true;
             appendLavaBucketFix();
         }
@@ -69,18 +78,18 @@ public class TransformTileEntityFurnaceCanPlaceItem extends MappedMethodVisitor 
      * Fixes overstacking lava buckets
      */
     private void appendLavaBucketFix() {
-        Label trueLabel = new Label();
+        Label newTrueLabel = new Label();
         super.visitVarInsn(ALOAD, 2); // Load ItemStack
         super.visitFieldInsn(GETSTATIC, nms("Items").field("LAVA_BUCKET")); // Get Items.LAVA_BUCKET
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("is")); // ItemStack#is(Item)
-        super.visitJumpInsn(IFEQ, trueLabel); // If not lava bucket, goto true label
+        super.visitJumpInsn(IFEQ, newTrueLabel); // If not lava bucket, goto true label
 
         super.visitVarInsn(ALOAD, 3); // Load itemstack1
         super.visitFieldInsn(GETSTATIC, nms("Items").field("LAVA_BUCKET")); // Get Items.LAVA_BUCKET
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("is")); // ItemStack#is(Item)
-        super.visitJumpInsn(IFNE, newFalseLabel); // If lava bucket, goto false label
+        super.visitJumpInsn(IFNE, falseLabel); // If lava bucket, goto false label
 
-        super.visitLabel(trueLabel);
+        super.visitLabel(newTrueLabel);
         super.visitFrame(F_SAME, 0, null, 0, null);
     }
 }

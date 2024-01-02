@@ -31,7 +31,7 @@ public class MappingsLookupTest {
     private static SimpleStack plugin;
 
     private static final Map<String, Pair<List<String>, List<String>>> classes = ImmutableMap.<String, Pair<List<String>, List<String>>>builder()
-        .put("ArrayList", new ImmutablePair<>(ImmutableList.of("size", "contains", "addAll", "get"), ImmutableList.of("DEFAULT_CAPACITY", "elementData")))
+        .put("ArrayList", new ImmutablePair<>(ImmutableList.of("size", "contains", "addAll", "get", "indexOf"), ImmutableList.of("DEFAULT_CAPACITY", "elementData")))
         .put("Object", new ImmutablePair<>(ImmutableList.of("equals"), ImmutableList.of()))
         .build();
 
@@ -50,7 +50,8 @@ public class MappingsLookupTest {
             new ImmutablePair<>("size", "size"),
             new ImmutablePair<>("contains", "contains"),
             new ImmutablePair<>("addAll2", "addAll"),
-            new ImmutablePair<>("get", "get")),
+            new ImmutablePair<>("get", "get"),
+            new ImmutablePair<>("indexOf", "indexOf")),
         "Object", ImmutableList.of(
             new ImmutablePair<>("equals", "equals"))
     );
@@ -60,7 +61,8 @@ public class MappingsLookupTest {
             new ImmutablePair<>("size", "()I"),
             new ImmutablePair<>("contains", "(Ljava/lang/Object;)Z"),
             new ImmutablePair<>("addAll2", "(ILjava/util/Collection;)Z"),
-            new ImmutablePair<>("get", "(I)Ljava/lang/Object;")),
+            new ImmutablePair<>("get", "(I)Ljava/lang/Object;"),
+            new ImmutablePair<>("indexOf", "(Ljava/lang/Object;)I")),
         "Object", ImmutableList.of(
             new ImmutablePair<>("equals", "(Ljava/lang/Object;)Z"))
     );

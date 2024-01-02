@@ -13,11 +13,7 @@ import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
  *
  * @author Mikedeejay2
  */
-@Transformer({
-    "1.20.2", "1.20.1", "1.20",
-    "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
-    "1.18", "1.18.1", "1.18.2"
-})
+@Transformer("1.18-1.20.4")
 public class TransformContainerMoveItemStackTo extends MappedMethodVisitor {
     private boolean visitedGetMaxStackSize = false;
     private boolean visitedIStoreFlag = false;
@@ -46,7 +42,7 @@ public class TransformContainerMoveItemStackTo extends MappedMethodVisitor {
     @Override
     public void visitVarInsn(int opcode, int varIndex) {
         // Targets the last statement before the break line
-        if(!visitedIStoreFlag && visitedGetMaxStackSize && opcode == ISTORE && varIndex == 6) { // Target flag1
+        if(!visitedIStoreFlag && visitedGetMaxStackSize && opcode == ISTORE && (varIndex == 6 || varIndex == 5)) { // Target flag1
             visitedIStoreFlag = true;
         }
         super.visitVarInsn(opcode, varIndex);
