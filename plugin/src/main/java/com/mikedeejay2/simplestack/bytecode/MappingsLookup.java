@@ -139,15 +139,6 @@ public class MappingsLookup {
             classMapping.alternates(collectAlternates(classObject));
         }
 
-        // Generate descriptors
-//        for(ClassMapping classMapping : holder.mappings.values()) {
-//            for(MappingEntry methodEntry : classMapping.methodMappings.values()) {
-//                methodEntry.generateDescriptor();
-//            }
-//            for(MappingEntry fieldEntry : classMapping.fieldMappings.values()) {
-//                fieldEntry.generateDescriptor();
-//            }
-//        }
         return true;
     }
 
