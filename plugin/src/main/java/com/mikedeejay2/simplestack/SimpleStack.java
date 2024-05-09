@@ -39,6 +39,7 @@ public final class SimpleStack extends BukkitPlugin {
         PlaceholderFormatter.of("url", Text.literal("&bhttps://github.com/Mikedeejay2/SimpleStackPlugin/issues&c")));
     public static final Text CRASH_INFO_3 = Text.literal("&c").concat(Text.translatable("simplestack.crash.info_message_l3")).placeholder(
         PlaceholderFormatter.of("path", Text.literal("plugins/SimpleStack/crash-reports")));
+    private static boolean THROW_CRASH = false;
 
     private static SimpleStack instance;
 
@@ -169,6 +170,8 @@ public final class SimpleStack extends BukkitPlugin {
             .addInfo(SimpleStack.CRASH_INFO_2)
             .addInfo(SimpleStack.CRASH_INFO_3);
 
+
+        if(THROW_CRASH) throw new RuntimeException(crashReport.getReport()); // For JUnit tests
         crashReport.execute();
     }
 }

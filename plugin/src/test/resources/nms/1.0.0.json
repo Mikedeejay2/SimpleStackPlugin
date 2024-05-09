@@ -7,13 +7,19 @@
       "contains": "contains(LObject;)Z",
       "addAll2": "addAll(ILjava/util/Collection;)Z",
       "get": "get(I)LObject;",
-      "indexOf": "invalidIndexOf(LObject;)I",
-      "__ALTERNATE__indexOf": "indexOf(LObject;)I"
+      "indexOf": {
+        "value": "invalidIndexOf(LObject;)I",
+        "alternates": {
+          "Not invalid": "indexOf(LObject;)I"
+        }
+      }
     },
     "fields": {
       "DEFAULT_CAPACITY": "DEFAULT_CAPACITY:I",
       "elementDataaa": "elementData:[LObject;"
+    },
+    "alternates": {
+      "Working Version": "java.util.ArrayList"
     }
-  },
-  "__ALTERNATE__ArrayList": "java.util.ArrayList"
+  }
 }

@@ -2,6 +2,7 @@ package com.mikedeejay2.simplestack.bytecode;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.mikedeejay2.mikedeejay2lib.reflect.Reflector;
 import com.mikedeejay2.mikedeejay2lib.text.language.TranslationManager;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.ImmutablePair;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.Pair;
@@ -14,6 +15,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.SimplePluginManager;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -24,6 +26,7 @@ import java.util.logging.Logger;
 
 import static org.assertj.core.api.Assertions.*;
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
+import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -87,6 +90,7 @@ public class MappingsLookupTest {
         plugin = Mockito.mock(SimpleStack.class);
         Mockito.when(plugin.classLoader()).thenReturn(plugin.getClass().getClassLoader());
         Mockito.when(plugin.getDescription()).thenReturn(new PluginDescriptionFile("SimpleStack", "test-ver", "na"));
+        Mockito.when(plugin.getName()).thenReturn("SimpleStack (JUnit)");
 
         Server server = Mockito.mock(Server.class);
         Mockito.when(server.getVersion()).thenReturn("(MC: 1.0.0)");
@@ -97,6 +101,9 @@ public class MappingsLookupTest {
 
         TranslationManager.GLOBAL.setPlugin(plugin);
         TranslationManager.GLOBAL.registerDirectory("lang/mikedeejay2lib", true);
+
+        Reflector.of(SimpleStack.class).field("instance").set(plugin, plugin);
+        Reflector.of(SimpleStack.class).field("THROW_CRASH").set(null, true);
     }
 
     @Test
