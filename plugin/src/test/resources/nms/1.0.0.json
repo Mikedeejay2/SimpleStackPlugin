@@ -1,7 +1,7 @@
 {
   "using_base": "base",
   "ArrayList": {
-    "class_name": "java.util.ArrayList",
+    "class_name": "java.invalid.ArrayList",
     "methods": {
       "size": "size()I",
       "contains": "contains(LObject;)Z",
@@ -14,5 +14,6 @@
       "DEFAULT_CAPACITY": "DEFAULT_CAPACITY:I",
       "elementDataaa": "elementData:[LObject;"
     }
-  }
+  },
+  "__ALTERNATE__ArrayList": "java.util.ArrayList"
 }

@@ -1,0 +1,5 @@
+{
+  "using_base": "1.20.4",
+  "CraftItemStack": "org.bukkit.craftbukkit.inventory.CraftItemStack",
+  "CraftInventory": "org.bukkit.craftbukkit.inventory.CraftInventory"
+}
