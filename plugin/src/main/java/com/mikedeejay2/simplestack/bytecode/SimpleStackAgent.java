@@ -1,11 +1,13 @@
 package com.mikedeejay2.simplestack.bytecode;
 
+import com.google.common.collect.ImmutableList;
 import com.mikedeejay2.mikedeejay2lib.reflect.*;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReportSection;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.MutablePair;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.Pair;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.util.BlacklistPrintStream;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.asm.AsmVisitorWrapper;
@@ -28,6 +30,7 @@ import net.bytebuddy.utility.JavaModule;
 import org.apache.commons.lang3.Validate;
 import org.objectweb.asm.util.CheckClassAdapter;
 
+import java.io.PrintStream;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
 import java.util.*;

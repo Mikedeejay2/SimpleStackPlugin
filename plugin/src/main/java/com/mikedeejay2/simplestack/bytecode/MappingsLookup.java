@@ -73,51 +73,61 @@ public class MappingsLookup {
         // Special case, load base json mappings
         if(accessor.contains("using_base")) {
             JsonElement usingBaseElement = accessor.get("using_base");
-            Validate.isTrue(doLoadMappings(plugin, usingBaseElement.getAsString()),
-                            "Unable to load base version \"%s\" for mappings version \"%s\"",
-                            usingBaseElement.getAsString(), mcVersion);
+            Validate.isTrue(
+                doLoadMappings(plugin, usingBaseElement.getAsString()),
+                "Unable to load base version \"%s\" for mappings version \"%s\"",
+                usingBaseElement.getAsString(), mcVersion);
         }
 
         // Iterate through classes in json
-        for(String classKey : accessor.getKeys(false)) {
-            final JsonElement classElement = accessor.get(classKey);
-            if(classKey.equals("using_base")) continue;
+        for(String classRefName : accessor.getKeys(false)) {
+            final JsonElement classElement = accessor.get(classRefName);
+            if(classRefName.equals("using_base")) continue;
             if(classElement.isJsonPrimitive()) { // Class entry holds no methods or fields, add it and continue
                 // If class already exists, change name and continue
-                if(holder.mappings.containsKey(classKey)) {
-                    ClassMapping existingClassMapping = holder.mappings.get(classKey);
-                    ClassMapping classMapping = new ClassMapping(classElement.getAsString(), classKey);
-                    classMapping.fieldMappings.putAll(existingClassMapping.fieldMappings);
-                    classMapping.methodMappings.putAll(existingClassMapping.methodMappings);
-                    classMapping.methodMappings.forEach((s, m) -> m.owner = classMapping);
-                    classMapping.fieldMappings.forEach((s, m) -> m.owner = classMapping);
-                    holder.add(classKey, classMapping);
+                if(holder.mappings.containsKey(classRefName)) {
+                    holder.clazz(classRefName).setQualifiedName(classElement.getAsString());
                     continue;
                 }
-                holder.add(classKey, new ClassMapping(classElement.getAsString(), classKey));
+                holder.add(classRefName, new ClassMapping(classElement.getAsString(), classRefName));
                 continue;
             }
             Validate.isTrue(classElement.isJsonObject()); // Should be an object
             final JsonObject classObject = classElement.getAsJsonObject();
 
-            // Create/get class mapping
-            ClassMapping classMapping;
-            if(!holder.mappings.containsKey(classKey)) { // If class NOT already loaded from a base
-                Validate.isTrue(classObject.has("class_name"),
-                                "Can not find class name for mapping \"%s\"", classKey); // Should have a class name
-                classMapping = new ClassMapping(classObject.get("class_name").getAsString(), classKey);
-                holder.add(classKey, classMapping);
-            } else {
-                classMapping = holder.clazz(classKey);
-                // If class already exists, change name and continue
-                if(classObject.has("class_name")) {
-                    ClassMapping tempClassMapping = new ClassMapping(classObject.get("class_name").getAsString(), classKey);
-                    tempClassMapping.fieldMappings.putAll(classMapping.fieldMappings);
-                    tempClassMapping.methodMappings.putAll(classMapping.methodMappings);
-                    classMapping = tempClassMapping;
-                    holder.add(classKey, classMapping);
+            // Get class names, including alternates
+            final List<String> alternateClassNames = new ArrayList<>();
+            String classQualName = null;
+            if(classObject.has("class_name")) {
+                final JsonElement classNameElement = classObject.get("class_name");
+                if(classNameElement.isJsonObject()) {
+                    final JsonObject classNameObject = classNameElement.getAsJsonObject();
+                    for(String key : classNameObject.keySet()) {
+                        String name = classNameObject.get(key).getAsString();
+                        if(classQualName == null) {
+                            classQualName = name;
+                            continue;
+                        }
+                        alternateClassNames.add(classNameObject.get(key).getAsString());
+                    }
+                } else if(classNameElement.isJsonPrimitive()) {
+                    classQualName = classNameElement.getAsString();
                 }
             }
+
+            // Create/get class mapping
+            ClassMapping classMapping;
+            if(!holder.mappings.containsKey(classRefName)) { // If class NOT already loaded from a base
+                Validate.isTrue(classObject.has("class_name"),
+                                "Can not find class name for mapping \"%s\"", classRefName); // Should have a class name
+                classMapping = new ClassMapping(classQualName, classRefName);
+                holder.add(classRefName, classMapping);
+            } else {
+                // If class already exists, change name and continue
+                classMapping = holder.clazz(classRefName);
+                if(classQualName != null) classMapping.setQualifiedName(classQualName);
+            }
+
 
             // Collect methods and fields
             for(Map.Entry<String, MappingEntry> entry : collectEntries(classObject, "methods").entrySet()) {
@@ -129,14 +139,16 @@ public class MappingsLookup {
             }
             for(Map.Entry<String, MappingEntry> entry : collectEntries(classObject, "fields").entrySet()) {
                 if(entry.getValue() == null) {
-                    classMapping.methodMappings.remove(entry.getKey());
+                    classMapping.fieldMappings.remove(entry.getKey());
                     continue;
                 }
                 classMapping.field(entry.getKey(), entry.getValue());
             }
 
             // Collect alternate classes
-            classMapping.alternates(collectAlternates(classObject));
+            for(String alternateClassName : alternateClassNames) {
+                classMapping.alternate(alternateClassName);
+            }
         }
 
         return true;
@@ -148,6 +160,7 @@ public class MappingsLookup {
         final JsonElement keyElement = json.get(key);
         Validate.isTrue(keyElement.isJsonObject()); // Should be an object
         final JsonObject keyObject = keyElement.getAsJsonObject();
+
         for(String entryKey : keyObject.keySet()) {
             final JsonElement entryElement = keyObject.get(entryKey);
             if(entryElement.isJsonPrimitive()) {
@@ -160,26 +173,18 @@ public class MappingsLookup {
             }
             Validate.isTrue(entryElement.isJsonObject()); // Should be an object
             final JsonObject entryObject = entryElement.getAsJsonObject();
-            Validate.isTrue(entryObject.has("value"),
+            final String[] keys = entryObject.keySet().toArray(new String[0]);
+            Validate.isTrue(keys.length > 0,
                             "Can not find a value for entry \"%s\"", entryKey); // Should have a value
-            final MappingEntry mappingEntry = new MappingEntry(entryObject.get("value").getAsString(), entryKey);
-            mappingEntry.alternates(collectAlternates(entryObject));
+            final MappingEntry mappingEntry = new MappingEntry(entryObject.get(keys[0]).getAsString(), entryKey);
+
+            // Collect alternates
+            for(int i = 1; i < keys.length; ++i) {
+                mappingEntry.alternate(entryObject.get(keys[i]).getAsString());
+            }
             result.put(entryKey, mappingEntry);
         }
         return result;
-    }
-
-    private static List<String> collectAlternates(JsonObject obj) {
-        List<String> output = new ArrayList<>();
-        if(obj.has("alternates")) {
-            JsonElement alternateElement = obj.get("alternates");
-            Validate.isTrue(alternateElement.isJsonObject());
-            JsonObject alternateObject = alternateElement.getAsJsonObject();
-            for(String alternateKey : alternateObject.keySet()) {
-                output.add(alternateObject.get(alternateKey).getAsString());
-            }
-        }
-        return output;
     }
 
     private static String getFailedClassesStr(Map<ClassMapping, Exception> failed) {
@@ -388,6 +393,11 @@ public class MappingsLookup {
         private ClassMapping field(String name, MappingEntry entry) {
             entry.owner(this);
             fieldMappings.put(name, entry);
+            return this;
+        }
+
+        private ClassMapping setQualifiedName(String qualifiedName) {
+            initFields(qualifiedName);
             return this;
         }
 
