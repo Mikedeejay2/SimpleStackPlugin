@@ -3,32 +3,76 @@
   "Item": {
     "class_name": "net.minecraft.world.item.Item",
     "methods": {
-      "getMaxStackSize": "l()I",
-      "isEnchantable": "d_(LItemStack;)Z"
+      "getMaxStackSize": {
+        "paper": "getDefaultMaxStackSize()I",
+        "spigot": "l()I"
+      },
+      "isEnchantable": {
+        "paper": "isEnchantable(LItemStack;)Z",
+        "spigot": "d_(LItemStack;)Z"
+      }
     }
   },
   "ItemStack": {
     "class_name": "net.minecraft.world.item.ItemStack",
     "methods": {
-      "getMaxStackSize": "g()I",
-      "split": "a(I)LItemStack;",
-      "copy": "p()LItemStack;",
-      "setCount": "f(I)V",
-      "shrink": "h(I)V",
-      "getCount": "L()I",
-      "isSameItemSameTags": "c(LItemStack;LItemStack;)Z",
-      "isEmpty": "b()Z",
+      "getMaxStackSize": {
+        "paper": "getMaxStackSize()I",
+        "spigot": "g()I"},
+      "split": {
+        "paper": "split(I)LItemStack;",
+        "spigot": "a(I)LItemStack;"
+      },
+      "copy": {
+        "paper": "copy()LItemStack;",
+        "spigot": "p()LItemStack;"
+      },
+      "setCount": {
+        "paper": "setCount(I)V",
+        "spigot": "f(I)V"
+      },
+      "shrink": {
+        "paper": "shrink(I)V",
+        "spigot": "h(I)V"
+      },
+      "getCount": {
+        "paper": "getCount()I",
+        "spigot": "L()I"
+      },
+      "isSameItemSameTags": {
+        "paper": "isSameItemSameComponents(LItemStack;LItemStack;)Z",
+        "spigot": "c(LItemStack;LItemStack;)Z"
+      },
+      "isEmpty": {
+        "paper": "isEmpty()Z",
+        "spigot": "b()Z"
+      },
       "<init>": "<init>(LIMaterial;)V",
-      "isDamaged": "j()Z",
-      "isStackable": "h()Z",
-      "is": "a(LItem;)Z"
+      "isDamaged": {
+        "paper": "isDamaged()Z",
+        "spigot": "j()Z"
+      },
+      "isStackable": {
+        "paper": "isStackable()Z",
+        "spigot": "h()Z"
+      },
+      "is": {
+        "paper": "is(LItem;)Z",
+        "spigot": "a(LItem;)Z"
+      }
     },
     "fields": {
-      "EMPTY": "f:LItemStack;"
+      "EMPTY": {
+        "paper": "EMPTY:LItemStack;",
+        "spigot": "f:LItemStack;"
+      }
     }
   },
   "CraftItemStack": {
-    "class_name": "org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack",
+    "class_name": {
+      "paper": "org.bukkit.craftbukkit.inventory.CraftItemStack",
+      "spigot": "org.bukkit.craftbukkit.v1_20_R4.inventory.CraftItemStack"
+    },
     "methods": {
       "asBukkitCopy": "asBukkitCopy(LItemStack;)Lorg/bukkit/inventory/ItemStack;",
       "getMaxStackSize": "getMaxStackSize()I"
@@ -40,20 +84,41 @@
       "spigot": "net.minecraft.world.ContainerUtil"
     },
     "methods": {
-      "removeItem": "a(Ljava/util/List;II)LItemStack;"
+      "removeItem": {
+        "paper": "removeItem(Ljava/util/List;II)LItemStack;",
+        "spigot": "a(Ljava/util/List;II)LItemStack;"
+      }
     }
   },
   "Slot": {
     "class_name": "net.minecraft.world.inventory.Slot",
     "methods": {
-      "tryRemove": "a(IILEntityHuman;)Ljava/util/Optional;",
-      "getItem": "g()LItemStack;",
-      "getMaxStackSize": "a()I",
-      "getMaxStackSize1": "a_(LItemStack;)I"
+      "tryRemove": {
+        "paper": "tryRemove(IILEntityHuman;)Ljava/util/Optional;",
+        "spigot": "a(IILEntityHuman;)Ljava/util/Optional;"
+      },
+      "getItem": {
+        "paper": "getItem()LItemStack;",
+        "spigot": "g()LItemStack;"
+      },
+      "getMaxStackSize": {
+        "paper": "getMaxStackSize()I",
+        "spigot": "a()I"
+      },
+      "getMaxStackSize1": {
+        "paper": "getMaxStackSize(LItemStack;)I",
+        "spigot": "a_(LItemStack;)I"
+      }
     },
     "fields": {
-      "slot": "a:I",
-      "container": "d:LIInventory;"
+      "slot": {
+        "paper": "slot:I",
+        "spigot": "a:I"
+      },
+      "container": {
+        "paper": "container:LIInventory;",
+        "spigot": "d:LIInventory;"
+      }
     }
   },
   "EntityPlayer": {
@@ -80,7 +145,10 @@
       "spigot": "net.minecraft.world.inventory.Container"
     },
     "methods": {
-      "doClick": "b(IILInventoryClickType;LEntityHuman;)V",
+      "doClick": {
+        "paper": "doClick(IILInventoryClickType;LEntityHuman;)V",
+        "spigot": "b(IILInventoryClickType;LEntityHuman;)V"
+      },
       "doClickLambda": {
         "paper": "lambda$doClick$3(LSlot;LEntityHuman;LItemStack;)V",
         "spigot": "lambda$5(LSlot;LEntityHuman;LItemStack;)V"
@@ -89,7 +157,10 @@
         "paper": "moveItemStackTo(LItemStack;IIZZ)Z",
         "spigot": "a(LItemStack;IIZ)Z"
       },
-      "getSlot": "b(I)LSlot;"
+      "getSlot": {
+        "paper": "getSlot(I)LSlot;",
+        "spigot": "b(I)LSlot;"
+      }
     }
   },
   "InventoryClickType": {
@@ -104,8 +175,14 @@
       "spigot": "net.minecraft.world.entity.player.EntityHuman"
     },
     "methods": {
-      "drop": "a(LItemStack;ZZ)LEntityItem;",
-      "getInventory": "fS()LPlayerInventory;"
+      "drop": {
+        "paper": "drop(LItemStack;ZZ)LEntityItem;",
+        "spigot": "a(LItemStack;ZZ)LEntityItem;"
+      },
+      "getInventory": {
+        "paper": "getInventory()LPlayerInventory;",
+        "spigot": "fS()LPlayerInventory;"
+      }
     }
   },
   "PlayerInventory": {
@@ -114,9 +191,18 @@
       "spigot": "net.minecraft.world.entity.player.PlayerInventory"
     },
     "methods": {
-      "setItem": "a(ILItemStack;)V",
-      "add": "e(LItemStack;)Z",
-      "add2": "c(ILItemStack;)Z"
+      "setItem": {
+        "paper": "setItem(ILItemStack;)V",
+        "spigot": "a(ILItemStack;)V"
+      },
+      "add": {
+        "paper": "add(LItemStack;)Z",
+        "spigot": "e(LItemStack;)Z"
+      },
+      "add2": {
+        "paper": "add(ILItemStack;)Z",
+        "spigot": "c(ILItemStack;)Z"
+      }
     }
   },
   "ItemBucket": {
@@ -125,15 +211,27 @@
       "spigot": "net.minecraft.world.item.ItemBucket"
     },
     "methods": {
-      "getEmptySuccessItem": "a(LItemStack;LEntityHuman;)LItemStack;"
+      "getEmptySuccessItem": {
+        "paper": "getEmptySuccessItem(LItemStack;LEntityHuman;)LItemStack;",
+        "spigot": "a(LItemStack;LEntityHuman;)LItemStack;"
+      }
     }
   },
   "Items": {
     "class_name": "net.minecraft.world.item.Items",
     "fields": {
-      "BUCKET": "qv:LItem;",
-      "BOWL": "pn:LItem;",
-      "LAVA_BUCKET": "qx:LItem;"
+      "BUCKET": {
+        "paper": "BUCKET:LItem;",
+        "spigot": "qv:LItem;"
+      },
+      "BOWL": {
+        "paper": "BOWL:LItem;",
+        "spigot": "pn:LItem;"
+      },
+      "LAVA_BUCKET": {
+        "paper": "LAVA_BUCKET:LItem;",
+        "spigot": "qx:LItem;"
+      }
     }
   },
   "IMaterial": {
@@ -148,7 +246,10 @@
       "spigot": "net.minecraft.world.item.ItemSoup"
     },
     "methods": {
-      "finishUsingItem": "a(LItemStack;LWorld;LEntityLiving;)LItemStack;"
+      "finishUsingItem": {
+        "paper": "finishUsingItem(LItemStack;LWorld;LEntityLiving;)LItemStack;",
+        "spigot": "a(LItemStack;LWorld;LEntityLiving;)LItemStack;"
+      }
     }
   },
   "World": {
@@ -169,16 +270,22 @@
       "spigot": "net.minecraft.world.item.ItemSuspiciousStew"
     },
     "methods": {
-      "finishUsingItem": "a(LItemStack;LWorld;LEntityLiving;)LItemStack;"
+      "finishUsingItem": {
+        "paper": "finishUsingItem(LItemStack;LWorld;LEntityLiving;)LItemStack;",
+        "spigot": "a(LItemStack;LWorld;LEntityLiving;)LItemStack;"
+      }
     }
   },
   "ArmorSlot": {
     "class_name": {
-      "paper": "net.minecraft.world.inventory.InventoryPlayer$1",
+      "paper": "net.minecraft.world.inventory.InventoryMenu$1",
       "spigot": "net.minecraft.world.inventory.ContainerPlayer$1"
     },
     "methods": {
-      "getMaxStackSize": "a()I"
+      "getMaxStackSize": {
+        "paper": "getMaxStackSize()I",
+        "spigot": "a()I"
+      }
     }
   },
   "ItemTrident": {
@@ -187,7 +294,10 @@
       "spigot": "net.minecraft.world.item.ItemTrident"
     },
     "methods": {
-      "releaseUsing": "a(LItemStack;LWorld;LEntityLiving;I)V"
+      "releaseUsing": {
+        "paper": "releaseUsing(LItemStack;LWorld;LEntityLiving;I)V",
+        "spigot": "a(LItemStack;LWorld;LEntityLiving;I)V"
+      }
     }
   },
   "IInventory": {
@@ -196,14 +306,22 @@
       "spigot": "net.minecraft.world.IInventory"
     }
   },
-  "CraftInventory": "org.bukkit.craftbukkit.v1_20_R1.inventory.CraftInventory",
+  "CraftInventory": {
+    "class_name": {
+      "paper": "org.bukkit.craftbukkit.inventory.CraftInventory",
+      "spigot": "org.bukkit.craftbukkit.v1_20_R4.inventory.CraftInventory"
+    }
+  },
   "SlotFurnaceFuel": {
     "class_name": {
       "paper": "net.minecraft.world.inventory.FurnaceFuelSlot",
       "spigot": "net.minecraft.world.inventory.SlotFurnaceFuel"
     },
     "methods": {
-      "isBucket": "c(LItemStack;)Z"
+      "isBucket": {
+        "paper": "isBucket(LItemStack;)Z",
+        "spigot": "c(LItemStack;)Z"
+      }
     }
   },
   "ContainerFurnace": {
@@ -212,8 +330,14 @@
       "spigot": "net.minecraft.world.inventory.ContainerFurnace"
     },
     "methods": {
-      "quickMoveStack": "a(LEntityHuman;I)LItemStack;",
-      "isFuel": "d(LItemStack;)Z"
+      "quickMoveStack": {
+        "paper": "quickMoveStack(LEntityHuman;I)LItemStack;",
+        "spigot": "a(LEntityHuman;I)LItemStack;"
+      },
+      "isFuel": {
+        "paper": "isFuel(LItemStack;)Z",
+        "spigot": "d(LItemStack;)Z"
+      }
     }
   },
   "TileEntityFurnace": {
@@ -222,7 +346,10 @@
       "spigot": "net.minecraft.world.level.block.entity.TileEntityFurnace"
     },
     "methods": {
-      "canPlaceItem": "b(ILItemStack;)Z"
+      "canPlaceItem": {
+        "paper": "canPlaceItem(ILItemStack;)Z",
+        "spigot": "b(ILItemStack;)Z"
+      }
     }
   },
   "EntityThrownTrident": {
