@@ -210,8 +210,8 @@ public class MappingsLookup {
             final MappingEntry mapping = entry.getKey();
             final Exception exception = entry.getValue();
             builder.append("\n    ")
-                .append(mapping.owner().referenceName())
-                .append(".")
+                .append(mapping.owner().qualifiedName())
+                .append("::")
                 .append(mapping.referenceName())
                 .append(", exception: ")
                 .append(exception.getClass().getSimpleName())
@@ -295,6 +295,13 @@ public class MappingsLookup {
                 "Mismatch return type for method \"%s\", expected type \"%s\", actual type \"%s\"",
                 mapping.name(), returnType.getSimpleName(), method.getReturnType().getSimpleName()));
         }
+
+        if(!mapping.name().equals(method.getName())) {
+            throw new NoSuchMethodException(String.format(
+                "Mismatch name for method \"%s\", expected name \"%s\", actual name \"%s\"",
+                mapping.referenceName(), mapping.name(), method.getName()
+            ));
+        }
     }
 
     private static void tryValidateConstructor(MappingEntry mapping, Class<?> clazz)
@@ -315,7 +322,13 @@ public class MappingsLookup {
         if(!field.getType().equals(typeClass)) {
             throw new NoSuchFieldException(String.format(
                 "Mismatch type for field \"%s\", expected type \"%s\", actual type \"%s\"",
-                mapping.name(), typeClass.getSimpleName(), field.getType().getSimpleName()));
+                mapping.referenceName(), typeClass.getSimpleName(), field.getType().getSimpleName()));
+        }
+        if(!mapping.name().equals(field.getName())) {
+            throw new NoSuchFieldException(String.format(
+                "Mismatch name for field \"%s\", expected name \"%s\", actual name \"%s\"",
+                mapping.referenceName(), mapping.name(), field.getName()
+            ));
         }
     }
 
