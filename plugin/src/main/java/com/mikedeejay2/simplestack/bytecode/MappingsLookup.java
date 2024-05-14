@@ -290,17 +290,17 @@ public class MappingsLookup {
         final Class<?> returnType = TypeConverter.convertReturnType(descriptor);
 
         Method method = clazz.getDeclaredMethod(mapping.name(), paramTypes.toArray(new Class<?>[0]));
-        if(!method.getReturnType().equals(returnType)) {
-            throw new NoSuchMethodException(String.format(
-                "Mismatch return type for method \"%s\", expected type \"%s\", actual type \"%s\"",
-                mapping.name(), returnType.getSimpleName(), method.getReturnType().getSimpleName()));
-        }
-
         if(!mapping.name().equals(method.getName())) {
             throw new NoSuchMethodException(String.format(
                 "Mismatch name for method \"%s\", expected name \"%s\", actual name \"%s\"",
                 mapping.referenceName(), mapping.name(), method.getName()
             ));
+        }
+
+        if(!method.getReturnType().equals(returnType)) {
+            throw new NoSuchMethodException(String.format(
+                "Mismatch return type for method \"%s\", expected type \"%s\", actual type \"%s\"",
+                mapping.name(), returnType.getSimpleName(), method.getReturnType().getSimpleName()));
         }
     }
 
@@ -319,16 +319,17 @@ public class MappingsLookup {
         final Class<?> typeClass = TypeConverter.convertType(descriptor);
 
         Field field = clazz.getDeclaredField(mapping.name());
-        if(!field.getType().equals(typeClass)) {
-            throw new NoSuchFieldException(String.format(
-                "Mismatch type for field \"%s\", expected type \"%s\", actual type \"%s\"",
-                mapping.referenceName(), typeClass.getSimpleName(), field.getType().getSimpleName()));
-        }
         if(!mapping.name().equals(field.getName())) {
             throw new NoSuchFieldException(String.format(
                 "Mismatch name for field \"%s\", expected name \"%s\", actual name \"%s\"",
                 mapping.referenceName(), mapping.name(), field.getName()
             ));
+        }
+
+        if(!field.getType().equals(typeClass)) {
+            throw new NoSuchFieldException(String.format(
+                "Mismatch type for field \"%s\", expected type \"%s\", actual type \"%s\"",
+                mapping.referenceName(), typeClass.getSimpleName(), field.getType().getSimpleName()));
         }
     }
 
