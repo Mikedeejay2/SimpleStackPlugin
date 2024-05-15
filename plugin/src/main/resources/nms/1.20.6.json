@@ -18,7 +18,8 @@
     "methods": {
       "getMaxStackSize": {
         "paper": "getMaxStackSize()I",
-        "spigot": "g()I"},
+        "spigot": "g()I"
+      },
       "split": {
         "paper": "split(I)LItemStack;",
         "spigot": "a(I)LItemStack;"
