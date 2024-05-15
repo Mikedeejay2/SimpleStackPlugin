@@ -13,7 +13,7 @@ import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.20.4")
+@Transformer("1.18-1.20.6")
 public class TransformContainerMoveItemStackTo extends MappedMethodVisitor {
     private boolean visitedGetMaxStackSize = false;
     private boolean visitedIStoreFlag = false;

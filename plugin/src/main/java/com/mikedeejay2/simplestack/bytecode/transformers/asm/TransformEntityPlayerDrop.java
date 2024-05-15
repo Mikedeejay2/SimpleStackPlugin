@@ -12,7 +12,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.20.4")
+@Transformer("1.18-1.20.6")
 public class TransformEntityPlayerDrop extends MappedMethodVisitor {
     @Override
     public MappingEntry getMappingEntry() {
