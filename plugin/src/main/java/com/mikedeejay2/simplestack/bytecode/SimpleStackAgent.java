@@ -163,12 +163,7 @@ public final class SimpleStackAgent {
                 final MethodVisitorInfo info = pair.getLeft();
                 builder.append("\n      ")
                     .append(info.getClass().getSimpleName())
-                    .append(" [")
-                    .append(info.getMappingEntry().owner().qualifiedName())
-                    .append(".")
-                    .append(info.getMappingEntry().name())
-                    .append(info.getMappingEntry().descriptor())
-                    .append("], transformed: ")
+                    .append(", transformed: ")
                     .append(pair.getRight());
             }
         }
