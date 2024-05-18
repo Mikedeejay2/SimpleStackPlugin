@@ -66,7 +66,8 @@
       "EMPTY": {
         "paper": "EMPTY:LItemStack;",
         "spigot": "f:LItemStack;"
-      }
+      },
+      "components": "components:LPatchedDataComponentMap;"
     }
   },
   "CraftItemStack": {
@@ -357,6 +358,20 @@
     "class_name": {
       "paper": "net.minecraft.world.entity.projectile.ThrownTrident",
       "spigot": "net.minecraft.world.entity.projectile.EntityThrownTrident"
+    }
+  },
+  "DataComponentMap": "net.minecraft.core.component.DataComponentMap",
+  "PatchedDataComponentMap": {
+    "class_name": "net.minecraft.core.component.PatchedDataComponentMap",
+    "methods": {
+      "set": "set(LDataComponentType;LObject;)LObject;"
+    }
+  },
+  "DataComponentType": "net.minecraft.core.component.DataComponentType",
+  "DataComponents": {
+    "class_name": "net.minecraft.core.component.DataComponents",
+    "fields": {
+      "MAX_STACK_SIZE": "MAX_STACK_SIZE:LDataComponentType;"
     }
   }
 }

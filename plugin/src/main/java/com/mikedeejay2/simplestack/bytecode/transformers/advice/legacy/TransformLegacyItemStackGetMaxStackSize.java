@@ -1,10 +1,11 @@
-package com.mikedeejay2.simplestack.bytecode.transformers.advice;
+package com.mikedeejay2.simplestack.bytecode.transformers.advice.legacy;
 
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.event.ItemStackMaxAmountEvent;
-import com.mikedeejay2.simplestack.bytecode.*;
+import com.mikedeejay2.simplestack.bytecode.AdviceBridge;
+import com.mikedeejay2.simplestack.bytecode.MethodVisitorInfo;
+import com.mikedeejay2.simplestack.bytecode.Transformer;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
-import com.mikedeejay2.simplestack.util.NmsComponentHandler;
 import com.mikedeejay2.simplestack.util.NmsConverters;
 import com.mikedeejay2.simplestack.util.SafeEventCall;
 import net.bytebuddy.asm.Advice;
@@ -14,15 +15,16 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.logging.Level;
 
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
+import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.MappingEntry;
+import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
 
 /**
  * Advice for changing the max stack size of an ItemStack.
  *
  * @author Mikedeejay2
  */
-@Transformer("1.20.6")
-public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
+@Transformer("1.18-1.20.4")
+public class TransformLegacyItemStackGetMaxStackSize implements MethodVisitorInfo {
     private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 
     @Override
@@ -31,53 +33,24 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
     }
 
     @Override
-    public MappingsLookup.MappingEntry getMappingEntry() {
+    public MappingEntry getMappingEntry() {
         return nms("ItemStack").method("getMaxStackSize");
     }
 
-    /**
-     * Get the maximum stack size of a NMS <code>ItemStack</code>. This converts the NMS ItemStack into a Bukkit
-     * ItemStack through a reflective call to
-     * <b>{@code org.bukkit.craftbukkit.inventory.CraftItemStack#asBukkitCopy()}</b> which is then passed Simple Stack's
-     * config to get the item size. If the config returns <code>-1</code>, it will return the
-     * <code>currentReturnValue</code> which is the vanilla max stack amount.
-     *
-     * @param currentReturnValue The original max stack amount from Minecraft's code
-     * @param startTime The method's start time, used for debug purposes
-     * @param nmsItemStack The NMS <code>Item</code>
-     * @return The new stack size
-     */
     public static int getItemStackMaxStackSize(int currentReturnValue, long startTime, Object nmsItemStack) {
         final ItemStack itemStack = NmsConverters.itemStackToItemStack(nmsItemStack);
         final ItemStackMaxAmountEvent event = new ItemStackMaxAmountEvent(itemStack, currentReturnValue);
         SafeEventCall.callEvent(event);
-        final int maxStackSize = event.getAmount();
-        if(currentReturnValue != maxStackSize) {
-            NmsComponentHandler.setMaxStackSize(nmsItemStack, event.getAmount());
-        }
         TIMINGS.collect(startTime, "ItemStack size redirect", true);
-        return maxStackSize;
+        return event.getAmount();
     }
 
-    /**
-     * Advice class for <b>{@code net.minecraft.world.item.ItemStack}</b>. The code in this class is copied over to the
-     * code in <b>{@code net.minecraft.world.ItemStack.Item#getMaxStackSize()}</b> to redirect functionality of that
-     * method to Simple Stack. The method that is called as a result of this advice is
-     * {@link TransformItemStackGetMaxStackSize#getItemStackMaxStackSize(int, long, Object)}
-     */
     public static class ItemStackAdvice {
-
-        /**
-         * @see TransformItemGetMaxStackSize.ItemAdvice#onMethodEnter()
-         */
         @Advice.OnMethodEnter
         public static long onMethodEnter() {
             return System.nanoTime();
         }
 
-        /**
-         * @see TransformItemGetMaxStackSize.ItemAdvice#onMethodExit(int, long, Object)
-         */
         @Advice.OnMethodExit
         public static void onMethodExit(
             @Advice.Return(readOnly = false) int returnValue,
