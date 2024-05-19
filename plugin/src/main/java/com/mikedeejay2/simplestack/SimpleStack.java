@@ -17,6 +17,7 @@ import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
 import com.mikedeejay2.simplestack.config.ConfigListener;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
+import com.mikedeejay2.simplestack.util.CreativeListener;
 
 import java.util.function.Consumer;
 
@@ -71,6 +72,7 @@ public final class SimpleStack extends BukkitPlugin {
         this.config = new SimpleStackConfigImpl(this);
         this.config.load();
         registerEvent(new ConfigListener(config));
+        registerEvent(new CreativeListener());
         setupApi();
 
         if(loadMappings() || installByteBuddyAgent() || installAndTransform()) return;
