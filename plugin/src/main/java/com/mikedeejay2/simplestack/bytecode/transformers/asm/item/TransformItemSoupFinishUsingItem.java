@@ -35,7 +35,6 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
     @Override
     public void visitVarInsn(int opcode, int varIndex) {
         if(!visitedAload && visitedPrecondition && opcode == ALOAD && varIndex == stackIndex) {// Target load ItemStack
-            System.out.println("Aload for " + this.getClass().getSimpleName());
             visitedAload = true;
         }
         super.visitVarInsn(opcode, varIndex);
@@ -45,7 +44,6 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
     public void visitFrame(int type, int numLocal, Object[] local, int numStack, Object[] stack) {
         if(!visitedFrame && visitedAload) { // Target the frame after load ItemStack
             visitedFrame = true;
-            System.out.println("Frame for " + this.getClass().getSimpleName());
             // Change this frame to include the same locals append the extra ItemStack.
             // Without this, the frame has no local values.
             super.visitFrame(F_APPEND, 1, new Object[] {nms("ItemStack").internalName()}, 0, null);
@@ -63,7 +61,6 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
         }
         if(!visitedNew && opcode == NEW && type.equals(nms("ItemStack").internalName())) { // Target new ItemStack() invocation
             visitedNew = true;
-            System.out.println("New for " + this.getClass().getSimpleName());
             appendStackedSoupFix();
         }
         super.visitTypeInsn(opcode, type);
@@ -76,7 +73,6 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
             (owner.equals(nms("EntityLiving").internalName()) || owner.equals(nms("EntityHuman").internalName())) &&
             name.equals(nms("EntityLiving").method("hasInfiniteMaterials").name()) &&
             descriptor.equals(nms("EntityLiving").method("hasInfiniteMaterials").descriptor())) {
-            System.out.println("Precondition for " + this.getClass().getSimpleName());
             visitedPrecondition = true;
         }
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);

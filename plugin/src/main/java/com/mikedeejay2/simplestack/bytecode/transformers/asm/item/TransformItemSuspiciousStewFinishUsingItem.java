@@ -32,7 +32,6 @@ public class TransformItemSuspiciousStewFinishUsingItem extends TransformItemSou
     public void visitFrame(int type, int numLocal, Object[] local, int numStack, Object[] stack) {
         if(!visitedFrame && visitedAload && MinecraftVersion.check("<=1.19.3,>=1.20.6")) { // Target the frame after the first return statement
             super.visitedFrame = true;
-            System.out.println("Frame THIS for " + this.getClass().getSimpleName());
             // Instead of F_APPEND, F_SAME is instead used for suspicious stew.
             super.visitFrame(F_SAME, 0, null, 0, null);
             return;
