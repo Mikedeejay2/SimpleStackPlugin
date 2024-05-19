@@ -24,7 +24,7 @@ import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
  * @author Mikedeejay2
  */
 @Transformer("1.18-1.20.6")
-public class TransformCraftBukkitItemStackGetMaxStackSize implements MethodVisitorInfo {
+public class TransformCraftItemStackGetMaxStackSize implements MethodVisitorInfo {
     private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 
     @Override
@@ -37,7 +37,7 @@ public class TransformCraftBukkitItemStackGetMaxStackSize implements MethodVisit
         return nms("CraftItemStack").method("getMaxStackSize");
     }
 
-    public static int getCraftBukkitItemStackMaxStackSize(int currentReturnValue, long startTime, ItemStack itemStack) {
+    public static int getCraftItemStackMaxStackSize(int currentReturnValue, long startTime, ItemStack itemStack) {
         final ItemStackMaxAmountEvent event = new ItemStackMaxAmountEvent(itemStack, currentReturnValue);
         SafeEventCall.callEvent(event);
         TIMINGS.collect(startTime, "CraftBukkit ItemStack size redirect", true);
@@ -62,7 +62,7 @@ public class TransformCraftBukkitItemStackGetMaxStackSize implements MethodVisit
             @Advice.Enter long startTime,
             @Advice.This ItemStack craftItemStack) {
             try {
-                returnValue = AdviceBridge.getCraftBukkitItemStackMaxStackSize(returnValue, startTime, craftItemStack);
+                returnValue = AdviceBridge.getCraftItemStackMaxStackSize(returnValue, startTime, craftItemStack);
             } catch(Throwable throwable) {
                 Bukkit.getLogger().log(Level.SEVERE, "Simple Stack encountered an exception while processing a CraftBukkit ItemStack", throwable);
             }
