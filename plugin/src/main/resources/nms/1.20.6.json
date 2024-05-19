@@ -264,6 +264,9 @@
     "class_name": {
       "paper": "net.minecraft.world.entity.LivingEntity",
       "spigot": "net.minecraft.world.entity.EntityLiving"
+    },
+    "methods": {
+      "hasInfiniteMaterials": "hasInfiniteMaterials()Z"
     }
   },
   "ItemSuspiciousStew": {
