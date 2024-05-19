@@ -3,7 +3,6 @@ package com.mikedeejay2.simplestack.bytecode;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ItemType;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.invoke.*;
