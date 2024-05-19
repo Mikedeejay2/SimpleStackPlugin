@@ -9,6 +9,7 @@ import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 
 import java.io.PrintStream;
 import java.lang.instrument.Instrumentation;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,12 +29,7 @@ public final class ByteBuddyHolder {
     /**
      * Used with {@link BlacklistPrintStream} to prevent printing the warning seen below on Java 21 and above.
      */
-    private static final List<String> printBlacklist = ImmutableList.of(
-        "WARNING: A Java agent has been loaded dynamically",
-        "WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning",
-        "WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information",
-        "WARNING: Dynamic loading of agents will be disallowed by default in a future release"
-    );
+    private static final List<String> printBlacklist = Collections.singletonList("WARNING: A Java agent has been loaded dynamically");
 
     /**
      * Install the {@link ByteBuddyAgent}
