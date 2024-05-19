@@ -52,8 +52,11 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
         final ItemStackMaxAmountEvent event = new ItemStackMaxAmountEvent(itemStack, currentReturnValue);
         SafeEventCall.callEvent(event);
         final int maxStackSize = event.getAmount();
-        if(currentReturnValue != maxStackSize) {
-            NmsComponentHandler.setMaxStackSize(nmsItemStack, event.getAmount());
+        // Prevent client hiding the real stack size of an overstacked item
+        if(itemStack.getAmount() > maxStackSize) {
+            NmsComponentHandler.setMaxStackSize(nmsItemStack, itemStack.getAmount());
+        } else if(currentReturnValue != maxStackSize) {
+            NmsComponentHandler.setMaxStackSize(nmsItemStack, maxStackSize);
         }
         TIMINGS.collect(startTime, "ItemStack size redirect", true);
         return maxStackSize;
