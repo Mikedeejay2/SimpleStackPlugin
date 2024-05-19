@@ -60,6 +60,9 @@
       "is": {
         "paper": "is(LItem;)Z",
         "spigot": "a(LItem;)Z"
+      },
+      "limitSize": {
+        "paper": "limitSize(I)V"
       }
     },
     "fields": {
