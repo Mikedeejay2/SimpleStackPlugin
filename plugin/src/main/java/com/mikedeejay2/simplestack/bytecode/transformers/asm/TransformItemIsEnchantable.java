@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.asm;
 
+import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import org.objectweb.asm.Label;
@@ -20,6 +21,7 @@ public class TransformItemIsEnchantable extends MappedMethodVisitor {
     protected boolean visitedInvoke = false;
     protected boolean visitedIconst = false;
     protected boolean visitedIficmpne = false;
+    protected int stackIndex = MinecraftVersion.check(">=1.20.6") ? 1 : 0;
 
     @Override
     public MappingEntry getMappingEntry() {
@@ -34,7 +36,7 @@ public class TransformItemIsEnchantable extends MappedMethodVisitor {
 
     @Override
     public void visitVarInsn(int opcode, int varIndex) {
-        if(!visitedAload && opcode == ALOAD && varIndex == 0) { // Target first aload (this)
+        if(!visitedAload && opcode == ALOAD && varIndex == stackIndex) { // Target first aload (this)
             this.visitedAload = true;
             return;
         }
