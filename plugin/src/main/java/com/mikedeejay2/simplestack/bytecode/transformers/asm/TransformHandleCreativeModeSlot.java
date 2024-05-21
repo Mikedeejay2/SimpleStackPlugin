@@ -57,7 +57,7 @@ public class TransformHandleCreativeModeSlot extends MappedMethodVisitor {
      */
     private void appendItemStackLimit() {
         super.visitVarInsn(ALOAD, itemStackIdx); // Load ItemStack (for later)
-        super.visitVarInsn(ALOAD, itemStackIdx); // Load ItemStack
+        super.visitInsn(DUP); // Load ItemStack again
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getMaxStackSize")); // Get the max stack size of the ItemStack
         super.visitVarInsn(ALOAD, itemStackIdx); // Load ItemStack
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getCount")); // Get the current count of the ItemStack
