@@ -379,5 +379,17 @@
     "fields": {
       "MAX_STACK_SIZE": "MAX_STACK_SIZE:LDataComponentType;"
     }
+  },
+  "PlayerConnection": {
+    "class_name": "net.minecraft.server.network.ServerGamePacketListenerImpl",
+    "methods": {
+      "handleSetCreativeModeSlot": "handleSetCreativeModeSlot(LPacketPlayInSetCreativeSlot;)V"
+    }
+  },
+  "PacketPlayInSetCreativeSlot": {
+    "class_name":"net.minecraft.network.protocol.game.ServerboundSetCreativeModeSlotPacket",
+    "methods": {
+      "itemStack": "itemStack()LItemStack;"
+    }
   }
 }
