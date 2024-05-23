@@ -1,13 +1,12 @@
 package com.mikedeejay2.simplestack.bytecode;
 
-import com.google.common.collect.ImmutableList;
 import com.mikedeejay2.mikedeejay2lib.reflect.*;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReportSection;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.MutablePair;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.Pair;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.util.BlacklistPrintStream;
+import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.asm.AsmVisitorWrapper;
@@ -17,6 +16,7 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.Implementation;
 import org.bukkit.Bukkit;
 import org.objectweb.asm.ClassVisitor;
@@ -30,7 +30,6 @@ import net.bytebuddy.utility.JavaModule;
 import org.apache.commons.lang3.Validate;
 import org.objectweb.asm.util.CheckClassAdapter;
 
-import java.io.PrintStream;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
 import java.util.*;
@@ -80,7 +79,8 @@ public final class SimpleStackAgent {
         if(injectAdviceBridge()) return true;
 
         // Install transformer
-        transformer = new AgentBuilder.Default()
+        transformer = new AgentBuilder.Default(
+            new ByteBuddy().with(TypeValidation.DISABLED))
             .disableClassFormatChanges()
             .ignore(not(nameStartsWith("net.minecraft").or(nameStartsWith("org.bukkit"))))
             .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION) // Use retransformation strategy to modify existing NMS classes
@@ -221,7 +221,7 @@ public final class SimpleStackAgent {
                 new MethodDescription.Latent.TypeInitializer(instrumentedType))) {
                 mapped.put(methodDescription.getInternalName() + methodDescription.getDescriptor(), methodDescription);
             }
-            classVisitor = new CheckClassAdapter(classVisitor);
+            classVisitor = new CheckClassAdapter(classVisitor, true);
             return new AgentClassVisitor(
                 classVisitor, visitorInfos, mapped, instrumentedType,
                 implementationContext, typePool, writerFlags, readerFlags);
