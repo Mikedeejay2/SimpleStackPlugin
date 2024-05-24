@@ -391,5 +391,18 @@
     "methods": {
       "itemStack": "itemStack()LItemStack;"
     }
-  }
+  },
+  "SolidBucketItem": {
+    "class_name": "net.minecraft.world.item.SolidBucketItem",
+    "methods": {
+      "useOn": "useOn(LUseOnContext;)LInteractionResult;"
+    }
+  },
+  "UseOnContext": {
+    "class_name": "net.minecraft.world.item.context.UseOnContext",
+    "methods": {
+      "getItemInHand": "getItemInHand()LItemStack;"
+    }
+  },
+  "InteractionResult": "net.minecraft.world.InteractionResult"
 }
