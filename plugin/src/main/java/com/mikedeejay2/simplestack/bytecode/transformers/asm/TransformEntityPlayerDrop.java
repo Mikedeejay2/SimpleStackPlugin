@@ -37,7 +37,6 @@ public class TransformEntityPlayerDrop extends MappedMethodVisitor {
         Label insideLabel = new Label(); // Label for inside of while loop
         Label exitLabel = new Label(); // Label for the exit of the while loop
         super.visitLabel(whileLabel);
-        super.visitFrame(F_SAME, 0, null, 0, null);
         super.visitVarInsn(ALOAD, 1); // Load ItemStack
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getCount")); // ItemStack#getCount()
         super.visitVarInsn(ALOAD, 1); // Load ItemStack
@@ -62,6 +61,5 @@ public class TransformEntityPlayerDrop extends MappedMethodVisitor {
         super.visitJumpInsn(GOTO, whileLabel); // Jump to start of while loop
 
         super.visitLabel(exitLabel); // Exit loop
-        super.visitFrame(F_SAME, 0, null, 0, null);
     }
 }

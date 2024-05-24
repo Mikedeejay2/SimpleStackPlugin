@@ -53,7 +53,6 @@ public class TransformItemBucketUse extends MappedMethodVisitor {
         super.visitVarInsn(ALOAD, 0); // Load ItemStack
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("isEmpty")); // Get whether ItemStack is empty
         super.visitJumpInsn(IFNE, emptyBucketLabel); // If it is empty, jump to empty bucket
-        super.visitFrame(F_SAME, 0, null, 0, null);
 
         // Get PlayerInventory
         super.visitVarInsn(ALOAD, 1); // Load EntityHuman
@@ -79,7 +78,6 @@ public class TransformItemBucketUse extends MappedMethodVisitor {
         super.visitInsn(POP); // Pop the resulting EntityItem
 
         super.visitLabel(ifNotDropLabel);
-        super.visitFrame(F_SAME, 0, null, 0, null);
 
         // Get ItemStack
         super.visitVarInsn(ALOAD, 0); // Load ItemStack
@@ -87,7 +85,6 @@ public class TransformItemBucketUse extends MappedMethodVisitor {
         super.visitJumpInsn(GOTO, returnLabel); // Goto the return label to return the existing ItemStack
 
         super.visitLabel(emptyBucketLabel);
-        super.visitFrame(F_SAME, 0, null, 0, null);
     }
 
     @Override

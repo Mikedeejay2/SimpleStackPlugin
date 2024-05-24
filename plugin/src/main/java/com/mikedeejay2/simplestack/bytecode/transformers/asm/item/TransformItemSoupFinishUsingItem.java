@@ -41,18 +41,6 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
     }
 
     @Override
-    public void visitFrame(int type, int numLocal, Object[] local, int numStack, Object[] stack) {
-        if(!visitedFrame && visitedAload) { // Target the frame after load ItemStack
-            visitedFrame = true;
-            // Change this frame to include the same locals append the extra ItemStack.
-            // Without this, the frame has no local values.
-            super.visitFrame(F_APPEND, 1, new Object[] {nms("ItemStack").internalName()}, 0, null);
-            return;
-        }
-        super.visitFrame(type, numLocal, local, numStack, stack);
-    }
-
-    @Override
     public void visitTypeInsn(int opcode, String type) {
         if(!visitedPrecondition && opcode == CHECKCAST &&
             MinecraftVersion.check("<=1.20.4") &&
@@ -127,13 +115,11 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
         super.visitInsn(POP); // Pop the resulting EntityItem
 
         super.visitLabel(ifNotDropLabel); // Exit drop if statement
-        super.visitFrame(F_SAME, 0, null, 0, null);
 
         // Get ItemStack
         super.visitVarInsn(ALOAD, stackIndex); // Load ItemStack
         // Goto the return label
         super.visitInsn(ARETURN); // Return the ItemStack
         super.visitLabel(emptyBowlLabel);
-        super.visitFrame(F_SAME, 0, null, 0, null);
     }
 }

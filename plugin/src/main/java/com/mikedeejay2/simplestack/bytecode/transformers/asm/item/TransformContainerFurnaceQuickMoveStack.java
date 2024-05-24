@@ -107,6 +107,5 @@ public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor
         super.visitInsn(ARETURN); // Return empty item, this method can do no more
 
         super.visitLabel(notLavaBucketLabel); // Below this is for regular item handling, not lava buckets
-        super.visitFrame(F_SAME, 0, null, 0, null);
     }
 }

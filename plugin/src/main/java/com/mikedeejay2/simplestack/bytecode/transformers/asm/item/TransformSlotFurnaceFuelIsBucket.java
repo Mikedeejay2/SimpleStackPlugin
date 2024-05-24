@@ -47,16 +47,13 @@ public class TransformSlotFurnaceFuelIsBucket extends MappedMethodVisitor {
         super.visitJumpInsn(IFEQ, falseLabel); // If not lava bucket, goto false label
 
         super.visitLabel(trueLabel); // True label
-        super.visitFrame(F_SAME, 0, null, 0, null);
         super.visitInsn(ICONST_1); // Load 1 (true)
         super.visitJumpInsn(GOTO, returnLabel); // Goto the return label
 
         super.visitLabel(falseLabel); // False label
-        super.visitFrame(F_SAME, 0, null, 0, null);
         super.visitInsn(ICONST_0); // Load 0 (false)
 
         super.visitLabel(returnLabel); // Return label
-        super.visitFrame(F_SAME1, 0, null, 1, new Object[]{INTEGER});
         // Next instruction is IRETURN
     }
 }

@@ -97,7 +97,6 @@ public class TransformContainerDoClick extends MappedMethodVisitor {
         super.visitVarInsn(ALOAD, 7); // Load itemstack
         super.visitVarInsn(ALOAD, itemstack1Idx); // Load itemstack1
         super.visitJumpInsn(IF_ACMPEQ, exitLabel); // If they're the same, don't do this
-        super.visitFrame(F_SAME, 0, null, 0, null);
         super.visitVarInsn(ALOAD, 5); // Load PlayerInventory
         super.visitVarInsn(ILOAD, 2); // Load button
         super.visitVarInsn(ALOAD, 7); // Load ItemStack
@@ -123,6 +122,5 @@ public class TransformContainerDoClick extends MappedMethodVisitor {
         super.visitInsn(POP); // Pop the resulting EntityItem
 
         super.visitLabel(exitLabel);
-        super.visitFrame(F_SAME, 0, null, 0, null);
     }
 }

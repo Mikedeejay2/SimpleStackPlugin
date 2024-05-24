@@ -59,6 +59,5 @@ public class TransformContainerDoClickLambda extends MappedMethodVisitor {
         super.visitInsn(POP); // Pop the resulting EntityItem
 
         super.visitLabel(exitLabel);
-        super.visitFrame(F_SAME, 0, null, 0, null);
     }
 }
