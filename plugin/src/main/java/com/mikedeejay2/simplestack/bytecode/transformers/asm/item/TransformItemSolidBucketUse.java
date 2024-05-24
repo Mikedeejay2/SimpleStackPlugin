@@ -70,12 +70,6 @@ public class TransformItemSolidBucketUse extends MappedMethodVisitor {
         super.visitMethodInsn(INVOKEVIRTUAL, nms("UseOnContext").method("getItemInHand")); // Get the ItemStack used
         super.visitVarInsn(ASTORE, 5); // Save to index 5 (first unused index)
 
-
-        // Shrink ItemStack by one
-//        super.visitVarInsn(ALOAD, 5); // Load ItemStack
-//        super.visitInsn(ICONST_1); // Load int 1
-//        super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("shrink")); // Shrink ItemStack by one
-
         super.visitVarInsn(ALOAD, 5); // Load ItemStack
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("isEmpty")); // Get whether ItemStack is empty
         super.visitJumpInsn(IFNE, emptyBucketLabel); // If it is empty, jump to empty bucket
