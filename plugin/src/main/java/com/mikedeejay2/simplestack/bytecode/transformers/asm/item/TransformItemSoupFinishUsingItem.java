@@ -17,7 +17,6 @@ import static org.objectweb.asm.Opcodes.*;
 public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
     protected int stackIndex = 4;
     protected boolean visitedNew = false; // New ItemStack, separate from frame
-    protected boolean visitedFrame = false; // Frame transform, aload must be true
     protected boolean visitedAload = false; // Aload ItemStack, precondition must be true
     protected boolean visitedPrecondition = false; // The precondition for aload. >=1.20.6 is hasInfiniteMaterials, else cast check for EntityHuman
 
