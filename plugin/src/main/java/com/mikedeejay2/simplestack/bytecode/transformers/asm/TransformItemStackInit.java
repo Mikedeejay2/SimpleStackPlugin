@@ -20,7 +20,7 @@ public class TransformItemStackInit extends MappedMethodVisitor {
 
     @Override
     public MappingEntry getMappingEntry() {
-        return nms("ItemStack").method("<initfull>");
+        return nms("ItemStack").method("<init2>");
     }
 
     @Override

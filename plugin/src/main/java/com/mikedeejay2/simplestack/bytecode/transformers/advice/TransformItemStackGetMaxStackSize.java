@@ -1,6 +1,7 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.advice;
 
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
+import com.mikedeejay2.simplestack.api.SimpleStackConfig;
 import com.mikedeejay2.simplestack.api.event.ItemStackMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytecode.*;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
@@ -57,6 +58,11 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
             NmsComponentHandler.setMaxStackSize(nmsItemStack, itemStack.getAmount());
         } else if(currentReturnValue != maxStackSize) {
             NmsComponentHandler.setMaxStackSize(nmsItemStack, maxStackSize);
+        }
+        // TODO: Remove this in new config system
+        final SimpleStackConfig config = SimpleStackAPI.getConfig();
+        if(!config.isWhitelist() && config.containsMaterial(itemStack.getType())) {
+            NmsComponentHandler.removeMaxStackSize(nmsItemStack);
         }
         TIMINGS.collect(startTime, "ItemStack size redirect", true);
         return maxStackSize;

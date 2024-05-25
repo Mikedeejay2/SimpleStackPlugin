@@ -49,7 +49,7 @@
         "spigot": "b()Z"
       },
       "<init>": "<init>(LIMaterial;)V",
-      "<initfull>": "<init>(LIMaterial;ILPatchedDataComponentMap;)V",
+      "<init2>": "<init>(LIMaterial;I)V",
       "isDamaged": {
         "paper": "isDamaged()Z",
         "spigot": "j()Z"
@@ -376,7 +376,8 @@
   "PatchedDataComponentMap": {
     "class_name": "net.minecraft.core.component.PatchedDataComponentMap",
     "methods": {
-      "set": "set(LDataComponentType;LObject;)LObject;"
+      "set": "set(LDataComponentType;LObject;)LObject;",
+      "remove": "remove(LDataComponentType;)LObject;"
     }
   },
   "DataComponentType": "net.minecraft.core.component.DataComponentType",

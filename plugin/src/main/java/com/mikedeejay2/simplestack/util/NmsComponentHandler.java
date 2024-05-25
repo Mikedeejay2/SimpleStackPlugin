@@ -14,6 +14,7 @@ import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
 public final class NmsComponentHandler {
     public static final MethodHandle HANDLE_STACK_COMPONENTS;
     public static final MethodHandle HANDLE_PATCHED_COMPONENTS_SET;
+    public static final MethodHandle HANDLE_PATCHED_COMPONENTS_REMOVE;
     public static final Object MAX_STACK_SIZE_COMPONENT;
 
     static {
@@ -21,18 +22,25 @@ public final class NmsComponentHandler {
             final MethodHandles.Lookup lookup = MethodHandles.lookup();
 
             final Class<?> itemStackClass = nms("ItemStack").toClass();
-            final Field fieldStackComponents = itemStackClass.getDeclaredField(lastNms().field("components").name());
+            final Field fieldStackComponents = itemStackClass.getDeclaredField(nms("ItemStack").field("components").name());
             fieldStackComponents.setAccessible(true);
             HANDLE_STACK_COMPONENTS = lookup.unreflectGetter(fieldStackComponents);
 
             final Class<?> patchedDataComponentMapClass = nms("PatchedDataComponentMap").toClass();
             final Method patchedComponentsSetMethod = patchedDataComponentMapClass.getMethod(
-                lastNms().method("set").name(),
+                nms("PatchedDataComponentMap").method("set").name(),
                 nms("DataComponentType").toClass(),
                 Object.class
             );
             patchedComponentsSetMethod.setAccessible(true);
             HANDLE_PATCHED_COMPONENTS_SET = lookup.unreflect(patchedComponentsSetMethod);
+
+            final Method patchedComponentsRemoveMethod = patchedDataComponentMapClass.getMethod(
+                nms("PatchedDataComponentMap").method("remove").name(),
+                nms("DataComponentType").toClass()
+            );
+            patchedComponentsRemoveMethod.setAccessible(true);
+            HANDLE_PATCHED_COMPONENTS_REMOVE = lookup.unreflect(patchedComponentsRemoveMethod);
 
             final Class<?> dataComponentsClass = nms("DataComponents").toClass();
             final Field maxStackSizeComponentField = dataComponentsClass.getField(lastNms().field("MAX_STACK_SIZE").name());
@@ -59,6 +67,15 @@ public final class NmsComponentHandler {
             HANDLE_PATCHED_COMPONENTS_SET.invoke(nmsComponents, MAX_STACK_SIZE_COMPONENT, stackSize);
         } catch(Throwable e) {
             Bukkit.getLogger().log(Level.SEVERE, String.format("SimpleStack could not set ItemStack max stack size component \"%s\"", nmsItemStack), e);
+        }
+    }
+
+    public static void removeMaxStackSize(Object nmsItemStack) {
+        try {
+            final Object nmsComponents = getItemStackComponents(nmsItemStack);
+            HANDLE_PATCHED_COMPONENTS_REMOVE.invoke(nmsComponents, MAX_STACK_SIZE_COMPONENT);
+        } catch(Throwable e) {
+            Bukkit.getLogger().log(Level.SEVERE, String.format("SimpleStack could not remove ItemStack max stack size component \"%s\"", nmsItemStack), e);
         }
     }
 }
