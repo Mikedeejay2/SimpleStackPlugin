@@ -49,6 +49,7 @@
         "spigot": "b()Z"
       },
       "<init>": "<init>(LIMaterial;)V",
+      "<initfull>": "<init>(LIMaterial;ILPatchedDataComponentMap;)V",
       "isDamaged": {
         "paper": "isDamaged()Z",
         "spigot": "j()Z"
