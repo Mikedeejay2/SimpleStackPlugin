@@ -19,10 +19,7 @@ import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.Implementation;
 import org.bukkit.Bukkit;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.*;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.pool.TypePool;
 import net.bytebuddy.utility.CompoundList;
@@ -211,7 +208,7 @@ public final class SimpleStackAgent {
 
         @Override
         public int mergeReader(int flags) {
-            return flags;
+            return flags | ClassReader.SKIP_FRAMES;
         }
 
         @Override
