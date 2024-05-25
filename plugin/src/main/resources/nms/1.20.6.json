@@ -412,5 +412,11 @@
     }
   },
   "InteractionResult": "net.minecraft.world.InteractionResult",
-  "InventoryMenu": "net.minecraft.world.inventory.InventoryMenu"
+  "InventoryMenu": "net.minecraft.world.inventory.InventoryMenu",
+  "JukeboxBlockEntity": {
+    "class_name":"net.minecraft.world.level.block.entity.JukeboxBlockEntity",
+    "methods": {
+      "setTheItem": "setTheItem(LItemStack;)V"
+    }
+  }
 }
