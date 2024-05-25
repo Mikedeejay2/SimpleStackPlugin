@@ -15,11 +15,10 @@ import static org.objectweb.asm.Opcodes.*;
  */
 @Transformer("1.20.6")
 public class TransformItemSolidBucketUse extends MappedMethodVisitor {
-    protected boolean aStore = false;
-    protected final Label afterLabel = new Label();
+    protected boolean visitedAStore = false;
     protected boolean visitedGetStatic = false;
-    protected int invokeVirtualCount = 0;
-    protected boolean visitedFrame = false;
+    protected boolean visitedInvoke = false;
+    protected boolean visitedSetItemInHand = false;
 
     @Override
     public MappingEntry getMappingEntry() {
@@ -35,29 +34,35 @@ public class TransformItemSolidBucketUse extends MappedMethodVisitor {
     @Override
     public void visitVarInsn(int opcode, int varIndex) {
         super.visitVarInsn(opcode, varIndex);
-        if(!aStore && opcode == ASTORE && varIndex == 4) {
-            aStore = true;
+        if(!visitedAStore && opcode == ASTORE && varIndex == 4) {
+            visitedAStore = true;
             appendStackedBucketsFix();
         }
     }
 
     @Override
     public void visitFieldInsn(int opcode, String owner, String name, String descriptor) {
-        if(aStore && !visitedGetStatic && opcode == GETSTATIC && equalsMapping(
+        if(visitedAStore && !visitedGetStatic && opcode == GETSTATIC && equalsMapping(
             owner, name, descriptor, nms("Items").field("BUCKET"))) { // Get Items.BUCKET instruction
             visitedGetStatic = true;
+            // Load stack to be used in setItemInHand call
+            super.visitVarInsn(ALOAD, 5);
+            return;
         }
         super.visitFieldInsn(opcode, owner, name, descriptor);
     }
 
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
+        if(visitedGetStatic && !visitedInvoke && opcode == INVOKEVIRTUAL) { // Target setItemInHand and getDefaultInstance()
+            visitedInvoke = true;
+            // Cancel invocation of getDefaultInstance on Items.BUCKET
+            return;
+        }
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
-        // Add afterLabel after player's hand is set to a bucket
-        if(visitedGetStatic && invokeVirtualCount < 2 && opcode == INVOKEVIRTUAL) { // Target setItemInHand and getDefaultInstance()
-            ++invokeVirtualCount;
-            if(invokeVirtualCount != 2) return;
-            super.visitLabel(afterLabel);
+        if(visitedInvoke && !visitedSetItemInHand) {
+            visitedSetItemInHand = true;
+            appendInventoryUpdate();
         }
     }
 
@@ -97,11 +102,31 @@ public class TransformItemSolidBucketUse extends MappedMethodVisitor {
         super.visitMethodInsn(INVOKEVIRTUAL, nms("EntityHuman").method("drop")); // Drop the rest of the item
         super.visitInsn(POP); // Pop the resulting EntityItem
 
-        super.visitLabel(ifNotDropLabel);
-
-        // Goto the return label
-        super.visitJumpInsn(GOTO, afterLabel); // Goto the return label to return the existing ItemStack
-
         super.visitLabel(emptyBucketLabel);
+
+        // If the existing stack is empty, set it to a bucket
+        super.visitTypeInsn(NEW, nms("ItemStack").internalName()); // Create new ItemStack
+        super.visitInsn(DUP); // Duplicate this ItemStack on the stack
+        super.visitFieldInsn(GETSTATIC, nms("Items").field("BUCKET")); // Get Bucket material
+        super.visitMethodInsn(INVOKESPECIAL, nms("ItemStack").method("<init>")); // Call the ItemStack's constructor
+        super.visitVarInsn(ASTORE, 5); // Store the existing stack variable
+
+        super.visitLabel(ifNotDropLabel);
+    }
+
+    /**
+     * Prevents the powdered snow bucket from "jumping" in the inventory upon use. Manually send the new data of the
+     * inventory to the client to prevent the effect from occurring.
+     */
+    private void appendInventoryUpdate() {
+        final Label afterLabel = new Label();
+        super.visitVarInsn(ALOAD, 3);
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("EntityLiving").method("isUsingItem"));
+        super.visitJumpInsn(IFNE, afterLabel);
+        super.visitVarInsn(ALOAD, 3);
+        super.visitFieldInsn(GETFIELD, nms("EntityHuman").field("inventoryMenu"));
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("Container").method("sendAllDataToRemote"));
+
+        super.visitLabel(afterLabel);
     }
 }

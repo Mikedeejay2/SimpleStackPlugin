@@ -165,7 +165,8 @@
       "getSlot": {
         "paper": "getSlot(I)LSlot;",
         "spigot": "b(I)LSlot;"
-      }
+      },
+      "sendAllDataToRemote": "sendAllDataToRemote()V"
     }
   },
   "InventoryClickType": {
@@ -188,6 +189,9 @@
         "paper": "getInventory()LPlayerInventory;",
         "spigot": "fS()LPlayerInventory;"
       }
+    },
+    "fields": {
+      "inventoryMenu": "inventoryMenu:LInventoryMenu;"
     }
   },
   "PlayerInventory": {
@@ -269,7 +273,8 @@
       "spigot": "net.minecraft.world.entity.EntityLiving"
     },
     "methods": {
-      "hasInfiniteMaterials": "hasInfiniteMaterials()Z"
+      "hasInfiniteMaterials": "hasInfiniteMaterials()Z",
+      "isUsingItem": "isUsingItem()Z"
     }
   },
   "ItemSuspiciousStew": {
@@ -404,5 +409,6 @@
       "getItemInHand": "getItemInHand()LItemStack;"
     }
   },
-  "InteractionResult": "net.minecraft.world.InteractionResult"
+  "InteractionResult": "net.minecraft.world.InteractionResult",
+  "InventoryMenu": "net.minecraft.world.inventory.InventoryMenu"
 }
