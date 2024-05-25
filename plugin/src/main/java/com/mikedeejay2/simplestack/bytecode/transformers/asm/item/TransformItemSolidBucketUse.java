@@ -117,16 +117,23 @@ public class TransformItemSolidBucketUse extends MappedMethodVisitor {
     /**
      * Prevents the powdered snow bucket from "jumping" in the inventory upon use. Manually send the new data of the
      * inventory to the client to prevent the effect from occurring.
+     * <p>
+     * ItemBucket already does this as it is called using the <code>use</code> method, however the ItemSolidBucket class
+     * uses the <code>useOn</code> method, which does not do this by default.
      */
     private void appendInventoryUpdate() {
         final Label afterLabel = new Label();
-        super.visitVarInsn(ALOAD, 3);
+        // if(!entityPlayer.isUsingItem()) {
+        super.visitVarInsn(ALOAD, 3); // Load entityPLayer
         super.visitMethodInsn(INVOKEVIRTUAL, nms("EntityLiving").method("isUsingItem"));
-        super.visitJumpInsn(IFNE, afterLabel);
-        super.visitVarInsn(ALOAD, 3);
-        super.visitFieldInsn(GETFIELD, nms("EntityHuman").field("inventoryMenu"));
-        super.visitMethodInsn(INVOKEVIRTUAL, nms("Container").method("sendAllDataToRemote"));
+        super.visitJumpInsn(IFNE, afterLabel); // If using item, skip if body
 
+        // entityPlayer.inventoryMenu.sendAllDataToRemote();
+        super.visitVarInsn(ALOAD, 3); // Load entityPLayer
+        super.visitFieldInsn(GETFIELD, nms("EntityHuman").field("inventoryMenu")); // Get player's inventoryMenu
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("Container").method("sendAllDataToRemote")); // Send all inventory data to the player
+
+        // }
         super.visitLabel(afterLabel);
     }
 }
