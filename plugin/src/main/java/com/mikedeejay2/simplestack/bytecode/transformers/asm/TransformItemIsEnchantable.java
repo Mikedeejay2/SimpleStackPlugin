@@ -19,8 +19,6 @@ import static org.objectweb.asm.Opcodes.*;
 public class TransformItemIsEnchantable extends MappedMethodVisitor {
     protected boolean visitedAload = false;
     protected boolean visitedInvoke = false;
-    protected boolean visitedIconst = false;
-    protected boolean visitedIficmpne = false;
     protected int stackIndex = MinecraftVersion.check(">=1.20.6") ? 1 : 0;
 
     @Override
@@ -38,7 +36,6 @@ public class TransformItemIsEnchantable extends MappedMethodVisitor {
     public void visitVarInsn(int opcode, int varIndex) {
         if(!visitedAload && opcode == ALOAD && varIndex == stackIndex) { // Target first aload (this)
             this.visitedAload = true;
-            return;
         }
         super.visitVarInsn(opcode, varIndex);
     }
@@ -47,26 +44,9 @@ public class TransformItemIsEnchantable extends MappedMethodVisitor {
     public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
         if(visitedAload && !visitedInvoke && opcode == INVOKEVIRTUAL) { // Target first invoke virtual (getMaxStackSize)
             this.visitedInvoke = true;
+            super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getCount"));
             return;
         }
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
-    }
-
-    @Override
-    public void visitInsn(int opcode) {
-        if(visitedInvoke && !visitedIconst && opcode == ICONST_1) { // Target first iconst_1 instruction (1 as max stack)
-            this.visitedIconst = true;
-            return;
-        }
-        super.visitInsn(opcode);
-    }
-
-    @Override
-    public void visitJumpInsn(int opcode, Label label) {
-        if(visitedIconst && !visitedIficmpne && opcode == IF_ICMPNE) { // Target first comparison for max stack size
-            this.visitedIficmpne = true;
-            return;
-        }
-        super.visitJumpInsn(opcode, label);
     }
 }
