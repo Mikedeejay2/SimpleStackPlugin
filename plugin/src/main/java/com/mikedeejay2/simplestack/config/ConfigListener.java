@@ -25,11 +25,6 @@ public class ConfigListener implements Listener {
     @EventHandler
     private void onItemStack(ItemStackMaxAmountEvent event) {
         int amount = config.getUniqueItemAmount(event.getItemStack());
-        // Temporary, will be replaced by new config system
-        // Only necessary on 1.20.6
-        if(USES_COMPONENTS && amount == -1) {
-            amount = config.getAmount(event.getItemStack().getType());
-        }
         if(amount != -1) event.setAmount(amount);
     }
 

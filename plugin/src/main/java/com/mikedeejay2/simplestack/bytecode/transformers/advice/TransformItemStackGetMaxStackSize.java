@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.bytecode.transformers.advice;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.SimpleStackConfig;
 import com.mikedeejay2.simplestack.api.event.ItemStackMaxAmountEvent;
+import com.mikedeejay2.simplestack.api.event.MaterialMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytecode.*;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
 import com.mikedeejay2.simplestack.util.NmsComponentHandler;
@@ -50,9 +51,11 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
      */
     public static int getItemStackMaxStackSize(int currentReturnValue, long startTime, Object nmsItemStack) {
         final ItemStack itemStack = NmsConverters.itemStackToItemStack(nmsItemStack);
-        final ItemStackMaxAmountEvent event = new ItemStackMaxAmountEvent(itemStack, currentReturnValue);
-        SafeEventCall.callEvent(event);
-        final int maxStackSize = event.getAmount();
+        final MaterialMaxAmountEvent materialEvent = new MaterialMaxAmountEvent(itemStack.getType(), currentReturnValue);
+        SafeEventCall.callEvent(materialEvent);
+        final ItemStackMaxAmountEvent stackEvent = new ItemStackMaxAmountEvent(itemStack, materialEvent.getAmount());
+        SafeEventCall.callEvent(stackEvent);
+        final int maxStackSize = stackEvent.getAmount();
         // Prevent client hiding the real stack size of an overstacked item
         if(itemStack.getAmount() > maxStackSize) {
             NmsComponentHandler.setMaxStackSize(nmsItemStack, itemStack.getAmount());
