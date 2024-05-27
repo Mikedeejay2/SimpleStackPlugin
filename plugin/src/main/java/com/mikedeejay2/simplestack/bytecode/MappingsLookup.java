@@ -35,18 +35,18 @@ public class MappingsLookup {
         final Map<String, ClassMapping> mappings = holder.mappings;
         final Map<ClassMapping, Exception> failedClasses = new HashMap<>();
         final Map<MappingEntry, Exception> failedEntries = new HashMap<>();
+        // Class validation
         for(ClassMapping classMapping : mappings.values()) {
-            // Class validation
             try {
                 tryClassValidate(classMapping);
             } catch(ClassNotFoundException exception) {
                 if(!tryAlternateMappings(classMapping)) {
                     failedClasses.put(classMapping, exception);
-                    continue;
                 }
             }
-
-            // Entry validation
+        }
+        // Entry validation
+        for(ClassMapping classMapping : mappings.values()) {
             try {
                 failedEntries.putAll(tryMappingValidate(classMapping));
             } catch(ClassNotFoundException exception) {
@@ -502,6 +502,7 @@ public class MappingsLookup {
 
         private void descriptor(String descriptor) {
             this.descriptorFormat = descriptor;
+            this.descriptor = null;
         }
 
         private void owner(ClassMapping owner) {
