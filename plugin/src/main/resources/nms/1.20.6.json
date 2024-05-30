@@ -5,11 +5,11 @@
     "methods": {
       "getMaxStackSize": {
         "paper": "getDefaultMaxStackSize()I",
-        "spigot": "l()I"
+        "spigot": "q()I"
       },
       "isEnchantable": {
         "paper": "isEnchantable(LItemStack;)Z",
-        "spigot": "d_(LItemStack;)Z"
+        "spigot": "a(LItemStack;)Z"
       }
     }
   },
@@ -18,7 +18,7 @@
     "methods": {
       "getMaxStackSize": {
         "paper": "getMaxStackSize()I",
-        "spigot": "g()I"
+        "spigot": "j()I"
       },
       "split": {
         "paper": "split(I)LItemStack;",
@@ -26,11 +26,11 @@
       },
       "copy": {
         "paper": "copy()LItemStack;",
-        "spigot": "p()LItemStack;"
+        "spigot": "s()LItemStack;"
       },
       "setCount": {
         "paper": "setCount(I)V",
-        "spigot": "f(I)V"
+        "spigot": "e(I)V"
       },
       "shrink": {
         "paper": "shrink(I)V",
@@ -38,7 +38,7 @@
       },
       "getCount": {
         "paper": "getCount()I",
-        "spigot": "L()I"
+        "spigot": "I()I"
       },
       "isSameItemSameTags": {
         "paper": "isSameItemSameComponents(LItemStack;LItemStack;)Z",
@@ -46,32 +46,36 @@
       },
       "isEmpty": {
         "paper": "isEmpty()Z",
-        "spigot": "b()Z"
+        "spigot": "e()Z"
       },
       "<init>": "<init>(LIMaterial;)V",
       "<init2>": "<init>(LIMaterial;I)V",
       "isDamaged": {
         "paper": "isDamaged()Z",
-        "spigot": "j()Z"
+        "spigot": "m()Z"
       },
       "isStackable": {
         "paper": "isStackable()Z",
-        "spigot": "h()Z"
+        "spigot": "k()Z"
       },
       "is": {
         "paper": "is(LItem;)Z",
         "spigot": "a(LItem;)Z"
       },
       "limitSize": {
-        "paper": "limitSize(I)V"
+        "paper": "limitSize(I)V",
+        "spigot": "f(I)V"
       }
     },
     "fields": {
       "EMPTY": {
         "paper": "EMPTY:LItemStack;",
-        "spigot": "f:LItemStack;"
+        "spigot": "l:LItemStack;"
       },
-      "components": "components:LPatchedDataComponentMap;"
+      "components": {
+        "paper": "components:LPatchedDataComponentMap;",
+        "spigot": "r:LPatchedDataComponentMap;"
+      }
     }
   },
   "CraftItemStack": {
@@ -123,7 +127,7 @@
       },
       "container": {
         "paper": "container:LIInventory;",
-        "spigot": "d:LIInventory;"
+        "spigot": "c:LIInventory;"
       }
     }
   },
@@ -167,7 +171,10 @@
         "paper": "getSlot(I)LSlot;",
         "spigot": "b(I)LSlot;"
       },
-      "sendAllDataToRemote": "sendAllDataToRemote()V"
+      "sendAllDataToRemote": {
+        "paper": "sendAllDataToRemote()V",
+        "spigot": "b()V"
+      }
     }
   },
   "InventoryClickType": {
@@ -188,11 +195,14 @@
       },
       "getInventory": {
         "paper": "getInventory()LPlayerInventory;",
-        "spigot": "fS()LPlayerInventory;"
+        "spigot": "gc()LPlayerInventory;"
       }
     },
     "fields": {
-      "inventoryMenu": "inventoryMenu:LInventoryMenu;"
+      "inventoryMenu": {
+        "paper": "inventoryMenu:LInventoryMenu;",
+        "spigot": "ca:LInventoryMenu;"
+      }
     }
   },
   "PlayerInventory": {
@@ -207,7 +217,7 @@
       },
       "add": {
         "paper": "add(LItemStack;)Z",
-        "spigot": "e(LItemStack;)Z"
+        "spigot": "f(LItemStack;)Z"
       },
       "add2": {
         "paper": "add(ILItemStack;)Z",
@@ -232,15 +242,15 @@
     "fields": {
       "BUCKET": {
         "paper": "BUCKET:LItem;",
-        "spigot": "qv:LItem;"
+        "spigot": "qy:LItem;"
       },
       "BOWL": {
         "paper": "BOWL:LItem;",
-        "spigot": "pn:LItem;"
+        "spigot": "pq:LItem;"
       },
       "LAVA_BUCKET": {
         "paper": "LAVA_BUCKET:LItem;",
-        "spigot": "qx:LItem;"
+        "spigot": "qA:LItem;"
       }
     }
   },
@@ -274,8 +284,14 @@
       "spigot": "net.minecraft.world.entity.EntityLiving"
     },
     "methods": {
-      "hasInfiniteMaterials": "hasInfiniteMaterials()Z",
-      "isUsingItem": "isUsingItem()Z"
+      "hasInfiniteMaterials": {
+        "paper": "hasInfiniteMaterials()Z",
+        "spigot": "fP()Z"
+      },
+      "isUsingItem": {
+        "paper": "isUsingItem()Z",
+        "spigot": "fv()Z"
+      }
     }
   },
   "ItemSuspiciousStew": {
@@ -376,47 +392,93 @@
   "PatchedDataComponentMap": {
     "class_name": "net.minecraft.core.component.PatchedDataComponentMap",
     "methods": {
-      "set": "set(LDataComponentType;LObject;)LObject;",
-      "remove": "remove(LDataComponentType;)LObject;"
+      "set": {
+        "paper": "b(LDataComponentType;LObject;)LObject;",
+        "spigot": "set(LDataComponentType;LObject;)LObject;"
+      },
+      "remove": {
+        "paper": "remove(LDataComponentType;)LObject;",
+        "spigot": "d(LDataComponentType;)LObject;"
+      }
     }
   },
   "DataComponentType": "net.minecraft.core.component.DataComponentType",
   "DataComponents": {
     "class_name": "net.minecraft.core.component.DataComponents",
     "fields": {
-      "MAX_STACK_SIZE": "MAX_STACK_SIZE:LDataComponentType;"
+      "MAX_STACK_SIZE": {
+        "paper": "MAX_STACK_SIZE:LDataComponentType;",
+        "spigot": "c:LDataComponentType;"
+      }
     }
   },
   "PlayerConnection": {
-    "class_name": "net.minecraft.server.network.ServerGamePacketListenerImpl",
+    "class_name": {
+      "paper": "net.minecraft.server.network.ServerGamePacketListenerImpl",
+      "spigot": "net.minecraft.server.network.PlayerConnection"
+    },
     "methods": {
-      "handleSetCreativeModeSlot": "handleSetCreativeModeSlot(LPacketPlayInSetCreativeSlot;)V"
+      "handleSetCreativeModeSlot": {
+        "paper": "handleSetCreativeModeSlot(LPacketPlayInSetCreativeSlot;)V",
+        "spigot": "a(LPacketPlayInSetCreativeSlot;)V"
+      }
     }
   },
   "PacketPlayInSetCreativeSlot": {
-    "class_name":"net.minecraft.network.protocol.game.ServerboundSetCreativeModeSlotPacket",
+    "class_name": {
+      "paper": "net.minecraft.network.protocol.game.ServerboundSetCreativeModeSlotPacket",
+      "spigot": "net.minecraft.network.protocol.game.PacketPlayInSetCreativeSlot"
+    },
     "methods": {
-      "itemStack": "itemStack()LItemStack;"
+      "itemStack": {
+        "paper": "itemStack()LItemStack;",
+        "spigot": "e()LItemStack;"
+      }
     }
   },
   "SolidBucketItem": {
     "class_name": "net.minecraft.world.item.SolidBucketItem",
     "methods": {
-      "useOn": "useOn(LUseOnContext;)LInteractionResult;"
+      "useOn": {
+        "paper": "useOn(LUseOnContext;)LInteractionResult;",
+        "spigot": "a(LUseOnContext;)LInteractionResult;"
+      }
     }
   },
   "UseOnContext": {
-    "class_name": "net.minecraft.world.item.context.UseOnContext",
+    "class_name": {
+      "paper": "net.minecraft.world.item.context.UseOnContext",
+      "spigot": "net.minecraft.world.item.context.ItemActionContext"
+    },
     "methods": {
-      "getItemInHand": "getItemInHand()LItemStack;"
+      "getItemInHand": {
+        "paper": "getItemInHand()LItemStack;",
+        "spigot": "n()LItemStack;"
+      }
     }
   },
-  "InteractionResult": "net.minecraft.world.InteractionResult",
-  "InventoryMenu": "net.minecraft.world.inventory.InventoryMenu",
+  "InteractionResult": {
+    "class_name": {
+      "paper": "net.minecraft.world.InteractionResult",
+      "spigot": "net.minecraft.world.EnumInteractionResult"
+    }
+  },
+  "InventoryMenu": {
+    "class_name": {
+      "paper": "net.minecraft.world.inventory.InventoryMenu",
+      "spigot": "net.minecraft.world.inventory.ContainerPlayer"
+    }
+  },
   "JukeboxBlockEntity": {
-    "class_name":"net.minecraft.world.level.block.entity.JukeboxBlockEntity",
+    "class_name": {
+      "paper": "net.minecraft.world.level.block.entity.JukeboxBlockEntity",
+      "spigot": "net.minecraft.world.level.block.entity.TileEntityJukeBox"
+    },
     "methods": {
-      "setTheItem": "setTheItem(LItemStack;)V"
+      "setTheItem": {
+        "paper": "setTheItem(LItemStack;)V",
+        "spigot": "b(LItemStack;)V"
+      }
     }
   }
 }
