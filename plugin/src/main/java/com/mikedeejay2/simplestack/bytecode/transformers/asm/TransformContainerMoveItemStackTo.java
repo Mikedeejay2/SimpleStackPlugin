@@ -10,15 +10,12 @@ import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
 
 /**
  * Fixes shift clicking overstacked items out of a result slot
- * <p>
- * 1.20.6 Fix - All versions of minecraft call <code>istore 6</code> (<code>istore 5</code> on spigot) exactly 4 times.
- * This transformer needs to transform after the 4th time on all versions of Minecraft.
  *
  * @author Mikedeejay2
  */
 @Transformer("1.18-1.20.6")
 public class TransformContainerMoveItemStackTo extends MappedMethodVisitor {
-    private int iStoreCount = 0;
+    private boolean visitedSplitInvoke = false;
     private boolean fixedBreak = false;
 
     @Override
@@ -33,16 +30,17 @@ public class TransformContainerMoveItemStackTo extends MappedMethodVisitor {
     }
 
     @Override
-    public void visitVarInsn(int opcode, int varIndex) {
-        if(opcode == ISTORE && (varIndex == 6 || varIndex == 5)) { // Target flag1
-            ++iStoreCount;
+    public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
+        if(!visitedSplitInvoke && opcode == INVOKEVIRTUAL &&
+            equalsMapping(owner, name, descriptor, nms("ItemStack").method("split"))) {
+            visitedSplitInvoke = true;
         }
-        super.visitVarInsn(opcode, varIndex);
+        super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
     }
 
     @Override
     public void visitJumpInsn(int opcode, Label label) {
-        if(!fixedBreak && iStoreCount == 4 && opcode == GOTO) {
+        if(!fixedBreak && visitedSplitInvoke && opcode == GOTO) {
             super.visitVarInsn(ALOAD, 1); // Load ItemStack
             super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("isEmpty")); // Get boolean of ItemStack#isEmpty
             super.visitJumpInsn(IFNE, label); // If it is empty, break loop
