@@ -22,13 +22,10 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-      - name: Upload plugin artifact
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: SimpleStack-Artifacts-${{ github.run_number }}
-          path: ${{ github.workspace }}/plugin/target/SimpleStack-*.jar
-      - name: Upload API artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: SimpleStack-Artifacts-${{ github.run_number }}
-          path: ${{ github.workspace }}/api/target/SimpleStack-*.jar
+          path: |
+            plugin/target/SimpleStack-*.jar
+            api/target/SimpleStack-*.jar
