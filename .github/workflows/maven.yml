@@ -28,4 +28,3 @@ jobs:
           name: SimpleStack-Artifacts-${{ github.run_number }}
           path: |
             plugin/target/SimpleStack-*.jar
-            api/target/SimpleStack-*.jar
