@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.config;
 
+import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.api.SimpleStackConfig;
 import com.mikedeejay2.simplestack.api.event.ArmorSlotMaxAmountEvent;
 import com.mikedeejay2.simplestack.api.event.ItemStackMaxAmountEvent;
@@ -8,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class ConfigListener implements Listener {
+    private final static boolean USES_COMPONENTS = MinecraftVersion.check(">=1.20.6");
     private final SimpleStackConfig config;
 
     public ConfigListener(SimpleStackConfig config) {
@@ -22,7 +24,7 @@ public class ConfigListener implements Listener {
 
     @EventHandler
     private void onItemStack(ItemStackMaxAmountEvent event) {
-        final int amount = config.getUniqueItemAmount(event.getItemStack());
+        int amount = config.getUniqueItemAmount(event.getItemStack());
         if(amount != -1) event.setAmount(amount);
     }
 

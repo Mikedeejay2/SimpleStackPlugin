@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -68,14 +69,7 @@ public class GUIConfigModule implements GUIModule {
             Text.of("&7  ").concat("generic.enabled"),
             Text.of("&c&l⊳ ").concat("generic.disabled"));
 
-    private static final ItemFlag[] PREVIEW_ITEM_FLAGS = new ItemFlag[] {
-        ItemFlag.HIDE_POTION_EFFECTS,
-        ItemFlag.HIDE_ATTRIBUTES,
-        ItemFlag.HIDE_UNBREAKABLE,
-        ItemFlag.HIDE_ENCHANTS,
-        ItemFlag.HIDE_DESTROYS,
-        ItemFlag.HIDE_PLACED_ON
-    };
+    private static final ItemFlag[] PREVIEW_ITEM_FLAGS = Arrays.copyOf(ItemFlag.values(), 6);
 
     private final SimpleStack plugin;
     protected final int LIST_ANIM_AMOUNT = 8;

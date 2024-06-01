@@ -6,6 +6,7 @@ import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.MutablePair;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.Pair;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.SimpleStack;
+import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.asm.AsmVisitorWrapper;
@@ -15,12 +16,10 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.Implementation;
 import org.bukkit.Bukkit;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.*;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.pool.TypePool;
 import net.bytebuddy.utility.CompoundList;
@@ -39,6 +38,8 @@ public final class SimpleStackAgent {
     private static ResettableClassFileTransformer transformer;
     private static final Map<String, Set<Pair<MethodVisitorInfo, Boolean>>> VISITORS = new HashMap<>();
     private static final AtomicBoolean crashed = new AtomicBoolean(false);
+    private static final List<CrashReportSection> crashSections = new ArrayList<>();
+    private static Throwable crashThrowable = null;
     private static MethodVisitorInfo lastVisitedInfo = null;
 
     public static boolean registerTransformers() {
@@ -69,7 +70,7 @@ public final class SimpleStackAgent {
     }
 
     public static boolean install() {
-        Validate.isTrue(VISITORS.size() != 0, "No transformers found for installation");
+        Validate.isTrue(!VISITORS.isEmpty(), "No transformers found for installation");
         final ElementMatcher.Junction<? super TypeDescription> typeMatcher = generateTypeMatcher();
         if(typeMatcher == null) return true;
 
@@ -77,15 +78,25 @@ public final class SimpleStackAgent {
         if(injectAdviceBridge()) return true;
 
         // Install transformer
-        transformer = new AgentBuilder.Default()
+        transformer = new AgentBuilder.Default(
+            new ByteBuddy().with(TypeValidation.DISABLED)) // Disable bytebuddy validation, using ASM CheckClassAdapter below
             .disableClassFormatChanges()
             .ignore(not(nameStartsWith("net.minecraft").or(nameStartsWith("org.bukkit"))))
             .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION) // Use retransformation strategy to modify existing NMS classes
-            .type(typeMatcher) // Match only classes to be transformed
-            .transform(MasterTransformer.INSTANCE) // Transform using MasterTransformer
+            .with(RedefinitionExceptionListener.INSTANCE)
             .with(ExceptionListener.INSTANCE)
             .with(InstallationExceptionListener.INSTANCE)
+            .type(typeMatcher) // Match only classes to be transformed
+            .transform(MasterTransformer.INSTANCE) // Transform using MasterTransformer
             .installOn(ByteBuddyHolder.getInstrumentation()); // Inject
+
+        if(crashed.get()) {
+            SimpleStack.doCrash("Exception while applying transformations", crashThrowable, (crashReport) -> {
+                for(CrashReportSection section : crashSections) {
+                    crashReport.addSection(section);
+                }
+            });
+        }
 
         return crashed.get() || detectNotVisited();
     }
@@ -160,12 +171,7 @@ public final class SimpleStackAgent {
                 final MethodVisitorInfo info = pair.getLeft();
                 builder.append("\n      ")
                     .append(info.getClass().getSimpleName())
-                    .append(" [")
-                    .append(info.getMappingEntry().owner().qualifiedName())
-                    .append(".")
-                    .append(info.getMappingEntry().name())
-                    .append(info.getMappingEntry().descriptor())
-                    .append("], transformed: ")
+                    .append(", transformed: ")
                     .append(pair.getRight());
             }
         }
@@ -197,12 +203,12 @@ public final class SimpleStackAgent {
 
         @Override
         public int mergeWriter(int flags) {
-            return flags | ClassWriter.COMPUTE_MAXS;
+            return flags | ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES;
         }
 
         @Override
         public int mergeReader(int flags) {
-            return flags;
+            return flags | ClassReader.SKIP_FRAMES;
         }
 
         @Override
@@ -223,7 +229,6 @@ public final class SimpleStackAgent {
                 new MethodDescription.Latent.TypeInitializer(instrumentedType))) {
                 mapped.put(methodDescription.getInternalName() + methodDescription.getDescriptor(), methodDescription);
             }
-            classVisitor = new CheckClassAdapter(classVisitor);
             return new AgentClassVisitor(
                 classVisitor, visitorInfos, mapped, instrumentedType,
                 implementationContext, typePool, writerFlags, readerFlags);
@@ -234,6 +239,7 @@ public final class SimpleStackAgent {
         private final Set<Pair<MethodVisitorInfo, Boolean>> visitorInfos;
         private final Map<String, MethodDescription> methods;
 
+        private final ClassVisitor originalVisitor;
         private final TypeDescription instrumentedType;
         private final Implementation.Context implementationContext;
         private final TypePool typePool;
@@ -249,7 +255,8 @@ public final class SimpleStackAgent {
             TypePool typePool,
             int writerFlags,
             int readerFlags) {
-            super(Opcodes.ASM9, classVisitor);
+            super(Opcodes.ASM9, new CheckClassAdapter(classVisitor, true));
+            this.originalVisitor = classVisitor;
             this.visitorInfos = visitorInfos;
             this.methods = methods;
             this.instrumentedType = instrumentedType;
@@ -261,21 +268,24 @@ public final class SimpleStackAgent {
 
         @Override
         public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
-            MethodVisitor visitor = super.visitMethod(access, name, descriptor, signature, exceptions);
-            if(crashed.get()) return visitor;
+            if(crashed.get()) return super.visitMethod(access, name, descriptor, signature, exceptions);
             MethodDescription description = methods.get(name + descriptor);
+            MethodVisitor visitor = null;
             for(Pair<MethodVisitorInfo, Boolean> pair : visitorInfos) {
                 final MethodVisitorInfo info = pair.getLeft();
                 if(!info.getMappingEntry().matches(name, descriptor)) continue;
                 // Uncomment to print out current MethodVisitorInfo
                 // System.out.println(info.getMappingEntry().owner().internalName() + "." + info.getMappingEntry().name() + info.getMappingEntry().descriptor());
+                if(visitor == null) {
+                    visitor = super.visitMethod(access, name, descriptor, signature, exceptions);
+                }
                 lastVisitedInfo = info;
                 visitor = info.getWrapper().wrap(
                     instrumentedType, description, visitor,
                     implementationContext, typePool, writerFlags, readerFlags);
                 pair.setValue(true);
             }
-            return visitor;
+            return visitor == null ? originalVisitor.visitMethod(access, name, descriptor, signature, exceptions) : visitor;
         }
     }
 
@@ -284,11 +294,11 @@ public final class SimpleStackAgent {
 
         @Override
         public void onError(String typeName, ClassLoader classLoader, JavaModule module, boolean loaded, Throwable throwable) {
-            SimpleStack.doCrash("Exception while transforming classes", throwable, crashReport -> {
-                CrashReportSection section = crashReport.addSection("Transform Details");
-                section.addDetail("Type Name", typeName);
-                section.addDetail("Loaded", String.valueOf(loaded));
-            });
+            crashThrowable = throwable;
+            CrashReportSection section = new CrashReportSection("Transform Details");
+            section.addDetail("Type Name", typeName);
+            section.addDetail("Loaded", String.valueOf(loaded));
+            crashSections.add(section);
             crashed.compareAndSet(false, true);
         }
 
@@ -303,10 +313,10 @@ public final class SimpleStackAgent {
 
         @Override
         public Throwable onError(Instrumentation instrumentation, ResettableClassFileTransformer classFileTransformer, Throwable throwable) {
-            SimpleStack.doCrash("Exception while transforming classes", throwable, crashReport -> {
-                CrashReportSection section = crashReport.addSection("Install Details");
-                section.addDetail("Class File Transformer", classFileTransformer.getClass().getCanonicalName());
-            });
+            crashThrowable = throwable;
+            CrashReportSection section = new CrashReportSection("Install Details");
+            section.addDetail("Class File Transformer", classFileTransformer.getClass().getCanonicalName());
+            crashSections.add(section);
             crashed.compareAndSet(false, true);
             return null;
         }
@@ -317,5 +327,23 @@ public final class SimpleStackAgent {
         @Override public void onBeforeWarmUp(Set<Class<?>> types, ResettableClassFileTransformer classFileTransformer) {}
         @Override public void onWarmUpError(Class<?> type, ResettableClassFileTransformer classFileTransformer, Throwable throwable) {}
         @Override public void onAfterWarmUp(Map<Class<?>, byte[]> types, ResettableClassFileTransformer classFileTransformer, boolean transformed) {}
+    }
+
+    private enum RedefinitionExceptionListener implements AgentBuilder.RedefinitionStrategy.Listener {
+        INSTANCE;
+
+        @Override
+        public Iterable<? extends List<Class<?>>> onError(int index, List<Class<?>> batch, Throwable throwable, List<Class<?>> types) {
+            crashThrowable = throwable;
+            CrashReportSection section = new CrashReportSection("Redefinition Details");
+            section.addDetail("Batch", batch.get(index).getName());
+            section.addDetail("Type", types.get(index).getName());
+            crashSections.add(section);
+            crashed.compareAndSet(false, true);
+            return Collections.singletonList(Collections.singletonList(batch.get(index)));
+        }
+
+        @Override public void onBatch(int index, List<Class<?>> batch, List<Class<?>> types) {}
+        @Override public void onComplete(int amount, List<Class<?>> types, Map<List<Class<?>>, Throwable> failures) {}
     }
 }

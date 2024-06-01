@@ -13,14 +13,13 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.20.4")
+@Transformer("1.18-1.20.6")
 public class TransformTileEntityFurnaceCanPlaceItem extends MappedMethodVisitor {
     private boolean visitedAstore = false;
     private int jumpInsnCount = 0;
     private Label falseLabel = null;
     private Label trueLabel = null;
     private boolean visitedTrueLabel = false;
-    private boolean visitedTrueFrame = false;
 
     @Override
     public MappingEntry getMappingEntry() {
@@ -58,16 +57,8 @@ public class TransformTileEntityFurnaceCanPlaceItem extends MappedMethodVisitor 
     @Override
     public void visitLabel(Label label) {
         super.visitLabel(label);
-        if(label == trueLabel) {
+        if(!visitedTrueLabel && label == trueLabel) {
             visitedTrueLabel = true;
-        }
-    }
-
-    @Override
-    public void visitFrame(int type, int numLocal, Object[] local, int numStack, Object[] stack) {
-        super.visitFrame(type, numLocal, local, numStack, stack);
-        if(!visitedTrueFrame && visitedTrueLabel) {
-            visitedTrueFrame = true;
             appendLavaBucketFix();
         }
     }
@@ -90,6 +81,5 @@ public class TransformTileEntityFurnaceCanPlaceItem extends MappedMethodVisitor 
         super.visitJumpInsn(IFNE, falseLabel); // If lava bucket, goto false label
 
         super.visitLabel(newTrueLabel);
-        super.visitFrame(F_SAME, 0, null, 0, null);
     }
 }

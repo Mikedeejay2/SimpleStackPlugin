@@ -14,7 +14,7 @@ import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.20.4")
+@Transformer("1.18-1.20.6")
 public class TransformPlayerInventoryAdd extends MappedMethodVisitor {
     private boolean visitedIsDamaged = false;
     private boolean visitedIfStatement = false;

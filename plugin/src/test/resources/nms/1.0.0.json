@@ -1,14 +1,19 @@
 {
   "using_base": "base",
   "ArrayList": {
-    "class_name": "java.util.ArrayList",
+    "class_name": {
+      "Not working version": "java.invalid.ArrayList",
+      "Working Version": "java.util.ArrayList"
+    },
     "methods": {
       "size": "size()I",
       "contains": "contains(LObject;)Z",
       "addAll2": "addAll(ILjava/util/Collection;)Z",
       "get": "get(I)LObject;",
-      "indexOf": "invalidIndexOf(LObject;)I",
-      "__ALTERNATE__indexOf": "indexOf(LObject;)I"
+      "indexOf": {
+        "invalidValue": "invalidIndexOf(LObject;)I",
+        "Not invalid": "indexOf(LObject;)I"
+      }
     },
     "fields": {
       "DEFAULT_CAPACITY": "DEFAULT_CAPACITY:I",

@@ -64,10 +64,14 @@
     "class_name": "net.minecraft.world.inventory.Container",
     "methods": {
       "doClick": "b(IILInventoryClickType;LEntityHuman;)V",
-      "doClickLambda": "lambda$doClick$3(LSlot;LEntityHuman;LItemStack;)V",
-      "__SPIGOT__doClickLambda": "lambda$5(LSlot;LEntityHuman;LItemStack;)V",
-      "moveItemStackTo": "moveItemStackTo(LItemStack;IIZZ)Z",
-      "__SPIGOT__moveItemStackTo": "a(LItemStack;IIZ)Z",
+      "doClickLambda": {
+        "paper": "lambda$doClick$3(LSlot;LEntityHuman;LItemStack;)V",
+        "spigot": "lambda$5(LSlot;LEntityHuman;LItemStack;)V"
+      },
+      "moveItemStackTo": {
+        "paper": "moveItemStackTo(LItemStack;IIZZ)Z",
+        "spigot": "a(LItemStack;IIZ)Z"
+      },
       "getSlot": "b(I)LSlot;"
     }
   },

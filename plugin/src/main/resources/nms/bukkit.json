@@ -10,5 +10,6 @@
     "methods": {
       "getMaxStackSize": "getMaxStackSize()I"
     }
-  }
+  },
+  "Object": "java.lang.Object"
 }

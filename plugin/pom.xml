@@ -31,6 +31,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
+                    <argLine>-XX:+EnableDynamicAgentLoading</argLine>
                     <classpathDependencyExcludes>
                         <!-- Fix inline mocking in tests, Mockito requires byte-buddy (not dep) -->
                         <classpathDependencyExclude>net.bytebuddy:byte-buddy-dep</classpathDependencyExclude>

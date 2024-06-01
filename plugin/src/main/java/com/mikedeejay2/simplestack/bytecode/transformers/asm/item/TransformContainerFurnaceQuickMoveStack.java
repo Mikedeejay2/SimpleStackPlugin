@@ -14,7 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.20.4")
+@Transformer("1.18-1.20.6")
 public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor {
     private boolean visitedIsFuel = false;
     private boolean visitedEntranceLabel = false;
@@ -107,6 +107,5 @@ public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor
         super.visitInsn(ARETURN); // Return empty item, this method can do no more
 
         super.visitLabel(notLavaBucketLabel); // Below this is for regular item handling, not lava buckets
-        super.visitFrame(F_SAME, 0, null, 0, null);
     }
 }

@@ -13,7 +13,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.20.4")
+@Transformer("1.18-1.20.6")
 public class TransformContainerDoClickLambda extends MappedMethodVisitor {
     @Override
     public MappingsLookup.MappingEntry getMappingEntry() {
@@ -59,6 +59,5 @@ public class TransformContainerDoClickLambda extends MappedMethodVisitor {
         super.visitInsn(POP); // Pop the resulting EntityItem
 
         super.visitLabel(exitLabel);
-        super.visitFrame(F_SAME, 0, null, 0, null);
     }
 }

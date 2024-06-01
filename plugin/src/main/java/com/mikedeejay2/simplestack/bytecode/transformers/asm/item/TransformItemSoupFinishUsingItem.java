@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.asm.item;
 
+import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import org.objectweb.asm.Label;
@@ -12,12 +13,12 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.20.4")
+@Transformer("1.18-1.20.6")
 public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
-    protected boolean visitedNew = false;
-    protected boolean visitedFrame = false;
-    protected boolean visitedAload = false;
-    protected boolean visitedCheckCast = false;
+    protected int stackIndex = 4;
+    protected boolean visitedNew = false; // New ItemStack, separate from frame
+    protected boolean visitedAload = false; // Aload ItemStack, precondition must be true
+    protected boolean visitedPrecondition = false; // The precondition for aload. >=1.20.6 is hasInfiniteMaterials, else cast check for EntityHuman
 
     @Override
     public MappingEntry getMappingEntry() {
@@ -32,34 +33,36 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
 
     @Override
     public void visitVarInsn(int opcode, int varIndex) {
-        if(!visitedAload && visitedCheckCast && opcode == ALOAD && varIndex == 4) {// Target load ItemStack
+        if(!visitedAload && visitedPrecondition && opcode == ALOAD && varIndex == stackIndex) {// Target load ItemStack
             visitedAload = true;
         }
         super.visitVarInsn(opcode, varIndex);
     }
 
     @Override
-    public void visitFrame(int type, int numLocal, Object[] local, int numStack, Object[] stack) {
-        if(!visitedFrame && visitedAload) { // Target the frame after load ItemStack
-            visitedFrame = true;
-            // Change this frame to include the same locals append the extra ItemStack.
-            // Without this, the frame has no local values.
-            super.visitFrame(F_APPEND, 1, new Object[] {nms("ItemStack").internalName()}, 0, null);
-            return;
-        }
-        super.visitFrame(type, numLocal, local, numStack, stack);
-    }
-
-    @Override
     public void visitTypeInsn(int opcode, String type) {
-        if(!visitedCheckCast && opcode == CHECKCAST && type.equals(nms("EntityHuman").internalName())) {
-            visitedCheckCast = true;
+        if(!visitedPrecondition && opcode == CHECKCAST &&
+            MinecraftVersion.check("<=1.20.4") &&
+            type.equals(nms("EntityHuman").internalName())) {
+            visitedPrecondition = true;
         }
         if(!visitedNew && opcode == NEW && type.equals(nms("ItemStack").internalName())) { // Target new ItemStack() invocation
             visitedNew = true;
             appendStackedSoupFix();
         }
         super.visitTypeInsn(opcode, type);
+    }
+
+    @Override
+    public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
+        if(!visitedPrecondition && opcode == INVOKEVIRTUAL && // Check invokevirtual for LivingEntity#hasInfiniteMaterials (1.20.6+)
+            MinecraftVersion.check(">=1.20.6") &&
+            (owner.equals(nms("EntityLiving").internalName()) || owner.equals(nms("EntityHuman").internalName())) &&
+            name.equals(nms("EntityLiving").method("hasInfiniteMaterials").name()) &&
+            descriptor.equals(nms("EntityLiving").method("hasInfiniteMaterials").descriptor())) {
+            visitedPrecondition = true;
+        }
+        super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
     }
 
     /**
@@ -82,7 +85,7 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
         super.visitVarInsn(ASTORE, 6); // Store EntityHuman in local index 6
 
         // ItemStack is already shrunk by 1, check if it's empty
-        super.visitVarInsn(ALOAD, 4); // Load ItemStack
+        super.visitVarInsn(ALOAD, stackIndex); // Load ItemStack
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("isEmpty")); // Get whether ItemStack is empty
 
         Label ifNotDropLabel = new Label();
@@ -111,13 +114,11 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
         super.visitInsn(POP); // Pop the resulting EntityItem
 
         super.visitLabel(ifNotDropLabel); // Exit drop if statement
-        super.visitFrame(F_SAME, 0, null, 0, null);
 
         // Get ItemStack
-        super.visitVarInsn(ALOAD, 4); // Load ItemStack
+        super.visitVarInsn(ALOAD, stackIndex); // Load ItemStack
         // Goto the return label
         super.visitInsn(ARETURN); // Return the ItemStack
         super.visitLabel(emptyBowlLabel);
-        super.visitFrame(F_SAME, 0, null, 0, null);
     }
 }

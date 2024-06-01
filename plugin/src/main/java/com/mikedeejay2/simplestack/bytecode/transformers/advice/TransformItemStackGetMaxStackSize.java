@@ -1,9 +1,12 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.advice;
 
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
+import com.mikedeejay2.simplestack.api.SimpleStackConfig;
 import com.mikedeejay2.simplestack.api.event.ItemStackMaxAmountEvent;
+import com.mikedeejay2.simplestack.api.event.MaterialMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytecode.*;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
+import com.mikedeejay2.simplestack.util.NmsComponentHandler;
 import com.mikedeejay2.simplestack.util.NmsConverters;
 import com.mikedeejay2.simplestack.util.SafeEventCall;
 import net.bytebuddy.asm.Advice;
@@ -20,7 +23,7 @@ import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.20.4")
+@Transformer("1.20.6")
 public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
     private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 
@@ -48,10 +51,24 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
      */
     public static int getItemStackMaxStackSize(int currentReturnValue, long startTime, Object nmsItemStack) {
         final ItemStack itemStack = NmsConverters.itemStackToItemStack(nmsItemStack);
-        final ItemStackMaxAmountEvent event = new ItemStackMaxAmountEvent(itemStack, currentReturnValue);
-        SafeEventCall.callEvent(event);
+        final MaterialMaxAmountEvent materialEvent = new MaterialMaxAmountEvent(itemStack.getType(), currentReturnValue);
+        SafeEventCall.callEvent(materialEvent);
+        final ItemStackMaxAmountEvent stackEvent = new ItemStackMaxAmountEvent(itemStack, materialEvent.getAmount());
+        SafeEventCall.callEvent(stackEvent);
+        final int maxStackSize = stackEvent.getAmount();
+        // Prevent client hiding the real stack size of an overstacked item
+        if(itemStack.getAmount() > maxStackSize) {
+            NmsComponentHandler.setMaxStackSize(nmsItemStack, itemStack.getAmount());
+        } else if(currentReturnValue != maxStackSize) {
+            NmsComponentHandler.setMaxStackSize(nmsItemStack, maxStackSize);
+        }
+        // TODO: Remove this in new config system
+        final SimpleStackConfig config = SimpleStackAPI.getConfig();
+        if(!config.isWhitelist() && config.containsMaterial(itemStack.getType())) {
+            NmsComponentHandler.removeMaxStackSize(nmsItemStack);
+        }
         TIMINGS.collect(startTime, "ItemStack size redirect", true);
-        return event.getAmount();
+        return maxStackSize;
     }
 
     /**

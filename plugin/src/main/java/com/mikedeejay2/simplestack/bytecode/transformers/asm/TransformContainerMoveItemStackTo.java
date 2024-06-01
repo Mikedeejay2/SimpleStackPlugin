@@ -13,10 +13,9 @@ import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.20.4")
+@Transformer("1.18-1.20.6")
 public class TransformContainerMoveItemStackTo extends MappedMethodVisitor {
-    private boolean visitedGetMaxStackSize = false;
-    private boolean visitedIStoreFlag = false;
+    private boolean visitedSplitInvoke = false;
     private boolean fixedBreak = false;
 
     @Override
@@ -32,25 +31,16 @@ public class TransformContainerMoveItemStackTo extends MappedMethodVisitor {
 
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
-        if(!visitedGetMaxStackSize && opcode == INVOKEVIRTUAL &&
-            equalsMapping(owner, name, descriptor, nms("Slot").method("getMaxStackSize"))) {
-            visitedGetMaxStackSize = true;
+        if(!visitedSplitInvoke && opcode == INVOKEVIRTUAL &&
+            equalsMapping(owner, name, descriptor, nms("ItemStack").method("split"))) {
+            visitedSplitInvoke = true;
         }
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
     }
 
     @Override
-    public void visitVarInsn(int opcode, int varIndex) {
-        // Targets the last statement before the break line
-        if(!visitedIStoreFlag && visitedGetMaxStackSize && opcode == ISTORE && (varIndex == 6 || varIndex == 5)) { // Target flag1
-            visitedIStoreFlag = true;
-        }
-        super.visitVarInsn(opcode, varIndex);
-    }
-
-    @Override
     public void visitJumpInsn(int opcode, Label label) {
-        if(!fixedBreak && visitedIStoreFlag && opcode == GOTO) {
+        if(!fixedBreak && visitedSplitInvoke && opcode == GOTO) {
             super.visitVarInsn(ALOAD, 1); // Load ItemStack
             super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("isEmpty")); // Get boolean of ItemStack#isEmpty
             super.visitJumpInsn(IFNE, label); // If it is empty, break loop

@@ -69,7 +69,7 @@ public final class AdviceBridge {
     private static MethodHandle getSlotISMaxStackSize;
     private static MethodHandle getBukkitMaterialMaxStackSize;
     private static MethodHandle getBukkitItemStackMaxStackSize;
-    private static MethodHandle getCraftBukkitItemStackMaxStackSize;
+    private static MethodHandle getCraftItemStackMaxStackSize;
 
     public static void initialize() {
         final Plugin plugin = Bukkit.getPluginManager().getPlugin("SimpleStack");
@@ -82,7 +82,7 @@ public final class AdviceBridge {
             getSlotISMaxStackSize = getMethodHandle("TransformSlotISGetMaxStackSize", classLoader, "getSlotMaxStackSize", Object.class, Object.class);
             getBukkitMaterialMaxStackSize = getMethodHandle("TransformBukkitMaterialGetMaxStackSize", classLoader, "getBukkitMaterialMaxStackSize", Material.class);
             getBukkitItemStackMaxStackSize = getMethodHandle("TransformBukkitItemStackGetMaxStackSize", classLoader, "getBukkitItemStackMaxStackSize", ItemStack.class);
-            getCraftBukkitItemStackMaxStackSize = getMethodHandle("TransformCraftBukkitItemStackGetMaxStackSize", classLoader, "getCraftBukkitItemStackMaxStackSize", ItemStack.class);
+            getCraftItemStackMaxStackSize = getMethodHandle("TransformCraftItemStackGetMaxStackSize", classLoader, "getCraftItemStackMaxStackSize", ItemStack.class);
         } catch(Throwable e) {
             throw new RuntimeException(e);
         }
@@ -131,7 +131,7 @@ public final class AdviceBridge {
         return (int) getBukkitItemStackMaxStackSize.invokeExact(currentReturnValue, startTime, itemStack);
     }
 
-    public static int getCraftBukkitItemStackMaxStackSize(int currentReturnValue, long startTime, ItemStack itemStack) throws Throwable {
-        return (int) getCraftBukkitItemStackMaxStackSize.invokeExact(currentReturnValue, startTime, itemStack);
+    public static int getCraftItemStackMaxStackSize(int currentReturnValue, long startTime, ItemStack itemStack) throws Throwable {
+        return (int) getCraftItemStackMaxStackSize.invokeExact(currentReturnValue, startTime, itemStack);
     }
 }

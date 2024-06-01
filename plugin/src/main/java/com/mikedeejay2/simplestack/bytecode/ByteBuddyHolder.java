@@ -1,11 +1,16 @@
 package com.mikedeejay2.simplestack.bytecode;
 
+import com.google.common.collect.ImmutableList;
 import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.util.BlacklistPrintStream;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 
+import java.io.PrintStream;
 import java.lang.instrument.Instrumentation;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Simple holder class for initializing the Byte Buddy agent and storing its instrumentation instance.
@@ -22,6 +27,11 @@ public final class ByteBuddyHolder {
     private static Instrumentation instrumentation;
 
     /**
+     * Used with {@link BlacklistPrintStream} to prevent printing the warning seen below on Java 21 and above.
+     */
+    private static final List<String> printBlacklist = Collections.singletonList("WARNING: A Java agent has been loaded dynamically");
+
+    /**
      * Install the {@link ByteBuddyAgent}
      *
      * @return Whether a failure has occurred
@@ -32,14 +42,25 @@ public final class ByteBuddyHolder {
         } catch(IllegalStateException ignored) {
             // ignored
         }
-        if(instrumentation == null) {
-            try {
-                instrumentation = ByteBuddyAgent.install();
-            } catch(IllegalStateException ignored) {
-                return true;
-            }
+
+        if(instrumentation != null) {
+            return false;
         }
-        return false;
+        // Redirect System.err to stop output warning
+        final PrintStream errStream = System.err;
+        System.setErr(new BlacklistPrintStream(errStream, printBlacklist));
+
+        boolean result = true;
+        try {
+            instrumentation = ByteBuddyAgent.install();
+            result = false;
+        } catch(IllegalStateException ignored) {
+            // ignored
+        }
+        // Change System.err back to original
+        System.setErr(errStream);
+
+        return result;
     }
 
     /**
