@@ -19,10 +19,7 @@
   },
   "EntityPlayer": {
     "methods": {
-      "drop": {
-        "paper": "drop(LItemStack;ZZZ)LEntityItem;",
-        "spigot": "a(LItemStack;ZZ)LEntityItem;"
-      }
+      "drop": ["drop(LItemStack;ZZZ)LEntityItem;", "a(LItemStack;ZZ)LEntityItem;"]
     }
   },
   "Items": {

@@ -4,5 +4,9 @@
     "methods": {
       "equals": "equals(LObject;)Z"
     }
-  }
+  },
+  "String": [
+    "java.util.String",
+    "java.lang.String"
+  ]
 }

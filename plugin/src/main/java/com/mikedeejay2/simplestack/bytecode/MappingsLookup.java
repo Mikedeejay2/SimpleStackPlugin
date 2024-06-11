@@ -1,11 +1,15 @@
 package com.mikedeejay2.simplestack.bytecode;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mikedeejay2.mikedeejay2lib.data.json.JsonAccessor;
 import com.mikedeejay2.mikedeejay2lib.data.json.JsonFile;
 import com.mikedeejay2.mikedeejay2lib.util.debug.CrashReportSection;
+import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.ImmutablePair;
+import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.Pair;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.SimpleStack;
 import org.apache.commons.lang3.Validate;
@@ -15,6 +19,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MappingsLookup {
     private static MappingsHolder holder = null;
@@ -83,79 +88,76 @@ public class MappingsLookup {
         for(String classRefName : accessor.getKeys(false)) {
             final JsonElement classElement = accessor.get(classRefName);
             if(classRefName.equals("using_base")) continue;
-            if(classElement.isJsonPrimitive()) { // Class entry holds no methods or fields, add it and continue
-                // If class already exists, change name and continue
-                if(holder.mappings.containsKey(classRefName)) {
-                    holder.clazz(classRefName).setQualifiedName(classElement.getAsString());
-                    continue;
-                }
-                holder.add(classRefName, new ClassMapping(classElement.getAsString(), classRefName));
-                continue;
-            }
-            Validate.isTrue(classElement.isJsonObject()); // Should be an object
-            final JsonObject classObject = classElement.getAsJsonObject();
-
-            // Get class names, including alternates
-            final List<String> alternateClassNames = new ArrayList<>();
-            String classQualName = null;
-            if(classObject.has("class_name")) {
-                final JsonElement classNameElement = classObject.get("class_name");
-                if(classNameElement.isJsonObject()) {
-                    final JsonObject classNameObject = classNameElement.getAsJsonObject();
-                    for(String key : classNameObject.keySet()) {
-                        String name = classNameObject.get(key).getAsString();
-                        if(classQualName == null) {
-                            classQualName = name;
-                            continue;
-                        }
-                        alternateClassNames.add(classNameObject.get(key).getAsString());
-                    }
-                } else if(classNameElement.isJsonPrimitive()) {
-                    classQualName = classNameElement.getAsString();
-                }
-            }
-
-            // Create/get class mapping
-            ClassMapping classMapping;
-            if(!holder.mappings.containsKey(classRefName)) { // If class NOT already loaded from a base
-                Validate.isTrue(classObject.has("class_name"),
-                                "Can not find class name for mapping \"%s\"", classRefName); // Should have a class name
-                classMapping = new ClassMapping(classQualName, classRefName);
-                holder.add(classRefName, classMapping);
-            } else {
-                // If class already exists, change name and continue
-                classMapping = holder.clazz(classRefName);
-                if(classQualName != null) classMapping.setQualifiedName(classQualName);
-            }
-
-
-            // Collect methods and fields
-            for(Map.Entry<String, MappingEntry> entry : collectEntries(classObject, "methods").entrySet()) {
-                if(entry.getValue() == null) {
-                    classMapping.methodMappings.remove(entry.getKey());
-                    continue;
-                }
-                classMapping.method(entry.getKey(), entry.getValue());
-            }
-            for(Map.Entry<String, MappingEntry> entry : collectEntries(classObject, "fields").entrySet()) {
-                if(entry.getValue() == null) {
-                    classMapping.fieldMappings.remove(entry.getKey());
-                    continue;
-                }
-                classMapping.field(entry.getKey(), entry.getValue());
-            }
-
-            // Collect alternate classes
-            for(String alternateClassName : alternateClassNames) {
-                classMapping.alternate(alternateClassName);
-            }
+            collectClass(classRefName, classElement);
         }
-
         return true;
     }
 
+    private static void collectClass(String classRefName, JsonElement classElement) {
+        final List<String> allNames = collectClassNames(classElement, classRefName);
+        final String qualifiedName = !allNames.isEmpty() ? allNames.remove(0) : null;
+        final boolean newMapping = !holder.mappings.containsKey(classRefName);
+        Validate.isTrue(!(newMapping && qualifiedName == null),
+                        "New class mapping with no qualified name: \"%s\"", classRefName);
+        final ClassMapping mapping = newMapping ? new ClassMapping(qualifiedName, classRefName) : holder.clazz(classRefName);
+
+        // If it's not a new mapping and there's a new qualified name, change the existing mapping
+        if(!newMapping && qualifiedName != null) mapping.setQualifiedName(qualifiedName);
+        // If it's a new mapping, register it
+        if(newMapping) holder.add(classRefName, mapping);
+        // If it's a primitive, no more work needs to be done
+        if(classElement.isJsonPrimitive()) return;
+
+        // Add alternates
+        mapping.alternates(allNames);
+        // If it's an array, no more work needs to be done
+        if(classElement.isJsonArray()) return;
+
+        Validate.isTrue(classElement.isJsonObject()); // Should be an object
+        final JsonObject classObject = classElement.getAsJsonObject();
+
+        // Collect methods and fields
+        for(Map.Entry<String, MappingEntry> entry : collectEntries(classObject, "methods").entrySet()) {
+            if(entry.getValue() == null) {
+                mapping.removeMethod(entry.getKey());
+                continue;
+            }
+            mapping.method(entry.getKey(), entry.getValue());
+        }
+        for(Map.Entry<String, MappingEntry> entry : collectEntries(classObject, "fields").entrySet()) {
+            if(entry.getValue() == null) {
+                mapping.removeField(entry.getKey());
+                continue;
+            }
+            mapping.field(entry.getKey(), entry.getValue());
+        }
+    }
+
+    private static List<String> collectClassNames(JsonElement classElement, String classRefName) {
+        return collectClassNames(classElement, classRefName, false);
+    }
+
+    private static List<String> collectClassNames(JsonElement classElement, String classRefName, boolean inner) {
+        if(classElement.isJsonObject() && !inner) {
+            final JsonObject classObject = classElement.getAsJsonObject();
+            Validate.isTrue(classObject.has("class_name"),
+                            "Can not find class name for mapping \"%s\"", classRefName); // Should have a class name
+            return collectClassNames(classObject.get("class_name"), classRefName, true);
+        }
+        if(classElement.isJsonArray()) {
+            final JsonArray array = classElement.getAsJsonArray();
+            Validate.isTrue(!array.isEmpty(),
+                            "Can not find a class name for \"%s\"", classRefName); // Should have a value
+            return jsonArrayToStringList(array);
+        }
+        if(classElement.isJsonPrimitive()) {
+            return Lists.newArrayList(classElement.getAsString());
+        }
+        throw new UnsupportedOperationException("Unknown class name data type for class " + classRefName);
+    }
+
     private static Map<String, MappingEntry> collectEntries(JsonObject json, String key) {
-        if(!json.has(key)) return ImmutableMap.of(); // Unable to collect if key doesn't exist
+        if(!json.has(key)) return Collections.emptyMap(); // Unable to collect if key doesn't exist
         final Map<String, MappingEntry> result = new HashMap<>();
         final JsonElement keyElement = json.get(key);
         Validate.isTrue(keyElement.isJsonObject()); // Should be an object
@@ -163,28 +165,31 @@ public class MappingsLookup {
 
         for(String entryKey : keyObject.keySet()) {
             final JsonElement entryElement = keyObject.get(entryKey);
-            if(entryElement.isJsonPrimitive()) {
-                if(entryElement.getAsString().equals("remove")) { // If remove, mark it null
-                    result.put(entryKey, null);
-                    continue;
-                }
-                result.put(entryKey, new MappingEntry(entryElement.getAsString(), entryKey));
-                continue;
-            }
-            Validate.isTrue(entryElement.isJsonObject()); // Should be an object
-            final JsonObject entryObject = entryElement.getAsJsonObject();
-            final String[] keys = entryObject.keySet().toArray(new String[0]);
-            Validate.isTrue(keys.length > 0,
-                            "Can not find a value for entry \"%s\"", entryKey); // Should have a value
-            final MappingEntry mappingEntry = new MappingEntry(entryObject.get(keys[0]).getAsString(), entryKey);
-
-            // Collect alternates
-            for(int i = 1; i < keys.length; ++i) {
-                mappingEntry.alternate(entryObject.get(keys[i]).getAsString());
-            }
-            result.put(entryKey, mappingEntry);
+            final Pair<String, MappingEntry> resultPair = collectEntryValue(entryKey, entryElement);
+            result.put(resultPair.getKey(), resultPair.getValue());
         }
         return result;
+    }
+
+    private static Pair<String, MappingEntry> collectEntryValue(String entryKey, JsonElement entryElement) {
+        if(entryElement.isJsonPrimitive()) {
+            if(entryElement.getAsString().equals("remove")) { // If remove, mark it null
+                return new ImmutablePair<>(entryKey, null);
+            }
+            return new ImmutablePair<>(entryKey, new MappingEntry(entryElement.getAsString(), entryKey));
+        }
+
+        Validate.isTrue(entryElement.isJsonArray()); // Should be an array
+        final JsonArray array = entryElement.getAsJsonArray();
+
+        Validate.isTrue(!array.isEmpty(),
+                        "Can not find a value for entry \"%s\"", entryKey); // Should have a value
+        List<String> allValues = jsonArrayToStringList(entryElement.getAsJsonArray());
+        final MappingEntry mappingEntry = new MappingEntry(allValues.remove(0), entryKey);
+
+        // Collect alternates
+        mappingEntry.alternates(allValues);
+        return new ImmutablePair<>(entryKey, mappingEntry);
     }
 
     private static String getFailedClassesStr(Map<ClassMapping, Exception> failed) {
@@ -356,6 +361,12 @@ public class MappingsLookup {
         return lastField;
     }
 
+    private static List<String> jsonArrayToStringList(JsonArray array) {
+        return array.asList().stream()
+            .map(JsonElement::getAsString)
+            .collect(Collectors.toList());
+    }
+
     public static final class MappingsHolder {
         private final Map<String, ClassMapping> mappings;
 
@@ -404,9 +415,19 @@ public class MappingsLookup {
             return this;
         }
 
+        private ClassMapping removeMethod(String name) {
+            methodMappings.remove(name);
+            return this;
+        }
+
         private ClassMapping field(String name, MappingEntry entry) {
             entry.owner(this);
             fieldMappings.put(name, entry);
+            return this;
+        }
+
+        private ClassMapping removeField(String name) {
+            fieldMappings.remove(name);
             return this;
         }
 

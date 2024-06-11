@@ -30,20 +30,20 @@
   "CraftItemStack": {
     "class_name": "org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack",
     "methods": {
-      "asBukkitCopy": "asBukkitCopy(LItemStack;)Lorg/bukkit/inventory/ItemStack;",
+      "asBukkitCopy": "asBukkitCopy(LItemStack;)LBukkitItemStack;",
       "getMaxStackSize": "getMaxStackSize()I"
     }
   },
   "ContainerUtil": {
     "class_name": "net.minecraft.world.ContainerUtil",
     "methods": {
-      "removeItem": "a(Ljava/util/List;II)LItemStack;"
+      "removeItem": "a(LList;II)LItemStack;"
     }
   },
   "Slot": {
     "class_name": "net.minecraft.world.inventory.Slot",
     "methods": {
-      "tryRemove": "a(IILEntityHuman;)Ljava/util/Optional;",
+      "tryRemove": "a(IILEntityHuman;)LOptional;",
       "getItem": "e()LItemStack;",
       "getMaxStackSize": "a()I",
       "getMaxStackSize1": "a_(LItemStack;)I"
@@ -64,14 +64,8 @@
     "class_name": "net.minecraft.world.inventory.Container",
     "methods": {
       "doClick": "b(IILInventoryClickType;LEntityHuman;)V",
-      "doClickLambda": {
-        "value": "lambda$doClick$3(LSlot;LEntityHuman;LItemStack;)V",
-        "spigot": "lambda$5(LSlot;LEntityHuman;LItemStack;)V"
-      },
-      "moveItemStackTo": {
-        "value": "moveItemStackTo(LItemStack;IIZZ)Z",
-        "spigot": "a(LItemStack;IIZ)Z"
-      },
+      "doClickLambda": ["lambda$doClick$3(LSlot;LEntityHuman;LItemStack;)V", "lambda$5(LSlot;LEntityHuman;LItemStack;)V"],
+      "moveItemStackTo": ["moveItemStackTo(LItemStack;IIZZ)Z", "a(LItemStack;IIZ)Z"],
       "getSlot": "b(I)LSlot;"
     }
   },

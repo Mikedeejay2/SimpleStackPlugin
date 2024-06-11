@@ -15,7 +15,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.SimplePluginManager;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -26,7 +25,6 @@ import java.util.logging.Logger;
 
 import static org.assertj.core.api.Assertions.*;
 import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
-import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -36,13 +34,15 @@ public class MappingsLookupTest {
     private static final Map<String, Pair<List<String>, List<String>>> classes = ImmutableMap.<String, Pair<List<String>, List<String>>>builder()
         .put("ArrayList", new ImmutablePair<>(ImmutableList.of("size", "contains", "addAll", "get", "indexOf"), ImmutableList.of("DEFAULT_CAPACITY", "elementData")))
         .put("Object", new ImmutablePair<>(ImmutableList.of("equals"), ImmutableList.of()))
+        .put("String", new ImmutablePair<>(ImmutableList.of(), ImmutableList.of()))
         .build();
 
-    private static final List<String> classNames = ImmutableList.of("ArrayList", "Object");
+    private static final List<String> classNames = ImmutableList.of("ArrayList", "Object", "String");
 
     private static final Map<String, Class<?>> classNameToClass = ImmutableMap.of(
         "ArrayList", ArrayList.class,
-        "Object", Object.class);
+        "Object", Object.class,
+        "String", String.class);
 
     private static final Map<String, List<String>> classNameToMethodNames = ImmutableMap.of(
         "ArrayList", ImmutableList.of("size", "contains", "addAll2", "get"),
