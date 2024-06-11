@@ -1,12 +1,12 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.asm;
 
-import com.mikedeejay2.simplestack.bytecode.MappingsLookup;
+import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import org.objectweb.asm.Label;
 
 import static org.objectweb.asm.Opcodes.*;
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
 
 /**
  * Fixes shift clicking overstacked items out of a result slot
@@ -19,7 +19,7 @@ public class TransformContainerMoveItemStackTo extends MappedMethodVisitor {
     private boolean fixedBreak = false;
 
     @Override
-    public MappingsLookup.MappingEntry getMappingEntry() {
+    public MappingEntry getMappingEntry() {
         return nms("Container").method("moveItemStackTo");
     }
 

@@ -1,11 +1,11 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.asm;
 
-import com.mikedeejay2.simplestack.bytecode.MappingsLookup;
+import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 
 import static org.objectweb.asm.Opcodes.*;
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
 
 /**
  * Used in multiple places, most common is dropping overstacked items onto the ground. This transformation should ensure
@@ -16,7 +16,7 @@ import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
 @Transformer("1.18-1.20.6")
 public class TransformContainerUtilRemoveItem extends MappedMethodVisitor {
     @Override
-    public MappingsLookup.MappingEntry getMappingEntry() {
+    public MappingEntry getMappingEntry() {
         return nms("ContainerUtil").method("removeItem");
     }
 

@@ -7,6 +7,7 @@ import com.mikedeejay2.mikedeejay2lib.text.language.TranslationManager;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.ImmutablePair;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.Pair;
 import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.mappings.MappingsLookup;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.Warning;
@@ -24,7 +25,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import static org.assertj.core.api.Assertions.*;
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

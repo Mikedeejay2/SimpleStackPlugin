@@ -1,5 +1,7 @@
 package com.mikedeejay2.simplestack.bytecode;
 
+import com.mikedeejay2.simplestack.mappings.ClassMapping;
+import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.objectweb.asm.MethodVisitor;
 
@@ -21,7 +23,7 @@ public abstract class MappedMethodVisitor extends MethodVisitor implements Metho
         return this;
     }
 
-    public final void visitMethodInsn(int opcode, MappingsLookup.MappingEntry method, boolean isInterface) {
+    public final void visitMethodInsn(int opcode, MappingEntry method, boolean isInterface) {
         super.visitMethodInsn(
             opcode,
             method.owner().internalName(),
@@ -30,11 +32,11 @@ public abstract class MappedMethodVisitor extends MethodVisitor implements Metho
             isInterface);
     }
 
-    public final void visitMethodInsn(int opcode, MappingsLookup.MappingEntry method) {
+    public final void visitMethodInsn(int opcode, MappingEntry method) {
         visitMethodInsn(opcode, method, false);
     }
 
-    public final void visitFieldInsn(int opcode, MappingsLookup.MappingEntry field) {
+    public final void visitFieldInsn(int opcode, MappingEntry field) {
         super.visitFieldInsn(
             opcode,
             field.owner().internalName(),
@@ -42,7 +44,7 @@ public abstract class MappedMethodVisitor extends MethodVisitor implements Metho
             field.descriptor());
     }
 
-    public final void visitMethodInsn(int opcode, MappingsLookup.ClassMapping owner, MappingsLookup.MappingEntry method, boolean isInterface) {
+    public final void visitMethodInsn(int opcode, ClassMapping owner, MappingEntry method, boolean isInterface) {
         super.visitMethodInsn(
             opcode,
             owner.internalName(),
@@ -51,11 +53,11 @@ public abstract class MappedMethodVisitor extends MethodVisitor implements Metho
             isInterface);
     }
 
-    public final void visitMethodInsn(int opcode, MappingsLookup.ClassMapping owner, MappingsLookup.MappingEntry method) {
+    public final void visitMethodInsn(int opcode, ClassMapping owner, MappingEntry method) {
         visitMethodInsn(opcode, owner, method, false);
     }
 
-    public final void visitFieldInsn(int opcode, MappingsLookup.ClassMapping owner, MappingsLookup.MappingEntry field) {
+    public final void visitFieldInsn(int opcode, ClassMapping owner, MappingEntry field) {
         super.visitFieldInsn(
             opcode,
             owner.internalName(),
@@ -63,7 +65,7 @@ public abstract class MappedMethodVisitor extends MethodVisitor implements Metho
             field.descriptor());
     }
 
-    protected final boolean equalsMapping(String owner, String name, String descriptor, MappingsLookup.MappingEntry mapping) {
+    protected final boolean equalsMapping(String owner, String name, String descriptor, MappingEntry mapping) {
         return owner.equals(mapping.owner().internalName()) &&
             name.equals(mapping.name()) &&
             descriptor.equals(mapping.descriptor());

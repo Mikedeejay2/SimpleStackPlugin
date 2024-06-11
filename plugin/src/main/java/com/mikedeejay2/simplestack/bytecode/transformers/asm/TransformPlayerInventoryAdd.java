@@ -1,12 +1,12 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.asm;
 
-import com.mikedeejay2.simplestack.bytecode.MappingsLookup;
+import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import org.objectweb.asm.Label;
 
 import static org.objectweb.asm.Opcodes.*;
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
 
 /**
  * Fixes stacked damaged items not stacking together upon add. This fixes picking up multiple damaged items from the
@@ -20,7 +20,7 @@ public class TransformPlayerInventoryAdd extends MappedMethodVisitor {
     private boolean visitedIfStatement = false;
 
     @Override
-    public MappingsLookup.MappingEntry getMappingEntry() {
+    public MappingEntry getMappingEntry() {
         return nms("PlayerInventory").method("add2");
     }
 

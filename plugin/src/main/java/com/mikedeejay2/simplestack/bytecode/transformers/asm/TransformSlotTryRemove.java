@@ -1,11 +1,11 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.asm;
 
-import com.mikedeejay2.simplestack.bytecode.MappingsLookup;
+import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 
 import static org.objectweb.asm.Opcodes.*;
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
 
 /**
  * Make sure max of max stack size is removed from trying to remove from a slot.
@@ -15,7 +15,7 @@ import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
 @Transformer("1.18-1.20.6")
 public class TransformSlotTryRemove extends MappedMethodVisitor {
     @Override
-    public MappingsLookup.MappingEntry getMappingEntry() {
+    public MappingEntry getMappingEntry() {
         return nms("Slot").method("tryRemove");
     }
 

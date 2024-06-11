@@ -12,8 +12,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
 
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.lastNms;
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.lastNms;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.nms;
 
 /**
  * Converters for some NMS objects.

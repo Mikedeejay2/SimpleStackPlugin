@@ -17,6 +17,7 @@ import com.mikedeejay2.simplestack.commands.*;
 import com.mikedeejay2.simplestack.config.SimpleStackConfigImpl;
 import com.mikedeejay2.simplestack.config.ConfigListener;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
+import com.mikedeejay2.simplestack.mappings.MappingsLookup;
 
 import java.util.function.Consumer;
 

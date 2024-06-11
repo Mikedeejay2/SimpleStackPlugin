@@ -6,6 +6,7 @@ import com.mikedeejay2.simplestack.bytecode.AdviceBridge;
 import com.mikedeejay2.simplestack.bytecode.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
+import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import com.mikedeejay2.simplestack.util.SafeEventCall;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
@@ -14,8 +15,7 @@ import org.bukkit.Material;
 
 import java.util.logging.Level;
 
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.MappingEntry;
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.nms;
 
 /**
  * Advice for changing the max stack size of a {@link Material}. This does not interact with NMS in any way, it is

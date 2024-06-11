@@ -4,6 +4,7 @@ import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.event.MaterialMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytecode.*;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
+import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import com.mikedeejay2.simplestack.util.NmsConverters;
 import com.mikedeejay2.simplestack.util.SafeEventCall;
 import net.bytebuddy.asm.Advice;
@@ -13,7 +14,7 @@ import org.bukkit.Material;
 
 import java.util.logging.Level;
 
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
 
 /**
  * Advice for changing the max stack size of an Item. This is a general item, not an ItemStack, similar to Material in
@@ -31,7 +32,7 @@ public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
     }
 
     @Override
-    public MappingsLookup.MappingEntry getMappingEntry() {
+    public MappingEntry getMappingEntry() {
         return nms("Item").method("getMaxStackSize");
     }
 

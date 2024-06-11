@@ -1,12 +1,12 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.asm;
 
-import com.mikedeejay2.simplestack.bytecode.MappingsLookup;
+import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import org.objectweb.asm.Label;
 
 import static org.objectweb.asm.Opcodes.*;
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
 
 /**
  * Fixes ItemStack's isStackable method by removing the isDamaged check. This fixes picking up multiple damaged items
@@ -20,7 +20,7 @@ public class TransformItemStackIsStackable extends MappedMethodVisitor {
     private boolean visitedIConst = false;
 
     @Override
-    public MappingsLookup.MappingEntry getMappingEntry() {
+    public MappingEntry getMappingEntry() {
         return nms("ItemStack").method("isStackable");
     }
 

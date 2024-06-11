@@ -1,11 +1,10 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.asm.item;
 
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
-import com.mikedeejay2.simplestack.bytecode.MappingsLookup;
+import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
-import static org.objectweb.asm.Opcodes.*;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
 
 /**
  * Fixes stacked suspicious stews from being replaced by a bowl upon use.
@@ -15,7 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
 @Transformer("1.18-1.20.6")
 public class TransformItemSuspiciousStewFinishUsingItem extends TransformItemSoupFinishUsingItem {
     @Override
-    public MappingsLookup.MappingEntry getMappingEntry() {
+    public MappingEntry getMappingEntry() {
         return nms("ItemSuspiciousStew").method("finishUsingItem");
     }
 

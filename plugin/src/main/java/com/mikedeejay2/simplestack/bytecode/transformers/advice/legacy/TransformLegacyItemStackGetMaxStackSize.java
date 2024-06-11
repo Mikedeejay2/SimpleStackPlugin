@@ -6,6 +6,7 @@ import com.mikedeejay2.simplestack.bytecode.AdviceBridge;
 import com.mikedeejay2.simplestack.bytecode.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
+import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import com.mikedeejay2.simplestack.util.NmsConverters;
 import com.mikedeejay2.simplestack.util.SafeEventCall;
 import net.bytebuddy.asm.Advice;
@@ -15,8 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.logging.Level;
 
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.MappingEntry;
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.nms;
 
 /**
  * Advice for changing the max stack size of an ItemStack.

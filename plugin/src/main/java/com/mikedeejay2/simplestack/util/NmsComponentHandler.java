@@ -1,6 +1,5 @@
 package com.mikedeejay2.simplestack.util;
 
-import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import org.bukkit.Bukkit;
 
 import java.lang.invoke.MethodHandle;
@@ -9,7 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
 
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
 
 public final class NmsComponentHandler {
     public static final MethodHandle HANDLE_STACK_COMPONENTS;

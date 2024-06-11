@@ -2,9 +2,9 @@ package com.mikedeejay2.simplestack.bytecode.transformers.asm.item;
 
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
+import com.mikedeejay2.simplestack.mappings.MappingEntry;
 
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.MappingEntry;
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.nms;
 import static org.objectweb.asm.Opcodes.*;
 
 /**

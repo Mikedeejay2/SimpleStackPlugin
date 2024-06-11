@@ -1,11 +1,11 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.asm.item;
 
-import com.mikedeejay2.simplestack.bytecode.MappingsLookup;
+import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import org.objectweb.asm.Label;
 
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
 import static org.objectweb.asm.Opcodes.*;
 
 /**
@@ -21,7 +21,7 @@ public class TransformItemBucketUse extends MappedMethodVisitor {
     protected boolean visitedReturnLabel = false;
 
     @Override
-    public MappingsLookup.MappingEntry getMappingEntry() {
+    public MappingEntry getMappingEntry() {
         return nms("ItemBucket").method("getEmptySuccessItem");
     }
 

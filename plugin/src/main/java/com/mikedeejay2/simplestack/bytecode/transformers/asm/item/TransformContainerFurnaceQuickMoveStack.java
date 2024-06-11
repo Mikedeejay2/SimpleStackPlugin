@@ -1,11 +1,11 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.asm.item;
 
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
-import com.mikedeejay2.simplestack.bytecode.MappingsLookup;
+import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import org.objectweb.asm.Label;
 
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.*;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
 import static org.objectweb.asm.Opcodes.*;
 
 /**
@@ -23,7 +23,7 @@ public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor
     private Label actualExitLabel; // Represents the actual exit label, pulled from quickMoveStack jump, not the next else if
 
     @Override
-    public MappingsLookup.MappingEntry getMappingEntry() {
+    public MappingEntry getMappingEntry() {
         return nms("ContainerFurnace").method("quickMoveStack");
     }
 

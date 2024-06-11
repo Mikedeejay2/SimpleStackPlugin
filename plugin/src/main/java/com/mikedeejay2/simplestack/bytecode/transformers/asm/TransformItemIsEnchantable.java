@@ -3,10 +3,9 @@ package com.mikedeejay2.simplestack.bytecode.transformers.asm;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
-import org.objectweb.asm.Label;
+import com.mikedeejay2.simplestack.mappings.MappingEntry;
 
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.MappingEntry;
-import static com.mikedeejay2.simplestack.bytecode.MappingsLookup.nms;
+import static com.mikedeejay2.simplestack.mappings.MappingsLookup.nms;
 import static org.objectweb.asm.Opcodes.*;
 
 /**
