@@ -27,31 +27,26 @@ public final class ClassMapping {
         this.descriptorName = "L" + internalName + ";";
     }
 
-    ClassMapping method(String name, MappingEntry entry) {
+    void method(String name, MappingEntry entry) {
         entry.owner(this);
         methodMappings.put(name, entry);
-        return this;
     }
 
-    ClassMapping removeMethod(String name) {
+    void removeMethod(String name) {
         methodMappings.remove(name);
-        return this;
     }
 
-    ClassMapping field(String name, MappingEntry entry) {
+    void field(String name, MappingEntry entry) {
         entry.owner(this);
         fieldMappings.put(name, entry);
-        return this;
     }
 
-    ClassMapping removeField(String name) {
+    void removeField(String name) {
         fieldMappings.remove(name);
-        return this;
     }
 
-    ClassMapping setQualifiedName(String qualifiedName) {
+    void setQualifiedName(String qualifiedName) {
         initFields(qualifiedName);
-        return this;
     }
 
     void alternate(String alternate) {

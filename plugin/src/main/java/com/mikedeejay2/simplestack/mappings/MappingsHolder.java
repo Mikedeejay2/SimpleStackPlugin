@@ -13,9 +13,8 @@ public final class MappingsHolder {
         this.mappings = new HashMap<>();
     }
 
-    MappingsHolder add(String name, ClassMapping mappings) {
+    void add(String name, ClassMapping mappings) {
         this.mappings.put(name, mappings);
-        return this;
     }
 
     boolean contains(String key) {
