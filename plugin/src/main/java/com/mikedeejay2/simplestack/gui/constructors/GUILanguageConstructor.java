@@ -53,7 +53,10 @@ public class GUILanguageConstructor extends GUIAbstractListConstructor<GUIItem> 
             .addEvent(new GUISwitchLangEvent("es_ve")),
         new GUIItem(ItemBuilder.of(Base64Head.FLAG_GERMANY.get())
                         .setName("&bDeutsch (German)").setLore(CLICK_MESSAGE, Text.of("&7de_de")))
-            .addEvent(new GUISwitchLangEvent("de_de")));
+            .addEvent(new GUISwitchLangEvent("de_de")),
+        new GUIItem(ItemBuilder.of(Base64Head.FLAG_NETHERLANDS.get())
+                        .setName("&bNederlands (Dutch)").setLore(CLICK_MESSAGE, Text.of("&7nl_nl")))
+            .addEvent(new GUISwitchLangEvent("nl_nl")));
 
     private GUILanguageConstructor(SimpleStack plugin) {
         super(plugin, Text.of("simplestack.gui.language.title"), 5, MAPPER, null);
