@@ -5,6 +5,14 @@
   "EntityHuman": {
     "methods": {
       "getInventory": "fR()LPlayerInventory;"
+    },
+    "fields": {
+      "inventoryMenu": "bR:LInventoryMenu;"
+    }
+  },
+  "PacketPlayInSetCreativeSlot": {
+    "methods": {
+      "itemStack": "d()LItemStack;"
     }
   }
 }

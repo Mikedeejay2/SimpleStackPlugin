@@ -6,6 +6,8 @@ import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.MutablePair;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.Pair;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.SimpleStack;
+import com.mikedeejay2.simplestack.mappings.ClassMapping;
+import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
@@ -37,6 +39,7 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 public final class SimpleStackAgent {
     private static ResettableClassFileTransformer transformer;
     private static final Map<String, Set<Pair<MethodVisitorInfo, Boolean>>> VISITORS = new HashMap<>();
+    private static final Map<String, String> ADVICE_CLASSES = new HashMap<>();
     private static final AtomicBoolean crashed = new AtomicBoolean(false);
     private static final List<CrashReportSection> crashSections = new ArrayList<>();
     private static Throwable crashThrowable = null;
@@ -67,6 +70,9 @@ public final class SimpleStackAgent {
         String className = visitor.getMappingEntry().owner().qualifiedName();
         VISITORS.putIfAbsent(className, new HashSet<>());
         VISITORS.get(className).add(new MutablePair<>(visitor, false));
+        if(visitor instanceof AdviceVisitorInfo) {
+            ADVICE_CLASSES.put(((AdviceVisitorInfo) visitor).getAdviceName(), visitor.getClass().getName());
+        }
     }
 
     public static boolean install() {

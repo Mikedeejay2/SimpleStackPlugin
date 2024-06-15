@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.bytecode.transformers.advice;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.event.SlotMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytecode.AdviceBridge;
+import com.mikedeejay2.simplestack.bytecode.AdviceVisitorInfo;
 import com.mikedeejay2.simplestack.bytecode.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import com.mikedeejay2.simplestack.util.NmsConverters;
@@ -25,7 +26,7 @@ import static com.mikedeejay2.simplestack.mappings.MappingsLookup.nms;
  * @author Mikedeejay2
  */
 @Transformer("1.18-1.20.6")
-public class TransformSlotISGetMaxStackSize implements MethodVisitorInfo {
+public class TransformSlotISGetMaxStackSize implements MethodVisitorInfo, AdviceVisitorInfo {
     private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 
     @Override
@@ -38,7 +39,12 @@ public class TransformSlotISGetMaxStackSize implements MethodVisitorInfo {
         return nms("Slot").method("getMaxStackSize1");
     }
 
-    public static int getSlotMaxStackSize(int currentReturnValue, long startTime, Object nmsSlot, Object nmsItemStack) {
+    @Override
+    public String getAdviceName() {
+        return "SlotIS";
+    }
+
+    public static int bridgedMethod(int currentReturnValue, long startTime, Object nmsSlot, Object nmsItemStack) {
         if(SlotMaxAmountEvent.getHandlerList().getRegisteredListeners().length == 0) return currentReturnValue;
         final Inventory inventory = NmsConverters.slotToInventory(nmsSlot);
         final int slot = NmsConverters.slotToSlot(nmsSlot);

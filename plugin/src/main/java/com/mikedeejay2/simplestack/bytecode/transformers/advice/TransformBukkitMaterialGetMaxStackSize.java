@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.bytecode.transformers.advice;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.event.MaterialMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytecode.AdviceBridge;
+import com.mikedeejay2.simplestack.bytecode.AdviceVisitorInfo;
 import com.mikedeejay2.simplestack.bytecode.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
@@ -24,7 +25,7 @@ import static com.mikedeejay2.simplestack.mappings.MappingsLookup.nms;
  * @author Mikedeejay2
  */
 @Transformer("1.18-1.20.6")
-public class TransformBukkitMaterialGetMaxStackSize implements MethodVisitorInfo {
+public class TransformBukkitMaterialGetMaxStackSize implements MethodVisitorInfo, AdviceVisitorInfo {
     private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 
     @Override
@@ -37,7 +38,12 @@ public class TransformBukkitMaterialGetMaxStackSize implements MethodVisitorInfo
         return nms("BukkitMaterial").method("getMaxStackSize");
     }
 
-    public static int getBukkitMaterialMaxStackSize(int currentReturnValue, long startTime, Material material) {
+    @Override
+    public String getAdviceName() {
+        return "BukkitMaterial";
+    }
+
+    public static int bridgedMethod(int currentReturnValue, long startTime, Material material) {
         final MaterialMaxAmountEvent event = new MaterialMaxAmountEvent(material, currentReturnValue);
         SafeEventCall.callEvent(event);
         TIMINGS.collect(startTime, "Bukkit Material size redirect", true);

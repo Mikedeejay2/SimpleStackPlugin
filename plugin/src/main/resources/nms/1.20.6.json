@@ -62,9 +62,7 @@
       "drop": ["drop(LItemStack;ZZZ)LEntityItem;", "a(LItemStack;ZZ)LEntityItem;"]
     }
   },
-  "EntityItem": {
-    "class_name": ["net.minecraft.world.entity.item.ItemEntity", "net.minecraft.world.entity.item.EntityItem"]
-  },
+  "EntityItem": ["net.minecraft.world.entity.item.ItemEntity", "net.minecraft.world.entity.item.EntityItem"],
   "Container": {
     "class_name": ["net.minecraft.world.inventory.AbstractContainerMenu", "net.minecraft.world.inventory.Container"],
     "methods": {
@@ -110,18 +108,14 @@
       "LAVA_BUCKET": ["LAVA_BUCKET:LItem;", "qA:LItem;"]
     }
   },
-  "IMaterial": {
-    "class_name": ["net.minecraft.world.level.ItemLike", "net.minecraft.world.level.IMaterial"]
-  },
+  "IMaterial": ["net.minecraft.world.level.ItemLike", "net.minecraft.world.level.IMaterial"],
   "ItemSoup": {
     "class_name": ["net.minecraft.world.item.BowlFoodItem", "net.minecraft.world.item.ItemSoup"],
     "methods": {
       "finishUsingItem": ["finishUsingItem(LItemStack;LWorld;LEntityLiving;)LItemStack;", "a(LItemStack;LWorld;LEntityLiving;)LItemStack;"]
     }
   },
-  "World": {
-    "class_name": ["net.minecraft.world.level.Level", "net.minecraft.world.level.World"]
-  },
+  "World": ["net.minecraft.world.level.Level", "net.minecraft.world.level.World"],
   "EntityLiving": {
     "class_name": ["net.minecraft.world.entity.LivingEntity", "net.minecraft.world.entity.EntityLiving"],
     "methods": {
@@ -147,12 +141,8 @@
       "releaseUsing": ["releaseUsing(LItemStack;LWorld;LEntityLiving;I)V", "a(LItemStack;LWorld;LEntityLiving;I)V"]
     }
   },
-  "IInventory": {
-    "class_name": ["net.minecraft.world.Container", "net.minecraft.world.IInventory"]
-  },
-  "CraftInventory": {
-    "class_name": ["org.bukkit.craftbukkit.inventory.CraftInventory", "org.bukkit.craftbukkit.v1_20_R4.inventory.CraftInventory"]
-  },
+  "IInventory": ["net.minecraft.world.Container", "net.minecraft.world.IInventory"],
+  "CraftInventory": ["org.bukkit.craftbukkit.inventory.CraftInventory", "org.bukkit.craftbukkit.v1_20_R4.inventory.CraftInventory"],
   "SlotFurnaceFuel": {
     "class_name": ["net.minecraft.world.inventory.FurnaceFuelSlot", "net.minecraft.world.inventory.SlotFurnaceFuel"],
     "methods": {
@@ -172,9 +162,7 @@
       "canPlaceItem": ["canPlaceItem(ILItemStack;)Z", "b(ILItemStack;)Z"]
     }
   },
-  "EntityThrownTrident": {
-    "class_name": ["net.minecraft.world.entity.projectile.ThrownTrident", "net.minecraft.world.entity.projectile.EntityThrownTrident"]
-  },
+  "EntityThrownTrident": ["net.minecraft.world.entity.projectile.ThrownTrident", "net.minecraft.world.entity.projectile.EntityThrownTrident"],
   "DataComponentMap": "net.minecraft.core.component.DataComponentMap",
   "PatchedDataComponentMap": {
     "class_name": "net.minecraft.core.component.PatchedDataComponentMap",
@@ -199,7 +187,7 @@
   "PacketPlayInSetCreativeSlot": {
     "class_name": ["net.minecraft.network.protocol.game.ServerboundSetCreativeModeSlotPacket", "net.minecraft.network.protocol.game.PacketPlayInSetCreativeSlot"],
     "methods": {
-      "itemStack": ["itemStack()LItemStack;", "e()LItemStack;"]
+      "itemStack": ["itemStack()LItemStack;", "c()LItemStack;"]
     }
   },
   "SolidBucketItem": {
@@ -214,12 +202,8 @@
       "getItemInHand": ["getItemInHand()LItemStack;", "n()LItemStack;"]
     }
   },
-  "InteractionResult": {
-    "class_name": ["net.minecraft.world.InteractionResult", "net.minecraft.world.EnumInteractionResult"]
-  },
-  "InventoryMenu": {
-    "class_name": ["net.minecraft.world.inventory.InventoryMenu", "net.minecraft.world.inventory.ContainerPlayer"]
-  },
+  "InteractionResult": ["net.minecraft.world.InteractionResult", "net.minecraft.world.EnumInteractionResult"],
+  "InventoryMenu": ["net.minecraft.world.inventory.InventoryMenu", "net.minecraft.world.inventory.ContainerPlayer"],
   "JukeboxBlockEntity": {
     "class_name": ["net.minecraft.world.level.block.entity.JukeboxBlockEntity", "net.minecraft.world.level.block.entity.TileEntityJukeBox"],
     "methods": {

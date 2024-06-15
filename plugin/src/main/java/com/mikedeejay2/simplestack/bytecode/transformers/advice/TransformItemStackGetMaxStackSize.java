@@ -25,7 +25,7 @@ import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
  * @author Mikedeejay2
  */
 @Transformer("1.20.6")
-public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
+public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo, AdviceVisitorInfo {
     private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 
     @Override
@@ -36,6 +36,11 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
     @Override
     public MappingEntry getMappingEntry() {
         return nms("ItemStack").method("getMaxStackSize");
+    }
+
+    @Override
+    public String getAdviceName() {
+        return "ItemStack";
     }
 
     /**
@@ -50,7 +55,7 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
      * @param nmsItemStack The NMS <code>Item</code>
      * @return The new stack size
      */
-    public static int getItemStackMaxStackSize(int currentReturnValue, long startTime, Object nmsItemStack) {
+    public static int bridgedMethod(int currentReturnValue, long startTime, Object nmsItemStack) {
         final ItemStack itemStack = NmsConverters.itemStackToItemStack(nmsItemStack);
         final MaterialMaxAmountEvent materialEvent = new MaterialMaxAmountEvent(itemStack.getType(), currentReturnValue);
         SafeEventCall.callEvent(materialEvent);
@@ -76,7 +81,7 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo {
      * Advice class for <b>{@code net.minecraft.world.item.ItemStack}</b>. The code in this class is copied over to the
      * code in <b>{@code net.minecraft.world.ItemStack.Item#getMaxStackSize()}</b> to redirect functionality of that
      * method to Simple Stack. The method that is called as a result of this advice is
-     * {@link TransformItemStackGetMaxStackSize#getItemStackMaxStackSize(int, long, Object)}
+     * {@link TransformItemStackGetMaxStackSize#bridgedMethod(int, long, Object)}
      */
     public static class ItemStackAdvice {
 

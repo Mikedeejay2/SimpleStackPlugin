@@ -66,7 +66,8 @@
       "doClick": "b(IILInventoryClickType;LEntityHuman;)V",
       "doClickLambda": ["lambda$doClick$3(LSlot;LEntityHuman;LItemStack;)V", "lambda$5(LSlot;LEntityHuman;LItemStack;)V"],
       "moveItemStackTo": ["moveItemStackTo(LItemStack;IIZZ)Z", "a(LItemStack;IIZ)Z"],
-      "getSlot": "b(I)LSlot;"
+      "getSlot": "b(I)LSlot;",
+      "sendAllDataToRemote": "b()V"
     }
   },
   "InventoryClickType": "net.minecraft.world.inventory.InventoryClickType",
@@ -75,6 +76,9 @@
     "methods": {
       "drop": "a(LItemStack;ZZ)LEntityItem;",
       "getInventory": "fN()LPlayerInventory;"
+    },
+    "fields": {
+      "inventoryMenu": "bQ:LInventoryMenu;"
     }
   },
   "PlayerInventory": {
@@ -107,7 +111,12 @@
     }
   },
   "World": "net.minecraft.world.level.World",
-  "EntityLiving": "net.minecraft.world.entity.EntityLiving",
+  "EntityLiving": {
+    "class_name": "net.minecraft.world.entity.EntityLiving",
+    "methods": {
+      "isUsingItem": "fi()Z"
+    }
+  },
   "ItemSuspiciousStew": {
     "class_name": "net.minecraft.world.item.ItemSuspiciousStew",
     "methods": {
@@ -147,5 +156,37 @@
       "canPlaceItem": "b(ILItemStack;)Z"
     }
   },
-  "EntityThrownTrident": "net.minecraft.world.entity.projectile.EntityThrownTrident"
+  "EntityThrownTrident": "net.minecraft.world.entity.projectile.EntityThrownTrident",
+  "PlayerConnection": {
+    "class_name": "net.minecraft.server.network.PlayerConnection",
+    "methods": {
+      "handleSetCreativeModeSlot": "a(LPacketPlayInSetCreativeSlot;)V"
+    }
+  },
+  "PacketPlayInSetCreativeSlot": {
+    "class_name": "net.minecraft.network.protocol.game.PacketPlayInSetCreativeSlot",
+    "methods": {
+      "itemStack": "c()LItemStack;"
+    }
+  },
+  "SolidBucketItem": {
+    "class_name": "net.minecraft.world.item.SolidBucketItem",
+    "methods": {
+      "useOn": "a(LUseOnContext;)LInteractionResult;"
+    }
+  },
+  "UseOnContext": {
+    "class_name": "net.minecraft.world.item.context.ItemActionContext",
+    "methods": {
+      "getItemInHand": "n()LItemStack;"
+    }
+  },
+  "InteractionResult": "net.minecraft.world.EnumInteractionResult",
+  "InventoryMenu": "net.minecraft.world.inventory.ContainerPlayer",
+  "JukeboxBlockEntity": {
+    "class_name": "net.minecraft.world.level.block.entity.TileEntityJukeBox",
+    "methods": {
+      "setTheItem": "a(ILItemStack;)V"
+    }
+  }
 }

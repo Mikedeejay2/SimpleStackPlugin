@@ -23,7 +23,7 @@ import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
  * @author Mikedeejay2
  */
 @Transformer("1.18-1.20.6")
-public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
+public class TransformItemGetMaxStackSize implements MethodVisitorInfo, AdviceVisitorInfo {
     private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 
     @Override
@@ -34,6 +34,11 @@ public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
     @Override
     public MappingEntry getMappingEntry() {
         return nms("Item").method("getMaxStackSize");
+    }
+
+    @Override
+    public String getAdviceName() {
+        return "Item";
     }
 
     /**
@@ -47,7 +52,7 @@ public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
      * @param nmsItem The NMS <code>Item</code>
      * @return The new stack size
      */
-    public static int getItemMaxStackSize(int currentReturnValue, long startTime, Object nmsItem) {
+    public static int bridgedMethod(int currentReturnValue, long startTime, Object nmsItem) {
         final Material material = NmsConverters.itemToMaterial(nmsItem);
         final MaterialMaxAmountEvent event = new MaterialMaxAmountEvent(material, currentReturnValue);
         SafeEventCall.callEvent(event);
@@ -59,7 +64,7 @@ public class TransformItemGetMaxStackSize implements MethodVisitorInfo {
      * Advice class for <b>{@code net.minecraft.world.item.Item}</b>. The code in this class is copied over to the code
      * in <b>{@code net.minecraft.world.item.Item#getMaxStackSize()}</b> to redirect functionality of that method to
      * Simple Stack. The method that is called as a result of this advice is
-     * {@link TransformItemGetMaxStackSize#getItemMaxStackSize(int, long, Object)}
+     * {@link TransformItemGetMaxStackSize#bridgedMethod(int, long, Object)}
      */
     public static class ItemAdvice {
 

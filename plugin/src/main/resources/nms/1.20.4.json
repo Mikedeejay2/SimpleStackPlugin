@@ -28,5 +28,15 @@
       "BOWL": "pn:LItem;",
       "LAVA_BUCKET": "qx:LItem;"
     }
+  },
+  "EntityLiving": {
+    "methods": {
+      "isUsingItem": "fn()Z"
+    }
+  },
+  "JukeboxBlockEntity": {
+    "methods": {
+      "setTheItem": "b(LItemStack;)V"
+    }
   }
 }

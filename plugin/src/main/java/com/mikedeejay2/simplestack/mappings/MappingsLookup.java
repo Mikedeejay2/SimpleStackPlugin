@@ -138,6 +138,9 @@ public class MappingsLookup {
     private static List<String> collectClassNames(JsonElement classElement, String classRefName, boolean inner) {
         if(classElement.isJsonObject() && !inner) {
             final JsonObject classObject = classElement.getAsJsonObject();
+            if(holder.contains(classRefName) && !classObject.has("class_name")) {
+                return Collections.emptyList();
+            }
             Validate.isTrue(classObject.has("class_name"),
                             "Can not find class name for mapping \"%s\"", classRefName); // Should have a class name
             return collectClassNames(classObject.get("class_name"), classRefName, true);

@@ -13,7 +13,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.20.6")
+@Transformer("1.20-1.20.6")
 public class TransformHandleCreativeModeSlot extends MappedMethodVisitor {
     private final int itemStackIdx = 3;
     private boolean visitedItemStack = false;

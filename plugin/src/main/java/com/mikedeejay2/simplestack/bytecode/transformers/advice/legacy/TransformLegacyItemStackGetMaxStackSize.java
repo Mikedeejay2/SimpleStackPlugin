@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.bytecode.transformers.advice.legacy;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.event.ItemStackMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytecode.AdviceBridge;
+import com.mikedeejay2.simplestack.bytecode.AdviceVisitorInfo;
 import com.mikedeejay2.simplestack.bytecode.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
@@ -24,7 +25,7 @@ import static com.mikedeejay2.simplestack.mappings.MappingsLookup.nms;
  * @author Mikedeejay2
  */
 @Transformer("1.18-1.20.4")
-public class TransformLegacyItemStackGetMaxStackSize implements MethodVisitorInfo {
+public class TransformLegacyItemStackGetMaxStackSize implements MethodVisitorInfo, AdviceVisitorInfo {
     private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 
     @Override
@@ -37,7 +38,12 @@ public class TransformLegacyItemStackGetMaxStackSize implements MethodVisitorInf
         return nms("ItemStack").method("getMaxStackSize");
     }
 
-    public static int getItemStackMaxStackSize(int currentReturnValue, long startTime, Object nmsItemStack) {
+    @Override
+    public String getAdviceName() {
+        return "ItemStack";
+    }
+
+    public static int bridgedMethod(int currentReturnValue, long startTime, Object nmsItemStack) {
         final ItemStack itemStack = NmsConverters.itemStackToItemStack(nmsItemStack);
         final ItemStackMaxAmountEvent event = new ItemStackMaxAmountEvent(itemStack, currentReturnValue);
         SafeEventCall.callEvent(event);

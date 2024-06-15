@@ -24,7 +24,7 @@ import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
  * @author Mikedeejay2
  */
 @Transformer("1.18-1.20.6")
-public class TransformArmorSlotGetMaxStackSize implements MethodVisitorInfo {
+public class TransformArmorSlotGetMaxStackSize implements MethodVisitorInfo, AdviceVisitorInfo {
     private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 
     @Override
@@ -37,7 +37,12 @@ public class TransformArmorSlotGetMaxStackSize implements MethodVisitorInfo {
         return nms("ArmorSlot").method("getMaxStackSize");
     }
 
-    public static int getArmorSlotMaxStackSize(int currentReturnValue, long startTime, Object nmsSlot) {
+    @Override
+    public String getAdviceName() {
+        return "ArmorSlot";
+    }
+
+    public static int bridgedMethod(int currentReturnValue, long startTime, Object nmsSlot) {
         final Inventory inventory = NmsConverters.slotToInventory(nmsSlot);
         final int slot = NmsConverters.slotToSlot(nmsSlot);
         final SlotMaxAmountEvent slotEvent = new SlotMaxAmountEvent(inventory, slot, currentReturnValue);

@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.bytecode.transformers.advice;
 import com.mikedeejay2.simplestack.api.SimpleStackAPI;
 import com.mikedeejay2.simplestack.api.event.ItemStackMaxAmountEvent;
 import com.mikedeejay2.simplestack.bytecode.AdviceBridge;
+import com.mikedeejay2.simplestack.bytecode.AdviceVisitorInfo;
 import com.mikedeejay2.simplestack.bytecode.MethodVisitorInfo;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import com.mikedeejay2.simplestack.debug.SimpleStackTimingsImpl;
@@ -24,7 +25,7 @@ import static com.mikedeejay2.simplestack.mappings.MappingsLookup.nms;
  * @author Mikedeejay2
  */
 @Transformer("1.18-1.20.6")
-public class TransformBukkitItemStackGetMaxStackSize implements MethodVisitorInfo {
+public class TransformBukkitItemStackGetMaxStackSize implements MethodVisitorInfo, AdviceVisitorInfo {
     private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 
     @Override
@@ -37,7 +38,12 @@ public class TransformBukkitItemStackGetMaxStackSize implements MethodVisitorInf
         return nms("BukkitItemStack").method("getMaxStackSize");
     }
 
-    public static int getBukkitItemStackMaxStackSize(int currentReturnValue, long startTime, ItemStack itemStack) {
+    @Override
+    public String getAdviceName() {
+        return "BukkitItemStack";
+    }
+
+    public static int bridgedMethod(int currentReturnValue, long startTime, ItemStack itemStack) {
         final ItemStackMaxAmountEvent event = new ItemStackMaxAmountEvent(itemStack, currentReturnValue);
         SafeEventCall.callEvent(event);
         TIMINGS.collect(startTime, "Bukkit ItemStack size redirect", true);
