@@ -61,6 +61,5 @@
   "simplestack.info.install_transformer": "Simple Stack transformator installeren, dit kan even duren...",
   "simplestack.info.apply_transformations": "Transformaties toepassen, dit kan even duren...",
   "simplestack.info.finish_init": "Klaar met initialiseren.",
-  "simplestack.errors.incompatible_java_l1": "SimpleStack is niet compatibel met deze installatie vanm Java.",
-  "simplestack.errors.incompatible_java_l2": "Veelgebruikte oplossingen zijn om Java 9 of hoger te gebruiken OF een Java 8 JDK."
+  "simplestack.errors.incompatible_java_l1": "SimpleStack is niet compatibel met deze installatie vanm Java."
 }
