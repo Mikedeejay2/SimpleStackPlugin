@@ -62,5 +62,5 @@
   "simplestack.info.apply_transformations": "Applying transformations, this may take a moment...",
   "simplestack.info.finish_init": "Finished initialization.",
   "simplestack.errors.incompatible_java_l1": "SimpleStack is not compatible with this installation of Java.",
-  "simplestack.errors.incompatible_java_l2": "Common solutions are to use Java 9 or greater OR use a Java 8 JDK."
+  "simplestack.errors.incompatible_java_l2": "SimpleStack generally requires the server to be running on a JDK (Java Development Kit)."
 }
