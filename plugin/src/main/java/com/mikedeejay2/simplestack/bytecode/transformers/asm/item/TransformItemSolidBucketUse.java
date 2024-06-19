@@ -13,7 +13,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.20-1.20.6")
+@Transformer("1.19-1.20.6")
 public class TransformItemSolidBucketUse extends MappedMethodVisitor {
     protected boolean visitedAStore = false;
     protected boolean visitedGetStatic = false;

@@ -1,6 +1,5 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.asm.item;
 
-import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import com.mikedeejay2.simplestack.mappings.MappingEntry;
@@ -14,11 +13,9 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.20-1.20.6")
+@Transformer("1.19-1.20.6")
 public class TransformJukeboxEntitySetTheItem extends MappedMethodVisitor {
-    private final int stackIdx = MinecraftVersion.check(">=1.20.4") ? 1 : 2;
-    private boolean visitedIfNull = false;
-    private boolean visitedLabel = false;
+    private final int stackIdx = nms("JukeboxBlockEntity").method("setTheItem").descriptor().contains("(I") ? 2 : 1;
 
     @Override
     public MappingEntry getMappingEntry() {
@@ -29,28 +26,32 @@ public class TransformJukeboxEntitySetTheItem extends MappedMethodVisitor {
     public void visitCode() {
         super.visitCode();
 //        System.out.println("setTheItem");
-    }
-
-    @Override
-    public void visitJumpInsn(int opcode, Label label) {
-        super.visitJumpInsn(opcode, label);
-        if(!visitedIfNull && opcode == IFNULL) {
-            this.visitedIfNull = true;
-        }
-    }
-
-    @Override
-    public void visitLabel(Label label) {
-        super.visitLabel(label);
-        if(visitedIfNull && !visitedLabel) {
-            visitedLabel = true;
-            appendFixStackSize();
-        }
+        appendFixStackSize();
     }
 
     private void appendFixStackSize() {
-        super.visitVarInsn(ALOAD, stackIdx); // Load the ItemStack
-        super.visitInsn(ICONST_1);
-        super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("setCount"));
+        Label emptyLabel = new Label();
+        Label afterLabel = new Label();
+
+        super.visitVarInsn(ALOAD, stackIdx); // Load ItemStack (for later)
+        super.visitInsn(DUP); // Load ItemStack again
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getCount")); // Get the current count of the ItemStack
+        super.visitInsn(ICONST_1); // Load int 1
+        super.visitMethodInsn(
+            INVOKESTATIC, "java/lang/Math", "min",
+            "(II)I", false); // Call Math.min() with the min stack size and the current size
+        super.visitInsn(DUP);
+        super.visitInsn(ICONST_0);
+
+        // In 1.19 versions, if setCount is called on ItemStack.EMPTY, it crashes the server
+        super.visitJumpInsn(IF_ICMPEQ, emptyLabel); // If Math.min and 0 are equal, don't set count
+
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("setCount")); // Set the item to the minimum amount
+        super.visitJumpInsn(GOTO, afterLabel);
+        super.visitLabel(emptyLabel);
+
+        super.visitInsn(POP2);
+
+        super.visitLabel(afterLabel);
     }
 }

@@ -3,6 +3,7 @@ package com.mikedeejay2.simplestack.bytecode.transformers.asm;
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import com.mikedeejay2.simplestack.mappings.MappingEntry;
+import org.objectweb.asm.Label;
 
 import static com.mikedeejay2.simplestack.mappings.MappingsLookup.nms;
 import static org.objectweb.asm.Opcodes.*;
@@ -13,7 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.20-1.20.6")
+@Transformer("1.19-1.20.6")
 public class TransformHandleCreativeModeSlot extends MappedMethodVisitor {
     private final int itemStackIdx = 3;
     private boolean visitedItemStack = false;
@@ -56,6 +57,9 @@ public class TransformHandleCreativeModeSlot extends MappedMethodVisitor {
      * </pre>
      */
     private void appendItemStackLimit() {
+        Label emptyLabel = new Label();
+        Label afterLabel = new Label();
+
         super.visitVarInsn(ALOAD, itemStackIdx); // Load ItemStack (for later)
         super.visitInsn(DUP); // Load ItemStack again
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getMaxStackSize")); // Get the max stack size of the ItemStack
@@ -64,6 +68,18 @@ public class TransformHandleCreativeModeSlot extends MappedMethodVisitor {
         super.visitMethodInsn(
             INVOKESTATIC, "java/lang/Math", "min",
             "(II)I", false); // Call Math.min() with the min stack size and the current size
+        super.visitInsn(DUP);
+        super.visitInsn(ICONST_0);
+
+        // In 1.19 versions, if setCount is called on ItemStack.EMPTY, it crashes the server
+        super.visitJumpInsn(IF_ICMPEQ, emptyLabel); // If Math.min and 0 are equal, don't set count
+
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("setCount")); // Set the item to the minimum amount
+        super.visitJumpInsn(GOTO, afterLabel);
+        super.visitLabel(emptyLabel);
+
+        super.visitInsn(POP2);
+
+        super.visitLabel(afterLabel);
     }
 }

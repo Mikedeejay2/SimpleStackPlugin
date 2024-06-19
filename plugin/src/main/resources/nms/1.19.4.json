@@ -5,6 +5,14 @@
   "EntityHuman": {
     "methods": {
       "getInventory": "fJ()LPlayerInventory;"
+    },
+    "fields": {
+      "inventoryMenu": "bO:LInventoryMenu;"
+    }
+  },
+  "EntityLiving": {
+    "methods": {
+      "isUsingItem": "fe()Z"
     }
   },
   "Item": {
@@ -25,6 +33,11 @@
       "setCount": "f(I)V",
       "shrink": "h(I)V",
       "isSameItemSameTags": "d(LItemStack;LItemStack;)Z"
+    }
+  },
+  "JukeboxBlockEntity": {
+    "methods": {
+      "setTheItem": "a(ILItemStack;)V"
     }
   }
 }

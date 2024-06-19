@@ -1,6 +1,8 @@
 package com.mikedeejay2.simplestack.mappings;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -358,7 +360,7 @@ public class MappingsLookup {
     }
 
     private static List<String> jsonArrayToStringList(JsonArray array) {
-        return array.asList().stream()
+        return Lists.newArrayList(array).stream()
             .map(JsonElement::getAsString)
             .collect(Collectors.toList());
     }

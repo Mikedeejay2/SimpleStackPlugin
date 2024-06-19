@@ -4,5 +4,10 @@
     "methods": {
       "getInventory": "fA()LPlayerInventory;"
     }
+  },
+  "EntityLiving": {
+    "methods": {
+      "isUsingItem": "eT()Z"
+    }
   }
 }
