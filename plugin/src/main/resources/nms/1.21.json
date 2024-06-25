@@ -207,7 +207,7 @@
   "ItemUtils": {
     "class_name": "net.minecraft.world.item.ItemUtils",
     "methods": {
-      "createFilledResult": "createFilledResult(LItemStack;LPlayer;LItemStack;Z)LItemStack;"
+      "createFilledResult": "createFilledResult(LItemStack;LEntityHuman;LItemStack;Z)LItemStack;"
     }
   }
 }
