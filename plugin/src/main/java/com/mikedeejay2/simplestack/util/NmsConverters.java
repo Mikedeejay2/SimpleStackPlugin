@@ -88,6 +88,11 @@ public final class NmsConverters {
 
     public static Material itemToMaterial(Object nmsItem) {
         String key = nmsItem.toString();
+        final int indexOfColon = key.indexOf(":");
+        if(indexOfColon != -1) {
+            // Strip minecraft: from the name
+            key = key.substring(indexOfColon+1);
+        }
         key = key.toUpperCase(java.util.Locale.ENGLISH);
         Material material;
         try {
