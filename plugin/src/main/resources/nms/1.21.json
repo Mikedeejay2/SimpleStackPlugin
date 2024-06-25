@@ -109,12 +109,6 @@
     }
   },
   "IMaterial": ["net.minecraft.world.level.ItemLike", "net.minecraft.world.level.IMaterial"],
-  "ItemSoup": {
-    "class_name": ["net.minecraft.world.item.BowlFoodItem", "net.minecraft.world.item.ItemSoup"],
-    "methods": {
-      "finishUsingItem": ["finishUsingItem(LItemStack;LWorld;LEntityLiving;)LItemStack;", "a(LItemStack;LWorld;LEntityLiving;)LItemStack;"]
-    }
-  },
   "World": ["net.minecraft.world.level.Level", "net.minecraft.world.level.World"],
   "EntityLiving": {
     "class_name": ["net.minecraft.world.entity.LivingEntity", "net.minecraft.world.entity.EntityLiving"],
@@ -130,7 +124,7 @@
     }
   },
   "ArmorSlot": {
-    "class_name": ["net.minecraft.world.inventory.InventoryMenu$1", "net.minecraft.world.inventory.ContainerPlayer$1"],
+    "class_name": "net.minecraft.world.inventory.ArmorSlot",
     "methods": {
       "getMaxStackSize": ["getMaxStackSize()I", "a()I"]
     }
@@ -208,6 +202,12 @@
     "class_name": ["net.minecraft.world.level.block.entity.JukeboxBlockEntity", "net.minecraft.world.level.block.entity.TileEntityJukeBox"],
     "methods": {
       "setTheItem": ["setTheItem(LItemStack;)V", "b(LItemStack;)V"]
+    }
+  },
+  "ItemUtils": {
+    "class_name": "net.minecraft.world.item.ItemUtils",
+    "methods": {
+      "createFilledResult": "createFilledResult(LItemStack;LPlayer;LItemStack;Z)LItemStack;"
     }
   }
 }

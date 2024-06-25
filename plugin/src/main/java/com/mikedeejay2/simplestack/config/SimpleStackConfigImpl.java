@@ -18,9 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Field;
 import java.util.*;
 
 import static com.mikedeejay2.simplestack.config.SimpleStackConfigTypes.*;
@@ -99,6 +96,7 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
 
     @Override
     public int getUniqueItemAmount(@NotNull ItemStack item) {
+        if(uniqueItemMap.get().isEmpty()) return -1;
         final int amount = uniqueItemMap.get().getInt(item);
         return amount > 0 ? amount : -1;
     }
@@ -240,70 +238,9 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
             }).rename("unique_items.json", "unique_items_old.json");
         }
 
-        /**
-         * A strategy to compare items quickly. Uses {@link MethodHandle} to get {@link ItemMeta}, since it avoids
-         * cloning the item meta.
-         * <p>
-         * Benchmark of {@link ItemStack#getItemMeta()}, reflection, and method handle:
-         * <table>
-         *     <tr>
-         *         <th>Ms/tick (1 minute)</th>
-         *         <th>Minimum</th>
-         *         <th>Medium</th>
-         *         <th>Average</th>
-         *         <th>95th percentile</th>
-         *         <th>Maximum</th>
-         *     </tr>
-         *     <tr>
-         *         <td>getItemMeta</td>
-         *         <td>1.29ms</td>
-         *         <td>1.52ms</td>
-         *         <td>1.84ms</td>
-         *         <td>4.13ms</td>
-         *         <td>9.63ms</td>
-         *     </tr>
-         *     <tr>
-         *         <td>Reflection</td>
-         *         <td>1.08ms</td>
-         *         <td>1.25ms</td>
-         *         <td>1.49ms</td>
-         *         <td>3.75ms</td>
-         *         <td>8.90ms</td>
-         *     </tr>
-         *     <tr>
-         *         <td>Handle</td>
-         *         <td>1.11ms</td>
-         *         <td>1.25ms</td>
-         *         <td>1.45ms</td>
-         *         <td>3.24ms</td>
-         *         <td>5.89ms</td>
-         *     </tr>
-         * </table>
-         *
-         * @author Mikedeejay2
-         */
         private static final class UniqueStrategy implements Hash.Strategy<ItemStack> {
-            private static final MethodHandle HANDLE_META;
-
-            static {
-                final MethodHandles.Lookup lookup = MethodHandles.lookup();
-                try {
-                    final Field metaField = ItemStack.class.getDeclaredField("meta");
-                    metaField.setAccessible(true);
-                    HANDLE_META = lookup.unreflectGetter(metaField);
-                } catch(NoSuchFieldException | IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            private static ItemMeta fastGetMeta(ItemStack stack) {
-                // If not Bukkit ItemStack, get meta regularly
-                if(stack.getClass().getSimpleName().length() != 9) return stack.hasItemMeta() ? stack.getItemMeta() : null;
-                try {
-                    return (ItemMeta) HANDLE_META.invokeExact(stack);
-                } catch(Throwable e) {
-                    throw new RuntimeException(e);
-                }
+            private static ItemMeta getItemMeta(ItemStack stack) {
+                return stack.getItemMeta(); // TODO: Config rewrite will better address this
             }
 
             @Override
@@ -313,7 +250,7 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
                 hash = hash * 31 + o.getType().hashCode();
                 hash = hash * 31 + 1; // Don't include amount
                 hash = hash * 31; // Don't include durability
-                final ItemMeta meta = fastGetMeta(o);
+                final ItemMeta meta = getItemMeta(o);
                 hash = hash * 31 + (meta != null ? meta.hashCode() : 0);
 
                 return hash;
@@ -324,8 +261,8 @@ public class SimpleStackConfigImpl extends ConfigFile implements SimpleStackConf
                 if(a == b) return true;
                 if(a == null || b == null) return false;
                 if(a.getType() != b.getType()) return false;
-                final ItemMeta aMeta = fastGetMeta(a);
-                final ItemMeta bMeta = fastGetMeta(b);
+                final ItemMeta aMeta = getItemMeta(a);
+                final ItemMeta bMeta = getItemMeta(b);
                 if(aMeta == bMeta) return true;
                 if(aMeta == null || bMeta == null) return false;
                 return aMeta.equals(bMeta);

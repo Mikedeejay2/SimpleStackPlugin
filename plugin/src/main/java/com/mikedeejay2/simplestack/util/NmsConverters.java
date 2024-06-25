@@ -61,10 +61,10 @@ public final class NmsConverters {
 
             final Class<?> itemStackClass = nms("ItemStack").toClass();
             final Class<?> craftItemStackClass = nms("CraftItemStack").toClass();
-            final Method methodAsBukkitCopy = craftItemStackClass.getMethod(
-                lastNms().method("asBukkitCopy").name(), itemStackClass);
-            methodAsBukkitCopy.setAccessible(true);
-            HANDLE_AS_BUKKIT_COPY = lookup.unreflect(methodAsBukkitCopy);
+            final Method methodAsCraftMirror = craftItemStackClass.getMethod(
+                lastNms().method("asCraftMirror").name(), itemStackClass);
+            methodAsCraftMirror.setAccessible(true);
+            HANDLE_AS_BUKKIT_COPY = lookup.unreflect(methodAsCraftMirror);
 
             final Class<?> slotClass = nms("Slot").toClass();
             final Field fieldSlotSlot = slotClass.getDeclaredField(lastNms().field("slot").name());
