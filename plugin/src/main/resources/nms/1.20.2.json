@@ -14,5 +14,6 @@
     "methods": {
       "itemStack": "d()LItemStack;"
     }
-  }
+  },
+  "CraftMagicNumbers": "org.bukkit.craftbukkit.v1_20_R2.util.CraftMagicNumbers"
 }

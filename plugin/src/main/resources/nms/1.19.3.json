@@ -30,5 +30,6 @@
       "BOWL": "od:LItem;",
       "LAVA_BUCKET": "pl:LItem;"
     }
-  }
+  },
+  "CraftMagicNumbers": "org.bukkit.craftbukkit.v1_19_R2.util.CraftMagicNumbers"
 }

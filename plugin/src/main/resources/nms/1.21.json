@@ -209,5 +209,11 @@
     "methods": {
       "createFilledResult": "createFilledResult(LItemStack;LEntityHuman;LItemStack;Z)LItemStack;"
     }
+  },
+  "CraftMagicNumbers": {
+    "class_name": "org.bukkit.craftbukkit.util.CraftMagicNumbers",
+    "methods": {
+      "getMaterial": "getMaterial(LItem;)LBukkitMaterial;"
+    }
   }
 }

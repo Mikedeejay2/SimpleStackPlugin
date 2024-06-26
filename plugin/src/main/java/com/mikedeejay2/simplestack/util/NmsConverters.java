@@ -49,10 +49,11 @@ import static com.mikedeejay2.simplestack.mappings.MappingsLookup.nms;
  * @author Mikedeejay2
  */
 public final class NmsConverters {
-    private static final MethodHandle HANDLE_AS_BUKKIT_COPY;
-    private static final MethodHandle HANDLE_SLOT_SLOT;
-    private static final MethodHandle HANDLE_SLOT_CONTAINER;
-    private static final MethodHandle HANDLE_CRAFT_INVENTORY;
+    private static final MethodHandle HANDLE_ITEMSTACK_AS_CRAFT_MIRROR;
+    private static final MethodHandle HANDLE_SLOT_AS_INT;
+    private static final MethodHandle HANDLE_SLOT_TO_CONTAINER;
+    private static final MethodHandle HANDLE_INVENTORY_TO_CRAFT_INVENTORY;
+    private static final MethodHandle HANDLE_ITEM_TO_BUKKIT_MATERIAL;
 
     // Get all NMS classes and methods using MappingsLookup
     static {
@@ -64,22 +65,28 @@ public final class NmsConverters {
             final Method methodAsCraftMirror = craftItemStackClass.getMethod(
                 lastNms().method("asCraftMirror").name(), itemStackClass);
             methodAsCraftMirror.setAccessible(true);
-            HANDLE_AS_BUKKIT_COPY = lookup.unreflect(methodAsCraftMirror);
+            HANDLE_ITEMSTACK_AS_CRAFT_MIRROR = lookup.unreflect(methodAsCraftMirror);
 
             final Class<?> slotClass = nms("Slot").toClass();
             final Field fieldSlotSlot = slotClass.getDeclaredField(lastNms().field("slot").name());
             fieldSlotSlot.setAccessible(true);
-            HANDLE_SLOT_SLOT = lookup.unreflectGetter(fieldSlotSlot);
+            HANDLE_SLOT_AS_INT = lookup.unreflectGetter(fieldSlotSlot);
 
             final Field fieldSlotContainer = slotClass.getDeclaredField(lastNms().field("container").name());
             fieldSlotContainer.setAccessible(true);
-            HANDLE_SLOT_CONTAINER = lookup.unreflectGetter(fieldSlotContainer);
+            HANDLE_SLOT_TO_CONTAINER = lookup.unreflectGetter(fieldSlotContainer);
 
             final Class<?> iInventoryClass = nms("IInventory").toClass();
             final Class<?> craftInventoryClass = nms("CraftInventory").toClass();
             final Constructor<?> constructorCraftInventory = craftInventoryClass.getConstructor(iInventoryClass);
             constructorCraftInventory.setAccessible(true);
-            HANDLE_CRAFT_INVENTORY = lookup.unreflectConstructor(constructorCraftInventory);
+            HANDLE_INVENTORY_TO_CRAFT_INVENTORY = lookup.unreflectConstructor(constructorCraftInventory);
+
+            final Class<?> itemClass = nms("Item").toClass();
+            final Class<?> craftMagicNumbersClass = nms("CraftMagicNumbers").toClass();
+            final Method methodGetMaterial = craftMagicNumbersClass.getMethod(
+                lastNms().method("getMaterial").name(), itemClass);
+            HANDLE_ITEM_TO_BUKKIT_MATERIAL = lookup.unreflect(methodGetMaterial);
         } catch(NoSuchMethodException | NoSuchFieldException | IllegalAccessException e) {
             Bukkit.getLogger().severe("SimpleStack cannot locate NMS classes");
             throw new RuntimeException(e);
@@ -87,18 +94,11 @@ public final class NmsConverters {
     }
 
     public static Material itemToMaterial(Object nmsItem) {
-        String key = nmsItem.toString();
-        final int indexOfColon = key.indexOf(":");
-        if(indexOfColon != -1) {
-            // Strip minecraft: from the name
-            key = key.substring(indexOfColon+1);
-        }
-        key = key.toUpperCase(java.util.Locale.ENGLISH);
         Material material;
         try {
-            material = Material.valueOf(key);
-        } catch(IllegalArgumentException e) {
-            Bukkit.getLogger().log(Level.SEVERE, String.format("SimpleStack could not find material of ID \"%s\"", key), e);
+            material = (Material) HANDLE_ITEM_TO_BUKKIT_MATERIAL.invoke(nmsItem);
+        } catch(Throwable e) {
+            Bukkit.getLogger().log(Level.SEVERE, String.format("SimpleStack could not find material of ID \"%s\"", nmsItem), e);
             return null;
         }
         return material;
@@ -106,7 +106,7 @@ public final class NmsConverters {
 
     public static ItemStack itemStackToItemStack(Object nmsItemStack) {
         try {
-            return (ItemStack) HANDLE_AS_BUKKIT_COPY.invoke(nmsItemStack);
+            return (ItemStack) HANDLE_ITEMSTACK_AS_CRAFT_MIRROR.invoke(nmsItemStack);
         } catch(Throwable e) {
             Bukkit.getLogger().log(Level.SEVERE, String.format("SimpleStack could not convert ItemStack \"%s\"", nmsItemStack), e);
             return null;
@@ -115,7 +115,7 @@ public final class NmsConverters {
 
     public static int slotToSlot(Object nmsSlot) {
         try {
-            return (int) HANDLE_SLOT_SLOT.invoke(nmsSlot);
+            return (int) HANDLE_SLOT_AS_INT.invoke(nmsSlot);
         } catch(Throwable e) {
             Bukkit.getLogger().log(Level.SEVERE, String.format("SimpleStack could not convert slot \"%s\"", nmsSlot), e);
             return -1;
@@ -124,8 +124,8 @@ public final class NmsConverters {
 
     public static Inventory slotToInventory(Object nmsSlot) {
         try {
-            Object nmsIInventory = HANDLE_SLOT_CONTAINER.invoke(nmsSlot);
-            return (Inventory) HANDLE_CRAFT_INVENTORY.invoke(nmsIInventory);
+            Object nmsIInventory = HANDLE_SLOT_TO_CONTAINER.invoke(nmsSlot);
+            return (Inventory) HANDLE_INVENTORY_TO_CRAFT_INVENTORY.invoke(nmsIInventory);
         } catch(Throwable e) {
             Bukkit.getLogger().log(Level.SEVERE, String.format("SimpleStack could not convert slot \"%s\"", nmsSlot), e);
             return null;

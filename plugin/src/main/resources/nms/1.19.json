@@ -188,5 +188,11 @@
     "methods": {
       "setTheItem": "a(LItemStack;)V"
     }
+  },
+  "CraftMagicNumbers": {
+    "class_name": "org.bukkit.craftbukkit.v1_19_R1.util.CraftMagicNumbers",
+    "methods": {
+      "getMaterial": "getMaterial(LItem;)LBukkitMaterial;"
+    }
   }
 }

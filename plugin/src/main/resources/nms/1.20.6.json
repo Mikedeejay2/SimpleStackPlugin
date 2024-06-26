@@ -209,5 +209,11 @@
     "methods": {
       "setTheItem": ["setTheItem(LItemStack;)V", "b(LItemStack;)V"]
     }
+  },
+  "CraftMagicNumbers": {
+    "class_name": ["org.bukkit.craftbukkit.util.CraftMagicNumbers", "org.bukkit.craftbukkit.v1_20_R4.util.CraftMagicNumbers"],
+    "methods": {
+      "getMaterial": "getMaterial(LItem;)LBukkitMaterial;"
+    }
   }
 }

@@ -147,5 +147,11 @@
       "canPlaceItem": "b(ILItemStack;)Z"
     }
   },
-  "EntityThrownTrident": "net.minecraft.world.entity.projectile.EntityThrownTrident"
+  "EntityThrownTrident": "net.minecraft.world.entity.projectile.EntityThrownTrident",
+  "CraftMagicNumbers": {
+    "class_name": "org.bukkit.craftbukkit.v1_18_R1.util.CraftMagicNumbers",
+    "methods": {
+      "getMaterial": "getMaterial(LItem;)LBukkitMaterial;"
+    }
+  }
 }

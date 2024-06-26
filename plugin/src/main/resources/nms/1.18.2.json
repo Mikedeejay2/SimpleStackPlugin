@@ -28,5 +28,11 @@
     "methods": {
       "getInventory": "fr()LPlayerInventory;"
     }
+  },
+  "CraftMagicNumbers": {
+    "class_name": "org.bukkit.craftbukkit.v1_18_R2.util.CraftMagicNumbers",
+    "methods": {
+      "getMaterial": "getMaterial(LItem;)LBukkitMaterial;"
+    }
   }
 }
