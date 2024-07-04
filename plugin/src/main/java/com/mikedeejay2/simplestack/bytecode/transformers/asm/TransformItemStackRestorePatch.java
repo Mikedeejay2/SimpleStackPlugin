@@ -15,27 +15,27 @@ import static org.objectweb.asm.Opcodes.*;
  * @author Mikedeejay2
  */
 @Transformer("1.18-1.21")
-public class TransformItemStackInit extends MappedMethodVisitor {
-    private boolean visitedReturn = false;
+public class TransformItemStackRestorePatch extends MappedMethodVisitor {
+    private boolean visitedInvoke = false;
 
     @Override
     public MappingEntry getMappingEntry() {
-        return nms("ItemStack").method("<init2>");
+        return nms("ItemStack").method("restorePatch");
     }
 
     @Override
     public void visitCode() {
         super.visitCode();
-//        System.out.println("initfull");
+//        System.out.println("restorePatch");
     }
 
     @Override
-    public void visitInsn(int opcode) {
-        if(!visitedReturn && opcode == RETURN) {
-            visitedReturn = true;
+    public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
+        super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
+        if(!visitedInvoke && opcode == INVOKEVIRTUAL) {
+            visitedInvoke = true;
             appendGetMaxStackSize();
         }
-        super.visitInsn(opcode);
     }
 
     private void appendGetMaxStackSize() {

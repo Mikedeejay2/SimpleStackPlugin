@@ -19,6 +19,7 @@
       "isSameItemSameTags": "e(LItemStack;LItemStack;)Z",
       "isEmpty": "b()Z",
       "<init>": "<init>(LIMaterial;)V",
+      "<init2>": "<init>(LIMaterial;I)V",
       "isDamaged": "g()Z",
       "isStackable": "e()Z",
       "is": "a(LItem;)Z"
@@ -30,7 +31,7 @@
   "CraftItemStack": {
     "class_name": "org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack",
     "methods": {
-      "asBukkitCopy": "asBukkitCopy(LItemStack;)LBukkitItemStack;",
+      "asCraftMirror": "asCraftMirror(LItemStack;)LCraftItemStack;",
       "getMaxStackSize": "getMaxStackSize()I"
     }
   },
@@ -147,5 +148,11 @@
       "canPlaceItem": "b(ILItemStack;)Z"
     }
   },
-  "EntityThrownTrident": "net.minecraft.world.entity.projectile.EntityThrownTrident"
+  "EntityThrownTrident": "net.minecraft.world.entity.projectile.EntityThrownTrident",
+  "CraftMagicNumbers": {
+    "class_name": "org.bukkit.craftbukkit.v1_18_R1.util.CraftMagicNumbers",
+    "methods": {
+      "getMaterial": "getMaterial(LItem;)LBukkitMaterial;"
+    }
+  }
 }

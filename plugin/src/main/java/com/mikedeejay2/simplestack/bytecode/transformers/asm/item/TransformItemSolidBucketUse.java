@@ -13,12 +13,14 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.19-1.20.6")
+@Transformer("1.20.6-1.21")
 public class TransformItemSolidBucketUse extends MappedMethodVisitor {
-    protected boolean visitedAStore = false;
-    protected boolean visitedGetStatic = false;
-    protected boolean visitedInvoke = false;
-    protected boolean visitedSetItemInHand = false;
+    protected boolean visitedSetItemStart = false; // The start (before loading to stack) of the setItemInHand method
+    protected boolean visitedAloadPlayer = false; // Loading the player for the setItemInHand method (prior to any arguments)
+    protected boolean visitedGetItemStart = false; // The start (before loading to stack) of retrieving the item to set in the player's hand
+    protected boolean visitedExtraInvoke = false; // Invoke between the start and the actual setItemInHand call
+    protected boolean visitedSetItem = false; // The invoke for setItemInHand
+    protected boolean appendedJumpFix = false; // Appending inventory update to prevent bucket from jumping in the inventory
 
     @Override
     public MappingEntry getMappingEntry() {
@@ -28,90 +30,67 @@ public class TransformItemSolidBucketUse extends MappedMethodVisitor {
     @Override
     public void visitCode() {
         super.visitCode();
-//        debugPrintString("Test of getEmptySuccessItem method");
+//        debugPrintString("Test of useOn method");
+    }
+
+    @Override
+    public void visitJumpInsn(int opcode, Label label) {
+        super.visitJumpInsn(opcode, label);
+        if(!visitedSetItemStart && opcode == IFNULL) { // Unique instruction to 1.21+
+            visitedSetItemStart = true;
+        }
     }
 
     @Override
     public void visitVarInsn(int opcode, int varIndex) {
         super.visitVarInsn(opcode, varIndex);
-        if(!visitedAStore && opcode == ASTORE && varIndex == 4) {
-            visitedAStore = true;
-            appendStackedBucketsFix();
+        if(!visitedSetItemStart && opcode == ASTORE && varIndex == 4) { // Unique instruction to 1.20.6 or less
+            visitedSetItemStart = true;
+        } else if(visitedSetItemStart && !visitedAloadPlayer && opcode == ALOAD && varIndex == 3) { // Player index is 3 on all versions
+            visitedAloadPlayer = true;
+        } else if(!visitedGetItemStart && visitedAloadPlayer && opcode == ALOAD && varIndex == 4) { // For 1.20.6 or less, target loading player's hand
+            visitedGetItemStart = true;
+            appendInputArgs();
         }
-    }
-
-    @Override
-    public void visitFieldInsn(int opcode, String owner, String name, String descriptor) {
-        if(visitedAStore && !visitedGetStatic && opcode == GETSTATIC && equalsMapping(
-            owner, name, descriptor, nms("Items").field("BUCKET"))) { // Get Items.BUCKET instruction
-            visitedGetStatic = true;
-            // Load stack to be used in setItemInHand call
-            super.visitVarInsn(ALOAD, 5);
-            return;
-        }
-        super.visitFieldInsn(opcode, owner, name, descriptor);
     }
 
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
-        if(visitedGetStatic && !visitedInvoke && opcode == INVOKEVIRTUAL) { // Target setItemInHand and getDefaultInstance()
-            visitedInvoke = true;
-            // Cancel invocation of getDefaultInstance on Items.BUCKET
-            return;
+        if(!visitedSetItem && visitedExtraInvoke && opcode == INVOKEVIRTUAL) {
+            visitedSetItem = true;
+            appendCreateFilledResult();
         }
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
-        if(visitedInvoke && !visitedSetItemInHand) {
-            visitedSetItemInHand = true;
+        if(!visitedGetItemStart && visitedAloadPlayer && opcode == INVOKEVIRTUAL) { // For 1.21+, target inlined getHand
+            visitedGetItemStart = true;
+            appendInputArgs();
+        } else if (!visitedExtraInvoke && visitedGetItemStart && opcode == INVOKEVIRTUAL) { // Flag the in between invoke (start of args > extra invoke > invoke call)
+            visitedExtraInvoke = true;
+        } else if(!appendedJumpFix && visitedSetItem) { // After setting the item, update the inventory for the client
+            appendedJumpFix = true;
             appendInventoryUpdate();
         }
     }
 
     /**
-     * Fixes stacked buckets from being replaced by a bucket upon use.
+     * Appends the call for ItemUtils.createFilledResult to perform proper stack checking, dropping if necessary, etc
      */
-    private void appendStackedBucketsFix() {
-        Label emptyBucketLabel = new Label();
-        super.visitVarInsn(ALOAD, 1); // Load useOnContext argument
-        super.visitMethodInsn(INVOKEVIRTUAL, nms("UseOnContext").method("getItemInHand")); // Get the ItemStack used
-        super.visitVarInsn(ASTORE, 5); // Save to index 5 (first unused index)
+    private void appendCreateFilledResult() {
+        visitInsn(ICONST_1); // Load true boolean for creative override argument
+        visitMethodInsn(INVOKESTATIC, nms("ItemUtils").method("createFilledResult")); // Call createFilledResult (proper stack checking)
+    }
 
-        super.visitVarInsn(ALOAD, 5); // Load ItemStack
-        super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("isEmpty")); // Get whether ItemStack is empty
-        super.visitJumpInsn(IFNE, emptyBucketLabel); // If it is empty, jump to empty bucket
-
-        // Get PlayerInventory
-        super.visitVarInsn(ALOAD, 3); // Load EntityHuman (Player)
-        super.visitMethodInsn(INVOKEVIRTUAL, nms("EntityHuman").method("getInventory"));
-        // New empty bucket ItemStack
-        super.visitTypeInsn(NEW, nms("ItemStack").internalName()); // Create new ItemStack
-        super.visitInsn(DUP); // Duplicate this ItemStack on the stack
-        super.visitFieldInsn(GETSTATIC, nms("Items").field("BUCKET")); // Get Bucket material
-        super.visitMethodInsn(INVOKESPECIAL, nms("ItemStack").method("<init>")); // Call the ItemStack's constructor
-        super.visitVarInsn(ASTORE, 6); // Store the new ItemStack to local index 6
-        super.visitVarInsn(ALOAD, 6); // Load the new ItemStack
-        // Add new bucket to inventory
-        super.visitMethodInsn(INVOKEVIRTUAL, nms("PlayerInventory").method("add")); // Attempt to add bucket to inventory
-        // If it failed, drop on ground
-        Label ifNotDropLabel = new Label();
-        super.visitJumpInsn(IFNE, ifNotDropLabel); // If no items need to be dropped, bypass drop method
-
-        super.visitVarInsn(ALOAD, 3); // Load EntityHuman
-        super.visitVarInsn(ALOAD, 6); // Load the new ItemStack (empty bucket)
-        super.visitInsn(ICONST_0); // Load false (don't throw randomly)
-        super.visitInsn(ICONST_1); // Load true (retain ownership of thrown item)
-        super.visitMethodInsn(INVOKEVIRTUAL, nms("EntityHuman").method("drop")); // Drop the rest of the item
-        super.visitInsn(POP); // Pop the resulting EntityItem
-
-        super.visitLabel(emptyBucketLabel);
-
-        // If the existing stack is empty, set it to a bucket
-        super.visitTypeInsn(NEW, nms("ItemStack").internalName()); // Create new ItemStack
-        super.visitInsn(DUP); // Duplicate this ItemStack on the stack
-        super.visitFieldInsn(GETSTATIC, nms("Items").field("BUCKET")); // Get Bucket material
-        super.visitMethodInsn(INVOKESPECIAL, nms("ItemStack").method("<init>")); // Call the ItemStack's constructor
-        super.visitVarInsn(ASTORE, 5); // Store the existing stack variable
-
-        super.visitLabel(ifNotDropLabel);
+    /**
+     * Appends the first two arguments (before output stack argument) to the stack
+     */
+    private void appendInputArgs() {
+        // Get the current item being held by the player
+        super.visitVarInsn(ALOAD, 1); // Load UseOnContext
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("UseOnContext").method("getItemInHand")); // Get the item in hand
+        super.visitInsn(DUP); // Duplicate the item on the stack
+        super.visitInsn(ICONST_M1); // Load -1 to the stack (grow 1)
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("shrink")); // Grow the ItemStack by 1 (prevent use consuming twice)
+        super.visitVarInsn(ALOAD, 3); // Load the player
     }
 
     /**

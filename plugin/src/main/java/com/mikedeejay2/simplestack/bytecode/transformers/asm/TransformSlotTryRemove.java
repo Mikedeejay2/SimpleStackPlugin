@@ -12,7 +12,7 @@ import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.20.6")
+@Transformer("1.18-1.21")
 public class TransformSlotTryRemove extends MappedMethodVisitor {
     @Override
     public MappingEntry getMappingEntry() {

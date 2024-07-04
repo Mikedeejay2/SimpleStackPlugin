@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.bytecode.transformers.asm.item;
+package com.mikedeejay2.simplestack.bytecode.transformers.asm.item.legacy;
 
 import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
