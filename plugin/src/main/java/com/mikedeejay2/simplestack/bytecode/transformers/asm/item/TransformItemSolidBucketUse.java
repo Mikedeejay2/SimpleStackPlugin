@@ -13,7 +13,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.19-1.21")
+@Transformer("1.20.6-1.21")
 public class TransformItemSolidBucketUse extends MappedMethodVisitor {
     protected boolean visitedSetItemStart = false; // The start (before loading to stack) of the setItemInHand method
     protected boolean visitedAloadPlayer = false; // Loading the player for the setItemInHand method (prior to any arguments)
@@ -30,7 +30,7 @@ public class TransformItemSolidBucketUse extends MappedMethodVisitor {
     @Override
     public void visitCode() {
         super.visitCode();
-//        debugPrintString("Test of getEmptySuccessItem method");
+//        debugPrintString("Test of useOn method");
     }
 
     @Override

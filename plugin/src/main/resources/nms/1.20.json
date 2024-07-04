@@ -19,6 +19,7 @@
       "isSameItemSameTags": "c(LItemStack;LItemStack;)Z",
       "isEmpty": "b()Z",
       "<init>": "<init>(LIMaterial;)V",
+      "<init2>": "<init>(LIMaterial;I)V",
       "isDamaged": "j()Z",
       "isStackable": "h()Z",
       "is": "a(LItem;)Z"

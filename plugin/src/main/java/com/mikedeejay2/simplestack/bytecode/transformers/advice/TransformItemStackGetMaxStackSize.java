@@ -13,6 +13,7 @@ import com.mikedeejay2.simplestack.util.SafeEventCall;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.logging.Level;
@@ -57,6 +58,7 @@ public class TransformItemStackGetMaxStackSize implements MethodVisitorInfo, Adv
      */
     public static int bridgedMethod(int currentReturnValue, long startTime, Object nmsItemStack) {
         final ItemStack itemStack = NmsConverters.itemStackToItemStack(nmsItemStack);
+        if(itemStack.getType() == Material.AIR) return currentReturnValue;
         final MaterialMaxAmountEvent materialEvent = new MaterialMaxAmountEvent(itemStack.getType(), currentReturnValue);
         SafeEventCall.callEvent(materialEvent);
         final ItemStackMaxAmountEvent stackEvent = new ItemStackMaxAmountEvent(itemStack, materialEvent.getAmount());

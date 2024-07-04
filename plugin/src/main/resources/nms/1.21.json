@@ -23,7 +23,8 @@
       "isDamaged": ["isDamaged()Z", "m()Z"],
       "isStackable": ["isStackable()Z", "k()Z"],
       "is": ["is(LItem;)Z", "a(LItem;)Z"],
-      "limitSize": ["limitSize(I)V", "f(I)V"]
+      "limitSize": ["limitSize(I)V", "f(I)V"],
+      "restorePatch": "restorePatch(LDataComponentPatch;)V"
     },
     "fields": {
       "EMPTY": ["EMPTY:LItemStack;", "l:LItemStack;"],
@@ -215,5 +216,6 @@
     "methods": {
       "getMaterial": "getMaterial(LItem;)LBukkitMaterial;"
     }
-  }
+  },
+  "DataComponentPatch": "net.minecraft.core.component.DataComponentPatch"
 }
