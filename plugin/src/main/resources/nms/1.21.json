@@ -15,7 +15,7 @@
       "copy": ["copy()LItemStack;", "s()LItemStack;"],
       "setCount": ["setCount(I)V", "e(I)V"],
       "shrink": ["shrink(I)V", "h(I)V"],
-      "getCount": ["getCount()I", "I()I"],
+      "getCount": ["getCount()I", "H()I"],
       "isSameItemSameTags": ["isSameItemSameComponents(LItemStack;LItemStack;)Z", "c(LItemStack;LItemStack;)Z"],
       "isEmpty": ["isEmpty()Z", "e()Z"],
       "<init>": "<init>(LIMaterial;)V",
@@ -32,7 +32,7 @@
     }
   },
   "CraftItemStack": {
-    "class_name": ["org.bukkit.craftbukkit.inventory.CraftItemStack", "org.bukkit.craftbukkit.v1_20_R4.inventory.CraftItemStack"],
+    "class_name": ["org.bukkit.craftbukkit.inventory.CraftItemStack", "org.bukkit.craftbukkit.v1_21_R1.inventory.CraftItemStack"],
     "methods": {
       "asCraftMirror": "asCraftMirror(LItemStack;)LCraftItemStack;",
       "getMaxStackSize": "getMaxStackSize()I"
@@ -81,10 +81,10 @@
     "class_name": ["net.minecraft.world.entity.player.Player", "net.minecraft.world.entity.player.EntityHuman"],
     "methods": {
       "drop": ["drop(LItemStack;ZZ)LEntityItem;", "a(LItemStack;ZZ)LEntityItem;"],
-      "getInventory": ["getInventory()LPlayerInventory;", "gc()LPlayerInventory;"]
+      "getInventory": ["getInventory()LPlayerInventory;", "fY()LPlayerInventory;"]
     },
     "fields": {
-      "inventoryMenu": ["inventoryMenu:LInventoryMenu;", "ca:LInventoryMenu;"]
+      "inventoryMenu": ["inventoryMenu:LInventoryMenu;", "cc:LInventoryMenu;"]
     }
   },
   "PlayerInventory": {
@@ -105,7 +105,7 @@
     "class_name": "net.minecraft.world.item.Items",
     "fields": {
       "BUCKET": ["BUCKET:LItem;", "qy:LItem;"],
-      "BOWL": ["BOWL:LItem;", "pq:LItem;"],
+      "BOWL": ["BOWL:LItem;", "ot:LItem;"],
       "LAVA_BUCKET": ["LAVA_BUCKET:LItem;", "qA:LItem;"]
     }
   },
@@ -114,8 +114,8 @@
   "EntityLiving": {
     "class_name": ["net.minecraft.world.entity.LivingEntity", "net.minecraft.world.entity.EntityLiving"],
     "methods": {
-      "hasInfiniteMaterials": ["hasInfiniteMaterials()Z", "fP()Z"],
-      "isUsingItem": ["isUsingItem()Z", "fv()Z"]
+      "hasInfiniteMaterials": ["hasInfiniteMaterials()Z", "fL()Z"],
+      "isUsingItem": ["isUsingItem()Z", "fr()Z"]
     }
   },
   "ItemSuspiciousStew": {
@@ -137,7 +137,7 @@
     }
   },
   "IInventory": ["net.minecraft.world.Container", "net.minecraft.world.IInventory"],
-  "CraftInventory": ["org.bukkit.craftbukkit.inventory.CraftInventory", "org.bukkit.craftbukkit.v1_20_R4.inventory.CraftInventory"],
+  "CraftInventory": ["org.bukkit.craftbukkit.inventory.CraftInventory", "org.bukkit.craftbukkit.v1_21_R1.inventory.CraftInventory"],
   "SlotFurnaceFuel": {
     "class_name": ["net.minecraft.world.inventory.FurnaceFuelSlot", "net.minecraft.world.inventory.SlotFurnaceFuel"],
     "methods": {
@@ -147,7 +147,7 @@
   "ContainerFurnace": {
     "class_name": ["net.minecraft.world.inventory.AbstractFurnaceMenu", "net.minecraft.world.inventory.ContainerFurnace"],
     "methods": {
-      "quickMoveStack": ["quickMoveStack(LEntityHuman;I)LItemStack;", "a(LEntityHuman;I)LItemStack;"],
+      "quickMoveStack": ["quickMoveStack(LEntityHuman;I)LItemStack;", "b(LEntityHuman;I)LItemStack;"],
       "isFuel": ["isFuel(LItemStack;)Z", "d(LItemStack;)Z"]
     }
   },
@@ -182,7 +182,7 @@
   "PacketPlayInSetCreativeSlot": {
     "class_name": ["net.minecraft.network.protocol.game.ServerboundSetCreativeModeSlotPacket", "net.minecraft.network.protocol.game.PacketPlayInSetCreativeSlot"],
     "methods": {
-      "itemStack": ["itemStack()LItemStack;", "c()LItemStack;"]
+      "itemStack": ["itemStack()LItemStack;", "e()LItemStack;"]
     }
   },
   "SolidBucketItem": {
@@ -206,13 +206,13 @@
     }
   },
   "ItemUtils": {
-    "class_name": "net.minecraft.world.item.ItemUtils",
+    "class_name": ["net.minecraft.world.item.ItemUtils", "net.minecraft.world.item.ItemLiquidUtil"],
     "methods": {
-      "createFilledResult": "createFilledResult(LItemStack;LEntityHuman;LItemStack;Z)LItemStack;"
+      "createFilledResult": ["createFilledResult(LItemStack;LEntityHuman;LItemStack;Z)LItemStack;", "a(LItemStack;LEntityHuman;LItemStack;Z)LItemStack;"]
     }
   },
   "CraftMagicNumbers": {
-    "class_name": "org.bukkit.craftbukkit.util.CraftMagicNumbers",
+    "class_name": ["org.bukkit.craftbukkit.util.CraftMagicNumbers", "org.bukkit.craftbukkit.v1_21_R1.util.CraftMagicNumbers"],
     "methods": {
       "getMaterial": "getMaterial(LItem;)LBukkitMaterial;"
     }
