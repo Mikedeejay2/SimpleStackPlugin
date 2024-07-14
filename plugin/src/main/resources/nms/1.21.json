@@ -114,7 +114,6 @@
   "EntityLiving": {
     "class_name": ["net.minecraft.world.entity.LivingEntity", "net.minecraft.world.entity.EntityLiving"],
     "methods": {
-      "hasInfiniteMaterials": ["hasInfiniteMaterials()Z", "fL()Z"],
       "isUsingItem": ["isUsingItem()Z", "fr()Z"]
     }
   },
