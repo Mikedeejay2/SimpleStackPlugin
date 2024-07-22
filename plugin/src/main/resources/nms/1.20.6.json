@@ -188,7 +188,7 @@
   "PacketPlayInSetCreativeSlot": {
     "class_name": ["net.minecraft.network.protocol.game.ServerboundSetCreativeModeSlotPacket", "net.minecraft.network.protocol.game.PacketPlayInSetCreativeSlot"],
     "methods": {
-      "itemStack": ["itemStack()LItemStack;", "c()LItemStack;"]
+      "itemStack": ["itemStack()LItemStack;", "e()LItemStack;"]
     }
   },
   "SolidBucketItem": {
