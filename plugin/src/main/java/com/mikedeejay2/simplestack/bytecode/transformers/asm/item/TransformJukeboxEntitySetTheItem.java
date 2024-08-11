@@ -13,7 +13,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.21")
+@Transformer("1.18-1.21.1")
 public class TransformJukeboxEntitySetTheItem extends MappedMethodVisitor {
     private final int stackIdx = nms("JukeboxBlockEntity").method("setTheItem").descriptor().contains("(I") ? 2 : 1;
 
