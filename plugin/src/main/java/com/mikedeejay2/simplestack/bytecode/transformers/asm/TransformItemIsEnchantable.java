@@ -13,7 +13,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.21")
+@Transformer("1.18-1.21.1")
 public class TransformItemIsEnchantable extends MappedMethodVisitor {
     protected boolean visitedAload = false;
     protected boolean visitedInvoke = false;

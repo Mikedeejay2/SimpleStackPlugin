@@ -23,7 +23,8 @@
       "isDamaged": ["isDamaged()Z", "m()Z"],
       "isStackable": ["isStackable()Z", "k()Z"],
       "is": ["is(LItem;)Z", "a(LItem;)Z"],
-      "limitSize": ["limitSize(I)V", "f(I)V"]
+      "limitSize": ["limitSize(I)V", "f(I)V"],
+      "restorePatch": "restorePatch(LDataComponentPatch;)V"
     },
     "fields": {
       "EMPTY": ["EMPTY:LItemStack;", "l:LItemStack;"],
@@ -187,7 +188,7 @@
   "PacketPlayInSetCreativeSlot": {
     "class_name": ["net.minecraft.network.protocol.game.ServerboundSetCreativeModeSlotPacket", "net.minecraft.network.protocol.game.PacketPlayInSetCreativeSlot"],
     "methods": {
-      "itemStack": ["itemStack()LItemStack;", "c()LItemStack;"]
+      "itemStack": ["itemStack()LItemStack;", "e()LItemStack;"]
     }
   },
   "SolidBucketItem": {
@@ -210,10 +211,17 @@
       "setTheItem": ["setTheItem(LItemStack;)V", "b(LItemStack;)V"]
     }
   },
+  "ItemUtils": {
+    "class_name": ["net.minecraft.world.item.ItemUtils", "net.minecraft.world.item.ItemLiquidUtil"],
+    "methods": {
+      "createFilledResult": ["createFilledResult(LItemStack;LEntityHuman;LItemStack;Z)LItemStack;", "a(LItemStack;LEntityHuman;LItemStack;Z)LItemStack;"]
+    }
+  },
   "CraftMagicNumbers": {
     "class_name": ["org.bukkit.craftbukkit.util.CraftMagicNumbers", "org.bukkit.craftbukkit.v1_20_R4.util.CraftMagicNumbers"],
     "methods": {
       "getMaterial": "getMaterial(LItem;)LBukkitMaterial;"
     }
-  }
+  },
+  "DataComponentPatch": "net.minecraft.core.component.DataComponentPatch"
 }

@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.asm.item;
 
+import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import com.mikedeejay2.simplestack.mappings.MappingEntry;
@@ -13,8 +14,9 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.20.6-1.21")
+@Transformer("1.20.6-1.21.1")
 public class TransformItemSolidBucketUse extends MappedMethodVisitor {
+    protected final boolean isLegacyImpl = MinecraftVersion.check("1.20.6");
     protected boolean visitedSetItemStart = false; // The start (before loading to stack) of the setItemInHand method
     protected boolean visitedAloadPlayer = false; // Loading the player for the setItemInHand method (prior to any arguments)
     protected boolean visitedGetItemStart = false; // The start (before loading to stack) of retrieving the item to set in the player's hand
@@ -36,7 +38,7 @@ public class TransformItemSolidBucketUse extends MappedMethodVisitor {
     @Override
     public void visitJumpInsn(int opcode, Label label) {
         super.visitJumpInsn(opcode, label);
-        if(!visitedSetItemStart && opcode == IFNULL) { // Unique instruction to 1.21+
+        if(!visitedSetItemStart && opcode == IFNULL && !isLegacyImpl) { // Target instruction for 1.21+
             visitedSetItemStart = true;
         }
     }
@@ -44,7 +46,7 @@ public class TransformItemSolidBucketUse extends MappedMethodVisitor {
     @Override
     public void visitVarInsn(int opcode, int varIndex) {
         super.visitVarInsn(opcode, varIndex);
-        if(!visitedSetItemStart && opcode == ASTORE && varIndex == 4) { // Unique instruction to 1.20.6 or less
+        if(!visitedSetItemStart && opcode == ASTORE && varIndex == 4 && isLegacyImpl) { // Target instruction for 1.20.6
             visitedSetItemStart = true;
         } else if(visitedSetItemStart && !visitedAloadPlayer && opcode == ALOAD && varIndex == 3) { // Player index is 3 on all versions
             visitedAloadPlayer = true;
