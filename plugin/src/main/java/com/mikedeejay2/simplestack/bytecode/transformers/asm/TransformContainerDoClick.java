@@ -38,8 +38,8 @@ public class TransformContainerDoClick extends MappedMethodVisitor {
 
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
-        if(!visitedIsSameItemSameTags && opcode == INVOKESTATIC && // Check starting reference method isSameItemSameTags
-            equalsMapping(owner, name, descriptor, nms("ItemStack").method("isSameItemSameTags"))) {
+        if(!visitedIsSameItemSameTags && opcode == INVOKESTATIC && // Check starting reference method isSameItemSameComponents
+            equalsMapping(owner, name, descriptor, nms("ItemStack").method("isSameItemSameComponents"))) {
             this.visitedIsSameItemSameTags = true;
         } else if(!appendedHotbarSwap && opcode == INVOKEVIRTUAL && // Hotbar swap point 1
             equalsMapping(owner, name, descriptor, nms("PlayerInventory").method("setItem"))) {

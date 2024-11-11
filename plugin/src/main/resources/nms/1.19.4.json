@@ -23,7 +23,6 @@
   },
   "Items": {
     "fields": {
-      "BUCKET": "pG:LItem;",
       "BOWL": "oy:LItem;",
       "LAVA_BUCKET": "pI:LItem;"
     }
@@ -32,7 +31,7 @@
     "methods": {
       "setCount": "f(I)V",
       "shrink": "h(I)V",
-      "isSameItemSameTags": "d(LItemStack;LItemStack;)Z"
+      "isSameItemSameComponents": "d(LItemStack;LItemStack;)Z"
     }
   },
   "JukeboxBlockEntity": {

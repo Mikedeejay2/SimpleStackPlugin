@@ -37,7 +37,6 @@
   },
   "Items": {
     "fields": {
-      "BUCKET": ["BUCKET:LItem;", "qW:LItem;"],
       "BOWL": ["BOWL:LItem;", "oP:LItem;"],
       "LAVA_BUCKET": ["LAVA_BUCKET:LItem;", "qY:LItem;"]
     }

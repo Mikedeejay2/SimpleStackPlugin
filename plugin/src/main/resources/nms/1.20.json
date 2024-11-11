@@ -16,7 +16,7 @@
       "setCount": "f(I)V",
       "shrink": "h(I)V",
       "getCount": "L()I",
-      "isSameItemSameTags": "c(LItemStack;LItemStack;)Z",
+      "isSameItemSameComponents": "c(LItemStack;LItemStack;)Z",
       "isEmpty": "b()Z",
       "<init>": "<init>(LIMaterial;)V",
       "<init2>": "<init>(LIMaterial;I)V",
@@ -99,7 +99,6 @@
   "Items": {
     "class_name": "net.minecraft.world.item.Items",
     "fields": {
-      "BUCKET": "pK:LItem;",
       "BOWL": "oC:LItem;",
       "LAVA_BUCKET": "pM:LItem;"
     }

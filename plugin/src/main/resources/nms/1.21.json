@@ -16,7 +16,7 @@
       "setCount": ["setCount(I)V", "e(I)V"],
       "shrink": ["shrink(I)V", "h(I)V"],
       "getCount": ["getCount()I", "H()I"],
-      "isSameItemSameTags": ["isSameItemSameComponents(LItemStack;LItemStack;)Z", "c(LItemStack;LItemStack;)Z"],
+      "isSameItemSameComponents": ["isSameItemSameComponents(LItemStack;LItemStack;)Z", "c(LItemStack;LItemStack;)Z"],
       "isEmpty": ["isEmpty()Z", "e()Z"],
       "<init>": "<init>(LIMaterial;)V",
       "<init2>": "<init>(LIMaterial;I)V",
@@ -104,8 +104,6 @@
   "Items": {
     "class_name": "net.minecraft.world.item.Items",
     "fields": {
-      "BUCKET": ["BUCKET:LItem;", "qy:LItem;"],
-      "BOWL": ["BOWL:LItem;", "ot:LItem;"],
       "LAVA_BUCKET": ["LAVA_BUCKET:LItem;", "qA:LItem;"]
     }
   },

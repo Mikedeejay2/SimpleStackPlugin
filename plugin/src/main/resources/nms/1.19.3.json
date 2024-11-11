@@ -4,7 +4,7 @@
     "methods": {
       "setCount": "f(I)V",
       "shrink": "h(I)V",
-      "isSameItemSameTags": "d(LItemStack;LItemStack;)Z"
+      "isSameItemSameComponents": "d(LItemStack;LItemStack;)Z"
     }
   },
   "CraftItemStack": "org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemStack",
@@ -26,7 +26,6 @@
   },
   "Items": {
     "fields": {
-      "BUCKET": "pj:LItem;",
       "BOWL": "od:LItem;",
       "LAVA_BUCKET": "pl:LItem;"
     }
