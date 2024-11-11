@@ -117,12 +117,6 @@
       "isUsingItem": ["isUsingItem()Z", "fr()Z"]
     }
   },
-  "ItemSuspiciousStew": {
-    "class_name": ["net.minecraft.world.item.SuspiciousStewItem", "net.minecraft.world.item.ItemSuspiciousStew"],
-    "methods": {
-      "finishUsingItem": ["finishUsingItem(LItemStack;LWorld;LEntityLiving;)LItemStack;", "a(LItemStack;LWorld;LEntityLiving;)LItemStack;"]
-    }
-  },
   "ArmorSlot": {
     "class_name": "net.minecraft.world.inventory.ArmorSlot",
     "methods": {

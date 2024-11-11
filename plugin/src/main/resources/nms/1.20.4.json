@@ -25,8 +25,8 @@
   "Items": {
     "fields": {
       "BUCKET": "qv:LItem;",
-      "BOWL": "pn:LItem;",
-      "LAVA_BUCKET": "qx:LItem;"
+      "BOWL": "oP:LItem;",
+      "LAVA_BUCKET": "qY:LItem;"
     }
   },
   "EntityLiving": {

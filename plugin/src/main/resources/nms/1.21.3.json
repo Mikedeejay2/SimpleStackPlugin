@@ -1,0 +1,45 @@
+{
+  "using_base": "1.21.1",
+  "CraftItemStack": ["org.bukkit.craftbukkit.inventory.CraftItemStack", "org.bukkit.craftbukkit.v1_21_R2.inventory.CraftItemStack"],
+  "CraftInventory": ["org.bukkit.craftbukkit.inventory.CraftInventory", "org.bukkit.craftbukkit.v1_21_R2.inventory.CraftInventory"],
+  "CraftMagicNumbers": ["org.bukkit.craftbukkit.util.CraftMagicNumbers", "org.bukkit.craftbukkit.v1_21_R2.util.CraftMagicNumbers"],
+  "Item": {
+    "methods": {
+      "getMaxStackSize": ["getDefaultMaxStackSize()I", "h()I"],
+      "isEnchantable": "remove"
+    }
+  },
+  "ItemTrident": {
+    "methods": {
+      "releaseUsing": ["releaseUsing(LItemStack;LWorld;LEntityLiving;I)Z", "a(LItemStack;LWorld;LEntityLiving;I)Z"]
+    }
+  },
+  "ItemStack": {
+    "class_name": "net.minecraft.world.item.ItemStack",
+    "methods": {
+      "getMaxStackSize": ["getMaxStackSize()I", "k()I"],
+      "copy": ["copy()LItemStack;", "v()LItemStack;"],
+      "getCount": ["getCount()I", "L()I"],
+      "isEmpty": ["isEmpty()Z", "f()Z"],
+      "isDamaged": ["isDamaged()Z", "n()Z"],
+      "isStackable": ["isStackable()Z", "l()Z"],
+      "restorePatch": "restorePatch(LDataComponentPatch;)V"
+    },
+    "fields": {
+      "EMPTY": ["EMPTY:LItemStack;", "j:LItemStack;"],
+      "components": ["components:LPatchedDataComponentMap;", "p:LPatchedDataComponentMap;"]
+    }
+  },
+  "EntityHuman": {
+    "methods": {
+      "getInventory": ["getInventory()LPlayerInventory;", "gi()LPlayerInventory;"]
+    }
+  },
+  "Items": {
+    "fields": {
+      "BUCKET": ["BUCKET:LItem;", "qW:LItem;"],
+      "BOWL": ["BOWL:LItem;", "oP:LItem;"],
+      "LAVA_BUCKET": ["LAVA_BUCKET:LItem;", "qY:LItem;"]
+    }
+  }
+}
