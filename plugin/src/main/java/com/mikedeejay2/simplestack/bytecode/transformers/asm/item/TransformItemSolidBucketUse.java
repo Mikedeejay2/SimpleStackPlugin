@@ -14,7 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.20.6-1.21.3")
+@Transformer("1.20.6-1.21.4")
 public class TransformItemSolidBucketUse extends MappedMethodVisitor {
     protected final boolean isLegacyImpl = MinecraftVersion.check("1.20.6");
     protected boolean visitedSetItemStart = false; // The start (before loading to stack) of the setItemInHand method

@@ -1,0 +1,29 @@
+{
+  "using_base": "1.21.3",
+  "CraftItemStack": ["org.bukkit.craftbukkit.inventory.CraftItemStack", "org.bukkit.craftbukkit.v1_21_R3.inventory.CraftItemStack"],
+  "CraftInventory": ["org.bukkit.craftbukkit.inventory.CraftInventory", "org.bukkit.craftbukkit.v1_21_R3.inventory.CraftInventory"],
+  "CraftMagicNumbers": ["org.bukkit.craftbukkit.util.CraftMagicNumbers", "org.bukkit.craftbukkit.v1_21_R3.util.CraftMagicNumbers"],
+  "ItemBucket": {
+    "methods": {
+      "getEmptySuccessItem": ["getEmptySuccessItem(LItemStack;LEntityHuman;)LItemStack;", "b(LItemStack;LEntityHuman;)LItemStack;"]
+    }
+  },
+  "ItemStack": {
+    "methods": {
+      "getCount": ["getCount()I", "M()I"]
+    },
+    "fields": {
+      "components": ["components:LPatchedDataComponentMap;", "q:LPatchedDataComponentMap;"]
+    }
+  },
+  "PatchedDataComponentMap": {
+    "methods": {
+      "remove": ["remove(LDataComponentType;)LObject;", "e(LDataComponentType;)LObject;"]
+    }
+  },
+  "Items": {
+    "fields": {
+      "LAVA_BUCKET": ["LAVA_BUCKET:LItem;", "rh:LItem;"]
+    }
+  }
+}
