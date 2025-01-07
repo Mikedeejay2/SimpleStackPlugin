@@ -48,14 +48,19 @@ public class TransformEntityPlayerDrop extends MappedMethodVisitor {
         super.visitVarInsn(ALOAD, 1); // Load ItemStack
         super.visitFieldInsn(GETSTATIC, "java/lang/Integer", "MAX_VALUE", "I"); // Get max Integer value
         super.visitMethodInsn(INVOKEVIRTUAL, lastNms().method("split")); // Split the max possible
-        super.visitVarInsn(ASTORE, 6); // Store new ItemStack to local index 6
+        super.visitVarInsn(ASTORE, 7); // Store new ItemStack to local index 7
 
         super.visitVarInsn(ALOAD, 0); // Load this
-        super.visitVarInsn(ALOAD, 6); // Load split ItemStack
+        super.visitVarInsn(ALOAD, 7); // Load split ItemStack
         super.visitVarInsn(ILOAD, 2); // Load throwRandomly boolean
         super.visitVarInsn(ILOAD, 3); // Load retainOwnership boolean
         MappingEntry drop = nms("EntityPlayer").method("drop");
-        if(drop.descriptor().contains("ZZZ)")) super.visitVarInsn(ILOAD, 4); // Load callDropEvent boolean (If running on paper servers)
+        if(drop.descriptor().contains("ZZZ")) { // Load callDropEvent boolean (If running on paper servers)
+            super.visitVarInsn(ILOAD, 4);
+        }
+        if(drop.descriptor().contains("ZZZL")) { // Load null for the entityOperation consumer (If running on paper servers >=1.21.4)
+            super.visitInsn(ACONST_NULL);
+        }
         super.visitMethodInsn(INVOKEVIRTUAL, drop); // Call the drop method recursively
         super.visitInsn(POP); // Pop the returned EntityItem from above call, we don't need it
 

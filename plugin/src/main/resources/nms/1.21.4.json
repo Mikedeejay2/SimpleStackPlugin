@@ -25,5 +25,10 @@
     "fields": {
       "LAVA_BUCKET": ["LAVA_BUCKET:LItem;", "rh:LItem;"]
     }
+  },
+  "EntityPlayer": {
+    "methods": {
+      "drop": ["drop(LItemStack;ZZZLConsumer;)LEntityItem;", "b(LItemStack;ZZ)LEntityItem;"]
+    }
   }
 }
