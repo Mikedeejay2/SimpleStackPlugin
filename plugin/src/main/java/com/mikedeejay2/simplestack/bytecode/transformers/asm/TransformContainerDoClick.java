@@ -14,7 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.21.4")
+@Transformer("1.18-1.21.5")
 public class TransformContainerDoClick extends MappedMethodVisitor {
     protected boolean visitedIsSameItemSameTags = false; // Reference position method for appendStackSizeCheck appends
     protected boolean appendedStackCheck1 = false; // Stack size check 1
@@ -141,9 +141,12 @@ public class TransformContainerDoClick extends MappedMethodVisitor {
         super.visitLabel(insideLabel);
         super.visitVarInsn(ALOAD, 4); // Load EntityHuman
         super.visitVarInsn(ALOAD, hotbarItemIdx2); // Load ItemStack
-        super.visitInsn(ICONST_0); // Load false (don't throw randomly)
+        MappingEntry drop = nms("EntityHuman").method("drop");
+        if(drop.descriptor().contains("ZZ")) {
+            super.visitInsn(ICONST_0); // Load false (don't throw randomly)
+        }
         super.visitInsn(ICONST_1); // Load true (retain ownership of thrown item)
-        super.visitMethodInsn(INVOKEVIRTUAL, nms("EntityHuman").method("drop")); // Drop the rest of the item
+        super.visitMethodInsn(INVOKEVIRTUAL, drop); // Drop the rest of the item
         super.visitInsn(POP); // Pop the resulting EntityItem
 
         super.visitLabel(exitLabel);

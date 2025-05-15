@@ -13,7 +13,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.21.4")
+@Transformer("1.18-1.21.5")
 public class TransformContainerDoClickLambda extends MappedMethodVisitor {
     @Override
     public MappingEntry getMappingEntry() {
@@ -53,9 +53,12 @@ public class TransformContainerDoClickLambda extends MappedMethodVisitor {
         super.visitLabel(insideLabel);
         super.visitVarInsn(ALOAD, 2); // Load EntityHuman
         super.visitVarInsn(ALOAD, 4); // Load ItemStack
-        super.visitInsn(ICONST_0); // Load false (don't throw randomly)
+        MappingEntry drop = nms("EntityHuman").method("drop");
+        if(drop.descriptor().contains("ZZ")) {
+            super.visitInsn(ICONST_0); // Load false (don't throw randomly)
+        }
         super.visitInsn(ICONST_0); // Load false (don't retain ownership of thrown item, this is default behavior)
-        super.visitMethodInsn(INVOKEVIRTUAL, nms("EntityHuman").method("drop")); // Drop the rest of the item
+        super.visitMethodInsn(INVOKEVIRTUAL, drop); // Drop the rest of the item
         super.visitInsn(POP); // Pop the resulting EntityItem
 
         super.visitLabel(exitLabel);

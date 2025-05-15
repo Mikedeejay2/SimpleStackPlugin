@@ -16,7 +16,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.20.6-1.21.4")
+@Transformer("1.20.6-1.21.5")
 public class TransformItemStackLimitSize extends MappedMethodVisitor {
     private boolean visitedIcmple = false;
 
