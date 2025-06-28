@@ -14,7 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.21.5")
+@Transformer("1.18-1.21.6")
 public class TransformContainerDoClick extends MappedMethodVisitor {
     protected boolean visitedIsSameItemSameTags = false; // Reference position method for appendStackSizeCheck appends
     protected boolean appendedStackCheck1 = false; // Stack size check 1

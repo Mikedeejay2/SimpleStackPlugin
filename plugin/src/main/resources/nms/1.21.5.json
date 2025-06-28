@@ -19,7 +19,7 @@
   },
   "EntityPlayer": {
     "methods": {
-      "drop": ["drop(LItemStack;ZZZLConsumer;)LEntityItem;", "a(LItemStack;ZZZ)LEntityItem;"]
+      "drop": ["drop(LItemStack;ZZZLConsumer;)LEntityItem;", "drop(LItemStack;ZZZ)LEntityItem;"]
     }
   },
   "PlayerInventory": {

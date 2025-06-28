@@ -24,7 +24,7 @@ import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.21.5")
+@Transformer("1.18-1.21.6")
 public class TransformSlotGetMaxStackSize implements MethodVisitorInfo, AdviceVisitorInfo {
     private static final SimpleStackTimingsImpl TIMINGS = (SimpleStackTimingsImpl) SimpleStackAPI.getTimings();
 

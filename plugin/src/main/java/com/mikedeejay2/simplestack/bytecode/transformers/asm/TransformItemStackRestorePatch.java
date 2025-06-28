@@ -14,7 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.21.5")
+@Transformer("1.18-1.21.6")
 public class TransformItemStackRestorePatch extends MappedMethodVisitor {
     private boolean visitedInvoke = false;
 
