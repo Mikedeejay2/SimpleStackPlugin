@@ -13,7 +13,7 @@ import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.21.7")
+@Transformer("1.18-1.21.8")
 public class TransformItemStackSplit extends MappedMethodVisitor {
     @Override
     public MappingEntry getMappingEntry() {

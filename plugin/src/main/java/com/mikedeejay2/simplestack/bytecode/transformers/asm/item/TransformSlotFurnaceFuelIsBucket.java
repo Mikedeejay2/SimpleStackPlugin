@@ -14,7 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.21.7")
+@Transformer("1.18-1.21.8")
 public class TransformSlotFurnaceFuelIsBucket extends MappedMethodVisitor {
     @Override
     public MappingEntry getMappingEntry() {
