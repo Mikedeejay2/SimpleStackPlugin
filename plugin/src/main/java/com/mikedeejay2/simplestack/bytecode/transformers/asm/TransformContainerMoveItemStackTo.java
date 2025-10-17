@@ -13,7 +13,7 @@ import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.21.8")
+@Transformer("1.18-1.21.10")
 public class TransformContainerMoveItemStackTo extends MappedMethodVisitor {
     private boolean visitedSplitInvoke = false;
     private boolean fixedBreak = false;

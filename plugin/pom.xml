@@ -154,7 +154,9 @@
         <dependency>
             <groupId>com.mikedeejay2</groupId>
             <artifactId>mikedeejay2lib</artifactId>
-            <version>${minecraft.version}-SNAPSHOT</version>
+            <!-- TODO: revert to ${minecraft.version}-SNAPSHOT once mikedeejay2lib updates for 1.21.10 -->
+            <version>1.21.8-SNAPSHOT</version>
+            <!-- <version>${minecraft.version}-SNAPSHOT</version> -->
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
