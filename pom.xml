@@ -19,8 +19,8 @@
 
         <commons-lang3.version>3.17.0</commons-lang3.version>
         <bstats.version>3.1.0</bstats.version>
-        <byte-buddy.version>1.17.6</byte-buddy.version>
-        <asm.version>9.8</asm.version>
+        <byte-buddy.version>1.17.8</byte-buddy.version>
+        <asm.version>9.9</asm.version>
         <jetbrains-annotations.version>26.0.2</jetbrains-annotations.version>
         <junit.version>5.12.2</junit.version>
         <mockito.version>5.17.0</mockito.version>
