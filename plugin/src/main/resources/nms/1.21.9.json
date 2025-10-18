@@ -1,0 +1,19 @@
+{
+  "using_base": "1.21.8",
+  "CraftItemStack": ["org.bukkit.craftbukkit.inventory.CraftItemStack", "org.bukkit.craftbukkit.v1_21_R6.inventory.CraftItemStack"],
+  "CraftInventory": ["org.bukkit.craftbukkit.inventory.CraftInventory", "org.bukkit.craftbukkit.v1_21_R6.inventory.CraftInventory"],
+  "CraftMagicNumbers": ["org.bukkit.craftbukkit.util.CraftMagicNumbers", "org.bukkit.craftbukkit.v1_21_R6.util.CraftMagicNumbers"],
+  "Items": {
+    "fields": {
+      "LAVA_BUCKET": ["LAVA_BUCKET:LItem;", "sm:LItem;"]
+    }
+  },
+  "EntityHuman": {
+    "methods": {
+      "getInventory": ["getInventory()LPlayerInventory;", "gB()LPlayerInventory;"]
+    },
+    "fields": {
+      "inventoryMenu": ["inventoryMenu:LInventoryMenu;", "ck:LInventoryMenu;"]
+    }
+  }
+}

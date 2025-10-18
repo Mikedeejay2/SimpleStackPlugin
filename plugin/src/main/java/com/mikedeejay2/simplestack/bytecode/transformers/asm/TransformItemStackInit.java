@@ -14,7 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.20.6-1.21.8")
+@Transformer("1.20.6-1.21.10")
 public class TransformItemStackInit extends MappedMethodVisitor {
     private boolean visitedReturn = false;
 
