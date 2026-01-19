@@ -1,0 +1,4 @@
+{
+  "using_base": "1.21.10",
+  "EntityThrownTrident": ["net.minecraft.world.entity.projectile.arrow.ThrownTrident", "net.minecraft.world.entity.projectile.arrow.EntityThrownTrident"]
+}
