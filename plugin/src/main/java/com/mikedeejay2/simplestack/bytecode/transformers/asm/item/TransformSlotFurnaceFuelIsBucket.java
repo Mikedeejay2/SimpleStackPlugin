@@ -30,6 +30,11 @@ public class TransformSlotFurnaceFuelIsBucket extends MappedMethodVisitor {
     }
 
     @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"appendLavaBucketCheck"};
+    }
+
+    @Override
     public void visitInsn(int opcode) {
         if(opcode == IRETURN) { // Target return statement
             appendLavaBucketCheck();
@@ -38,6 +43,7 @@ public class TransformSlotFurnaceFuelIsBucket extends MappedMethodVisitor {
     }
 
     public void appendLavaBucketCheck() {
+        this.marker("appendLavaBucketCheck");
         Label trueLabel = new Label();
         Label falseLabel = new Label();
         Label returnLabel = new Label();

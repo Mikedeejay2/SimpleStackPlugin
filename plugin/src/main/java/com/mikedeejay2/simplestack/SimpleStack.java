@@ -35,6 +35,7 @@ import java.util.function.Consumer;
  * @author Mikedeejay2
  */
 public final class SimpleStack extends BukkitPlugin {
+    public static final boolean DEBUG = true; // TODO: Allow this to be configurable
     public static final Text CRASH_INFO_1 = Text.literal("&c").concat(Text.translatable("simplestack.crash.info_message_l1"));
     public static final Text CRASH_INFO_2 = Text.literal("&c").concat(Text.translatable("simplestack.crash.info_message_l2")).placeholder(
         PlaceholderFormatter.of("url", Text.literal("&bhttps://github.com/Mikedeejay2/SimpleStackPlugin/issues&c")));

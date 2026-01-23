@@ -5,7 +5,7 @@
   "CraftMagicNumbers": ["org.bukkit.craftbukkit.util.CraftMagicNumbers", "org.bukkit.craftbukkit.v1_21_R4.util.CraftMagicNumbers"],
   "Container": {
     "methods": {
-      "doClickLambda": ["lambda$doClick$4(LSlot;LEntityHuman;LItemStack;)V", "lambda$doClick$5(LSlot;LEntityHuman;LItemStack;)V"]
+      "doClickLambda": ["lambda$doClick$4(LSlot;LEntityHuman;LItemStack;)V"]
     }
   },
   "EntityHuman": {

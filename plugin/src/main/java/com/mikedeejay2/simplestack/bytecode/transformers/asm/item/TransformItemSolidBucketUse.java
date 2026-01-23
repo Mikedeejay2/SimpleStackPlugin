@@ -30,6 +30,11 @@ public class TransformItemSolidBucketUse extends MappedMethodVisitor {
     }
 
     @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"visitedSetItemStart", "visitedAloadPlayer", "visitedGetItemStart", "appendInputArgs", "visitedExtraInvoke", "visitedSetItem", "appendCreateFilledResult", "appendedJumpFix", "appendInventoryUpdate"};
+    }
+
+    @Override
     public void visitCode() {
         super.visitCode();
 //        debugPrintString("Test of useOn method");
@@ -40,6 +45,7 @@ public class TransformItemSolidBucketUse extends MappedMethodVisitor {
         super.visitJumpInsn(opcode, label);
         if(!visitedSetItemStart && opcode == IFNULL && !isLegacyImpl) { // Target instruction for 1.21+
             visitedSetItemStart = true;
+            this.marker("visitedSetItemStart");
         }
     }
 
@@ -48,10 +54,13 @@ public class TransformItemSolidBucketUse extends MappedMethodVisitor {
         super.visitVarInsn(opcode, varIndex);
         if(!visitedSetItemStart && opcode == ASTORE && varIndex == 4 && isLegacyImpl) { // Target instruction for 1.20.6
             visitedSetItemStart = true;
+            this.marker("visitedSetItemStart");
         } else if(visitedSetItemStart && !visitedAloadPlayer && opcode == ALOAD && varIndex == 3) { // Player index is 3 on all versions
             visitedAloadPlayer = true;
+            this.marker("visitedAloadPlayer");
         } else if(!visitedGetItemStart && visitedAloadPlayer && opcode == ALOAD && varIndex == 4) { // For 1.20.6 or less, target loading player's hand
             visitedGetItemStart = true;
+            this.marker("visitedGetItemStart");
             appendInputArgs();
         }
     }
@@ -60,16 +69,20 @@ public class TransformItemSolidBucketUse extends MappedMethodVisitor {
     public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
         if(!visitedSetItem && visitedExtraInvoke && opcode == INVOKEVIRTUAL) {
             visitedSetItem = true;
+            this.marker("visitedSetItem");
             appendCreateFilledResult();
         }
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
         if(!visitedGetItemStart && visitedAloadPlayer && opcode == INVOKEVIRTUAL) { // For 1.21+, target inlined getHand
             visitedGetItemStart = true;
+            this.marker("visitedGetItemStart");
             appendInputArgs();
         } else if (!visitedExtraInvoke && visitedGetItemStart && opcode == INVOKEVIRTUAL) { // Flag the in between invoke (start of args > extra invoke > invoke call)
             visitedExtraInvoke = true;
+            this.marker("visitedExtraInvoke");
         } else if(!appendedJumpFix && visitedSetItem) { // After setting the item, update the inventory for the client
             appendedJumpFix = true;
+            this.marker("appendedJumpFix");
             appendInventoryUpdate();
         }
     }
@@ -78,6 +91,7 @@ public class TransformItemSolidBucketUse extends MappedMethodVisitor {
      * Appends the call for ItemUtils.createFilledResult to perform proper stack checking, dropping if necessary, etc
      */
     private void appendCreateFilledResult() {
+        this.marker("appendCreateFilledResult");
         visitInsn(ICONST_1); // Load true boolean for creative override argument
         visitMethodInsn(INVOKESTATIC, nms("ItemUtils").method("createFilledResult")); // Call createFilledResult (proper stack checking)
     }
@@ -86,6 +100,7 @@ public class TransformItemSolidBucketUse extends MappedMethodVisitor {
      * Appends the first two arguments (before output stack argument) to the stack
      */
     private void appendInputArgs() {
+        this.marker("appendInputArgs");
         // Get the current item being held by the player
         super.visitVarInsn(ALOAD, 1); // Load UseOnContext
         super.visitMethodInsn(INVOKEVIRTUAL, nms("UseOnContext").method("getItemInHand")); // Get the item in hand
@@ -103,6 +118,7 @@ public class TransformItemSolidBucketUse extends MappedMethodVisitor {
      * uses the <code>useOn</code> method, which does not do this by default.
      */
     private void appendInventoryUpdate() {
+        this.marker("appendInventoryUpdate");
         final Label afterLabel = new Label();
         // if(!entityPlayer.isUsingItem()) {
         super.visitVarInsn(ALOAD, 3); // Load entityPLayer

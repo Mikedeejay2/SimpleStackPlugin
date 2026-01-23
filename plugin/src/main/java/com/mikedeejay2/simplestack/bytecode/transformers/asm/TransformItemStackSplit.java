@@ -21,6 +21,11 @@ public class TransformItemStackSplit extends MappedMethodVisitor {
     }
 
     @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"appendClampToMaxStackSize"};
+    }
+
+    @Override
     public void visitCode() {
         super.visitCode();
 //        System.out.println("Split");
@@ -32,6 +37,7 @@ public class TransformItemStackSplit extends MappedMethodVisitor {
      * prevent overstacking, and, without other patches, left-clicking in general.
      */
     private void appendClampToMaxStackSize() {
+        this.marker("appendClampToMaxStackSize");
         super.visitVarInsn(ALOAD, 0); // Load this ItemStack
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getMaxStackSize")); // Invoke ItemStack#getMaxStackSize()
         super.visitVarInsn(ILOAD, 1); // Get split size request

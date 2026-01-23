@@ -25,6 +25,11 @@ public class TransformPlayerInventoryAdd extends MappedMethodVisitor {
     }
 
     @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"visitedIsDamaged", "visitedIfStatement"};
+    }
+
+    @Override
     public void visitCode() {
         super.visitCode();
 
@@ -37,6 +42,7 @@ public class TransformPlayerInventoryAdd extends MappedMethodVisitor {
         if(opcode == INVOKEVIRTUAL &&
             equalsMapping(owner, name, descriptor, nms("ItemStack").method("isDamaged"))) {
             visitedIsDamaged = true;
+            this.marker("visitedIsDamaged");
         }
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
     }
@@ -46,6 +52,7 @@ public class TransformPlayerInventoryAdd extends MappedMethodVisitor {
         super.visitJumpInsn(opcode, label);
         if(visitedIsDamaged && !visitedIfStatement) {
             visitedIfStatement = true;
+            this.marker("visitedIfStatement");
             super.visitVarInsn(ALOAD, 2); // Load ItemStack
             super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getMaxStackSize")); // Get max stack size
             super.visitInsn(ICONST_1); // Get int of 1

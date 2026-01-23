@@ -24,6 +24,11 @@ public class TransformItemStackRestorePatch extends MappedMethodVisitor {
     }
 
     @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"visitedInvoke", "appendGetMaxStackSize"};
+    }
+
+    @Override
     public void visitCode() {
         super.visitCode();
 //        System.out.println("restorePatch");
@@ -34,11 +39,13 @@ public class TransformItemStackRestorePatch extends MappedMethodVisitor {
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
         if(!visitedInvoke && opcode == INVOKEVIRTUAL) {
             visitedInvoke = true;
+            this.marker("visitedInvoke");
             appendGetMaxStackSize();
         }
     }
 
     private void appendGetMaxStackSize() {
+        this.marker("appendGetMaxStackSize");
         super.visitVarInsn(ALOAD, 0);
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getMaxStackSize"));
     }

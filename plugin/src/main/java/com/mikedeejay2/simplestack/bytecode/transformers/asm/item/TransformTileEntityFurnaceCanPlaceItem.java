@@ -28,6 +28,11 @@ public class TransformTileEntityFurnaceCanPlaceItem extends MappedMethodVisitor 
     }
 
     @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"visitedAstore", "jumpInsnCount", "trueLabel", "jumpInsnCount", "falseLabel", "jumpInsnCount", "visitedTrueLabel", "appendLavaBucketFix"};
+    }
+
+    @Override
     public void visitCode() {
         super.visitCode();
 //        System.out.println("canPlaceItem");
@@ -39,6 +44,7 @@ public class TransformTileEntityFurnaceCanPlaceItem extends MappedMethodVisitor 
         super.visitVarInsn(opcode, varIndex);
         if(!visitedAstore && opcode == ASTORE && varIndex == 3) {
             visitedAstore = true;
+            this.marker("visitedAstore");
         }
     }
 
@@ -47,10 +53,13 @@ public class TransformTileEntityFurnaceCanPlaceItem extends MappedMethodVisitor 
         super.visitJumpInsn(opcode, label);
         if(visitedAstore && (opcode == IFNE || opcode == IFEQ)) { // Count the jumps
             ++jumpInsnCount;
+            this.marker("jumpInsnCount");
             if(jumpInsnCount == 1) { // The first jump points to true on both paper and spigot compilations
                 trueLabel = label;
+                this.marker("trueLabel");
             } else if(jumpInsnCount == 2) { // The second jump points to false on both paper and spigot compilations
                 falseLabel = label;
+                this.marker("falseLabel");
             }
         }
     }
@@ -60,6 +69,7 @@ public class TransformTileEntityFurnaceCanPlaceItem extends MappedMethodVisitor 
         super.visitLabel(label);
         if(!visitedTrueLabel && label == trueLabel) {
             visitedTrueLabel = true;
+            this.marker("visitedTrueLabel");
             appendLavaBucketFix();
         }
     }
@@ -70,6 +80,7 @@ public class TransformTileEntityFurnaceCanPlaceItem extends MappedMethodVisitor 
      * Fixes overstacking lava buckets
      */
     private void appendLavaBucketFix() {
+        this.marker("appendLavaBucketFix");
         Label newTrueLabel = new Label();
         super.visitVarInsn(ALOAD, 2); // Load ItemStack
         super.visitFieldInsn(GETSTATIC, nms("Items").field("LAVA_BUCKET")); // Get Items.LAVA_BUCKET

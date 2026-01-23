@@ -30,9 +30,15 @@ public class TransformItemIsEnchantable extends MappedMethodVisitor {
     }
 
     @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"visitedAload", "visitedInvoke"};
+    }
+
+    @Override
     public void visitVarInsn(int opcode, int varIndex) {
         if(!visitedAload && opcode == ALOAD) { // Target first aload (this)
             this.visitedAload = true;
+            this.marker("visitedAload");
             super.visitVarInsn(ALOAD, 1); // Load ItemStack
             return;
         }
@@ -43,6 +49,7 @@ public class TransformItemIsEnchantable extends MappedMethodVisitor {
     public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
         if(visitedAload && !visitedInvoke && opcode == INVOKEVIRTUAL) { // Target first invoke virtual (getMaxStackSize)
             this.visitedInvoke = true;
+            this.marker("visitedInvoke");
             super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getCount"));
             return;
         }

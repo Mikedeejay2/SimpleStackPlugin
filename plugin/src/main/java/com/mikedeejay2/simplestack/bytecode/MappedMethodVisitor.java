@@ -1,5 +1,6 @@
 package com.mikedeejay2.simplestack.bytecode;
 
+import com.mikedeejay2.simplestack.SimpleStack;
 import com.mikedeejay2.simplestack.mappings.ClassMapping;
 import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import net.bytebuddy.asm.AsmVisitorWrapper;
@@ -8,14 +9,37 @@ import org.objectweb.asm.MethodVisitor;
 import static org.objectweb.asm.Opcodes.*;
 
 public abstract class MappedMethodVisitor extends MethodVisitor implements MethodVisitorInfo {
+    protected final MethodVisitorValidator validator;
+
     public MappedMethodVisitor() {
         super(ASM9);
+        if(SimpleStack.DEBUG && this.getValidationMarkers() != null) {
+            this.validator = new MethodVisitorValidator.Impl(this, this.getValidationMarkers());
+        } else {
+            this.validator = MethodVisitorValidator.NoOp.INSTANCE;
+        }
     }
 
     @Override
     public AsmVisitorWrapper.ForDeclaredMethods.MethodVisitorWrapper getWrapper() {
         return (instrumentedType, instrumentedMethod, methodVisitor, implementationContext, typePool, writerFlags, readerFlags) ->
             this.setMethodVisitor(methodVisitor);
+    }
+
+    @Override
+    public void visitCode() {
+        super.visitCode();
+        this.validator.start();
+    }
+
+    @Override
+    public void visitEnd() {
+        super.visitEnd();
+        this.validator.end();
+    }
+
+    protected final void marker(String value) {
+        this.validator.marker(value);
     }
 
     protected final MappedMethodVisitor setMethodVisitor(MethodVisitor visitor) {

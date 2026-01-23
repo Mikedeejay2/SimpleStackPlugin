@@ -8,7 +8,7 @@ import static org.objectweb.asm.Opcodes.*;
 import static com.mikedeejay2.simplestack.mappings.MappingsLookup.*;
 
 /**
- * Make sure max of max stack size is removed from trying to remove from a slot.
+ * Make sure max of max stack size is removed from trying to remove from a slot. Left-clicking on a slot.
  *
  * @author Mikedeejay2
  */
@@ -17,6 +17,11 @@ public class TransformSlotTryRemove extends MappedMethodVisitor {
     @Override
     public MappingEntry getMappingEntry() {
         return nms("Slot").method("tryRemove");
+    }
+
+    @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"appendClampToMaxStackSize"};
     }
 
     @Override
@@ -39,6 +44,7 @@ public class TransformSlotTryRemove extends MappedMethodVisitor {
      * Make sure max of max stack size is removed from trying to remove from a slot.
      */
     private void appendClampToMaxStackSize() {
+        this.marker("appendClampToMaxStackSize");
         super.visitVarInsn(ALOAD, 0); // Get this slot
         super.visitMethodInsn(INVOKEVIRTUAL, nms("Slot").method("getItem")); // Get the ItemStack currently in the slot
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getMaxStackSize")); // Get the max stack size of the ItemStack in the slot

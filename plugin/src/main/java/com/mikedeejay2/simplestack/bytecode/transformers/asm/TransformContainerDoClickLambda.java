@@ -21,10 +21,15 @@ public class TransformContainerDoClickLambda extends MappedMethodVisitor {
     }
 
     @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"appendOverstackCheck"};
+    }
+
+    @Override
     public void visitCode() {
         super.visitCode();
         // Uncomment for debug message on visit code
-//        System.out.println("doClickLambda");
+        System.out.println("doClickLambda");
 //        debugPrintString("doClickLambda");
 
         appendOverstackCheck();
@@ -34,6 +39,7 @@ public class TransformContainerDoClickLambda extends MappedMethodVisitor {
      * Fixes being able to overstack the cursor when picking up items from a result slot
      */
     public void appendOverstackCheck() {
+        this.marker("appendOverstackCheck");
         super.visitVarInsn(ALOAD, 3); // Load ItemStack
         super.visitVarInsn(ASTORE, 4); // Save it to new local index
         super.visitVarInsn(ALOAD, 3); // Load ItemStack

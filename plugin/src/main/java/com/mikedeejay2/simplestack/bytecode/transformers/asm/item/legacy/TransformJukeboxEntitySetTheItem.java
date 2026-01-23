@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.bytecode.transformers.asm.item;
+package com.mikedeejay2.simplestack.bytecode.transformers.asm.item.legacy;
 
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
@@ -13,13 +13,18 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.21.11")
+@Transformer("1.18-1.21.10") // TODO: When was this transformer last needed? No longer needed as of 1.21.11
 public class TransformJukeboxEntitySetTheItem extends MappedMethodVisitor {
     private final int stackIdx = nms("JukeboxBlockEntity").method("setTheItem").descriptor().contains("(I") ? 2 : 1;
 
     @Override
     public MappingEntry getMappingEntry() {
         return nms("JukeboxBlockEntity").method("setTheItem");
+    }
+
+    @Override
+    public String[] getValidationMarkers() {
+        return  new String[] {"appendFixStackSize"};
     }
 
     @Override
@@ -30,6 +35,7 @@ public class TransformJukeboxEntitySetTheItem extends MappedMethodVisitor {
     }
 
     private void appendFixStackSize() {
+        this.marker("appendFixStackSize");
         Label emptyLabel = new Label();
         Label afterLabel = new Label();
 

@@ -1,6 +1,5 @@
 package com.mikedeejay2.simplestack.bytecode.transformers.asm.item.legacy;
 
-import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.bytecode.Transformer;
 import com.mikedeejay2.simplestack.mappings.MappingEntry;
@@ -18,12 +17,15 @@ import static org.objectweb.asm.Opcodes.*;
 public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
     protected int stackIndex = 4;
     protected boolean visitedNew = false; // New ItemStack, separate from frame
-    protected boolean visitedAload = false; // Aload ItemStack, precondition must be true
-    protected boolean visitedPrecondition = false; // The precondition for aload. >=1.20.6 is hasInfiniteMaterials, else cast check for EntityHuman
 
     @Override
     public MappingEntry getMappingEntry() {
         return nms("ItemSoup").method("finishUsingItem");
+    }
+
+    @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"visitedNew", "appendStackedSoupFix"};
     }
 
     @Override
@@ -34,21 +36,14 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
 
     @Override
     public void visitVarInsn(int opcode, int varIndex) {
-        if(!visitedAload && visitedPrecondition && opcode == ALOAD && varIndex == stackIndex) {// Target load ItemStack
-            visitedAload = true;
-        }
         super.visitVarInsn(opcode, varIndex);
     }
 
     @Override
     public void visitTypeInsn(int opcode, String type) {
-        if(!visitedPrecondition && opcode == CHECKCAST &&
-            MinecraftVersion.check("<=1.20.4") &&
-            type.equals(nms("EntityHuman").internalName())) {
-            visitedPrecondition = true;
-        }
         if(!visitedNew && opcode == NEW && type.equals(nms("ItemStack").internalName())) { // Target new ItemStack() invocation
             visitedNew = true;
+            this.marker("visitedNew");
             appendStackedSoupFix();
         }
         super.visitTypeInsn(opcode, type);
@@ -56,13 +51,6 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
 
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
-        if(!visitedPrecondition && opcode == INVOKEVIRTUAL && // Check invokevirtual for LivingEntity#hasInfiniteMaterials (1.20.6+)
-            MinecraftVersion.check(">=1.20.6") &&
-            (owner.equals(nms("EntityLiving").internalName()) || owner.equals(nms("EntityHuman").internalName())) &&
-            name.equals(nms("EntityLiving").method("hasInfiniteMaterials").name()) &&
-            descriptor.equals(nms("EntityLiving").method("hasInfiniteMaterials").descriptor())) {
-            visitedPrecondition = true;
-        }
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
     }
 
@@ -74,6 +62,7 @@ public class TransformItemSoupFinishUsingItem extends MappedMethodVisitor {
      * been increased by one index.
      */
     private void appendStackedSoupFix() {
+        this.marker("appendStackedSoupFix");
         final Label emptyBowlLabel = new Label();
 
         // Get EntityHuman from EntityLiving

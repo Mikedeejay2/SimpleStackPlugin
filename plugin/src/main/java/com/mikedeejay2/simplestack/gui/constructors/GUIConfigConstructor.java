@@ -51,11 +51,13 @@ public class GUIConfigConstructor implements GUIConstructor {
             ANIMATED_GUI_ITEM, new AnimationSpecification(Position.of(2, 5), Style.CIRCULAR));
         GUINavigatorModule naviModule = new GUINavigatorModule(plugin, "config");
         GUIConfigModule configModule = new GUIConfigModule(plugin);
-        GUIDebugOpenerModule debugModule = new GUIDebugOpenerModule(plugin);
         gui.addModule(outlineModule);
         gui.addModule(naviModule);
         gui.addModule(configModule);
-        gui.addModule(debugModule);
+        if(SimpleStack.DEBUG) {
+            GUIDebugOpenerModule debugModule = new GUIDebugOpenerModule(plugin);
+            gui.addModule(debugModule);
+        }
         gui.addModule(animation);
         GUIInteractHandler handler = new GUIInteractHandlerDefault(64);
         gui.setInteractionHandler(handler);

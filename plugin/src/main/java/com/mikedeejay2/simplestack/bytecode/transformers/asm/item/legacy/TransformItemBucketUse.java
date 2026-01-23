@@ -23,6 +23,11 @@ public class TransformItemBucketUse extends MappedMethodVisitor {
     }
 
     @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"visitedNew", "appendArguments", "visitedConstructor", "appendCreateFilledStack"};
+    }
+
+    @Override
     public void visitCode() {
         super.visitCode();
 //        debugPrintString("Test of getEmptySuccessItem method");
@@ -32,6 +37,7 @@ public class TransformItemBucketUse extends MappedMethodVisitor {
     public void visitTypeInsn(int opcode, String type) {
         if(!visitedNew && opcode == NEW && type.equals(nms("ItemStack").internalName())) { // Target new ItemStack creation (new ItemStack(Items.BUCKET);)
             visitedNew = true;
+            this.marker("visitedNew");
             appendArguments();
         }
         super.visitTypeInsn(opcode, type);
@@ -42,16 +48,19 @@ public class TransformItemBucketUse extends MappedMethodVisitor {
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
         if(visitedNew && !visitedConstructor && opcode == INVOKESPECIAL) {
             visitedConstructor = true;
+            this.marker("visitedConstructor");
             appendCreateFilledStack();
         }
     }
 
     private void appendArguments() {
+        this.marker("appendArguments");
         super.visitVarInsn(ALOAD, 0); // Load the current ItemStack
         super.visitVarInsn(ALOAD, 1); // Load the player
     }
 
     private void appendCreateFilledStack() {
+        this.marker("appendCreateFilledStack");
         visitInsn(ICONST_1); // Load true boolean for creative override argument
         visitMethodInsn(INVOKESTATIC, nms("ItemUtils").method("createFilledResult")); // Call createFilledResult (proper stack checking)
     }

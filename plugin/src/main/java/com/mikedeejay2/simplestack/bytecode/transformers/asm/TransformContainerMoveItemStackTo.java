@@ -24,6 +24,11 @@ public class TransformContainerMoveItemStackTo extends MappedMethodVisitor {
     }
 
     @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"visitedSplitInvoke", "fixedBreak"};
+    }
+
+    @Override
     public void visitCode() {
         super.visitCode();
 //        debugPrintString("Test of moveItemStackTo method");
@@ -34,6 +39,7 @@ public class TransformContainerMoveItemStackTo extends MappedMethodVisitor {
         if(!visitedSplitInvoke && opcode == INVOKEVIRTUAL &&
             equalsMapping(owner, name, descriptor, nms("ItemStack").method("split"))) {
             visitedSplitInvoke = true;
+            this.marker("visitedSplitInvoke");
         }
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
     }
@@ -45,6 +51,7 @@ public class TransformContainerMoveItemStackTo extends MappedMethodVisitor {
             super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("isEmpty")); // Get boolean of ItemStack#isEmpty
             super.visitJumpInsn(IFNE, label); // If it is empty, break loop
             fixedBreak = true;
+            this.marker("fixedBreak");
             return; // don't add old break statement
         }
         super.visitJumpInsn(opcode, label);

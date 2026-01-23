@@ -26,6 +26,11 @@ public class TransformItemStackLimitSize extends MappedMethodVisitor {
     }
 
     @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"visitedIcmple", "appendUnlimitStackSize"};
+    }
+
+    @Override
     public void visitCode() {
         super.visitCode();
 //        System.out.println("LimitSize");
@@ -36,6 +41,7 @@ public class TransformItemStackLimitSize extends MappedMethodVisitor {
         super.visitJumpInsn(opcode, label);
         if(!visitedIcmple && opcode == IF_ICMPLE) {
             visitedIcmple = true;
+            this.marker("visitedIcmple");
             appendUnlimitStackSize(label);
         }
     }
@@ -44,6 +50,8 @@ public class TransformItemStackLimitSize extends MappedMethodVisitor {
      * Adds an if statement that prevents limiting an ItemStack to maxStackSize
      */
     private void appendUnlimitStackSize(Label label) {
+        this.marker("appendUnlimitStackSize");
+        super.debugPrintObject(0);
         super.visitVarInsn(ALOAD, 0); // Load this ItemStack
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getMaxStackSize")); // Invoke ItemStack#getMaxStackSize()
         super.visitVarInsn(ILOAD, 1); // Load maxSize argument

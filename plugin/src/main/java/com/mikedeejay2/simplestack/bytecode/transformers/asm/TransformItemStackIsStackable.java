@@ -32,13 +32,20 @@ public class TransformItemStackIsStackable extends MappedMethodVisitor {
     }
 
     @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"visitedIfStatement", "skipVarInsn", "skipMethodInsn", "skipJumpInsn", "skipVarInsn", "skipMethodInsn", "skipJumpInsn", "visitedIConst"};
+    }
+
+    @Override
     public void visitJumpInsn(int opcode, Label label) {
         if(visitedIfStatement && !visitedIConst) {
+            this.marker("skipJumpInsn");
             return;
         }
         super.visitJumpInsn(opcode, label);
         if(opcode == IF_ICMPLE && !visitedIfStatement) {
             visitedIfStatement = true;
+            this.marker("visitedIfStatement");
         }
     }
 
@@ -46,6 +53,7 @@ public class TransformItemStackIsStackable extends MappedMethodVisitor {
     public void visitInsn(int opcode) {
         if(opcode == ICONST_1 && visitedIfStatement) {
             visitedIConst = true;
+            this.marker("visitedIConst");
         }
         super.visitInsn(opcode);
     }
@@ -53,6 +61,7 @@ public class TransformItemStackIsStackable extends MappedMethodVisitor {
     @Override
     public void visitVarInsn(int opcode, int varIndex) {
         if(visitedIfStatement && !visitedIConst) {
+            this.marker("skipVarInsn");
             return;
         }
         super.visitVarInsn(opcode, varIndex);
@@ -61,6 +70,7 @@ public class TransformItemStackIsStackable extends MappedMethodVisitor {
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
         if(visitedIfStatement && !visitedIConst) {
+            this.marker("skipMethodInsn");
             return;
         }
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);

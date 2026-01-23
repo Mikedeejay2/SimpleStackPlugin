@@ -21,6 +21,11 @@ public class TransformContainerUtilRemoveItem extends MappedMethodVisitor {
     }
 
     @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"redirectSplit"};
+    }
+
+    @Override
     public void visitCode() {
         super.visitCode();
 //        System.out.println("RemoveItem");
@@ -43,8 +48,10 @@ public class TransformContainerUtilRemoveItem extends MappedMethodVisitor {
      * that all are dropped, not just 1.
      */
     private void redirectSplit() {
+        this.marker("redirectSplit");
         super.visitInsn(POP); // Pop amount
         super.visitInsn(POP); // Pop ItemStack
+
         // Get the target ItemStack out of the list
         super.visitVarInsn(ALOAD, 0); // Get list
         super.visitVarInsn(ILOAD, 1); // Get slot int
@@ -53,6 +60,16 @@ public class TransformContainerUtilRemoveItem extends MappedMethodVisitor {
             "(I)Ljava/lang/Object;", true); // Get ItemStack out of list
         super.visitTypeInsn(CHECKCAST, lastNms().internalName()); // Cast from Object to ItemStack
         super.visitVarInsn(ASTORE, 3); // Store this ItemStack to local index 3
+
+        // Fix for 1.21.10+ shelves, limit removal size to item stack size
+        //// amount = Math.min(itemstack.getCount(), amount)
+        super.visitVarInsn(ALOAD, 3); // Load ItemStack
+        super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getCount")); // Load the item's stack size
+        super.visitVarInsn(ILOAD, 2); // Load amount to remove
+        super.visitMethodInsn(
+            INVOKESTATIC, "java/lang/Math", "min",
+            "(II)I", false); // Call Math.min()
+        super.visitVarInsn(ISTORE, 2); // Store this min value to the amount local index
 
         //// ItemStack itemstack = this.copy();
         super.visitVarInsn(ALOAD, 3); // Load ItemStack

@@ -6,8 +6,6 @@ import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.MutablePair;
 import com.mikedeejay2.mikedeejay2lib.util.structure.tuple.Pair;
 import com.mikedeejay2.mikedeejay2lib.util.version.MinecraftVersion;
 import com.mikedeejay2.simplestack.SimpleStack;
-import com.mikedeejay2.simplestack.mappings.ClassMapping;
-import com.mikedeejay2.simplestack.mappings.MappingEntry;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;

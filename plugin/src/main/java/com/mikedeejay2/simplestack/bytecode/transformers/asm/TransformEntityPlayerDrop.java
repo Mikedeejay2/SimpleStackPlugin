@@ -21,6 +21,11 @@ public class TransformEntityPlayerDrop extends MappedMethodVisitor {
     }
 
     @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"fixDropOverstacking"};
+    }
+
+    @Override
     public void visitCode() {
         super.visitCode();
 //        System.out.println("Drop");
@@ -34,6 +39,7 @@ public class TransformEntityPlayerDrop extends MappedMethodVisitor {
      * Fixes player dropping overstacked items. This ensures that items are split down to their max stack size.
      */
     private void fixDropOverstacking() {
+        this.marker("fixDropOverstacking");
         Label whileLabel = new Label(); // If part of while loop
         Label insideLabel = new Label(); // Label for inside of while loop
         Label exitLabel = new Label(); // Label for the exit of the while loop

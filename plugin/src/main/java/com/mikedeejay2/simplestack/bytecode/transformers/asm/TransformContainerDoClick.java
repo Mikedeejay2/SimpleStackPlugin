@@ -34,6 +34,11 @@ public class TransformContainerDoClick extends MappedMethodVisitor {
     }
 
     @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"visitedIsSameItemSameTags", "appendStackSizeCheck", "appendedStackCheck2", "appendStackSizeCheck", "appendedStackCheck1", "visitedIsEmpty1", "visitedIsEmpty2", "appendHotbarSwap", "appendedHotbarSwap", "countGetMaxStackSize", "countGetMaxStackSize", "appendHotbarSwap"};
+    }
+
+    @Override
     public void visitCode() {
         super.visitCode();
 //        System.out.println("doClick");
@@ -46,14 +51,17 @@ public class TransformContainerDoClick extends MappedMethodVisitor {
         if(!visitedIsSameItemSameTags && opcode == INVOKESTATIC && // Check starting reference method isSameItemSameComponents
             equalsMapping(owner, name, descriptor, nms("ItemStack").method("isSameItemSameComponents"))) {
             this.visitedIsSameItemSameTags = true;
+            this.marker("visitedIsSameItemSameTags");
         } else if(!appendedHotbarSwap && opcode == INVOKEVIRTUAL && // Hotbar swap point 1
             equalsMapping(owner, name, descriptor, nms("PlayerInventory").method("setItem"))) {
             appendHotbarSwap();
             this.appendedHotbarSwap = true;
+            this.marker("appendedHotbarSwap");
             return;
         } else if(appendedHotbarSwap && opcode == INVOKEVIRTUAL && // Count Slot#getMaxStackSize(ItemStack) methods as next reference point
             equalsMapping(owner, name, descriptor, nms("Slot").method("getMaxStackSize1"))) {
             ++countGetMaxStackSize;
+            this.marker("countGetMaxStackSize");
         } else if(countGetMaxStackSize == 2 && opcode == INVOKEVIRTUAL && // Hotbar swap point 2
             equalsMapping(owner, name, descriptor, nms("PlayerInventory").method("setItem"))) {
             appendHotbarSwap();
@@ -61,9 +69,11 @@ public class TransformContainerDoClick extends MappedMethodVisitor {
         } else if(visitedIsSameItemSameTags && !visitedIsEmpty1 && opcode == INVOKEVIRTUAL && // Reference point to obtain hotbarItemIdx1
             equalsMapping(owner, name, descriptor, nms("ItemStack").method("isEmpty"))) {
             visitedIsEmpty1 = true;
+            this.marker("visitedIsEmpty1");
         } else if(visitedIsEmpty1 && !visitedIsEmpty2 && opcode == INVOKEVIRTUAL && // Reference point to obtain hotbarItemIdx2
             equalsMapping(owner, name, descriptor, nms("ItemStack").method("isEmpty"))) {
             visitedIsEmpty2 = true;
+            this.marker("visitedIsEmpty2");
         }
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
     }
@@ -74,9 +84,11 @@ public class TransformContainerDoClick extends MappedMethodVisitor {
         if(!appendedStackCheck1 && visitedIsSameItemSameTags && opcode == Opcodes.IF_ICMPGT) { // Get the if statement "<=" to target second cursor swap action
             appendStackSizeCheck(label); // Add additional stack size check
             this.appendedStackCheck1 = true;
+            this.marker("appendedStackCheck1");
         } else if(!appendedStackCheck2 && visitedIsSameItemSameTags && opcode == IFEQ) { // Get the if statement to target first cursor swap action
             appendStackSizeCheck(label); // Add additional stack size check
             this.appendedStackCheck2 = true;
+            this.marker("appendedStackCheck2");
         }
     }
 
@@ -102,6 +114,7 @@ public class TransformContainerDoClick extends MappedMethodVisitor {
      * @param label The label to jump to if false
      */
     public void appendStackSizeCheck(Label label) {
+        this.marker("appendStackSizeCheck");
         super.visitVarInsn(ALOAD, stackItemIdx); // Get slot's ItemStack
         super.visitMethodInsn(INVOKEVIRTUAL, nms("ItemStack").method("getCount")); // Get ItemStack count
         super.visitVarInsn(ALOAD, stackItemIdx); // Get slot's ItemStack
@@ -113,6 +126,7 @@ public class TransformContainerDoClick extends MappedMethodVisitor {
      * Fixes swapping overstacked items into the hotbar. Injected on a PlayerInventory#setItem call.
      */
     public void appendHotbarSwap() {
+        this.marker("appendHotbarSwap");
         Label exitLabel = new Label();
 
         super.visitInsn(POP); // Pop ItemStack

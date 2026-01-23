@@ -1,4 +1,4 @@
-package com.mikedeejay2.simplestack.bytecode.transformers.asm.item;
+package com.mikedeejay2.simplestack.bytecode.transformers.asm.item.legacy;
 
 import com.mikedeejay2.simplestack.bytecode.MappedMethodVisitor;
 import com.mikedeejay2.simplestack.mappings.MappingEntry;
@@ -14,7 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
  *
  * @author Mikedeejay2
  */
-@Transformer("1.18-1.21.11")
+@Transformer("1.18-1.21.10") // TODO: When was this transformer last needed? No longer needed as of 1.21.11
 public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor {
     private boolean visitedIsFuel = false;
     private boolean visitedEntranceLabel = false;
@@ -25,6 +25,11 @@ public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor
     @Override
     public MappingEntry getMappingEntry() {
         return nms("ContainerFurnace").method("quickMoveStack");
+    }
+
+    @Override
+    public String[] getValidationMarkers() {
+        return new String[] {"visitedIsFuel",  "visitedEntranceLabel", "appendIsLavaBucketFix", "actualExitLabel", "visitedExitLabel"};
     }
 
     @Override
@@ -40,6 +45,7 @@ public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor
         if(!visitedIsFuel && opcode == INVOKEVIRTUAL &&
             equalsMapping(owner, name, descriptor, nms("ContainerFurnace").method("isFuel"))) {
             visitedIsFuel = true;
+            this.marker("visitedIsFuel");
         }
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
     }
@@ -48,6 +54,7 @@ public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor
     public void visitLabel(Label label) {
         if(!visitedExitLabel && visitedEntranceLabel && actualExitLabel != null && label == actualExitLabel) { // Target actual exit label. This is the exit from isFuel and is not the next else if
             visitedExitLabel = true;
+            this.marker("visitedExitLabel");
             super.visitLabel(newExitLabel); // Add the new exit label to the existing exit label
         }
 
@@ -55,6 +62,7 @@ public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor
 
         if(!visitedEntranceLabel && visitedIsFuel) { // Target the label after the isFuel statement, inside isFuel if statement
             visitedEntranceLabel = true;
+            this.marker("visitedEntranceLabel");
             appendIsLavaBucketFix();
         }
     }
@@ -62,6 +70,7 @@ public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor
     public void visitJumpInsn(int opcode, Label label) {
         if(actualExitLabel == null && visitedEntranceLabel && opcode == IFNE) { // Target quickMoveStack if statement
             actualExitLabel = label;
+            this.marker("actualExitLabel");
         }
         super.visitJumpInsn(opcode, label);
     }
@@ -71,6 +80,7 @@ public class TransformContainerFurnaceQuickMoveStack extends MappedMethodVisitor
      * inside the fuel slot. If multiple lava buckets are stacked together, the empty bucket will not be returned.
      */
     private void appendIsLavaBucketFix() {
+        this.marker("appendIsLavaBucketFix");
         Label notLavaBucketLabel = new Label();
         // if(itemstack1.is(Items.LAVA_BUCKET))
         super.visitVarInsn(ALOAD, 5); // Load itemstack1
